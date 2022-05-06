@@ -4,12 +4,12 @@ BaedalMate Application for Android <br />
 ## Installation
 Clone this repository and import into **Android Studio**
 ```bash
-git clone git@github.com:BaedalMate/BeadalMate_Android.git
+git clone git@github.com:BaedalMate/BaedalMate_Android.git
 ```
 
 ## Development Environment
-- Android Studio 2020.3.1.2<br>
-- Kotlin 1.5.2
+- Android Studio Bumblebee | 2021.1.1 Patch 2<br>
+- Kotlin 1.5.30
 
 ## Application Version
 - minSdkVersion : 28<br>
