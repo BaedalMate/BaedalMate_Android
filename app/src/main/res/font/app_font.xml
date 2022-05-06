@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="UnusedAttribute,ResourceCycle">
+
+    <!-- Apple SD Gothic (KOREAN) -->
+    <!-- heavy -->
+    <font
+        android:font="@font/applesdgothic_neo_heavy"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_heavy"
+        app:fontStyle="normal" />
+    <!-- light -->
+    <font
+        android:font="@font/applesdgothic_neo_light"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_light"
+        app:fontStyle="normal" />
+    <!-- Ultra light -->
+    <font
+        android:font="@font/applesdgothic_neo_ultra_light"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_ultra_light"
+        app:fontStyle="normal" />
+
+    <!-- Extra bold -->
+    <font
+        android:font="@font/applesdgothic_neo_extra_bold"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_extra_bold"
+        app:fontStyle="normal" />
+    <!-- bold -->
+    <font
+        android:font="@font/applesdgothic_neo_bold"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_bold"
+        app:fontStyle="normal" />
+    <!-- Semi bold -->
+    <font
+        android:font="@font/applesdgothic_neo_semi_bold"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_semi_bold"
+        app:fontStyle="normal" />
+    <!-- medium -->
+    <font
+        android:font="@font/applesdgothic_neo_medium"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_medium"
+        app:fontStyle="normal" />
+    <!-- regular -->
+    <font
+        android:font="@font/applesdgothic_neo_regular"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_regular"
+        app:fontStyle="normal" />
+    <!-- thin -->
+    <font
+        android:font="@font/applesdgothic_neo_thin"
+        android:fontStyle="normal"
+        app:font="@font/applesdgothic_neo_thin"
+        app:fontStyle="normal" />
+
+    <!-- SF PRO Display (ENGLISH) -->
+    <!-- heavy -->
+    <font
+        android:font="@font/sf_pro_display_heavy"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_heavy"
+        app:fontStyle="normal" />
+    <!-- light -->
+    <font
+        android:font="@font/sf_pro_display_light"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_light"
+        app:fontStyle="normal" />
+
+    <!-- black -->
+    <font
+        android:font="@font/sf_pro_display_black"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_black"
+        app:fontStyle="normal" />
+    <!-- bold -->
+    <font
+        android:font="@font/sf_pro_display_bold"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_bold"
+        app:fontStyle="normal" />
+    <!-- Semi bold -->
+    <font
+        android:font="@font/sf_pro_display_semi_bold"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_semi_bold"
+        app:fontStyle="normal" />
+    <!-- medium -->
+    <font
+        android:font="@font/sf_pro_display_medium"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_medium"
+        app:fontStyle="normal" />
+    <!-- regular -->
+    <font
+        android:font="@font/sf_pro_display_regular"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_regular"
+        app:fontStyle="normal" />
+    <!-- thin -->
+    <font
+        android:font="@font/sf_pro_display_thin"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_thin"
+        app:fontStyle="normal" />
+    <!-- Ultra thin -->
+    <font
+        android:font="@font/sf_pro_display_ultra_thin"
+        android:fontStyle="normal"
+        app:font="@font/sf_pro_display_ultra_thin"
+        app:fontStyle="normal" />
+</font-family>
