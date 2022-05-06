@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="RoundButtonTheme">
+        <item name="buttonStyle">@style/RoundButton</item>
+    </style>
+
+    <style name="RoundButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/selector_round_button</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textColor">@drawable/selector_round_button_text</item>
+        <item name="fontFamily">@font/applesdgothic_neo_regular</item>
+        <item name="fontWeight">400</item>
+    </style>
+</resources>
