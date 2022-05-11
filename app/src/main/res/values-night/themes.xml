@@ -3,11 +3,11 @@
     <style name="Theme.BaedalMate" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_FB6C1C</item>
-        <item name="colorPrimaryVariant">@color/main_light_FBEADC</item>
+        <item name="colorPrimaryVariant">@color/gray_main_C4C4C4</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/sub_5060B1</item>
-        <item name="colorSecondaryVariant">@color/sub_5060B1</item>
+        <item name="colorSecondary">@color/gray_dark_8F939B</item>
+        <item name="colorSecondaryVariant">@color/gray_light_F2F3F6</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black_000000</item>

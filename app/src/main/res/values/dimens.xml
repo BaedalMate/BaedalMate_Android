@@ -2,4 +2,15 @@
 <resources>
     <dimen name="default_horizontal_margin">0.04</dimen>
 
+    <!-- Typography -->
+    <dimen name="text_large_title_24">24dp</dimen>
+    <dimen name="text_button_title_20">20dp</dimen>
+    <dimen name="text_title1_18">18dp</dimen>
+    <dimen name="text_title2_16">16dp</dimen>
+    <dimen name="text_semi_title_14">14dp</dimen>
+    <dimen name="text_body1_16">16dp</dimen>
+    <dimen name="text_body2_14">14dp</dimen>
+    <dimen name="text_caption1_12">12dp</dimen>
+    <dimen name="text_caption2_11">11dp</dimen>
+
 </resources>

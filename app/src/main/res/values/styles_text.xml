@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="style_large_title_kor">
+        <item name="android:textSize">@dimen/text_large_title_24</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_large_title_eng">
+        <item name="android:textSize">@dimen/text_large_title_24</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_button_title_kor">
+        <item name="android:textSize">@dimen/text_button_title_20</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_button_title_eng">
+        <item name="android:textSize">@dimen/text_button_title_20</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_title1_kor">
+        <item name="android:textSize">@dimen/text_title1_18</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_title1_eng">
+        <item name="android:textSize">@dimen/text_title1_18</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_title2_kor">
+        <item name="android:textSize">@dimen/text_title2_16</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_title2_eng">
+        <item name="android:textSize">@dimen/text_title2_16</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_semi_title_kor">
+        <item name="android:textSize">@dimen/text_semi_title_14</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_semi_title_eng">
+        <item name="android:textSize">@dimen/text_semi_title_14</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_body1_kor">
+        <item name="android:textSize">@dimen/text_body1_16</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_body1_eng">
+        <item name="android:textSize">@dimen/text_body1_16</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_body2_kor">
+        <item name="android:textSize">@dimen/text_body2_14</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_body2_eng">
+        <item name="android:textSize">@dimen/text_body2_14</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_caption1_kor">
+        <item name="android:textSize">@dimen/text_caption1_12</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_caption1_eng">
+        <item name="android:textSize">@dimen/text_caption1_12</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="style_caption2_kor">
+        <item name="android:textSize">@dimen/text_caption2_11</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+    <style name="style_caption2_eng">
+        <item name="android:textSize">@dimen/text_caption2_11</item>
+        <item name="android:textColor">@color/black_000000</item>
+        <item name="fontFamily">@font/sf_pro_display_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+</resources>
