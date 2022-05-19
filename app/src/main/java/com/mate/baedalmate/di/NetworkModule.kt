@@ -1,4 +1,4 @@
-package sc.artificial.baedalmate.di
+package com.mate.baedalmate.di
 
 import dagger.Module
 import dagger.Provides
@@ -10,7 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import sc.artificial.baedalmate.BuildConfig
+import com.mate.baedalmate.BuildConfig
 import javax.inject.Singleton
 
 @Module

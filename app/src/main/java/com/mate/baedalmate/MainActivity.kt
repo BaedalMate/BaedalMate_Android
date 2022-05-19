@@ -1,4 +1,4 @@
-package sc.artificial.baedalmate
+package com.mate.baedalmate
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

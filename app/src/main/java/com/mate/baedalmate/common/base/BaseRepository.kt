@@ -1,7 +1,7 @@
-package sc.artificial.baedalmate.common.base
+package com.mate.baedalmate.common.base
 
 import retrofit2.Response
-import sc.artificial.baedalmate.data.entity.ApiResult
+import com.mate.baedalmate.data.entity.ApiResult
 
 open class BaseRepository {
     internal suspend fun <T> getResponse(response: Response<T>): ApiResult<T> {
