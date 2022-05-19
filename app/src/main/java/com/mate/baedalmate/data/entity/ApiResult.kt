@@ -1,4 +1,4 @@
-package sc.artificial.baedalmate.data.entity
+package com.mate.baedalmate.data.entity
 
 import java.net.URLDecoder
 

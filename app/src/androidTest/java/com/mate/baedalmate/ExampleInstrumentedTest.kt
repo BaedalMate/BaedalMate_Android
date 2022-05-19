@@ -1,4 +1,4 @@
-package sc.artificial.baedalmate
+package com.mate.baedalmate
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
