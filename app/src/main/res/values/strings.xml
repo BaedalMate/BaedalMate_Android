@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">BaedalMate</string>
+
+    <!-- login -->
+    <string name="login_select_method_kakao">카카오톡으로 시작하기</string>
 </resources>

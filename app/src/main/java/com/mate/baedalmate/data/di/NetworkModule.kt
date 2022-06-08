@@ -1,4 +1,4 @@
-package com.mate.baedalmate.di
+package com.mate.baedalmate.data.di
 
 import dagger.Module
 import dagger.Provides

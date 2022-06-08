@@ -1,7 +1,8 @@
-package com.mate.baedalmate
+package com.mate.baedalmate.presentation.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mate.baedalmate.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
