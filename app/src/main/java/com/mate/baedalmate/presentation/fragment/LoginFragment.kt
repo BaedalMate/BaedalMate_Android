@@ -40,7 +40,8 @@ class LoginFragment : Fragment() {
             Log.e(ContentValues.TAG, "카카오 로그인 실패", error)
         } else if (token != null) {
             Log.i(ContentValues.TAG, "카카오 로그인 성공 ${token.accessToken}")
-            loginViewModel.requestLoginKakao(accessToken = token.accessToken)
+            loginViewModel.setKakaoAccessToken(token.accessToken)
+            loginViewModel.requestLoginKakao()
         }
     }
 
