@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "" // TODO : Base URL 설정 필요
+    private const val BASE_URL = "http://3.35.27.107:8080"
 
     @Singleton
     @Provides
@@ -28,7 +28,7 @@ object NetworkModule {
                 val accessToken = "" // TODO : Access Token 설정 필요
                 val request = chain.request()
                 // Header에 AccessToken을 삽입하지 않는 대상
-                if (request.url.encodedPath.equals("/auth/kakao", true)
+                if (request.url.encodedPath.equals("/login/oauth2/kakao", true)
                 ) {
                     chain.proceed(request)
                 } else {
@@ -55,7 +55,10 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())

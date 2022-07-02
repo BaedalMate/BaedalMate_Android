@@ -5,6 +5,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface MemberApiService {
-    @POST("/auth/kakao")
+    @POST("/login/oauth2/kakao")
     suspend fun requestLoginKakao(@Body data: MemberOAuthRequest): Response<MemberOAuthResponse>
 }
