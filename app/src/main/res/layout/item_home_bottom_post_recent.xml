@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="180dp"
+        android:layout_height="224dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/background_white_radius_10"
+            android:backgroundTint="@color/purple_200"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_home_bottom_post_recent_item_dim"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0.6"
+                android:src="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/radius10_ImageView" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_home_bottom_post_recent_item_left"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.04" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_home_bottom_post_recent_item_right"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.96" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_home_bottom_post_recent_item_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline_home_bottom_post_recent_item_right"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@id/guideline_home_bottom_post_recent_item_left"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <ImageView
+                    android:id="@+id/img_home_bottom_post_recent_item_top_person"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:adjustViewBounds="true"
+                    android:minHeight="0dp"
+                    android:src="@drawable/ic_people"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_home_bottom_post_recent_item_top_person"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_top_person"
+                    app:layout_constraintVertical_bias="0.3" />
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_top_person"
+                    style="@style/style_title2_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:lineHeight="22.3dp"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/img_home_bottom_post_recent_item_top_time"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:text="2/4" />
+
+                <ImageView
+                    android:id="@+id/img_home_bottom_post_recent_item_top_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:adjustViewBounds="true"
+                    android:minHeight="0dp"
+                    android:src="@drawable/ic_time"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_home_bottom_post_recent_item_top_time"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_top_time"
+                    app:layout_constraintVertical_bias="0.3" />
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_top_time"
+                    style="@style/style_title2_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineHeight="22.3dp"
+                    android:text="20분"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_home_bottom_post_recent_item_bottom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline_home_bottom_post_recent_item_right"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@id/guideline_home_bottom_post_recent_item_left"
+                app:layout_constraintTop_toBottomOf="@id/layout_home_bottom_post_recent_item_top"
+                app:layout_constraintVertical_bias="1.0">
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_bottom_title"
+                    style="@style/style_title1_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:lineHeight="25.09dp"
+                    android:singleLine="true"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toTopOf="@id/tv_home_bottom_post_recent_item_bottom_delivery"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text="Salady 공릉점" />
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_bottom_delivery"
+                    style="@style/style_caption1_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:lineHeight="18dp"
+                    android:text="배달팁"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toTopOf="@id/tv_home_bottom_post_recent_item_bottom_min"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_bottom_delivery_current"
+                    style="@style/style_caption_bold_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:lineHeight="25.09dp"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_home_bottom_post_recent_item_bottom_delivery"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/tv_home_bottom_post_recent_item_bottom_delivery"
+                    app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_bottom_delivery"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text=" 3,000원" />
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_bottom_min"
+                    style="@style/style_caption1_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:lineHeight="18dp"
+                    android:text="최소주문"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toTopOf="@id/layout_home_bottom_post_recent_item_bottom_user"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recent_item_bottom_min_current"
+                    style="@style/style_caption_bold_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineHeight="18dp"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_home_bottom_post_recent_item_bottom_min"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/tv_home_bottom_post_recent_item_bottom_min"
+                    app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_bottom_min"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text=" 13,000원" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_home_bottom_post_recent_item_bottom_user"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0">
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recent_item_bottom_user"
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineHeight="18dp"
+                        android:textColor="@color/white_FFFFFF"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text="유현영 • 누리학사" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recent_item_bottom_user_star"
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineHeight="18dp"
+                        android:textColor="@color/white_FFFFFF"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_home_bottom_post_recent_item_bottom_user"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_home_bottom_post_recent_item_bottom_user"
+                        app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_bottom_user"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text=" ★ 4.1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_home_bottom_post_recommend_item"
+                android:layout_width="150dp"
+                android:layout_height="95dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@color/main_FB5F1C"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:shapeAppearanceOverlay="@style/radius10_ImageView" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_home_bottom_post_recommend_item_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/img_home_bottom_post_recommend_item"
+                app:layout_constraintVertical_bias="0.0">
+
+                <TextView
+                    android:id="@+id/tv_home_bottom_post_recommend_item_info_title"
+                    style="@style/style_title2_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineHeight="22.3dp"
+                    android:singleLine="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:text="Salady 공릉점" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_home_bottom_post_recommend_item_info_current"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_bottom_post_recommend_item_info_title"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <ImageView
+                        android:id="@+id/img_home_bottom_post_recent_item_top_person"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:minHeight="0dp"
+                        android:src="@drawable/ic_people"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_top_person"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:tint="@color/black_000000" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recent_item_top_person"
+                        style="@style/style_title2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:lineHeight="22.3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/img_home_bottom_post_recent_item_top_person"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text="2/4" />
+
+                    <ImageView
+                        android:id="@+id/img_home_bottom_post_recent_item_top_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/ic_time"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_home_bottom_post_recent_item_top_person"
+                        app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recent_item_top_time"
+                        app:layout_constraintVertical_bias="0.3"
+                        app:tint="@color/black_000000" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recent_item_top_time"
+                        style="@style/style_title2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:lineHeight="22.3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/img_home_bottom_post_recent_item_top_time"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text="20분" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_home_bottom_post_recommend_item_info_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_home_bottom_post_recommend_item_info_current"
+                    app:layout_constraintVertical_bias="1.0">
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recommend_item_info_bottom_delivery"
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:lineHeight="18dp"
+                        android:text="@string/delivery_fee"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recommend_item_info_bottom_delivery_current"
+                        style="@style/style_caption_bold_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineHeight="25.09dp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_home_bottom_post_recommend_item_info_bottom_delivery"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_home_bottom_post_recommend_item_info_bottom_delivery"
+                        app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recommend_item_info_bottom_delivery"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text=" 3,000원" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recommend_item_info_bottom_min"
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:lineHeight="18dp"
+                        android:text="@string/delivery_min"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_bottom_post_recommend_item_info_bottom_delivery"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recommend_item_info_bottom_current"
+                        style="@style/style_caption_bold_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineHeight="18dp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_home_bottom_post_recommend_item_info_bottom_min"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_home_bottom_post_recommend_item_info_bottom_min"
+                        app:layout_constraintTop_toTopOf="@id/tv_home_bottom_post_recommend_item_info_bottom_min"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text=" 13,000원" />
+
+                    <TextView
+                        android:id="@+id/tv_home_bottom_post_recommend_item_info_bottom_user"
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="15dp"
+                        android:lineHeight="18dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_home_bottom_post_recommend_item_info_bottom_min"
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text="유현영 . 누리학사 ★ ️4.1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -12,5 +12,9 @@
     <dimen name="text_body2_14">14dp</dimen>
     <dimen name="text_caption1_12">12dp</dimen>
     <dimen name="text_caption2_11">11dp</dimen>
+    <dimen name="text_caption_bold_12">12dp</dimen>
 
+    <!-- RoundedTextView -->
+    <dimen name="roundedTextBorderRadius">4dp</dimen>
+    <dimen name="roundedTextBorderWidth">1dp</dimen>
 </resources>
