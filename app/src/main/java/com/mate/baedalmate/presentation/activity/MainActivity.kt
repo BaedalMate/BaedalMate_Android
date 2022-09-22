@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         findNavController().addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomNavView.visibility = when (destination.id) {
                 R.id.HomeFragment -> View.VISIBLE
+                R.id.PostCategoryListFragment -> View.VISIBLE
                 R.id.ChatFragment -> View.VISIBLE
                 R.id.MyPageFragment -> View.VISIBLE
                 else -> View.GONE
