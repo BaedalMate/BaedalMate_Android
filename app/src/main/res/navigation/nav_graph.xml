@@ -7,8 +7,20 @@
 
     <fragment
         android:id="@+id/HomeFragment"
-        android:name="com.mate.baedalmate.presentation.fragment.HomeFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
+    </fragment>
+    <fragment
+        android:id="@+id/ChatFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat">
+    </fragment>
+    <fragment
+        android:id="@+id/MyPageFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"
+        android:label="fragment_my_page"
+        tools:layout="@layout/fragment_my_page">
     </fragment>
 </navigation>

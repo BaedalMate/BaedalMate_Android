@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/HomeFragment"
+        android:enabled="true"
+        android:title="@string/home" />
+    <item
+        android:id="@+id/ChatFragment"
+        android:enabled="true"
+        android:title="@string/chat" />
+    <item
+        android:id="@+id/MyPageFragment"
+        android:enabled="true"
+        android:title="@string/my_page" />
+</menu>

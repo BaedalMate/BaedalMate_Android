@@ -1,4 +1,4 @@
-package com.mate.baedalmate.presentation.fragment
+package com.mate.baedalmate.presentation.fragment.home
 
 import android.os.Bundle
 import android.text.Annotation
