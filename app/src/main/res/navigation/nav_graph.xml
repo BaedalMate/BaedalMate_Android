@@ -12,13 +12,19 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postCategoryListFragment"
-            app:destination="@id/PostCategoryListFragment" />
+            app:destination="@id/PostFragment" />
     </fragment>
     <fragment
         android:id="@+id/PostCategoryListFragment"
         android:name="com.mate.baedalmate.presentation.fragment.post.PostCategoryListFragment"
         android:label="fragment_post_category_list"
         tools:layout="@layout/fragment_post_category_list">
+    </fragment>
+    <fragment
+        android:id="@+id/PostFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.post.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post">
     </fragment>
     <fragment
         android:id="@+id/ChatFragment"
