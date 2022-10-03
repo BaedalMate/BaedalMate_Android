@@ -28,7 +28,8 @@ object NetworkModule {
                 val accessToken = "" // TODO : Access Token 설정 필요
                 val request = chain.request()
                 // Header에 AccessToken을 삽입하지 않는 대상
-                if (request.url.encodedPath.equals("/login/oauth2/kakao", true)
+                if (request.url.encodedPath.equals("/login/oauth2/kakao", true) ||
+                    request.url.encodedPath.contains("/v2/local/search/keyword.json", true)
                 ) {
                     chain.proceed(request)
                 } else {

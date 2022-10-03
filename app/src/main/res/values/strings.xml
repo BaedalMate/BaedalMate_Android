@@ -73,5 +73,16 @@
     <string name="write_first_delivery_fee_free_not">무료배송이 아니에요</string>
     <string name="write_first_delivery_fee_range_add">+ 구간 추가하기</string>
 
+    <!-- Write Second -->
+    <string name="write_second_user_location_description">모집 인원에 도달하면 모집이 완료됩니다</string>
+    <string name="write_second_user_location_input_detail_hint">배달을 받을 장소에 대한 설명을 적어주세요</string>
+    <string name="write_second_store_location_hint">서울 노원구 공릉로 231 중앙빌딩</string>
+    <string name="write_second_coupon_title">쿠폰 입력</string>
+    <string name="write_second_coupon_input_error">쿠폰 금액을 입력해주세요</string>
+    <string name="write_second_coupon_description">기존 금액에서 주최자의 쿠폰 사용금액만큼 할인된 후 배달비가 나누기 됩니다.</string>
+    <string name="write_second_coupon_use">쿠폰 없음</string>
+    <string name="write_second_place_dialog_title">배달 가게 선택</string>
+    <string name="write_second_place_user_input_hint">장소명을 입력해주세요</string>
+    <string name="write_second_place_result_title">장소결과</string>
     <string name="input_lesson_price">%1$s</string>
 </resources>

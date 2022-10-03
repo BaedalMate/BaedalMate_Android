@@ -20,4 +20,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="EditTextBackground" parent="Theme.BaedalMate">
+        <!-- EditText color-->
+        <item name="android:colorControlNormal">@color/gray_dark_666666</item>
+        <item name="android:colorControlActivated">@color/main_FB5F1C</item>
+        <item name="android:textColorHighlight">@color/main_FB5F1C</item>
+        <item name="android:textCursorDrawable">@color/black_000000</item>
+    </style>
 </resources>
