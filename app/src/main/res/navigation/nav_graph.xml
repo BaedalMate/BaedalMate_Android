@@ -45,7 +45,7 @@
             app:destination="@id/WriteSecondPlaceDialogFragment" />
         <action
             android:id="@+id/action_writeSecondFragment_to_writeThirdFragment"
-            app:destination="@id/WriteSecondPlaceDialogFragment" />
+            app:destination="@id/WriteThirdFragment" />
     </fragment>
     <dialog
         android:id="@+id/WriteSecondPlaceDialogFragment"
