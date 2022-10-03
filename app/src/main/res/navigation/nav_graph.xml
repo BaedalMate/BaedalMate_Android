@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_writeSecondFragment_to_writeSecondPlaceDialogFragment"
             app:destination="@id/WriteSecondPlaceDialogFragment" />
+        <action
+            android:id="@+id/action_writeSecondFragment_to_writeThirdFragment"
+            app:destination="@id/WriteSecondPlaceDialogFragment" />
     </fragment>
     <dialog
         android:id="@+id/WriteSecondPlaceDialogFragment"
@@ -50,6 +53,12 @@
         android:label="fragment_write_second_place_dialog"
         tools:layout="@layout/fragment_write_second_place_dialog">
     </dialog>
+    <fragment
+        android:id="@+id/WriteThirdFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteThirdFragment"
+        android:label="fragment_write_third"
+        tools:layout="@layout/fragment_write_third">
+    </fragment>
     <fragment
         android:id="@+id/ChatFragment"
         android:name="com.mate.baedalmate.presentation.fragment.chat.ChatFragment"

@@ -134,7 +134,7 @@ class WriteSecondFragment : Fragment() {
                 writeViewModel.isCouponUse = true
                 writeViewModel.couponAmount = binding.etWriteSecondCouponUserInput.text.toString().replace(",", "").toInt()
             }
-//            findNavController().navigate(R.id.action_writeSecondFragment_to_writeThirdFragment)
+            findNavController().navigate(R.id.action_writeSecondFragment_to_writeThirdFragment)
         }
     }
 
