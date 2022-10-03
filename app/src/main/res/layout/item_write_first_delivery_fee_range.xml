@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:background="@color/background_F7F8FA"
+    android:paddingVertical="15dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_delivery_fee_range"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_delivery_fee_range_delete"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tv_delivery_fee_range_title"
+            style="@style/style_body2_kor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="구간1"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <EditText
+            android:id="@+id/et_delivery_fee_range_start"
+            style="@style/style_body1_kor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/background_white_radius_10"
+            android:gravity="end"
+            android:inputType="number"
+            android:nextFocusDown="@id/et_delivery_fee_range_end"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_delivery_fee_range"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/tv_delivery_fee_range_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="0원" />
+
+        <TextView
+            android:id="@+id/tv_delivery_fee_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:textColor="#ADADAD"
+            app:layout_constraintBottom_toBottomOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintEnd_toStartOf="@id/et_delivery_fee_range_end"
+            app:layout_constraintStart_toEndOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintTop_toTopOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <EditText
+            android:id="@+id/et_delivery_fee_range_end"
+            style="@style/style_body1_kor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/background_white_radius_10"
+            android:gravity="end"
+            android:inputType="number"
+            android:nextFocusDown="@id/et_delivery_fee"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/tv_delivery_fee_range"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="0원" />
+
+        <TextView
+            android:id="@+id/tv_delivery_fee_title"
+            style="@style/style_body2_kor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amount"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="@id/et_delivery_fee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/et_delivery_fee"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <EditText
+            android:id="@+id/et_delivery_fee"
+            style="@style/style_body1_kor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background_white_radius_10"
+            android:gravity="end"
+            android:inputType="number"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/et_delivery_fee_range_end"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintTop_toBottomOf="@id/et_delivery_fee_range_start"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="0원" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/btn_delivery_fee_range_delete"
+        android:layout_width="45dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_white_radius_10"
+        android:backgroundTint="@color/gray_line_EBEBEB"
+        android:src="@drawable/ic_sign_x_gray_dark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+</androidx.constraintlayout.widget.ConstraintLayout>
