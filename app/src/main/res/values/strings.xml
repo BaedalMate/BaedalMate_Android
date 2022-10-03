@@ -85,4 +85,15 @@
     <string name="write_second_place_user_input_hint">장소명을 입력해주세요</string>
     <string name="write_second_place_result_title">장소결과</string>
     <string name="input_lesson_price">%1$s</string>
+
+    <!-- Write Third -->
+    <string name="write_third_title">주문글 쓰기</string>
+    <string name="write_third_subject_error">제목을 적어주세요</string>
+    <string name="write_third_subject_input_hint">제목을 적어주세요</string>
+    <string name="write_third_description_title">모집글 설명</string>
+    <string name="write_third_description_error">설명을 적어주세요</string>
+    <string name="write_third_description_input_hint">모집글을 적어주세요</string>
+    <string name="write_third_tag_title">태그쓰기</string>
+    <string name="write_third_tag_input_hint">#태그를 입력해주세요</string>
+    <string name="write_third_tag_add">태그입력</string>
 </resources>

@@ -10,6 +10,7 @@ import com.mate.baedalmate.data.datasource.remote.recruit.Dormitory
 import com.mate.baedalmate.data.datasource.remote.recruit.PlaceDto
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitFinishCriteria
 import com.mate.baedalmate.data.datasource.remote.recruit.ShippingFeeDto
+import com.mate.baedalmate.data.datasource.remote.recruit.TagDto
 import com.mate.baedalmate.data.datasource.remote.write.PlaceMeta
 import com.mate.baedalmate.data.datasource.remote.write.RegionInfo
 import com.mate.baedalmate.data.datasource.remote.write.ResultSearchKeyword
@@ -35,6 +36,10 @@ class WriteViewModel @Inject constructor(private val kakaoLocalUseCase: RequestK
     var deliveryPlatform = DeliveryPlatform.BAEMIN
     var isCouponUse = false
     var couponAmount = 0
+
+    var postTitle = ""
+    var postDetail = ""
+    var postTagList = mutableListOf<TagDto>()
 
     private val _searchResultList = MutableLiveData(ResultSearchKeyword(
         PlaceMeta(0,0,false, RegionInfo(emptyList(), "", "")),
