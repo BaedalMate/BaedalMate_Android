@@ -144,6 +144,7 @@ class WriteFirstFragment : Fragment() {
                 feeList.sortWith(compareBy({ it.lowerPrice }, { it.upperPrice }))
                 writeViewModel.deliveryFeeRangeList = feeList
             }
+            findNavController().navigate(R.id.action_writeFirstFragment_to_writeSecondFragment)
         }
     }
 
