@@ -1,5 +1,7 @@
 package com.mate.baedalmate.data.di
 
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.mate.baedalmate.BaedalMateApplication
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,6 +13,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import com.mate.baedalmate.BuildConfig
+import com.mate.baedalmate.common.extension.readValue
+import kotlinx.coroutines.runBlocking
 import javax.inject.Singleton
 
 @Module
@@ -25,7 +29,11 @@ object NetworkModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         OkHttpClient.Builder()
             .addInterceptor { chain: Interceptor.Chain ->
-                val accessToken = "" // TODO : Access Token 설정 필요
+                val accessToken = runBlocking {
+                    BaedalMateApplication.applicationContext().tokenDataStore.readValue(
+                        stringPreferencesKey("accessToken")
+                    )
+                }
                 val request = chain.request()
                 // Header에 AccessToken을 삽입하지 않는 대상
                 if (request.url.encodedPath.equals("/login/oauth2/kakao", true) ||
