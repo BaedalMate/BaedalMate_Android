@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.data.datasource.remote.recruit.RecruitDetail
+import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.databinding.FragmentPostBinding
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -21,8 +21,8 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
-import com.mate.baedalmate.data.datasource.remote.recruit.DeliveryPlatform
-import com.mate.baedalmate.data.datasource.remote.recruit.Dormitory
+import com.mate.baedalmate.domain.model.DeliveryPlatform
+import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.databinding.FragmentWriteSecondBinding
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel

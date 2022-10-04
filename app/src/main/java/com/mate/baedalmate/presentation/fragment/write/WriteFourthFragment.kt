@@ -14,7 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.data.datasource.remote.recruit.MenuDto
+import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.databinding.FragmentWriteFourthBinding
 import com.mate.baedalmate.presentation.adapter.write.WriteFourthMenuListAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel

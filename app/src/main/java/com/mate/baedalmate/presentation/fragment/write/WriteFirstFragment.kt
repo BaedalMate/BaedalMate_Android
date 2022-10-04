@@ -26,8 +26,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.data.datasource.remote.recruit.RecruitFinishCriteria
-import com.mate.baedalmate.data.datasource.remote.recruit.ShippingFeeDto
+import com.mate.baedalmate.domain.model.RecruitFinishCriteria
+import com.mate.baedalmate.domain.model.ShippingFeeDto
 import com.mate.baedalmate.databinding.FragmentWriteFirstBinding
 import com.mate.baedalmate.databinding.ItemWriteFirstDeliveryFeeRangeBinding
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
