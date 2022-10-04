@@ -24,7 +24,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/gray_light_F9F9F9"
         android:tooltipText=""
-        app:itemIconSize="30dp"
         app:itemRippleColor="@android:color/transparent"
         app:labelVisibilityMode="labeled"
         app:itemTextColor="@drawable/selector_bottom_nav_text_color"
