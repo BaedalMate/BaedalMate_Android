@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dormitory_list">
+        <item>누리학사</item>
+        <item>성림학사</item>
+        <item>KB학사</item>
+        <item>불암학사</item>
+        <item>수림학사</item>
+    </string-array>
+</resources>

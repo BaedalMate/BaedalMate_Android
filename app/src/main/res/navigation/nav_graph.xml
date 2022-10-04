@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postCategoryListFragment"
-            app:destination="@id/PostFragment" />
+            app:destination="@id/WriteFirstFragment" />
     </fragment>
     <fragment
         android:id="@+id/PostCategoryListFragment"
@@ -26,6 +26,57 @@
         android:label="fragment_post"
         tools:layout="@layout/fragment_post">
     </fragment>
+    <fragment
+        android:id="@+id/WriteFirstFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteFirstFragment"
+        android:label="fragment_write_first"
+        tools:layout="@layout/fragment_write_first">
+        <action
+            android:id="@+id/action_writeFirstFragment_to_writeSecondFragment"
+            app:destination="@id/WriteSecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/WriteSecondFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteSecondFragment"
+        android:label="fragment_write_first"
+        tools:layout="@layout/fragment_write_second">
+        <action
+            android:id="@+id/action_writeSecondFragment_to_writeSecondPlaceDialogFragment"
+            app:destination="@id/WriteSecondPlaceDialogFragment" />
+        <action
+            android:id="@+id/action_writeSecondFragment_to_writeThirdFragment"
+            app:destination="@id/WriteThirdFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/WriteSecondPlaceDialogFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteSecondPlaceDialogFragment"
+        android:label="fragment_write_second_place_dialog"
+        tools:layout="@layout/fragment_write_second_place_dialog">
+    </dialog>
+    <fragment
+        android:id="@+id/WriteThirdFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteThirdFragment"
+        android:label="fragment_write_third"
+        tools:layout="@layout/fragment_write_third">
+        <action
+            android:id="@+id/action_writeThirdFragment_to_writeFourthFragment"
+            app:destination="@id/WriteFourthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/WriteFourthFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteFourthFragment"
+        android:label="fragment_write_fourth"
+        tools:layout="@layout/fragment_write_fourth">
+        <action
+            android:id="@+id/action_writeFourthFragment_to_writeFourthAddMenuFragment"
+            app:destination="@id/WriteFourthAddMenuFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/WriteFourthAddMenuFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteFourthAddMenuFragment"
+        android:label="fragment_write_fourth_add_menu"
+        tools:layout="@layout/fragment_write_fourth_add_menu">
+    </dialog>
     <fragment
         android:id="@+id/ChatFragment"
         android:name="com.mate.baedalmate.presentation.fragment.chat.ChatFragment"

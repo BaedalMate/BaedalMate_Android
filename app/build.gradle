@@ -10,6 +10,7 @@ plugins {
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 def NATIVE_APP_KEY = properties.getProperty('NATIVE_APP_KEY')
+def KAKAO_REST_API_KEY = properties.getProperty('KAKAO_REST_API_KEY')
 
 android {
     compileSdk 32
@@ -24,7 +25,8 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "NATIVE_APP_KEY", properties['NATIVE_APP_KEY_STR'])
-        manifestPlaceholders = [NATIVE_APP_KEY: NATIVE_APP_KEY]
+        buildConfigField("String", "KAKAO_REST_API_KEY", properties['KAKAO_REST_API_KEY_STR'])
+        manifestPlaceholders = [NATIVE_APP_KEY: NATIVE_APP_KEY, KAKAO_REST_API_KEY: KAKAO_REST_API_KEY]
     }
 
     buildTypes {
@@ -49,6 +51,7 @@ android {
 dependencies {
     def nav_version = "2.4.2"
     def kakao_version = "2.9.0"
+    def lifecycle_version = "2.5.1"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -104,4 +107,10 @@ dependencies {
 
     // Google Flexbox-Layout
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    //LifeCycle
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
 }

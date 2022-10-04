@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.fragment.write.WriteSecondPlaceDialogFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_white_radius_10"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_write_second_place_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:id="@+id/tv_write_second_place_dialog_title"
+                style="@style/style_title1_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/write_second_place_dialog_title"
+                android:textColor="@color/main_FB5F1C"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <ImageButton
+                android:id="@+id/btn_write_second_place_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="5dp"
+                android:src="@drawable/ic_sign_x_gray_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@id/tv_write_second_place_dialog_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/et_write_second_place_user_input"
+            style="@style/style_body2_kor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/background_white_radius_10"
+            android:backgroundTint="@color/gray_light_F9F9F9"
+            android:hint="@string/write_second_place_user_input_hint"
+            android:imeOptions="actionSearch"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:singleLine="true"
+            android:textColor="@color/black_000000"
+            android:textColorHint="@color/gray_dark_666666"
+            tools:text="" />
+
+        <LinearLayout
+            android:id="@+id/layout_write_second_place_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_write_second_place_result_title"
+                style="@style/style_semi_title_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/write_second_place_result_title"
+                android:textColor="@color/gray_main_C4C4C4"/>
+
+            <View
+                android:id="@+id/view_write_second_place_result_horizontal_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/gray_line_EBEBEB"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_write_second_place_result_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="300dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="5"
+                tools:listitem="@layout/item_write_second_place" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

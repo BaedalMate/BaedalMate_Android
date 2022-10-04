@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.fragment.write.WriteSecondFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_write_second_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageButton
+                android:id="@+id/btn_write_second_actionbar_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_left_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_write_second_actionbar_title"
+                style="@style/style_title1_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/write_actionbar_title"
+                android:textColor="@color/black_000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollview_write_second"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_write_second_actionbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_write_second_goal_title"
+                    style="@style/style_title1_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/write_goal_title"
+                    android:textColor="@color/main_FB5F1C"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_write_second_user_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:background="@color/background_F7F8FA"
+                    android:padding="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_write_second_goal_title"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:id="@+id/tv_write_second_user_location_title"
+                        style="@style/style_title2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_location"
+                        android:textColor="@color/black_000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/tv_write_second_user_location_description"
+                        style="@style/style_body2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/write_second_user_location_description"
+                        android:textColor="@color/gray_dark_666666"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_second_user_location_title"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_write_second_user_location_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_second_user_location_description"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <TextView
+                            android:id="@+id/tv_write_second_user_location_input_university"
+                            style="@style/style_body2_kor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/university_seoultech"
+                            android:textColor="@color/black_000000"
+                            app:layout_constraintBottom_toBottomOf="@id/view_write_second_user_location_input_dormitory_background"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/view_write_second_user_location_input_dormitory_background"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <View
+                            android:id="@+id/view_write_second_user_location_input_dormitory_background"
+                            android:layout_width="0dp"
+                            android:layout_height="45dp"
+                            android:layout_marginStart="30dp"
+                            android:background="@drawable/background_white_radius_10"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@id/tv_write_second_user_location_input_university"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                        <Spinner
+                            android:id="@+id/spinner_write_second_user_location_input_dormitory"
+                            style="@style/style_body2_kor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:background="@drawable/background_white_radius_10"
+                            android:elevation="0dp"
+                            android:gravity="end|center_vertical"
+                            android:popupBackground="@drawable/background_white_radius_10"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toEndOf="@id/tv_write_second_user_location_input_university"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <EditText
+                        android:id="@+id/et_write_second_user_location_input_detail"
+                        style="@style/style_body2_kor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="42dp"
+                        android:hint="@string/write_second_user_location_input_detail_hint"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textColor="@color/black_000000"
+                        android:textColorHint="@color/gray_dark_666666"
+                        android:theme="@style/EditTextBackground"
+                        app:layout_constraintBottom_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layout_write_second_user_location_input"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_write_second_store_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/background_F7F8FA"
+                    android:padding="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_write_second_user_location"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:id="@+id/tv_write_second_store_location_title"
+                        style="@style/style_title2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/store_location"
+                        android:textColor="@color/black_000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_write_second_store_location_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_write_second_store_location_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_write_second_store_location_title"
+                        app:layout_constraintTop_toTopOf="@id/tv_write_second_store_location_title"
+                        app:layout_constraintVertical_bias="0.5">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/img_write_second_store_location_background"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:padding="1dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearanceOverlay="@style/roundImageView"
+                            app:strokeColor="@color/gray_dark_666666"
+                            app:strokeWidth="1dp" />
+
+                        <ImageView
+                            android:id="@+id/img_write_second_store_location_icon"
+                            android:layout_width="11dp"
+                            android:layout_height="11dp"
+                            android:src="@drawable/ic_store_map_gray_dark"
+                            app:layout_constraintBottom_toBottomOf="@id/img_write_second_store_location_background"
+                            app:layout_constraintEnd_toEndOf="@id/img_write_second_store_location_background"
+                            app:layout_constraintStart_toStartOf="@id/img_write_second_store_location_background"
+                            app:layout_constraintTop_toTopOf="@id/img_write_second_store_location_background"
+                            app:tint="@color/gray_dark_666666" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/tv_write_second_store_location"
+                        style="@style/style_body2_kor"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/background_white_radius_10"
+                        android:hint="@string/write_second_store_location_hint"
+                        android:imeOptions="actionDone"
+                        android:paddingHorizontal="15dp"
+                        android:paddingVertical="11dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black_000000"
+                        android:textColorHint="@color/gray_dark_666666"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_second_store_location_title"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_write_second_platform"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/background_F7F8FA"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_write_second_store_location"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:id="@+id/tv_write_second_platform_title"
+                        style="@style/style_title2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delivery_platform"
+                        android:textColor="@color/black_000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <HorizontalScrollView
+                        android:id="@+id/layout_scroll_write_fourth_menu_add"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_second_platform_title"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <RadioGroup
+                            android:id="@+id/radiogroup_write_second_platform_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingTop="15dp"
+                            android:paddingBottom="3dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_write_second_platform_title"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <RadioButton
+                                android:id="@+id/radiobutton_write_second_platform_baemin"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:button="@null"
+                                android:checked="true"
+                                android:drawableStart="@drawable/selector_radiobutton_platform_baemin"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp" />
+
+                            <RadioButton
+                                android:id="@+id/radiobutton_write_second_platform_yogiyo"
+                                style="@style/style_body2_kor"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                android:button="@null"
+                                android:drawableStart="@drawable/selector_radiobutton_platform_yogiyo"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp" />
+
+                            <RadioButton
+                                android:id="@+id/radiobutton_write_second_platform_coupang"
+                                style="@style/style_body2_kor"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                android:button="@null"
+                                android:drawableStart="@drawable/selector_radiobutton_platform_coupang"
+                                android:drawablePadding="7dp"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp" />
+
+                            <RadioButton
+                                android:id="@+id/radiobutton_write_second_platform_ddangyo"
+                                style="@style/style_body2_kor"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                android:button="@null"
+                                android:drawableStart="@drawable/selector_radiobutton_platform_ddangyo"
+                                android:drawablePadding="7dp"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp" />
+
+                            <RadioButton
+                                android:id="@+id/radiobutton_write_second_platform_etc"
+                                style="@style/style_body2_kor"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:layout_marginStart="13dp"
+                                android:button="@null"
+                                android:drawableStart="@drawable/selector_radiobutton_platform_ddangyo"
+                                android:drawablePadding="7dp"
+                                android:drawableTint="@color/gray_main_C4C4C4"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp" />
+                        </RadioGroup>
+                    </HorizontalScrollView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_write_second_coupon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/background_F7F8FA"
+                    android:padding="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_write_second_platform"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <TextView
+                        android:id="@+id/tv_write_second_coupon_title"
+                        style="@style/style_title2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/write_second_coupon_title"
+                        android:textColor="@color/black_000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/tv_write_second_coupon_input_error"
+                        style="@style/style_body2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/write_second_coupon_input_error"
+                        android:textColor="@color/error_FF0000"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_write_second_coupon_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_write_second_coupon_title"
+                        app:layout_constraintTop_toTopOf="@id/tv_write_second_coupon_title"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
+                        android:id="@+id/tv_write_second_coupon_description"
+                        style="@style/style_body2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/write_second_coupon_description"
+                        android:textColor="@color/gray_dark_666666"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_second_coupon_title"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_write_second_coupon_user_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_second_coupon_description"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <TextView
+                            android:id="@+id/tv_write_second_coupon_user_input_title"
+                            style="@style/style_body2_kor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/amount"
+                            android:textColor="@color/black_000000"
+                            app:layout_constraintBottom_toBottomOf="@id/et_write_second_coupon_user_input"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/et_write_second_coupon_user_input"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <View
+                            android:id="@+id/view_write_second_coupon_user_input_background"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="30dp"
+                            android:background="@drawable/background_white_radius_10_stroke_gray_line"
+                            android:paddingHorizontal="15dp"
+                            android:paddingVertical="13dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tv_write_second_coupon_user_input_title"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_write_second_coupon_user_input_unit"
+                            style="@style/style_title2_kor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:paddingVertical="13dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/unit_korea"
+                            android:textColor="@color/gray_line_EBEBEB"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toEndOf="@id/tv_write_second_coupon_user_input_title"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <EditText
+                            android:id="@+id/et_write_second_coupon_user_input"
+                            style="@style/style_title2_kor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:enabled="false"
+                            android:gravity="end"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:paddingVertical="13dp"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/gray_line_EBEBEB"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_write_second_coupon_user_input_unit"
+                            app:layout_constraintStart_toStartOf="@id/view_write_second_coupon_user_input_background"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:text="10,000" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkbox_write_second_coupon_use"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="10dp"
+                        android:buttonTint="@color/main_FB5F1C"
+                        android:checked="true"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="@string/write_second_coupon_use"
+                        android:textColor="@color/gray_dark_666666"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layout_write_second_coupon_user_input"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_write_second_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_write_second_coupon"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <View
+                        android:id="@+id/view_write_second_progress_horizontal_line"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_line_EBEBEB"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_write_second_progress_current"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_write_second_progress_horizontal_line"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_vp_indicator_inactive"
+                            app:tint="@color/main_FB5F1C" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:src="@drawable/ic_vp_indicator_active"
+                            app:tint="@color/main_FB5F1C" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:src="@drawable/ic_vp_indicator_inactive"
+                            app:tint="@color/main_FB5F1C" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="7dp"
+                            android:src="@drawable/ic_vp_indicator_inactive"
+                            app:tint="@color/main_FB5F1C" />
+                    </LinearLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_write_second_next"
+                        style="@style/style_title1_kor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="40dp"
+                        android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
+                        android:enabled="false"
+                        android:stateListAnimator="@null"
+                        android:text="@string/next_to"
+                        android:textColor="@drawable/selector_textview_white_gray_main"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/layout_write_second_progress_current"
+                        app:layout_constraintVertical_bias="0.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

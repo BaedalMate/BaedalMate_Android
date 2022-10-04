@@ -8,6 +8,21 @@
     <string name="chat">채팅</string>
     <string name="my_page">마이페이지</string>
     <string name="report">신고하기</string>
+    <string name="amount">금액</string>
+    <string name="unit_korea">원</string>
+    <string name="section">구간</string>
+    <string name="next_to">다음으로</string>
+    <string name="select">선택</string>
+    <string name="menu">메뉴</string>
+    <string name="count">수량</string>
+    <string name="add">추가하기</string>
+    <string name="title">제목</string>
+    <string name="user_location">배달 거점</string>
+    <string name="store_location">배달 가게</string>
+    <string name="delivery_platform">배달 플랫폼</string>
+
+    <!-- University -->
+    <string name="university_seoultech">서울과기대</string>
 
     <!-- login -->
     <string name="login_select_method_kakao">카카오톡으로 시작하기</string>
@@ -34,4 +49,64 @@
     <string name="post_participate_in">모집 참여하기</string>
     <string name="post_participate_out">모집 나가기</string>
 
+    <!-- Write -->
+    <string name="write_actionbar_title">상세 설정</string>
+    <string name="write_goal_title">주문조건</string>
+
+    <!-- Write First -->
+    <string name="write_first_goal_people_title">최소 모집 인원</string>
+    <string name="write_first_goal_delivery_title">최소 주문 금액</string>
+    <string name="write_first_goal_delivery_error">최소 주문 금액을 입력해주세요</string>
+    <string name="write_first_goal_time_title">마감 시간 설정</string>
+    <string name="write_first_goal_time_description">모집 인원에 도달하면 모집이 완료됩니다</string>
+    <string name="write_first_goal_criterion_title">마감 기준</string>
+    <string name="write_first_goal_criterion_description_people">모집 인원에 도달하면 모집이 완료됩니다</string>
+    <string name="write_first_goal_criterion_description_delivery">최소 주문 금액에 도달하면 모집이 완료됩니다</string>
+    <string name="write_first_goal_criterion_description_time">마감시간이 되면 모집이 완료됩니다</string>
+    <string name="write_first_goal_criterion_people">모집 인원</string>
+    <string name="write_first_goal_criterion_delivery">최소 주문</string>
+    <string name="write_first_goal_criterion_time">마감 시간</string>
+    <string name="write_first_delivery_fee_title">배달비 구간 설정</string>
+    <string name="write_first_delivery_fee_description">주문금액 별 배달금액을 설정해주세요</string>
+    <string name="write_first_delivery_fee_range_error">올바른 구간 설정이 아닙니다</string>
+    <string name="write_first_delivery_fee_free">무료배송</string>
+    <string name="write_first_delivery_fee_free_not">무료배송이 아니에요</string>
+    <string name="write_first_delivery_fee_range_add">+ 구간 추가하기</string>
+
+    <!-- Write Second -->
+    <string name="write_second_user_location_description">모집 인원에 도달하면 모집이 완료됩니다</string>
+    <string name="write_second_user_location_input_detail_hint">배달을 받을 장소에 대한 설명을 적어주세요</string>
+    <string name="write_second_store_location_hint">서울 노원구 공릉로 231 중앙빌딩</string>
+    <string name="write_second_coupon_title">쿠폰 입력</string>
+    <string name="write_second_coupon_input_error">쿠폰 금액을 입력해주세요</string>
+    <string name="write_second_coupon_description">기존 금액에서 주최자의 쿠폰 사용금액만큼 할인된 후 배달비가 나누기 됩니다.</string>
+    <string name="write_second_coupon_use">쿠폰 없음</string>
+    <string name="write_second_place_dialog_title">배달 가게 선택</string>
+    <string name="write_second_place_user_input_hint">장소명을 입력해주세요</string>
+    <string name="write_second_place_result_title">장소결과</string>
+    <string name="input_lesson_price">%1$s</string>
+
+    <!-- Write Third -->
+    <string name="write_third_title">주문글 쓰기</string>
+    <string name="write_third_subject_error">제목을 적어주세요</string>
+    <string name="write_third_subject_input_hint">제목을 적어주세요</string>
+    <string name="write_third_description_title">모집글 설명</string>
+    <string name="write_third_description_error">설명을 적어주세요</string>
+    <string name="write_third_description_input_hint">모집글을 적어주세요</string>
+    <string name="write_third_tag_title">태그쓰기</string>
+    <string name="write_third_tag_input_hint">#태그를 입력해주세요</string>
+    <string name="write_third_tag_add">태그입력</string>
+
+    <!-- Write Fourth -->
+    <string name="write_fourth_menu_title">메뉴 추가</string>
+    <string name="write_fourth_menu_add_title">배달 메뉴</string>
+    <string name="write_fourth_menu_add_plus_sign">+ 메뉴 추가하기</string>
+    <string name="write_fourth_menu_add">메뉴 추가하기</string>
+    <string name="write_fourth_amount_title">결제하기</string>
+    <string name="write_fourth_amount_detail_title">결제금액</string>
+    <string name="write_fourth_amount_detail_total_title">총 주문 금액</string>
+    <string name="write_fourth_amount_detail_coupon_title">쿠폰 사용금액</string>
+    <string name="write_fourth_amount_total_title">결제 예정 금액</string>
+    <string name="write_fourth_add_menu_description">모집 인원에 도달하면 모집이 추가할 메뉴를 적고 메뉴의 금액을 하단에 적어주세요</string>
+    <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴를 적어주세요</string>
 </resources>
