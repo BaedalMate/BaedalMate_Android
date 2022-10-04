@@ -24,17 +24,17 @@ class MemberViewModel @Inject constructor(
     fun setKakaoAccessToken(kakaoAccessToken: String) =
         viewModelScope.launch { tokenPreferencesRepository.setKakaoAccessToken(kakaoAccessToken) }
 
-    fun requestLoginKakao() = viewModelScope.launch {
+    fun requestLoginKakao(kakaoAccessToken: String) = viewModelScope.launch {
         val response =
-            requestLoginKakaoUseCase(MemberOAuthRequest(runBlocking { tokenPreferencesRepository.getKakaoAccessToken() }))
+            requestLoginKakaoUseCase(MemberOAuthRequest(kakaoAccessToken = kakaoAccessToken))
         if (response.isSuccessful) {
-            _loginSuccess.postValue(true)
             tokenPreferencesRepository.setOAuthToken(
                 MemberOAuthResponse(
                     response.body()!!.accessToken,
                     response.body()!!.refreshToken
                 )
             )
+            _loginSuccess.postValue(true)
         } else {
             _loginSuccess.postValue(false)
         }

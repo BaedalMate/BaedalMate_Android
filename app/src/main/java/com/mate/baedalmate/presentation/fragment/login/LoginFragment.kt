@@ -1,4 +1,4 @@
-package com.mate.baedalmate.presentation.fragment
+package com.mate.baedalmate.presentation.fragment.login
 
 import android.content.ContentValues
 import android.content.Intent
@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
         } else if (token != null) {
             Log.i(ContentValues.TAG, "카카오 로그인 성공 ${token.accessToken}")
             loginViewModel.setKakaoAccessToken(token.accessToken)
-            loginViewModel.requestLoginKakao()
+            loginViewModel.requestLoginKakao(token.accessToken)
         }
     }
 
