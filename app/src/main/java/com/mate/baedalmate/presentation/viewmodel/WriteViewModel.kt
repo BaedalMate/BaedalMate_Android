@@ -18,18 +18,22 @@ import com.mate.baedalmate.data.datasource.remote.write.PlaceMeta
 import com.mate.baedalmate.data.datasource.remote.write.RegionInfo
 import com.mate.baedalmate.data.datasource.remote.write.ResultSearchKeyword
 import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
+import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WriteViewModel @Inject constructor(private val kakaoLocalUseCase: RequestKakaoLocalUseCase) :
+class WriteViewModel @Inject constructor(
+    private val kakaoLocalUseCase: RequestKakaoLocalUseCase,
+    private val uploadPostUseCase: RequestUploadPostUseCase
+) :
     ViewModel() {
     var categoryId = 0
 
     var deadLinePeopleCount = 0
     var deadLineAmount = 0
-    var deadLineTime = "2020-12-24T16:28:27" // TODO 수정 필요
+    var deadLineTime = "2022-12-24T16:28:27" // TODO 수정 필요
     var deadLineCriterion = RecruitFinishCriteria.NUMBER
     var isDeliveryFeeFree = false
     var deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
@@ -46,16 +50,60 @@ class WriteViewModel @Inject constructor(private val kakaoLocalUseCase: RequestK
 
     var menuList = ListLiveData<MenuDto>()
 
-    private val _searchResultList = MutableLiveData(ResultSearchKeyword(
-        PlaceMeta(0,0,false, RegionInfo(emptyList(), "", "")),
-        emptyList()
-    ))
+    private val _searchResultList = MutableLiveData(
+        ResultSearchKeyword(
+            PlaceMeta(0, 0, false, RegionInfo(emptyList(), "", "")),
+            emptyList()
+        )
+    )
     val searchResultList: LiveData<ResultSearchKeyword> get() = _searchResultList
 
-    fun searchPlaceKeyword(keyword: String, x: String = "127.076668", y: String = "37.630081") = viewModelScope.launch {
-        val response = kakaoLocalUseCase.invoke(url= "https://dapi.kakao.com/v2/local/search/keyword.json", key = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}", query = keyword, x = x , y = y)
+    private val _writePostId = MutableLiveData<Int>()
+    val writePostId: LiveData<Int> get() = _writePostId
+
+    private val _writeSuccess = MutableLiveData<Boolean>()
+    val writeSuccess: LiveData<Boolean> get() = _writeSuccess
+
+    fun searchPlaceKeyword(keyword: String, x: String = "127.076668", y: String = "37.630081") =
+        viewModelScope.launch {
+            val response = kakaoLocalUseCase.invoke(
+                url = "https://dapi.kakao.com/v2/local/search/keyword.json",
+                key = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}",
+                query = keyword,
+                x = x,
+                y = y
+            )
+            if (response.isSuccessful) {
+                _searchResultList.postValue(response.body()!!)
+            }
+        }
+
+    fun requestUploadPost() = viewModelScope.launch {
+        val response = uploadPostUseCase.invoke(
+            body = CreateRecruitRequest(
+                categoryId = categoryId,
+                coupon = couponAmount,
+                criteria = deadLineCriterion,
+                deadlineDate = deadLineTime,
+                description = postDetail,
+                dormitory = deliveryDormitory,
+                freeShipping = isDeliveryFeeFree,
+                menu = menuList.value!!.toList(),
+                minPeople = deadLinePeopleCount,
+                minPrice = deadLineAmount,
+                place = deliveryStore.value!!,
+                platform = deliveryPlatform,
+                shippingFee = deliveryFeeRangeList,
+                tags = postTagList,
+                title = postTitle
+            )
+        )
+
         if (response.isSuccessful) {
-            _searchResultList.postValue(response.body()!!)
+            _writePostId.postValue(response.body()?.id ?: 0)
+            _writeSuccess.postValue(true)
+        } else {
+            _writeSuccess.postValue(false)
         }
     }
 }
