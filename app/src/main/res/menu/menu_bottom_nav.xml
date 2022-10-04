@@ -3,13 +3,16 @@
     <item
         android:id="@+id/HomeFragment"
         android:enabled="true"
+        android:icon="@drawable/selector_menu_icon_home"
         android:title="@string/home" />
     <item
         android:id="@+id/ChatFragment"
         android:enabled="true"
+        android:icon="@drawable/selector_menu_icon_chat"
         android:title="@string/chat" />
     <item
         android:id="@+id/MyPageFragment"
         android:enabled="true"
+        android:icon="@drawable/selector_menu_icon_my_page"
         android:title="@string/my_page" />
 </menu>
