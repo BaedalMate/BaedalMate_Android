@@ -53,6 +53,9 @@
     <string name="write_actionbar_title">상세 설정</string>
     <string name="write_goal_title">주문조건</string>
 
+    <!-- Write Category -->
+    <string name="write_category_actionbar_title">카테고리 선택</string>
+
     <!-- Write First -->
     <string name="write_first_goal_people_title">최소 모집 인원</string>
     <string name="write_first_goal_delivery_title">최소 주문 금액</string>

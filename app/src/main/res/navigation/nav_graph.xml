@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postCategoryListFragment"
-            app:destination="@id/WriteFirstFragment" />
+            app:destination="@id/WriteCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/PostCategoryListFragment"
@@ -25,6 +25,15 @@
         android:name="com.mate.baedalmate.presentation.fragment.post.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post">
+    </fragment>
+    <fragment
+        android:id="@+id/WriteCategoryFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteCategoryFragment"
+        android:label="fragment_write_category"
+        tools:layout="@layout/fragment_write_category">
+        <action
+            android:id="@+id/action_writeCategoryFragment_to_writeFirstFragment"
+            app:destination="@id/WriteFirstFragment" />
     </fragment>
     <fragment
         android:id="@+id/WriteFirstFragment"

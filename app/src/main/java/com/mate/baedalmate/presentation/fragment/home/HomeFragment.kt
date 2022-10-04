@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ViewPagerUtil
@@ -80,6 +81,7 @@ class HomeFragment : Fragment() {
         initCategoryUI()
         initRecentPostUI()
         initRecommendPostListUI()
+        initNavigation()
     }
 
     private fun initTopUserUI() {
@@ -186,6 +188,12 @@ class HomeFragment : Fragment() {
                 testArrTopPost2
             )
         )
+    }
+
+    private fun initNavigation() {
+        binding.fabHomeToWrite.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_postCategoryListFragment)
+        }
     }
 
     private fun setRoundTextView(
