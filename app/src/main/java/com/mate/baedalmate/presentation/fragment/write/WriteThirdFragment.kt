@@ -60,6 +60,7 @@ class WriteThirdFragment : Fragment() {
                 tagList.add(TagDto(tagname = tagText))
             }
             writeViewModel.postTagList = tagList
+            findNavController().navigate(R.id.action_writeThirdFragment_to_writeFourthFragment)
         }
     }
 

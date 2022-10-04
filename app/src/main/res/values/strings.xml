@@ -96,4 +96,17 @@
     <string name="write_third_tag_title">태그쓰기</string>
     <string name="write_third_tag_input_hint">#태그를 입력해주세요</string>
     <string name="write_third_tag_add">태그입력</string>
+
+    <!-- Write Fourth -->
+    <string name="write_fourth_menu_title">메뉴 추가</string>
+    <string name="write_fourth_menu_add_title">배달 메뉴</string>
+    <string name="write_fourth_menu_add_plus_sign">+ 메뉴 추가하기</string>
+    <string name="write_fourth_menu_add">메뉴 추가하기</string>
+    <string name="write_fourth_amount_title">결제하기</string>
+    <string name="write_fourth_amount_detail_title">결제금액</string>
+    <string name="write_fourth_amount_detail_total_title">총 주문 금액</string>
+    <string name="write_fourth_amount_detail_coupon_title">쿠폰 사용금액</string>
+    <string name="write_fourth_amount_total_title">결제 예정 금액</string>
+    <string name="write_fourth_add_menu_description">모집 인원에 도달하면 모집이 추가할 메뉴를 적고 메뉴의 금액을 하단에 적어주세요</string>
+    <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴를 적어주세요</string>
 </resources>

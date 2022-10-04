@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.BuildConfig
+import com.mate.baedalmate.common.ListLiveData
 import com.mate.baedalmate.data.datasource.remote.recruit.DeliveryPlatform
 import com.mate.baedalmate.data.datasource.remote.recruit.Dormitory
+import com.mate.baedalmate.data.datasource.remote.recruit.MenuDto
 import com.mate.baedalmate.data.datasource.remote.recruit.PlaceDto
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitFinishCriteria
 import com.mate.baedalmate.data.datasource.remote.recruit.ShippingFeeDto
@@ -40,6 +42,8 @@ class WriteViewModel @Inject constructor(private val kakaoLocalUseCase: RequestK
     var postTitle = ""
     var postDetail = ""
     var postTagList = mutableListOf<TagDto>()
+
+    var menuList = ListLiveData<MenuDto>()
 
     private val _searchResultList = MutableLiveData(ResultSearchKeyword(
         PlaceMeta(0,0,false, RegionInfo(emptyList(), "", "")),

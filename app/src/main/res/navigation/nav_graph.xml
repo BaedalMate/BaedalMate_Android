@@ -58,7 +58,25 @@
         android:name="com.mate.baedalmate.presentation.fragment.write.WriteThirdFragment"
         android:label="fragment_write_third"
         tools:layout="@layout/fragment_write_third">
+        <action
+            android:id="@+id/action_writeThirdFragment_to_writeFourthFragment"
+            app:destination="@id/WriteFourthFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/WriteFourthFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteFourthFragment"
+        android:label="fragment_write_fourth"
+        tools:layout="@layout/fragment_write_fourth">
+        <action
+            android:id="@+id/action_writeFourthFragment_to_writeFourthAddMenuFragment"
+            app:destination="@id/WriteFourthAddMenuFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/WriteFourthAddMenuFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.write.WriteFourthAddMenuFragment"
+        android:label="fragment_write_fourth_add_menu"
+        tools:layout="@layout/fragment_write_fourth_add_menu">
+    </dialog>
     <fragment
         android:id="@+id/ChatFragment"
         android:name="com.mate.baedalmate.presentation.fragment.chat.ChatFragment"

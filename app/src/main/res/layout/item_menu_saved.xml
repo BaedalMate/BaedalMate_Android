@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_menu_saved"
+        android:layout_width="200dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/background_white_radius_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tv_menu_saved_title"
+            style="@style/style_semi_title_kor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:paddingHorizontal="15dp"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="하와이안 피자 (L, 콜라 500ml 추가)" />
+
+        <TextView
+            android:id="@+id/tv_menu_saved_description"
+            style="@style/style_body2_kor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="9dp"
+            android:paddingHorizontal="15dp"
+            android:textColor="@color/gray_dark_666666"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_menu_saved_title"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="1개 · 12,400원" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/btn_menu_saved_delete"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/ic_delete_circle_gray_dark"
+        app:layout_constraintBottom_toTopOf="@id/layout_menu_saved"
+        app:layout_constraintEnd_toEndOf="@id/layout_menu_saved"
+        app:layout_constraintStart_toEndOf="@id/layout_menu_saved"
+        app:layout_constraintTop_toTopOf="@id/layout_menu_saved" />
+</androidx.constraintlayout.widget.ConstraintLayout>
