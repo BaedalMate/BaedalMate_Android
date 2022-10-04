@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_postCategoryListFragment"
             app:destination="@id/WriteCategoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_writeCategoryFragment"
+            app:destination="@id/WriteCategoryFragment" />
     </fragment>
     <fragment
         android:id="@+id/PostCategoryListFragment"
@@ -33,6 +36,9 @@
         tools:layout="@layout/fragment_write_category">
         <action
             android:id="@+id/action_writeCategoryFragment_to_writeFirstFragment"
+            app:destination="@id/WriteFirstFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_writeCategoryFragment"
             app:destination="@id/WriteFirstFragment" />
     </fragment>
     <fragment

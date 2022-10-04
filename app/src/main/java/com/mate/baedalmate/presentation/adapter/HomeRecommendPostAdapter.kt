@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mate.baedalmate.data.datasource.remote.recruit.RecruitDto
+import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.databinding.ItemHomeBottomPostRecommendBinding
 
 class HomeRecommendPostAdapter :

@@ -18,7 +18,7 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ViewPagerUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
-import com.mate.baedalmate.data.datasource.remote.recruit.RecruitDto
+import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.databinding.FragmentHomeBinding
 import com.mate.baedalmate.presentation.adapter.HomeCategoryAdapter
 import com.mate.baedalmate.presentation.adapter.HomeRecentPostAdapter
@@ -72,6 +72,7 @@ class HomeFragment : Fragment() {
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         initUI()
+        initNavigation()
         return binding.root
     }
 
@@ -81,7 +82,6 @@ class HomeFragment : Fragment() {
         initCategoryUI()
         initRecentPostUI()
         initRecommendPostListUI()
-        initNavigation()
     }
 
     private fun initTopUserUI() {
@@ -192,7 +192,7 @@ class HomeFragment : Fragment() {
 
     private fun initNavigation() {
         binding.fabHomeToWrite.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_postCategoryListFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_writeCategoryFragment)
         }
     }
 

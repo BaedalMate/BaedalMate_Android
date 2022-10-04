@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.RoundDialogFragment
-import com.mate.baedalmate.data.datasource.remote.recruit.PlaceDto
+import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.data.datasource.remote.write.Place
 import com.mate.baedalmate.databinding.FragmentWriteSecondPlaceDialogBinding
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondPlaceDialogListAdapter

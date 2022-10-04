@@ -1,4 +1,4 @@
-package com.mate.baedalmate.data.datasource.remote.recruit
+package com.mate.baedalmate.domain.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -18,7 +18,7 @@ import com.google.android.material.chip.ChipGroup
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
-import com.mate.baedalmate.data.datasource.remote.recruit.TagDto
+import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.databinding.FragmentWriteThirdBinding
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint

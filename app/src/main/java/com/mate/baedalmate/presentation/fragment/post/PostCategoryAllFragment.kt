@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.data.datasource.remote.recruit.RecruitDto
+import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.databinding.FragmentPostCategoryAllBinding
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import dagger.hilt.android.AndroidEntryPoint

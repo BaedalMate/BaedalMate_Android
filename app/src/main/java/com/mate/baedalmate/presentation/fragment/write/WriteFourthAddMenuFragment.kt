@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
-import com.mate.baedalmate.data.datasource.remote.recruit.MenuDto
+import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.databinding.FragmentWriteFourthAddMenuBinding
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -3,7 +3,7 @@ package com.mate.baedalmate.presentation.adapter.write
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.mate.baedalmate.data.datasource.remote.recruit.MenuDto
+import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.databinding.ItemMenuSavedBinding
 import java.text.DecimalFormat
 
