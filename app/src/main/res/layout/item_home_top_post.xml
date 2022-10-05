@@ -3,17 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="deliveryFee"
-            type="Integer" />
-
-        <variable
-            name="minPrice"
-            type="Integer" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
@@ -78,7 +67,7 @@
                 android:layout_height="0dp"
                 android:background="@drawable/background_white_radius_10_left"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/img_home_top_write_background"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/guideline_home_top_post_contents_divide"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -194,7 +183,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineHeight="18dp"
-                        android:text="@{` `+Integer.toString(deliveryFee) +`원`}"
                         app:layout_constraintBottom_toBottomOf="@id/tv_home_top_post_contents_information_description_delivery"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -223,7 +211,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:lineHeight="18dp"
-                        android:text="@{` `+Integer.toString(minPrice) +`원`}"
                         app:layout_constraintBottom_toBottomOf="@id/tv_home_top_post_contents_information_description_min"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -239,13 +226,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:lineHeight="18dp"
-                        android:text="20분 ~ 30분"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_home_top_post_contents_information_description_min"
-                        app:layout_constraintVertical_bias="0.0" />
+                        app:layout_constraintVertical_bias="0.0"
+                        tools:text="20분 ~ 30분" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -290,6 +277,78 @@
                     app:layout_constraintTop_toTopOf="@id/tv_home_top_post_contents_write"
                     app:layout_constraintVertical_bias="0.3"
                     app:tint="@color/black_000000" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_home_top_post_contents_write"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/background_white_radius_10_left"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_home_top_write_background"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/layout_home_top_post_contents_write"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/radius10_left_ImageView" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_img_home_top_post_contents_write"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/img_home_top_post_contents_write"
+                app:layout_constraintEnd_toEndOf="@id/img_home_top_post_contents_write"
+                app:layout_constraintStart_toStartOf="@id/img_home_top_post_contents_write"
+                app:layout_constraintTop_toTopOf="@id/img_home_top_post_contents_write">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/img_home_top_post_contents_write_overlay"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:alpha="0.5"
+                    android:background="#212123"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/radius10_left_ImageView" />
+
+                <TextView
+                    android:id="@+id/tv_home_top_post_contents_write_title"
+                    style="@style/style_title2_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/home_top_post_contents_write_title"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/tv_home_top_post_contents_write_description"
+                    style="@style/style_body2_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/home_top_post_contents_write_description"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_home_top_post_contents_write_title"
+                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
