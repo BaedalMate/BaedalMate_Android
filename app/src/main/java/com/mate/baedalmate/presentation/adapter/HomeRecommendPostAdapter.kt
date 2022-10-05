@@ -5,18 +5,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.mate.baedalmate.domain.model.RecruitDto
+import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.databinding.ItemHomeBottomPostRecommendBinding
+import java.text.DecimalFormat
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class HomeRecommendPostAdapter :
-    ListAdapter<RecruitDto, HomeRecommendPostAdapter.HomeRecommendPostViewHolder>(diffCallback) {
+    ListAdapter<MainRecruitDto, HomeRecommendPostAdapter.HomeRecommendPostViewHolder>(diffCallback) {
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<RecruitDto>() {
-            override fun areItemsTheSame(oldItem: RecruitDto, newItem: RecruitDto) =
+        private val diffCallback = object : DiffUtil.ItemCallback<MainRecruitDto>() {
+            override fun areItemsTheSame(oldItem: MainRecruitDto, newItem: MainRecruitDto) =
                 oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: RecruitDto, newItem: RecruitDto): Boolean =
-                oldItem.hashCode() == newItem.hashCode()
+            override fun areContentsTheSame(
+                oldItem: MainRecruitDto,
+                newItem: MainRecruitDto
+            ): Boolean =
+                oldItem == newItem
         }
     }
 
@@ -36,24 +43,36 @@ class HomeRecommendPostAdapter :
         holder.bind(getItem(position))
     }
 
-    override fun submitList(list: MutableList<RecruitDto>?) {
+    override fun submitList(list: MutableList<MainRecruitDto>?) {
         super.submitList(list?.let { ArrayList(it) })
     }
 
     inner class HomeRecommendPostViewHolder(private val binding: ItemHomeBottomPostRecommendBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(post: RecruitDto) {
-            with(binding) {
-                tvHomeBottomPostRecommendItemInfoTitle.text = "${post.title}"
-                tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
-                tvHomeBottomPostRecommendItemInfoBottomDeliveryCurrent.text =
-                    " ${post.deliveryFee}원"
-                tvHomeBottomPostRecommendItemInfoBottomCurrent.text = " ${post.minPrice}원"
-                tvHomeBottomPostRecommendItemInfoBottomUser.text =
-                    "${post.username} . ${post.dormitory} ★ ️${post.userScore}"
+        fun bind(post: MainRecruitDto) {
+            val decimalFormat = DecimalFormat("#,###")
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val deadlineTimeString: String = post.deadlineDate
+            var durationMinute = "0"
+
+            if (post.deadlineDate != "") {
+                val deadlineTime = LocalDateTime.parse(deadlineTimeString, formatter)
+                val currentTime = LocalDateTime.now()
+                val duration = Duration.between(currentTime, deadlineTime).toMinutes()
+                durationMinute = duration.toString()
             }
-            // TODO: 시간 설정
-            // TODO: 카테고리 이미지 설정
+
+            with(binding) {
+                // TODO: 카테고리 이미지 설정
+                tvHomeBottomPostRecommendItemInfoTitle.text = "${post.place}"
+                tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
+                tvHomeBottomPostRecentItemTopTime.text = "${durationMinute}분"
+                tvHomeBottomPostRecommendItemInfoBottomDeliveryCurrent.text = " ${decimalFormat.format(post.shippingFee)}원"
+                // TODO: 백엔드 최소금액 수정시 수정 필요
+                tvHomeBottomPostRecommendItemInfoBottomCurrent.text = " ${decimalFormat.format(post.minPeople)}원"
+                tvHomeBottomPostRecommendItemInfoBottomUser.text =
+                    "${post.username} · ${post.dormitory} ★ ️${post.userScore}"
+            }
         }
     }
 }

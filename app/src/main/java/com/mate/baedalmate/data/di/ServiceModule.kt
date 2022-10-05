@@ -1,14 +1,20 @@
 package com.mate.baedalmate.data.di
 
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
+import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.write.KakaoLocalApiService
 import com.mate.baedalmate.data.datasource.remote.write.WriteApiService
 import com.mate.baedalmate.data.repository.KakaoLocalRepositoryImpl
 import com.mate.baedalmate.data.repository.MemberRepositoryImpl
+import com.mate.baedalmate.data.repository.RecruitRepositoryImpl
 import com.mate.baedalmate.data.repository.WriteRepositoryImpl
 import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
+import com.mate.baedalmate.domain.repository.RecruitRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
 import dagger.Module
@@ -43,7 +49,6 @@ object ServiceModule {
     @Provides
     fun provideKakaoLocalUseCase(kakaoLocalRepository: KakaoLocalRepository): RequestKakaoLocalUseCase = RequestKakaoLocalUseCase(kakaoLocalRepository)
 
-
     @Singleton
     @Provides
     fun provideWriteApiService(retrofit: Retrofit) = retrofit.create(WriteApiService::class.java)
@@ -55,4 +60,24 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideUploadPostUseCase(writeRepository: WriteRepository): RequestUploadPostUseCase = RequestUploadPostUseCase(writeRepository)
+
+    @Singleton
+    @Provides
+    fun provideRecruitApiService(retrofit: Retrofit) = retrofit.create(RecruitApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideRecruitRepository(recruitRepositoryImpl: RecruitRepositoryImpl): RecruitRepository = recruitRepositoryImpl
+
+    @Singleton
+    @Provides
+    fun provideRecruitListUseCase(recruitRepository: RecruitRepository): RequestRecruitListUseCase = RequestRecruitListUseCase(recruitRepository)
+
+    @Singleton
+    @Provides
+    fun provideRecruitMainListUseCase(recruitRepository: RecruitRepository): RequestRecruitMainListUseCase = RequestRecruitMainListUseCase(recruitRepository)
+
+    @Singleton
+    @Provides
+    fun provideRecruitTagListUseCase(recruitRepository: RecruitRepository): RequestRecruitTagListUseCase = RequestRecruitTagListUseCase(recruitRepository)
 }

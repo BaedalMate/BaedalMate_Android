@@ -398,7 +398,7 @@
                             app:layout_constraintVertical_bias="0.0">
 
                             <RadioButton
-                                android:id="@+id/radiobutton_home_contents_bottom_post_recommend_category_time"
+                                android:id="@+id/radiobutton_home_contents_bottom_post_recommend_time"
                                 style="@style/style_body2_kor"
                                 android:layout_width="55dp"
                                 android:layout_height="28dp"

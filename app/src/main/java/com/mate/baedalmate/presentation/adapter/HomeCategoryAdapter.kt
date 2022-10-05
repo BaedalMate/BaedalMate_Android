@@ -14,7 +14,8 @@ class HomeCategoryAdapter :
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<String>() {
             override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean = oldItem == newItem
+            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
+                oldItem == newItem
         }
     }
 
@@ -43,13 +44,14 @@ class HomeCategoryAdapter :
         fun bind(category: String) {
             binding.tvHomeBottomMenuItem.text = category
             when(category) {
-                "한식" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_asia))}
+//                "전체" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_asia))}
+                "한식" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_korean))}
                 "중식" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_chinese))}
                 "일식" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_japanese))}
                 "양식" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_western))}
                 "패스트푸드" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_fastfood))}
                 "분식" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_bunsik))}
-                "카페디저트" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_dessert))}
+                "카페·디저트" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_dessert))}
                 "치킨" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_chinese))}
                 "피자" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_pizza))}
                 "아시안" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_asia))}

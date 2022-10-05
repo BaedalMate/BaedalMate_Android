@@ -24,6 +24,20 @@
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
 
+    <!-- Category -->
+    <string name="category_all">전체</string>
+    <string name="category_korean">한식</string>
+    <string name="category_chinese">중식</string>
+    <string name="category_japanese">일식</string>
+    <string name="category_western">양식</string>
+    <string name="category_fastfood">패스트푸드</string>
+    <string name="category_bunsik">분식</string>
+    <string name="category_dessert">카페·디저트</string>
+    <string name="category_chicken">치킨</string>
+    <string name="category_pizza">피자</string>
+    <string name="category_asia">아시안</string>
+    <string name="category_packedmeal">도시락</string>
+
     <!-- login -->
     <string name="login_select_method_kakao">카카오톡으로 시작하기</string>
 
@@ -31,6 +45,8 @@
     <string name="home_top_title">님을 위한</string>
     <string name="home_top_title_menu">오늘의 메뉴</string>
     <string name="home_top_title_location">배달 거점</string>
+    <string name="home_top_post_contents_write_title">지금 먹고 싶은 메뉴가 생겼다면?</string>
+    <string name="home_top_post_contents_write_description">합리적으로 배달시키세요!</string>
     <string name="home_contents_bottom_menu_title">메뉴 둘러보기</string>
     <string name="home_contents_bottom_post_recent_title">지금 모으고 있어요!</string>
     <string name="home_contents_bottom_post_recommend_title">배달메이트 추천</string>

@@ -8,14 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.mate.baedalmate.databinding.ItemHomeTopPostTagBinding
+import com.mate.baedalmate.domain.model.TagDto
 
 class HomeTopPostTagAdapter :
-    ListAdapter<String, HomeTopPostTagAdapter.HomeTopPostTagViewHolder>(diffCallback) {
+    ListAdapter<TagDto, HomeTopPostTagAdapter.HomeTopPostTagViewHolder>(diffCallback) {
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String) = oldItem == newItem
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean =
-                oldItem.hashCode() == newItem.hashCode()
+        private val diffCallback = object : DiffUtil.ItemCallback<TagDto>() {
+            override fun areItemsTheSame(oldItem: TagDto, newItem: TagDto) = oldItem == newItem
+            override fun areContentsTheSame(oldItem: TagDto, newItem: TagDto): Boolean =
+                oldItem.tagname == newItem.tagname
         }
     }
 
@@ -35,14 +36,14 @@ class HomeTopPostTagAdapter :
         holder.bind(getItem(position))
     }
 
-    override fun submitList(list: MutableList<String>?) {
+    override fun submitList(list: MutableList<TagDto>?) {
         super.submitList(list?.let { ArrayList(it) })
     }
 
     inner class HomeTopPostTagViewHolder(private val binding: ItemHomeTopPostTagBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(tagText: String) {
-            binding.tvHomeTopPostTag.text = tagText
+        fun bind(tag: TagDto) {
+            binding.tvHomeTopPostTag.text = tag.tagname
         }
     }
 }

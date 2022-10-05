@@ -12,68 +12,56 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ViewPagerUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
-import com.mate.baedalmate.domain.model.RecruitDto
+import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitDto
 import com.mate.baedalmate.databinding.FragmentHomeBinding
+import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.presentation.adapter.HomeCategoryAdapter
 import com.mate.baedalmate.presentation.adapter.HomeRecentPostAdapter
 import com.mate.baedalmate.presentation.adapter.HomeRecommendPostAdapter
 import com.mate.baedalmate.presentation.adapter.HomeTopPostAdapter
+import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding by autoCleared<FragmentHomeBinding>()
+    private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var homeTopPostAdapter: HomeTopPostAdapter
     private lateinit var homeCategoryAdapter: HomeCategoryAdapter
     private lateinit var homeRecentPostAdapter: HomeRecentPostAdapter
     private lateinit var homeRecommendPostAdapter: HomeRecommendPostAdapter
-    private lateinit var homeTopPostindicators: Array<ImageView?>
-
-    private var testArrTopPost1 = RecruitDto(
-        createDate = "2022-07-17T09:34:29.220Z",
-        currentPeople = 1,
-        deadlineDate = "2022-07-27T09:34:29.220Z",
-        deliveryFee = 4000,
-        dormitory = "수림학사",
-        id = 1,
-        minPeople = 2,
-        minPrice = 14000,
-        restaurantName = "교촌치킨",
-        thumbnailImage = "",
-        title = "같이 치킨 먹을 사람!",
-        userScore = 4.1f,
-        username = "유상"
-    )
-    private var testArrTopPost2 = RecruitDto(
-        createDate = "2022-07-12T09:34:29.220Z",
-        currentPeople = 1,
-        deadlineDate = "2022-07-21T09:34:29.220Z",
-        deliveryFee = 2000,
-        dormitory = "수림학사",
-        id = 2,
-        minPeople = 2,
-        minPrice = 14000,
-        restaurantName = "삼겹살",
-        thumbnailImage = "",
-        title = "사람 구해요",
-        userScore = 2.1f,
-        username = "유상"
-    )
+    private lateinit var homeTopPostIndicators: Array<ImageView?>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        getRecruitListData()
         initUI()
         initNavigation()
         return binding.root
+    }
+
+    private fun getRecruitListData() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recruitViewModel.requestHomeRecruitTagList(sort = "deadlineDate")
+                recruitViewModel.requestHomeRecruitRecentList(sort = "deadlineDate")
+                recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+            }
+        }
     }
 
     private fun initUI() {
@@ -98,33 +86,36 @@ class HomeFragment : Fragment() {
             adapter = homeTopPostAdapter
             ViewPagerUtil.previewNextItem(this, 37.dp, 15.dp)
         }
-        // TODO 서버 연결
-        homeTopPostAdapter.submitList(
-            mutableListOf(
-                testArrTopPost1,
-                testArrTopPost2,
-                testArrTopPost1,
-                testArrTopPost2
+
+        recruitViewModel.recruitHomeTagList.observe(viewLifecycleOwner) { tagList ->
+            val submitTagList = tagList.recruitList.toMutableList()
+            submitTagList.add(
+                TagRecruitDto(
+                    "", "", "", 0, "", 0, "", 0, listOf(TagDto("")),
+                    0f, ""
+                )
             )
-        )
-        setupIndicators(homeTopPostAdapter.itemCount)
-        setViewPagerChangeEvent()
+            homeTopPostAdapter.submitList(submitTagList)
+            setupIndicators(homeTopPostAdapter.itemCount)
+            setViewPagerChangeEvent()
+        }
     }
 
     private fun setupIndicators(count: Int) {
-        homeTopPostindicators = arrayOfNulls(count)
+        binding.vpHomeTopPostsIndicators.removeAllViews()
+        homeTopPostIndicators = arrayOfNulls(count)
         val params = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         params.setMargins(16, 8, 16, 8)
-        for (i in homeTopPostindicators.indices) {
-            homeTopPostindicators[i] = ImageView(requireContext())
-            homeTopPostindicators[i]!!.setImageDrawable(
+        for (i in homeTopPostIndicators.indices) {
+            homeTopPostIndicators[i] = ImageView(requireContext())
+            homeTopPostIndicators[i]!!.setImageDrawable(
                 ContextCompat.getDrawable(requireContext(), R.drawable.ic_vp_indicator_inactive)
             )
-            homeTopPostindicators[i]!!.layoutParams = params
-            binding.vpHomeTopPostsIndicators.addView(homeTopPostindicators[i])
+            homeTopPostIndicators[i]!!.layoutParams = params
+            binding.vpHomeTopPostsIndicators.addView(homeTopPostIndicators[i])
         }
         setCurrentIndicator(0)
     }
@@ -158,36 +149,55 @@ class HomeFragment : Fragment() {
     private fun initCategoryUI() {
         homeCategoryAdapter = HomeCategoryAdapter()
         binding.rvHomeContentsBottomMenu.adapter = homeCategoryAdapter
-        // TODO 서버 연결
-        homeCategoryAdapter.submitList(MutableList(8, { i -> "i" }))
+        homeCategoryAdapter.submitList(
+            mutableListOf(
+                getString(R.string.category_all), getString(R.string.category_korean),
+                getString(R.string.category_chinese), getString(R.string.category_japanese),
+                getString(R.string.category_western), getString(R.string.category_fastfood),
+                getString(R.string.category_bunsik), getString(R.string.category_dessert),
+                getString(R.string.category_chicken), getString(R.string.category_pizza),
+                getString(R.string.category_asia), getString(R.string.category_packedmeal)
+            )
+        )
     }
 
     private fun initRecentPostUI() {
         homeRecentPostAdapter = HomeRecentPostAdapter()
         binding.rvHomeContentsBottomPostRecentList.adapter = homeRecentPostAdapter
-        // TODO 서버 연결
-        homeRecentPostAdapter.submitList(
-            mutableListOf(
-                testArrTopPost1,
-                testArrTopPost2,
-                testArrTopPost1,
-                testArrTopPost2
-            )
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recruitViewModel.recruitHomeRecentList.observe(viewLifecycleOwner) { recruitList ->
+                    homeRecentPostAdapter.submitList(recruitList.recruitList.toMutableList())
+                }
+            }
+        }
     }
 
     private fun initRecommendPostListUI() {
         homeRecommendPostAdapter = HomeRecommendPostAdapter()
         binding.rvHomeContentsBottomPostRecommendList.adapter = homeRecommendPostAdapter
-        // TODO 서버 연결
-        homeRecommendPostAdapter.submitList(
-            mutableListOf(
-                testArrTopPost1,
-                testArrTopPost2,
-                testArrTopPost1,
-                testArrTopPost2
-            )
-        )
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                recruitViewModel.recruitHomeRecommendList.observe(viewLifecycleOwner) { recruitList ->
+                    homeRecommendPostAdapter.submitList(recruitList.recruitList.toMutableList())
+                }
+            }
+        }
+
+        binding.radiogroupHomeContentsBottomPostRecommendCategory.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                // TODO: 백엔드에서 정렬기준이 만들어지면 수정 필요
+                R.id.radiobutton_home_contents_bottom_post_recommend_time -> {
+                    recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+                }
+                R.id.radiobutton_home_contents_bottom_post_recommend_popular -> {
+                    recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+                }
+                R.id.radiobutton_home_contents_bottom_post_recommend_star -> {
+                    recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+                }
+            }
+        }
     }
 
     private fun initNavigation() {
