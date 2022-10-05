@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,7 @@ class WriteFourthFragment : Fragment() {
         setNextClickListener()
         setAddMenuClickListener()
         setMenuListOriginalValue()
+        observeUploadSuccess()
     }
 
     private fun setBackClickListener() {
@@ -53,7 +55,7 @@ class WriteFourthFragment : Fragment() {
 
     private fun setNextClickListener() {
         binding.btnWriteFourthNext.setOnClickListener {
-            // TODO
+            writeViewModel.requestUploadPost()
         }
     }
 
@@ -168,5 +170,15 @@ class WriteFourthFragment : Fragment() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         binding.tvWriteFourthAmountTotal.text = span
+    }
+
+    private fun observeUploadSuccess() {
+        writeViewModel.writeSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if(isSuccess) {
+                // TODO 글 작성 완료 이후 상세 글 보기 혹은 홈 화면으로 돌아가는 기능 구현 필요
+            } else {
+                Toast.makeText(requireContext(), "글 작성을 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
