@@ -29,6 +29,7 @@ import com.mate.baedalmate.presentation.adapter.HomeCategoryAdapter
 import com.mate.baedalmate.presentation.adapter.HomeRecentPostAdapter
 import com.mate.baedalmate.presentation.adapter.HomeRecommendPostAdapter
 import com.mate.baedalmate.presentation.adapter.HomeTopPostAdapter
+import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private var binding by autoCleared<FragmentHomeBinding>()
+    private val memberViewModel by activityViewModels<MemberViewModel>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var homeTopPostAdapter: HomeTopPostAdapter
     private lateinit var homeCategoryAdapter: HomeCategoryAdapter
@@ -48,20 +50,29 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        getRecruitListData()
-        initUI()
-        initNavigation()
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        getUserInfo()
+        getRecruitListData()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initUI()
+        initNavigation()
+    }
+
+    private fun getUserInfo() {
+        memberViewModel.requestUserInfo()
+    }
+
     private fun getRecruitListData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                recruitViewModel.requestHomeRecruitTagList(sort = "deadlineDate")
-                recruitViewModel.requestHomeRecruitRecentList(sort = "deadlineDate")
-                recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
-            }
-        }
+        recruitViewModel.requestHomeRecruitTagList(sort = "deadlineDate")
+        recruitViewModel.requestHomeRecruitRecentList(sort = "deadlineDate")
+        recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
     }
 
     private fun initUI() {
@@ -73,11 +84,41 @@ class HomeFragment : Fragment() {
     }
 
     private fun initTopUserUI() {
-        // TODO 서버 연결
-        val span = SpannableString("캡스톤")
-        setRoundTextView(span, "rounded", 0, span.length)
-        binding.tvHomeTopTitleUserName.text = span
-        binding.tvHomeTopTitleLocationCurrent.text = "서울과기대 누리학사"
+        var userName = "학생"
+        var userDormitory = "누리학사"
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                memberViewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
+                    userName = userInfo.nickname
+                    userDormitory = userInfo.dormitory
+
+                    val span = SpannableString(userName)
+                    setRoundTextView(span, "rounded", 0, span.length)
+                    binding.tvHomeTopTitleUserName.text = span
+                    binding.tvHomeTopTitleLocationCurrent.text =
+                        "${getString(R.string.university_seoultech)} $userDormitory"
+
+                    setChangeDormitory(currentDormitory = userDormitory)
+                }
+            }
+        }
+    }
+
+    private fun setChangeDormitory(currentDormitory: String) {
+        binding.tvHomeTopTitleLocationCurrent.setOnClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToHomeChangeDormitoryFragment(
+                    currentDormitory = currentDormitory
+                )
+            )
+        }
+        binding.imgHomeTopTitleLocationArrow.setOnClickListener {
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToHomeChangeDormitoryFragment(
+                    currentDormitory = currentDormitory
+                )
+            )
+        }
     }
 
     private fun initTopPostUI() {
@@ -96,8 +137,8 @@ class HomeFragment : Fragment() {
                 )
             )
             homeTopPostAdapter.submitList(submitTagList)
-            setupIndicators(homeTopPostAdapter.itemCount)
             setViewPagerChangeEvent()
+            setupIndicators(submitTagList.size)
         }
     }
 
