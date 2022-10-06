@@ -8,17 +8,19 @@ import retrofit2.http.Query
 interface RecruitApiService {
     @GET("/api/v1/recruit/list")
     suspend fun requestRecruitList(
-        @Query("categoryId") categoryId: Int,
+        @Query("categoryId") categoryId: Int? = null,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: String,
     ): Response<RecruitList>
+
     @GET("/api/v1/recruit/main/list")
     suspend fun requestRecruitMainList(
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: String,
     ): Response<MainRecruitList>
+
     @GET("/api/v1/recruit/tag/list")
     suspend fun requestRecruitTagList(
         @Query("page") page: Int,

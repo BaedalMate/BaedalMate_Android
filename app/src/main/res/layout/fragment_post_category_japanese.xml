@@ -2,24 +2,24 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".presentation.fragment.post.PostCategoryAllFragment">
+    tools:context=".presentation.fragment.post.PostCategoryJapaneseFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_post_category_all_sort"
+            android:id="@+id/layout_post_category_japanese_sort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="12dp"
+            android:paddingVertical="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
             <RadioGroup
-                android:id="@+id/radiogroup_layout_post_category_all_sort"
+                android:id="@+id/radiogroup_layout_post_category_japanese_sort"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -31,7 +31,7 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <RadioButton
-                    android:id="@+id/radiobutton_post_category_all_sort_time"
+                    android:id="@+id/radiobutton_post_category_japanese_sort_time"
                     style="@style/style_body2_kor"
                     android:layout_width="55dp"
                     android:layout_height="28dp"
@@ -44,7 +44,7 @@
                     android:textColor="@drawable/selector_post_category_sort_text" />
 
                 <RadioButton
-                    android:id="@+id/radiobutton_post_category_all_sort_popular"
+                    android:id="@+id/radiobutton_post_category_japanese_sort_popular"
                     style="@style/style_body2_kor"
                     android:layout_width="55dp"
                     android:layout_height="28dp"
@@ -56,7 +56,7 @@
                     android:textColor="@drawable/selector_post_category_sort_text" />
 
                 <RadioButton
-                    android:id="@+id/radiobutton_post_category_all_sort_star"
+                    android:id="@+id/radiobutton_post_category_japanese_sort_star"
                     style="@style/style_body2_kor"
                     android:layout_width="55dp"
                     android:layout_height="28dp"
@@ -70,7 +70,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_post_category_all_list"
+            android:id="@+id/rv_post_category_japanese_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -79,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_post_category_all_sort"
+            app:layout_constraintTop_toBottomOf="@id/layout_post_category_japanese_sort"
             app:layout_constraintVertical_bias="0.0"
             tools:itemCount="10"
             tools:listitem="@layout/item_post_category_list" />

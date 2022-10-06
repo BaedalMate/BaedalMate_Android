@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postCategoryListFragment"
-            app:destination="@id/WriteCategoryFragment" />
+            app:destination="@id/PostCategoryListFragment" />
         <action
             android:id="@+id/action_homeFragment_to_writeCategoryFragment"
             app:destination="@id/WriteCategoryFragment" />
@@ -35,12 +35,26 @@
         android:name="com.mate.baedalmate.presentation.fragment.post.PostCategoryListFragment"
         android:label="fragment_post_category_list"
         tools:layout="@layout/fragment_post_category_list">
+        <argument
+            android:name="currentCategory"
+            app:argType="string"
+            android:defaultValue="전체"/>
+        <action
+            android:id="@+id/action_postCategoryListFragment_to_writeCategoryFragment"
+            app:destination="@id/WriteCategoryFragment" />
+        <action
+            android:id="@+id/action_postCategoryListFragment_to_postFragment"
+            app:destination="@id/PostFragment" />
     </fragment>
     <fragment
         android:id="@+id/PostFragment"
         android:name="com.mate.baedalmate.presentation.fragment.post.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post">
+        <argument
+            android:name="postId"
+            app:argType="integer"
+            android:defaultValue="0"/>
     </fragment>
     <fragment
         android:id="@+id/WriteCategoryFragment"

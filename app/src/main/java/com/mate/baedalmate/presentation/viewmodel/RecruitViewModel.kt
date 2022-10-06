@@ -21,8 +21,30 @@ class RecruitViewModel @Inject constructor(
     private val recruitMainListUseCase: RequestRecruitMainListUseCase,
     private val recruitTagListUseCase: RequestRecruitTagListUseCase
 ) : ViewModel() {
-    private val _recruitList = MutableLiveData(RecruitList(emptyList()))
-    val recruitList: LiveData<RecruitList> get() = _recruitList
+    private val _recruitListAll = MutableLiveData(RecruitList(emptyList()))
+    val recruitListAll: LiveData<RecruitList> get() = _recruitListAll
+    private val _recruitListKorean = MutableLiveData(RecruitList(emptyList()))
+    val recruitListKorean: LiveData<RecruitList> get() = _recruitListKorean
+    private val _recruitListChinese = MutableLiveData(RecruitList(emptyList()))
+    val recruitListChinese: LiveData<RecruitList> get() = _recruitListChinese
+    private val _recruitListJapanese = MutableLiveData(RecruitList(emptyList()))
+    val recruitListJapanese: LiveData<RecruitList> get() = _recruitListJapanese
+    private val _recruitListWestern = MutableLiveData(RecruitList(emptyList()))
+    val recruitListWestern: LiveData<RecruitList> get() = _recruitListWestern
+    private val _recruitListFastfood = MutableLiveData(RecruitList(emptyList()))
+    val recruitListFastfood: LiveData<RecruitList> get() = _recruitListFastfood
+    private val _recruitListBunsik = MutableLiveData(RecruitList(emptyList()))
+    val recruitListBunsik: LiveData<RecruitList> get() = _recruitListBunsik
+    private val _recruitListDessert = MutableLiveData(RecruitList(emptyList()))
+    val recruitListDessert: LiveData<RecruitList> get() = _recruitListDessert
+    private val _recruitListChicken = MutableLiveData(RecruitList(emptyList()))
+    val recruitListChicken: LiveData<RecruitList> get() = _recruitListChicken
+    private val _recruitListPizza = MutableLiveData(RecruitList(emptyList()))
+    val recruitListPizza: LiveData<RecruitList> get() = _recruitListPizza
+    private val _recruitListAsia = MutableLiveData(RecruitList(emptyList()))
+    val recruitListAsia: LiveData<RecruitList> get() = _recruitListAsia
+    private val _recruitListPackedmeal = MutableLiveData(RecruitList(emptyList()))
+    val recruitListPackedmeal: LiveData<RecruitList> get() = _recruitListPackedmeal
 
     private val _isRecruitListLoad = MutableLiveData(false)
     val isRecruitListLoad: LiveData<Boolean> get() = _isRecruitListLoad
@@ -60,7 +82,12 @@ class RecruitViewModel @Inject constructor(
     private val _isRecruitTagListLoad = MutableLiveData(false)
     val isRecruitTagListLoad: LiveData<Boolean> get() = _isRecruitTagListLoad
 
-    fun requestCategoryRecruitList(categoryId: Int, page: Int = 0, size: Int = 4, sort: String) =
+    fun requestCategoryRecruitList(
+        categoryId: Int? = null,
+        page: Int = 0,
+        size: Int = 4,
+        sort: String
+    ) =
         viewModelScope.launch {
             val response = recruitListUseCase.invoke(
                 categoryId = categoryId,
@@ -69,7 +96,47 @@ class RecruitViewModel @Inject constructor(
                 sort = sort
             )
             if (response.isSuccessful) {
-                _recruitList.postValue(response.body())
+                when (categoryId) {
+                    null -> {
+                        _recruitListAll.postValue(response.body())
+                    }
+                    1 -> {
+                        _recruitListKorean.postValue(response.body())
+                    }
+                    2 -> {
+                        _recruitListChinese.postValue(response.body())
+                    }
+                    3 -> {
+                        _recruitListJapanese.postValue(response.body())
+                    }
+                    4 -> {
+                        _recruitListWestern.postValue(response.body())
+                    }
+                    5 -> {
+                        _recruitListFastfood.postValue(response.body())
+                    }
+                    6 -> {
+                        _recruitListBunsik.postValue(response.body())
+                    }
+                    7 -> {
+                        _recruitListDessert.postValue(response.body())
+                    }
+                    8 -> {
+                        _recruitListChicken.postValue(response.body())
+                    }
+                    9 -> {
+                        _recruitListPizza.postValue(response.body())
+                    }
+                    10 -> {
+                        _recruitListAsia.postValue(response.body())
+                    }
+                    11 -> {
+                        _recruitListPackedmeal.postValue(response.body())
+                    }
+                    else -> {
+                        _recruitListAll.postValue(response.body())
+                    }
+                }
                 _isRecruitListLoad.postValue(true)
             } else {
                 _isRecruitListLoad.postValue(false)
@@ -94,13 +161,14 @@ class RecruitViewModel @Inject constructor(
             }
         }
 
-    fun requestHomeRecruitTagList(page: Int = 0, size: Int = 4, sort: String) = viewModelScope.launch {
-        val response = recruitTagListUseCase.invoke(page = page, size = size, sort = sort)
-        if (response.isSuccessful) {
-            _recruitHomeTagList.postValue(response.body())
-            _isRecruitTagListLoad.postValue(true)
-        } else {
-            _isRecruitTagListLoad.postValue(false)
+    fun requestHomeRecruitTagList(page: Int = 0, size: Int = 4, sort: String) =
+        viewModelScope.launch {
+            val response = recruitTagListUseCase.invoke(page = page, size = size, sort = sort)
+            if (response.isSuccessful) {
+                _recruitHomeTagList.postValue(response.body())
+                _isRecruitTagListLoad.postValue(true)
+            } else {
+                _isRecruitTagListLoad.postValue(false)
+            }
         }
-    }
 }
