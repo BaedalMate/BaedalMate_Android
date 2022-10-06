@@ -11,7 +11,7 @@ import javax.inject.Inject
 class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: RecruitApiService) :
     RecruitRepository {
     override suspend fun requestRecruitList(
-        categoryId: Int,
+        categoryId: Int?,
         page: Int,
         size: Int,
         sort: String

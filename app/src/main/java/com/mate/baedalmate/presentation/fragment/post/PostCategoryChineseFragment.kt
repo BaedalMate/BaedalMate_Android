@@ -10,14 +10,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.databinding.FragmentPostCategoryAllBinding
+import com.mate.baedalmate.databinding.FragmentPostCategoryChineseBinding
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PostCategoryAllFragment : Fragment() {
-    private var binding by autoCleared<FragmentPostCategoryAllBinding>()
+class PostCategoryChineseFragment : Fragment() {
+    private var binding by autoCleared<FragmentPostCategoryChineseBinding>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var postCategoryListAdapter: PostCategoryListAdapter
 
@@ -25,7 +25,7 @@ class PostCategoryAllFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPostCategoryAllBinding.inflate(inflater, container, false)
+        binding = FragmentPostCategoryChineseBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -38,6 +38,7 @@ class PostCategoryAllFragment : Fragment() {
 
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
+            categoryId = 2,
             page = 0,
             size = 25,
             sort = sort
@@ -46,11 +47,11 @@ class PostCategoryAllFragment : Fragment() {
 
     private fun initListAdapter() {
         postCategoryListAdapter = PostCategoryListAdapter()
-        binding.rvPostCategoryAllList.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvPostCategoryChineseList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
-            rvPostCategoryAllList.adapter = postCategoryListAdapter
+            rvPostCategoryChineseList.adapter = postCategoryListAdapter
         }
-        recruitViewModel.recruitListAll.observe(viewLifecycleOwner) { recruitList ->
+        recruitViewModel.recruitListChinese.observe(viewLifecycleOwner) { recruitList ->
             postCategoryListAdapter.submitList(recruitList.recruitList.toMutableList())
         }
 
@@ -68,17 +69,11 @@ class PostCategoryAllFragment : Fragment() {
 
     private fun setCategoryClickListener() {
         // TODO 백엔드 수정시 수정 필요
-        binding.radiogroupLayoutPostCategoryAllSort.setOnCheckedChangeListener { group, checkedId ->
+        binding.radiogroupLayoutPostCategoryChineseSort.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                R.id.radiobutton_post_category_all_sort_time -> {
-                    getRecruitList(sort = "deadlineDate")
-                }
-                R.id.radiobutton_post_category_all_sort_star -> {
-                    getRecruitList(sort = "")
-                }
-                R.id.radiobutton_post_category_all_sort_popular -> {
-                    getRecruitList(sort = "")
-                }
+                R.id.radiobutton_post_category_chinese_sort_time -> { getRecruitList(sort = "") }
+                R.id.radiobutton_post_category_chinese_sort_star -> { getRecruitList(sort = "") }
+                R.id.radiobutton_post_category_chinese_sort_popular -> { getRecruitList(sort = "") }
             }
         }
     }

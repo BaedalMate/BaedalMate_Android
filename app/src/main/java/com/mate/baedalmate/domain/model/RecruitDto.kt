@@ -5,28 +5,24 @@ import com.google.gson.annotations.SerializedName
 data class RecruitDto (
     @SerializedName("createDate")
     val createDate: String,
+    @SerializedName("criteria")
+    val criteria: RecruitFinishCriteria,
     @SerializedName("currentPeople")
     val currentPeople: Int,
     @SerializedName("deadlineDate")
     val deadlineDate: String,
-    @SerializedName("deliveryFee")
-    val deliveryFee: Int,
     @SerializedName("dormitory")
     val dormitory: String,
     @SerializedName("id")
     val id: Int,
+    @SerializedName("image")
+    val image: String,
     @SerializedName("minPeople")
     val minPeople: Int,
-    @SerializedName("minPrice")
-    val minPrice: Int,
-    @SerializedName("restaurantName")
-    val restaurantName: String,
-    @SerializedName("thumbnailImage")
-    val thumbnailImage: String,
+    @SerializedName("place")
+    val place: String,
     @SerializedName("title")
     val title: String,
     @SerializedName("userScore")
-    val userScore: Float,
-    @SerializedName("username")
-    val username: String,
+    val userScore: Float
 )
