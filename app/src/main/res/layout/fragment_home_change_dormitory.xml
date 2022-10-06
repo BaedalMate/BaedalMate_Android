@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.fragment.home.HomeChangeDormitoryFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_white_radius_10_top">
+
+        <TextView
+            android:id="@+id/tv_home_change_dormitory_title"
+            style="@style/style_body2_kor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="7dp"
+            android:text="배달거점"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <RadioGroup
+            android:id="@+id/radiogroup_home_change_dormitory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_change_dormitory_title"
+            app:layout_constraintVertical_bias="0.0">
+
+            <RadioButton
+                android:id="@+id/radiobutton_home_change_dormitory_sunglim"
+                style="@style/style_body2_kor"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="20dp"
+                android:button="@null"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:drawableTint="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="성림학사"
+                android:textColor="@drawable/selector_textview_main_orange_gray_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_line_EBEBEB" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_home_change_dormitory_kb"
+                style="@style/style_body2_kor"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="20dp"
+                android:button="@null"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:drawableTint="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="KB학사"
+                android:textColor="@drawable/selector_textview_main_orange_gray_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_line_EBEBEB" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_home_change_dormitory_buram"
+                style="@style/style_body2_kor"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="20dp"
+                android:button="@null"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:drawableTint="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="불암학사"
+                android:textColor="@drawable/selector_textview_main_orange_gray_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_line_EBEBEB" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_home_change_dormitory_nuri"
+                style="@style/style_body2_kor"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="20dp"
+                android:button="@null"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:drawableTint="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="누리학사"
+                android:textColor="@drawable/selector_textview_main_orange_gray_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_line_EBEBEB" />
+
+            <RadioButton
+                android:id="@+id/radiobutton_home_change_dormitory_sulim"
+                style="@style/style_body2_kor"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="20dp"
+                android:button="@null"
+                android:drawableEnd="@drawable/ic_arrow"
+                android:drawableTint="@null"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="수림학사"
+                android:textColor="@drawable/selector_textview_main_orange_gray_dark" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray_line_EBEBEB" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/tv_home_change_dormitory_confirm"
+            style="@style/style_title2_kor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="11dp"
+            android:paddingBottom="58dp"
+            android:text="@string/confirm"
+            android:textColor="@color/black_000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radiogroup_home_change_dormitory"
+            app:layout_constraintVertical_bias="0.0" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

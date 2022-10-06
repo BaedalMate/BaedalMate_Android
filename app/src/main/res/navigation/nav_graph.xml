@@ -16,7 +16,20 @@
         <action
             android:id="@+id/action_homeFragment_to_writeCategoryFragment"
             app:destination="@id/WriteCategoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_homeChangeDormitoryFragment"
+            app:destination="@id/HomeChangeDormitoryFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/HomeChangeDormitoryFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.home.HomeChangeDormitoryFragment"
+        android:label="fragment_home_change_dormitory"
+        tools:layout="@layout/fragment_home_change_dormitory">
+        <argument
+            android:name="currentDormitory"
+            app:argType="string"
+            android:defaultValue="성림학사" />
+    </dialog>
     <fragment
         android:id="@+id/PostCategoryListFragment"
         android:name="com.mate.baedalmate.presentation.fragment.post.PostCategoryListFragment"

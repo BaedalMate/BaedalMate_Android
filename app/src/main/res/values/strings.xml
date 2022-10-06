@@ -20,9 +20,17 @@
     <string name="user_location">배달 거점</string>
     <string name="store_location">배달 가게</string>
     <string name="delivery_platform">배달 플랫폼</string>
+    <string name="confirm">확인</string>
 
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
+
+    <!-- Dormitory -->
+    <string name="sunglim">성림학사</string>
+    <string name="kb">KB학사</string>
+    <string name="buram">불암학사</string>
+    <string name="nuri">누리학사</string>
+    <string name="sulim">수림학사</string>
 
     <!-- Category -->
     <string name="category_all">전체</string>

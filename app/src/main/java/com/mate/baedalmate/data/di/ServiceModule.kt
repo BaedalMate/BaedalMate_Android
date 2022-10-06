@@ -12,6 +12,8 @@ import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
 import com.mate.baedalmate.domain.repository.RecruitRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
+import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
@@ -36,6 +38,14 @@ object ServiceModule {
     @Provides
     fun provideMemberRepository(memberApiService: MemberApiService): MemberRepository =
         MemberRepositoryImpl(memberApiService)
+
+    @Singleton
+    @Provides
+    fun provideGetUserInfoUseCase(memberRepository: MemberRepository): RequestGetUserInfoUseCase = RequestGetUserInfoUseCase(memberRepository)
+
+    @Singleton
+    @Provides
+    fun providePutUserDormitoryUseCase(memberRepository: MemberRepository): RequestPutUserDormitoryUseCase = RequestPutUserDormitoryUseCase(memberRepository)
 
     @Singleton
     @Provides

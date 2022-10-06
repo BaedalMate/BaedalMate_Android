@@ -60,7 +60,7 @@ class RecruitViewModel @Inject constructor(
     private val _isRecruitTagListLoad = MutableLiveData(false)
     val isRecruitTagListLoad: LiveData<Boolean> get() = _isRecruitTagListLoad
 
-    fun requestCategoryRecruitList(categoryId: Int, page: Int = 1, size: Int = 4, sort: String) =
+    fun requestCategoryRecruitList(categoryId: Int, page: Int = 0, size: Int = 4, sort: String) =
         viewModelScope.launch {
             val response = recruitListUseCase.invoke(
                 categoryId = categoryId,
@@ -76,7 +76,7 @@ class RecruitViewModel @Inject constructor(
             }
         }
 
-    fun requestHomeRecruitRecentList(page: Int = 1, size: Int = 4, sort: String) =
+    fun requestHomeRecruitRecentList(page: Int = 0, size: Int = 4, sort: String) =
         viewModelScope.launch {
             val response = recruitMainListUseCase.invoke(page = page, size = size, sort = sort)
             if (response.isSuccessful) {
@@ -85,7 +85,7 @@ class RecruitViewModel @Inject constructor(
             }
         }
 
-    fun requestHomeRecruitRecommendList(page: Int = 1, size: Int = 4, sort: String) =
+    fun requestHomeRecruitRecommendList(page: Int = 0, size: Int = 4, sort: String) =
         viewModelScope.launch {
             val response = recruitMainListUseCase.invoke(page = page, size = size, sort = sort)
             if (response.isSuccessful) {
@@ -94,7 +94,7 @@ class RecruitViewModel @Inject constructor(
             }
         }
 
-    fun requestHomeRecruitTagList(page: Int = 1, size: Int = 4, sort: String) = viewModelScope.launch {
+    fun requestHomeRecruitTagList(page: Int = 0, size: Int = 4, sort: String) = viewModelScope.launch {
         val response = recruitTagListUseCase.invoke(page = page, size = size, sort = sort)
         if (response.isSuccessful) {
             _recruitHomeTagList.postValue(response.body())

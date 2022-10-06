@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/main_FB5F1C" android:state_pressed="true" />
+    <item android:color="@color/main_FB5F1C" android:state_selected="true" />
+    <item android:color="@color/main_FB5F1C" android:state_focused="true" />
+    <item android:color="@color/main_FB5F1C" android:state_checked="true" />
+    <item android:color="@color/gray_dark_666666" android:state_checked="false" />
+</selector>
