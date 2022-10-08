@@ -12,7 +12,6 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="15dp"
             android:background="@drawable/background_white_radius_10"
-            android:backgroundTint="@color/purple_200"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -21,11 +20,21 @@
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_home_bottom_post_recent_item"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/radius10_ImageView" />
+
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_home_bottom_post_recent_item_dim"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:alpha="0.6"
-                android:src="@color/black"
+                android:src="#212123"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -110,14 +119,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:lineHeight="22.3dp"
-                    android:text="20분"
                     android:textColor="@color/white_FFFFFF"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:text="20분" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -155,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:lineHeight="18dp"
-                    android:text="배달팁"
+                    android:text="@string/delivery_fee"
                     android:textColor="@color/white_FFFFFF"
                     app:layout_constraintBottom_toTopOf="@id/tv_home_bottom_post_recent_item_bottom_min"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:lineHeight="18dp"
-                    android:text="최소주문"
+                    android:text="@string/delivery_min"
                     android:textColor="@color/white_FFFFFF"
                     app:layout_constraintBottom_toTopOf="@id/layout_home_bottom_post_recent_item_bottom_user"
                     app:layout_constraintEnd_toEndOf="parent"

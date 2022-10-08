@@ -3,6 +3,7 @@ package com.mate.baedalmate.data.repository
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
+import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
 import com.mate.baedalmate.domain.repository.RecruitRepository
 import retrofit2.Response
@@ -32,4 +33,7 @@ class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: R
         sort: String
     ): Response<TagRecruitList> =
         recruitApiService.requestRecruitTagList(page = page, size = size, sort = sort)
+
+    override suspend fun requestRecruitPost(id: Int): Response<RecruitDetail> =
+        recruitApiService.requestRecruitPost(id = id)
 }

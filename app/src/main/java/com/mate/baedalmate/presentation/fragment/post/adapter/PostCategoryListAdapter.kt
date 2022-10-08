@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Priority
+import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.databinding.ItemPostCategoryListBinding
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
@@ -16,7 +18,7 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class PostCategoryListAdapter :
+class PostCategoryListAdapter(private val requestManager: RequestManager) :
     ListAdapter<RecruitDto, PostCategoryListAdapter.PostCategoryListViewHolder>(diffCallback) {
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<RecruitDto>() {
@@ -94,7 +96,11 @@ class PostCategoryListAdapter :
                 }
             }
 
-//            binding.imgPostCategoryList = item.thumbnailImage // TODO: 서버와 연결하여 Glide 적용 필요
+            requestManager.load("http://3.35.27.107:8080/images/${item.image}")
+                .thumbnail(0.1f)
+                .priority(Priority.HIGH)
+                .centerCrop()
+                .into(binding.imgPostCategoryList)
             binding.tvPostCategoryListTitle.text = item.title
             binding.tvPostCategoryListLocationStore.text = item.place
             binding.tvPostCategoryListLocationUser.text = item.dormitory

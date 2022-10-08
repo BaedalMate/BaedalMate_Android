@@ -16,6 +16,7 @@ import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
@@ -90,4 +91,8 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRecruitTagListUseCase(recruitRepository: RecruitRepository): RequestRecruitTagListUseCase = RequestRecruitTagListUseCase(recruitRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestRecruitPostUseCase(recruitRepository: RecruitRepository): RequestRecruitPostUseCase = RequestRecruitPostUseCase(recruitRepository)
 }

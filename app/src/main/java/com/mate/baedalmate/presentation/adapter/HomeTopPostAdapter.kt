@@ -10,16 +10,19 @@ import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Priority
+import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitDto
 import com.mate.baedalmate.databinding.ItemHomeTopPostBinding
 import com.mate.baedalmate.domain.model.TagDto
+import com.mate.baedalmate.presentation.fragment.home.HomeFragmentDirections
 import java.text.DecimalFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class HomeTopPostAdapter :
+class HomeTopPostAdapter(private val requestManager: RequestManager) :
     ListAdapter<TagRecruitDto, HomeTopPostAdapter.HomeTopPostViewHolder>(
         diffCallback
     ) {
@@ -132,13 +135,26 @@ class HomeTopPostAdapter :
             binding.tvHomeTopPostContentsInformationDescriptionMinCurrent.text = " ${decimalFormat.format(post.minPrice)}원"
             binding.tvHomeTopPostContentsInformationDescriptionTime.text = "${durationMinute}분 남음"
             binding.tvHomeTopPostContentsInformationUserStar.text = post.userScore.toString()
-            // TODO: 게시글의 이미지 넣기
+
+            if (post.image.isNotEmpty()) {
+                requestManager.load("http://3.35.27.107:8080/images/${post.image}")
+                    .thumbnail(0.1f)
+                    .priority(Priority.HIGH)
+                    .centerCrop()
+                    .into(binding.imgHomeTopPostContents)
+            }
 
             binding.layoutHomeTopPostContentsWrite.setOnClickListener {
                 findNavController(binding.layoutHomeTopPostContentsWrite.findFragment()).navigate(R.id.action_homeFragment_to_writeCategoryFragment)
             }
             binding.layoutImgHomeTopPostContentsWrite.setOnClickListener {
                 findNavController(binding.layoutHomeTopPostContentsWrite.findFragment()).navigate(R.id.action_homeFragment_to_writeCategoryFragment)
+            }
+
+            binding.root.setOnClickListener {
+                findNavController(binding.root.findFragment()).navigate(HomeFragmentDirections.actionHomeFragmentToPostFragment(
+                    postId = post.id
+                ))
             }
         }
     }

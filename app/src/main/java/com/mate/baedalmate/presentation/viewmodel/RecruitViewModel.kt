@@ -7,9 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
+import com.mate.baedalmate.domain.model.Dormitory
+import com.mate.baedalmate.domain.model.PlaceDto
+import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,7 +23,8 @@ import javax.inject.Inject
 class RecruitViewModel @Inject constructor(
     private val recruitListUseCase: RequestRecruitListUseCase,
     private val recruitMainListUseCase: RequestRecruitMainListUseCase,
-    private val recruitTagListUseCase: RequestRecruitTagListUseCase
+    private val recruitTagListUseCase: RequestRecruitTagListUseCase,
+    private val recruitPostUseCase: RequestRecruitPostUseCase
 ) : ViewModel() {
     private val _recruitListAll = MutableLiveData(RecruitList(emptyList()))
     val recruitListAll: LiveData<RecruitList> get() = _recruitListAll
@@ -48,6 +53,29 @@ class RecruitViewModel @Inject constructor(
 
     private val _isRecruitListLoad = MutableLiveData(false)
     val isRecruitListLoad: LiveData<Boolean> get() = _isRecruitListLoad
+
+    private val _recruitPostDetail = MutableLiveData(
+        RecruitDetail(
+            false,
+            0,
+            0,
+            "",
+            "",
+            "",
+            false,
+            "",
+            0,
+            PlaceDto("", "", "", 0f, 0f),
+            "",
+            0,
+            0f,
+            0,
+            emptyList(),
+            "",
+            ""
+        )
+    )
+    val recruitPostDetail: LiveData<RecruitDetail> get() = _recruitPostDetail
 
     private val _recruitHomeRecentList = MutableLiveData(
         MainRecruitList(
@@ -171,4 +199,12 @@ class RecruitViewModel @Inject constructor(
                 _isRecruitTagListLoad.postValue(false)
             }
         }
+
+    fun requestRecruitPost(postId: Int) = viewModelScope.launch {
+        val response = recruitPostUseCase.invoke(id = postId)
+        if (response.isSuccessful) {
+            _recruitPostDetail.postValue(response.body())
+        } else {
+        }
+    }
 }

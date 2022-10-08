@@ -2,17 +2,22 @@ package com.mate.baedalmate.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.findFragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Priority
+import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.databinding.ItemHomeBottomPostRecentBinding
+import com.mate.baedalmate.presentation.fragment.home.HomeFragmentDirections
 import java.text.DecimalFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class HomeRecentPostAdapter :
+class HomeRecentPostAdapter(private val requestManager: RequestManager) :
     ListAdapter<MainRecruitDto, HomeRecentPostAdapter.HomeRecentPostViewHolder>(diffCallback) {
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<MainRecruitDto>() {
@@ -63,7 +68,12 @@ class HomeRecentPostAdapter :
             }
 
             with(binding) {
-                // TODO: 카테고리 이미지 설정
+                requestManager.load("http://3.35.27.107:8080/images/${post.image}")
+                    .thumbnail(0.1f)
+                    .priority(Priority.HIGH)
+                    .centerCrop()
+                    .into(imgHomeBottomPostRecentItem)
+
                 tvHomeBottomPostRecentItemBottomTitle.text = "${post.place}"
                 tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
                 tvHomeBottomPostRecentItemTopTime.text = "${durationMinute}분"
@@ -73,6 +83,13 @@ class HomeRecentPostAdapter :
                     " ${decimalFormat.format(post.minPeople)}원"
                 tvHomeBottomPostRecentItemBottomUser.text = "${post.username} · ${post.dormitory}"
                 tvHomeBottomPostRecentItemBottomUserStar.text = " ★ ${post.userScore}"
+
+                root.setOnClickListener {
+                    NavHostFragment.findNavController(binding.root.findFragment()).navigate(
+                        HomeFragmentDirections.actionHomeFragmentToPostFragment(
+                        postId = post.id
+                    ))
+                }
             }
         }
     }
