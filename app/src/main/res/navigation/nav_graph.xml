@@ -170,10 +170,10 @@
         tools:layout="@layout/fragment_write_fourth_add_menu">
     </dialog>
     <fragment
-        android:id="@+id/ChatFragment"
-        android:name="com.mate.baedalmate.presentation.fragment.chat.ChatFragment"
+        android:id="@+id/ChatListFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ChatListFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat">
+        tools:layout="@layout/fragment_chat_list">
     </fragment>
     <fragment
         android:id="@+id/MyPageFragment"

@@ -141,4 +141,7 @@
     <string name="write_fourth_amount_total_title">결제 예정 금액</string>
     <string name="write_fourth_add_menu_description">모집 인원에 도달하면 모집이 추가할 메뉴를 적고 메뉴의 금액을 하단에 적어주세요</string>
     <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴를 적어주세요</string>
+
+    <!-- Chat List -->
+    <string name="chat_list_actionbar_title">채팅방 리스트</string>
 </resources>

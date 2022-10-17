@@ -1,17 +1,21 @@
 package com.mate.baedalmate.data.di
 
+import com.mate.baedalmate.data.datasource.remote.chat.ChatApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.write.KakaoLocalApiService
 import com.mate.baedalmate.data.datasource.remote.write.WriteApiService
+import com.mate.baedalmate.data.repository.ChatRepositoryImpl
 import com.mate.baedalmate.data.repository.KakaoLocalRepositoryImpl
 import com.mate.baedalmate.data.repository.MemberRepositoryImpl
 import com.mate.baedalmate.data.repository.RecruitRepositoryImpl
 import com.mate.baedalmate.data.repository.WriteRepositoryImpl
+import com.mate.baedalmate.domain.repository.ChatRepository
 import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
 import com.mate.baedalmate.domain.repository.RecruitRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
+import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
@@ -95,4 +99,16 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRequestRecruitPostUseCase(recruitRepository: RecruitRepository): RequestRecruitPostUseCase = RequestRecruitPostUseCase(recruitRepository)
+
+    @Singleton
+    @Provides
+    fun provideChatApiService(retrofit: Retrofit) = retrofit.create(ChatApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideChatRepository(chatRepositoryImpl: ChatRepositoryImpl): ChatRepository = chatRepositoryImpl
+
+    @Singleton
+    @Provides
+    fun provideRequestGetChatRoomListUseCase(chatRepository: ChatRepository): RequestGetChatRoomListUseCase = RequestGetChatRoomListUseCase(chatRepository)
 }
