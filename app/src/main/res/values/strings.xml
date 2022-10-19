@@ -144,4 +144,10 @@
 
     <!-- Chat List -->
     <string name="chat_list_actionbar_title">채팅방 리스트</string>
+
+    <!-- Chat -->
+    <string name="chat_actionbar_title">채팅방</string>
+    <string name="chat_info_action_change_menu">메뉴변경</string>
+    <string name="chat_info_action_change_review">후기 작성하기</string>
+    <string name="chat_user_input_hint">채팅을 입력하세요</string>
 </resources>

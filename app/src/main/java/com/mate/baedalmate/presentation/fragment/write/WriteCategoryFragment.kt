@@ -64,10 +64,12 @@ class WriteCategoryFragment : Fragment() {
 
     private fun setCategoryClickListener() {
         for (i in 0 until binding.layoutWriteCategoryContents.childCount) {
-            val categoryView = binding.layoutWriteCategoryContents.getChildAt(i)
-            categoryView.setOnClickListener {
-                writeViewModel.categoryId = i.plus(1)
-                findNavController().navigate(R.id.action_writeCategoryFragment_to_writeFirstFragment)
+            val childView = binding.layoutWriteCategoryContents.getChildAt(i)
+            if (childView is ShapeableImageView) {
+                childView.setOnClickListener {
+                    writeViewModel.categoryId = (i / 3) + 1
+                    findNavController().navigate(R.id.action_writeCategoryFragment_to_writeFirstFragment)
+                }
             }
         }
     }

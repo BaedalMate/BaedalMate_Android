@@ -9,10 +9,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomInfo
 import com.mate.baedalmate.databinding.FragmentChatListBinding
-import com.mate.baedalmate.domain.model.MessageInfo
 import com.mate.baedalmate.presentation.adapter.chat.ChatRoomListAdapter
 import com.mate.baedalmate.presentation.viewmodel.ChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +22,13 @@ import kotlinx.coroutines.launch
 class ChatListFragment : Fragment() {
     private var binding by autoCleared<FragmentChatListBinding>()
     private val chatViewModel by activityViewModels<ChatViewModel>()
+    private lateinit var glideRequestManager: RequestManager
     private lateinit var chatRoomListAdapter: ChatRoomListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        glideRequestManager = Glide.with(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,20 +49,13 @@ class ChatListFragment : Fragment() {
     }
 
     private fun initChatRoomList() {
-        val tmpList = mutableListOf<ChatRoomInfo>(
-            ChatRoomInfo(0, MessageInfo(0, "마지막으로 보낸 메시지입니다", "DATE", "보낸 이")),
-            ChatRoomInfo(0, MessageInfo(0, "마지막으로 보낸 메시지입니다", "DATE", "보낸 이")),
-            ChatRoomInfo(0, MessageInfo(0, "마지막으로 보낸 메시지입니다", "DATE", "보낸 이")),
-        )
-
-        chatRoomListAdapter = ChatRoomListAdapter()
+        chatRoomListAdapter = ChatRoomListAdapter(requestManager = glideRequestManager)
         binding.rvChatListContents.adapter = chatRoomListAdapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 chatViewModel.chatRoomList.observe(viewLifecycleOwner) { roomList ->
-                    chatRoomListAdapter.submitList(tmpList) // TODO 임시 테스트용 추가. 추가삭제 필요
-//                    chatRoomListAdapter.submitList(roomList.rooms.toMutableList())
+                    chatRoomListAdapter.submitList(roomList.rooms.toMutableList())
                 }
             }
         }

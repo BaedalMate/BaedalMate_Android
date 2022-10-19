@@ -10,5 +10,20 @@ data class MessageInfo(
     @SerializedName("sendDate")
     val sendDate: String,
     @SerializedName("sender")
-    val sender: String
+    val sender: String,
+    @SerializedName("senderImage")
+    val senderImage: String?,
+)
+
+data class ReceiveMessageInfo(
+    @SerializedName("senderId")
+    val senderId: Long,
+    @SerializedName("sender")
+    val sender: String,
+    @SerializedName("senderImage")
+    val senderImage: String,
+    @SerializedName("roomId")
+    val roomId: Long,
+    @SerializedName("message")
+    val message: String
 )

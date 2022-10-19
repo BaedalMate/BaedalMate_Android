@@ -18,4 +18,6 @@ data class UserInfoResponse(
     val profileImage: String,
     @SerializedName("score")
     val score: Float,
+    @SerializedName("userId")
+    val userId: Long,
 )
