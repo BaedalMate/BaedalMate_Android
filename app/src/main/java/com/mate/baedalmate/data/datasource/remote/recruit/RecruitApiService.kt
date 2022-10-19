@@ -1,8 +1,10 @@
 package com.mate.baedalmate.data.datasource.remote.recruit
 
+import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RecruitApiService {
@@ -27,4 +29,9 @@ interface RecruitApiService {
         @Query("size") size: Int,
         @Query("sort") sort: String,
     ): Response<TagRecruitList>
+
+    @GET("/api/v1/recruit/{id}")
+    suspend fun requestRecruitPost(
+        @Path("id") id: Int
+    ): Response<RecruitDetail>
 }

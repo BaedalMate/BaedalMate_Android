@@ -18,6 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ViewPagerUtil
 import com.mate.baedalmate.common.autoCleared
@@ -39,11 +41,17 @@ class HomeFragment : Fragment() {
     private var binding by autoCleared<FragmentHomeBinding>()
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
+    private lateinit var glideRequestManager: RequestManager
     private lateinit var homeTopPostAdapter: HomeTopPostAdapter
     private lateinit var homeCategoryAdapter: HomeCategoryAdapter
     private lateinit var homeRecentPostAdapter: HomeRecentPostAdapter
     private lateinit var homeRecommendPostAdapter: HomeRecommendPostAdapter
     private lateinit var homeTopPostIndicators: Array<ImageView?>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        glideRequestManager = Glide.with(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,7 +130,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initTopPostUI() {
-        homeTopPostAdapter = HomeTopPostAdapter()
+        homeTopPostAdapter = HomeTopPostAdapter(requestManager = glideRequestManager)
         with(binding.vpHomeTopPosts) {
             adapter = homeTopPostAdapter
             ViewPagerUtil.previewNextItem(this, 37.dp, 15.dp)
@@ -203,7 +211,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecentPostUI() {
-        homeRecentPostAdapter = HomeRecentPostAdapter()
+        homeRecentPostAdapter = HomeRecentPostAdapter(requestManager = glideRequestManager)
         binding.rvHomeContentsBottomPostRecentList.adapter = homeRecentPostAdapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -215,7 +223,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecommendPostListUI() {
-        homeRecommendPostAdapter = HomeRecommendPostAdapter()
+        homeRecommendPostAdapter = HomeRecommendPostAdapter(requestManager = glideRequestManager)
         binding.rvHomeContentsBottomPostRecommendList.adapter = homeRecommendPostAdapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -227,15 +235,14 @@ class HomeFragment : Fragment() {
 
         binding.radiogroupHomeContentsBottomPostRecommendCategory.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                // TODO: 백엔드에서 정렬기준이 만들어지면 수정 필요
                 R.id.radiobutton_home_contents_bottom_post_recommend_time -> {
                     recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
                 }
                 R.id.radiobutton_home_contents_bottom_post_recommend_popular -> {
-                    recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+                    recruitViewModel.requestHomeRecruitRecommendList(sort = "score")
                 }
                 R.id.radiobutton_home_contents_bottom_post_recommend_star -> {
-                    recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+                    recruitViewModel.requestHomeRecruitRecommendList(sort = "view")
                 }
             }
         }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.BuildConfig
+import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.common.ListLiveData
 import com.mate.baedalmate.data.datasource.remote.write.CreateRecruitRequest
 import com.mate.baedalmate.domain.model.DeliveryPlatform
@@ -58,11 +59,11 @@ class WriteViewModel @Inject constructor(
     )
     val searchResultList: LiveData<ResultSearchKeyword> get() = _searchResultList
 
-    private val _writePostId = MutableLiveData<Int>()
-    val writePostId: LiveData<Int> get() = _writePostId
+    private val _writePostId = MutableLiveData<Event<Int>>()
+    val writePostId: LiveData<Event<Int>> get() = _writePostId
 
-    private val _writeSuccess = MutableLiveData<Boolean>()
-    val writeSuccess: LiveData<Boolean> get() = _writeSuccess
+    private val _writeSuccess = MutableLiveData<Event<Boolean>>()
+    val writeSuccess: LiveData<Event<Boolean>> get() = _writeSuccess
 
     fun searchPlaceKeyword(keyword: String, x: String = "127.076668", y: String = "37.630081") =
         viewModelScope.launch {
@@ -79,6 +80,8 @@ class WriteViewModel @Inject constructor(
         }
 
     fun requestUploadPost() = viewModelScope.launch {
+        _writeSuccess.postValue(Event(false))
+
         val response = uploadPostUseCase.invoke(
             body = CreateRecruitRequest(
                 categoryId = categoryId,
@@ -100,10 +103,10 @@ class WriteViewModel @Inject constructor(
         )
 
         if (response.isSuccessful) {
-            _writePostId.postValue(response.body()?.id ?: 0)
-            _writeSuccess.postValue(true)
+            _writePostId.postValue(response.body()?.let { Event(it.id) })
+            _writeSuccess.postValue(Event(true))
         } else {
-            _writeSuccess.postValue(false)
+            _writeSuccess.postValue(Event(false))
         }
     }
 }

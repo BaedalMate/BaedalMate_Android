@@ -36,8 +36,9 @@ class MainActivity : AppCompatActivity() {
         findNavController().addOnDestinationChangedListener { _, destination, _ ->
             binding.bottomNavView.visibility = when (destination.id) {
                 R.id.HomeFragment -> View.VISIBLE
-                R.id.PostCategoryListFragment -> View.VISIBLE
-                R.id.ChatFragment -> View.VISIBLE
+//                R.id.PostCategoryListFragment -> View.VISIBLE
+                // TODO: PostCategoryFragment에서 BottomNavigation이 정상적으로 작동하지 않는 현상
+                R.id.ChatListFragment -> View.VISIBLE
                 R.id.MyPageFragment -> View.VISIBLE
                 else -> View.GONE
             }

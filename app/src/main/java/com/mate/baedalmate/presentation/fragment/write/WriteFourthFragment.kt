@@ -56,6 +56,7 @@ class WriteFourthFragment : Fragment() {
     private fun setNextClickListener() {
         binding.btnWriteFourthNext.setOnClickListener {
             writeViewModel.requestUploadPost()
+            // TODO: 화면 터치 못하도록 Dialog 설정 필요
         }
     }
 
@@ -174,10 +175,20 @@ class WriteFourthFragment : Fragment() {
 
     private fun observeUploadSuccess() {
         writeViewModel.writeSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            if(isSuccess) {
-                // TODO 글 작성 완료 이후 상세 글 보기 혹은 홈 화면으로 돌아가는 기능 구현 필요
-            } else {
-                Toast.makeText(requireContext(), "글 작성을 다시 시도해주세요", Toast.LENGTH_SHORT).show()
+            if (isSuccess.getContentIfNotHandled() == true) {
+                writeViewModel.writePostId.value?.getContentIfNotHandled()?.let { writePostId ->
+                    findNavController().navigate(
+                        WriteFourthFragmentDirections.actionWriteFourthFragmentToPostFragment(
+                            writePostId
+                        )
+                    )
+                }
+            } else if (isSuccess.getContentIfNotHandled() == false) {
+                Toast.makeText(
+                    requireContext(),
+                    "글 작성을 다시 시도해주세요",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

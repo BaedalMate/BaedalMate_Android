@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.databinding.FragmentPostCategoryPackedmealBinding
@@ -20,6 +22,13 @@ class PostCategoryPackedmealFragment : Fragment() {
     private var binding by autoCleared<FragmentPostCategoryPackedmealBinding>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var postCategoryListAdapter: PostCategoryListAdapter
+    private lateinit var glideRequestManager: RequestManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        glideRequestManager = Glide.with(this)
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +55,7 @@ class PostCategoryPackedmealFragment : Fragment() {
     }
 
     private fun initListAdapter() {
-        postCategoryListAdapter = PostCategoryListAdapter()
+        postCategoryListAdapter = PostCategoryListAdapter(requestManager = glideRequestManager)
         binding.rvPostCategoryPackedmealList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
             rvPostCategoryPackedmealList.adapter = postCategoryListAdapter
@@ -68,12 +77,11 @@ class PostCategoryPackedmealFragment : Fragment() {
     }
 
     private fun setCategoryClickListener() {
-        // TODO 백엔드 수정시 수정 필요
         binding.radiogroupLayoutPostCategoryPackedmealSort.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                R.id.radiobutton_post_category_packedmeal_sort_time -> { getRecruitList(sort = "") }
-                R.id.radiobutton_post_category_packedmeal_sort_star -> { getRecruitList(sort = "") }
-                R.id.radiobutton_post_category_packedmeal_sort_popular -> { getRecruitList(sort = "") }
+                R.id.radiobutton_post_category_packedmeal_sort_time -> { getRecruitList(sort = "deadlineDate") }
+                R.id.radiobutton_post_category_packedmeal_sort_star -> { getRecruitList(sort = "score") }
+                R.id.radiobutton_post_category_packedmeal_sort_popular -> { getRecruitList(sort = "view") }
             }
         }
     }

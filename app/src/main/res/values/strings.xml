@@ -21,7 +21,7 @@
     <string name="store_location">배달 가게</string>
     <string name="delivery_platform">배달 플랫폼</string>
     <string name="confirm">확인</string>
-
+    <string name="order_amount">주문금액</string>
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
 
@@ -72,6 +72,11 @@
     <string name="post_detail_title">상세설명</string>
     <string name="post_participate_in">모집 참여하기</string>
     <string name="post_participate_out">모집 나가기</string>
+    <string name="post_delivery_fee_help_detail_title">배달비 상세정보</string>
+    <string name="post_delivery_fee_help_coupon_title">쿠폰 사용 금액</string>
+    <string name="post_delivery_fee_help_coupon_description">기존 금액에서 주최자의 쿠폰 사용금액만큼 할인된 후 배달비가 나누기 됩니다.</string>
+    <string name="coupon_amount">쿠폰사용금액</string>
+    <string name="post_map_title">배달 가게 위치</string>
 
     <!-- Write -->
     <string name="write_actionbar_title">상세 설정</string>
@@ -136,4 +141,13 @@
     <string name="write_fourth_amount_total_title">결제 예정 금액</string>
     <string name="write_fourth_add_menu_description">모집 인원에 도달하면 모집이 추가할 메뉴를 적고 메뉴의 금액을 하단에 적어주세요</string>
     <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴를 적어주세요</string>
+
+    <!-- Chat List -->
+    <string name="chat_list_actionbar_title">채팅방 리스트</string>
+
+    <!-- Chat -->
+    <string name="chat_actionbar_title">채팅방</string>
+    <string name="chat_info_action_change_menu">메뉴변경</string>
+    <string name="chat_info_action_change_review">후기 작성하기</string>
+    <string name="chat_user_input_hint">채팅을 입력하세요</string>
 </resources>

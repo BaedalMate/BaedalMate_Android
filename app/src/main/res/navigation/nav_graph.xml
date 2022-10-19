@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_homeChangeDormitoryFragment"
             app:destination="@id/HomeChangeDormitoryFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_postFragment"
+            app:destination="@id/PostFragment" />
     </fragment>
     <dialog
         android:id="@+id/HomeChangeDormitoryFragment"
@@ -55,7 +58,50 @@
             android:name="postId"
             app:argType="integer"
             android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_postFragment_to_postMapFragment"
+            app:destination="@id/PostMapFragment" />
+        <action
+            android:id="@+id/action_postFragment_to_postDeliveryFeeHelpFragment"
+            app:destination="@id/PostDeliveryFeeHelpFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/PostMapFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.post.PostMapFragment"
+        android:label="fragment_post_map"
+        tools:layout="@layout/fragment_post_map">
+        <argument
+            android:name="addressName"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="name"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="roadAddressName"
+            app:argType="string"
+            android:defaultValue=""/>
+        <argument
+            android:name="x"
+            app:argType="float"/>
+        <argument
+            android:name="y"
+            app:argType="float"/>
+    </dialog>
+    <dialog
+        android:id="@+id/PostDeliveryFeeHelpFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.post.PostDeliveryFeeHelpFragment"
+        android:label="fragment_post_delivery_fee_help"
+        tools:layout="@layout/fragment_post_delivery_fee_help">
+        <argument
+            android:name="deliveryFeeList"
+            app:argType="com.mate.baedalmate.domain.model.ShippingFeeDto[]"/>
+        <argument
+            android:name="couponAmount"
+            app:argType="integer"
+            android:defaultValue="0"/>
+    </dialog>
     <fragment
         android:id="@+id/WriteCategoryFragment"
         android:name="com.mate.baedalmate.presentation.fragment.write.WriteCategoryFragment"
@@ -112,6 +158,10 @@
         <action
             android:id="@+id/action_writeFourthFragment_to_writeFourthAddMenuFragment"
             app:destination="@id/WriteFourthAddMenuFragment" />
+        <action
+            android:id="@+id/action_writeFourthFragment_to_postFragment"
+            app:destination="@id/PostFragment"
+            app:popUpTo="@id/HomeFragment" />
     </fragment>
     <dialog
         android:id="@+id/WriteFourthAddMenuFragment"
@@ -120,10 +170,23 @@
         tools:layout="@layout/fragment_write_fourth_add_menu">
     </dialog>
     <fragment
+        android:id="@+id/ChatListFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ChatListFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat_list">
+        <action
+            android:id="@+id/action_chatListFragment_to_chatFragment"
+            app:destination="@id/ChatFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/ChatFragment"
         android:name="com.mate.baedalmate.presentation.fragment.chat.ChatFragment"
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="roomId"
+            app:argType="integer"
+            android:defaultValue="0"/>
     </fragment>
     <fragment
         android:id="@+id/MyPageFragment"

@@ -51,6 +51,14 @@ class MemberViewModel @Inject constructor(
         }
     }
 
+    fun getAccessToken() : String {
+        var accessToken = ""
+        viewModelScope.launch {
+            accessToken = tokenPreferencesRepository.getOAuthToken().accessToken
+        }
+        return accessToken
+    }
+
     fun requestUserInfo() = viewModelScope.launch {
         val response = requestGetUserInfoUseCase()
         if (response.isSuccessful) {
