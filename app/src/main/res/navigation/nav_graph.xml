@@ -29,7 +29,11 @@
             app:destination="@id/HomeChangeDormitoryFragment" />
         <action
             android:id="@+id/action_homeFragment_to_postFragment"
-            app:destination="@id/PostFragment" />
+            app:destination="@id/PostFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <dialog
         android:id="@+id/HomeChangeDormitoryFragment"
