@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_postCategoryListFragment"
-            app:destination="@id/PostCategoryListFragment" />
+            app:destination="@id/PostCategoryListFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
         <action
             android:id="@+id/action_homeFragment_to_writeCategoryFragment"
-            app:destination="@id/WriteCategoryFragment" />
+            app:destination="@id/WriteCategoryFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_homeFragment_to_homeChangeDormitoryFragment"
             app:destination="@id/HomeChangeDormitoryFragment" />
@@ -30,8 +38,8 @@
         tools:layout="@layout/fragment_home_change_dormitory">
         <argument
             android:name="currentDormitory"
-            app:argType="string"
-            android:defaultValue="성림학사" />
+            android:defaultValue="성림학사"
+            app:argType="string" />
     </dialog>
     <fragment
         android:id="@+id/PostCategoryListFragment"
@@ -40,14 +48,22 @@
         tools:layout="@layout/fragment_post_category_list">
         <argument
             android:name="currentCategory"
-            app:argType="string"
-            android:defaultValue="전체"/>
+            android:defaultValue="전체"
+            app:argType="string" />
         <action
             android:id="@+id/action_postCategoryListFragment_to_writeCategoryFragment"
-            app:destination="@id/WriteCategoryFragment" />
+            app:destination="@id/WriteCategoryFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_postCategoryListFragment_to_postFragment"
-            app:destination="@id/PostFragment" />
+            app:destination="@id/PostFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
         android:id="@+id/PostFragment"
@@ -56,14 +72,17 @@
         tools:layout="@layout/fragment_post">
         <argument
             android:name="postId"
-            app:argType="integer"
-            android:defaultValue="0"/>
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/action_postFragment_to_postMapFragment"
             app:destination="@id/PostMapFragment" />
         <action
             android:id="@+id/action_postFragment_to_postDeliveryFeeHelpFragment"
             app:destination="@id/PostDeliveryFeeHelpFragment" />
+        <action
+            android:id="@+id/action_postFragment_to_postMenuBottomSheetDialogFragment"
+            app:destination="@id/PostMenuBottomSheetDialogFragment" />
     </fragment>
     <dialog
         android:id="@+id/PostMapFragment"
@@ -72,22 +91,22 @@
         tools:layout="@layout/fragment_post_map">
         <argument
             android:name="addressName"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <argument
             android:name="name"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <argument
             android:name="roadAddressName"
-            app:argType="string"
-            android:defaultValue=""/>
+            android:defaultValue=""
+            app:argType="string" />
         <argument
             android:name="x"
-            app:argType="float"/>
+            app:argType="float" />
         <argument
             android:name="y"
-            app:argType="float"/>
+            app:argType="float" />
     </dialog>
     <dialog
         android:id="@+id/PostDeliveryFeeHelpFragment"
@@ -96,11 +115,21 @@
         tools:layout="@layout/fragment_post_delivery_fee_help">
         <argument
             android:name="deliveryFeeList"
-            app:argType="com.mate.baedalmate.domain.model.ShippingFeeDto[]"/>
+            app:argType="com.mate.baedalmate.domain.model.ShippingFeeDto[]" />
         <argument
             android:name="couponAmount"
-            app:argType="integer"
-            android:defaultValue="0"/>
+            android:defaultValue="0"
+            app:argType="integer" />
+    </dialog>
+    <dialog
+        android:id="@+id/PostMenuBottomSheetDialogFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.post.PostMenuBottomSheetDialogFragment"
+        android:label="fragment_post_menu_bottom_sheet_dialog"
+        tools:layout="@layout/fragment_post_menu_bottom_sheet_dialog">
+        <argument
+            android:name="roomId"
+            android:defaultValue="0"
+            app:argType="integer" />
     </dialog>
     <fragment
         android:id="@+id/WriteCategoryFragment"
@@ -109,10 +138,11 @@
         tools:layout="@layout/fragment_write_category">
         <action
             android:id="@+id/action_writeCategoryFragment_to_writeFirstFragment"
-            app:destination="@id/WriteFirstFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_writeCategoryFragment"
-            app:destination="@id/WriteFirstFragment" />
+            app:destination="@id/WriteFirstFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
         android:id="@+id/WriteFirstFragment"
@@ -121,7 +151,11 @@
         tools:layout="@layout/fragment_write_first">
         <action
             android:id="@+id/action_writeFirstFragment_to_writeSecondFragment"
-            app:destination="@id/WriteSecondFragment" />
+            app:destination="@id/WriteSecondFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
         android:id="@+id/WriteSecondFragment"
@@ -133,14 +167,17 @@
             app:destination="@id/WriteSecondPlaceDialogFragment" />
         <action
             android:id="@+id/action_writeSecondFragment_to_writeThirdFragment"
-            app:destination="@id/WriteThirdFragment" />
+            app:destination="@id/WriteThirdFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <dialog
         android:id="@+id/WriteSecondPlaceDialogFragment"
         android:name="com.mate.baedalmate.presentation.fragment.write.WriteSecondPlaceDialogFragment"
         android:label="fragment_write_second_place_dialog"
-        tools:layout="@layout/fragment_write_second_place_dialog">
-    </dialog>
+        tools:layout="@layout/fragment_write_second_place_dialog"></dialog>
     <fragment
         android:id="@+id/WriteThirdFragment"
         android:name="com.mate.baedalmate.presentation.fragment.write.WriteThirdFragment"
@@ -148,7 +185,11 @@
         tools:layout="@layout/fragment_write_third">
         <action
             android:id="@+id/action_writeThirdFragment_to_writeFourthFragment"
-            app:destination="@id/WriteFourthFragment" />
+            app:destination="@id/WriteFourthFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
         android:id="@+id/WriteFourthFragment"
@@ -161,14 +202,17 @@
         <action
             android:id="@+id/action_writeFourthFragment_to_postFragment"
             app:destination="@id/PostFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"
             app:popUpTo="@id/HomeFragment" />
     </fragment>
     <dialog
         android:id="@+id/WriteFourthAddMenuFragment"
         android:name="com.mate.baedalmate.presentation.fragment.write.WriteFourthAddMenuFragment"
         android:label="fragment_write_fourth_add_menu"
-        tools:layout="@layout/fragment_write_fourth_add_menu">
-    </dialog>
+        tools:layout="@layout/fragment_write_fourth_add_menu"></dialog>
     <fragment
         android:id="@+id/ChatListFragment"
         android:name="com.mate.baedalmate.presentation.fragment.chat.ChatListFragment"
@@ -176,7 +220,11 @@
         tools:layout="@layout/fragment_chat_list">
         <action
             android:id="@+id/action_chatListFragment_to_chatFragment"
-            app:destination="@id/ChatFragment" />
+            app:destination="@id/ChatFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
     <fragment
         android:id="@+id/ChatFragment"
@@ -185,13 +233,12 @@
         tools:layout="@layout/fragment_chat">
         <argument
             android:name="roomId"
-            app:argType="integer"
-            android:defaultValue="0"/>
+            android:defaultValue="0"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/MyPageFragment"
         android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"
         android:label="fragment_my_page"
-        tools:layout="@layout/fragment_my_page">
-    </fragment>
+        tools:layout="@layout/fragment_my_page"></fragment>
 </navigation>
