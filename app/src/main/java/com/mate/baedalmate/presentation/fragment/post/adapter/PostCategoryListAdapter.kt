@@ -121,30 +121,30 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
                     binding.tvPostCategoryListContentsStateGoal.text = span
                 }
                 RecruitFinishCriteria.PRICE -> {
-                    // TODO: 백엔드측 수정이후 반영필요
-//                    val goalText = "${item.minPeople}원 "
-//                    val currentText = " 현재 ${item.currentPeople}원"
-                    binding.tvPostCategoryListContentsStateGoalTitle.text = "최소주문"
-//                    binding.tvPostCategoryListContentsStateGoal.text = "$goalText|$currentText"
-//                    val span = SpannableString(binding.tvPostCategoryListContentsStateGoal.text)
-//                    span.setSpan(
-//                        StyleSpan(Typeface.BOLD),
-//                        goalText.length + 1,
-//                        goalText.length + 1 + currentText.length,
-//                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-//                    )
-//                    binding.tvPostCategoryListContentsStateGoal.text = span
-                }
-                RecruitFinishCriteria.TIME -> {
-                    val goalText = "${item.deadlineDate} "
-                    val currentText = " ${durationMinuteDeadLine}분 남음"
-                    binding.tvPostCategoryListContentsStateGoalTitle.text = "마감시간"
+                    val goalText = "${item.minPrice}원 "
+                    val currentText = " 현재 ${item.currentPrice}원"
+                    binding.tvPostCategoryListContentsStateGoalTitle.text = "목표금액"
                     binding.tvPostCategoryListContentsStateGoal.text = "$goalText|$currentText"
                     val span = SpannableString(binding.tvPostCategoryListContentsStateGoal.text)
                     span.setSpan(
                         StyleSpan(Typeface.BOLD),
-                        goalText.length + 1,
-                        goalText.length + 1 + currentText.length,
+                        goalText.length + 2,
+                        goalText.length + 2 + currentText.length,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    binding.tvPostCategoryListContentsStateGoal.text = span
+                }
+                RecruitFinishCriteria.TIME -> {
+                    val deadLineTime = LocalDateTime.parse(deadLineTimeString, formatter)
+                    val goalText = deadLineTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+                    val currentText = "${durationMinuteDeadLine}분 남음"
+                    binding.tvPostCategoryListContentsStateGoalTitle.text = "마감시간"
+                    binding.tvPostCategoryListContentsStateGoal.text = "$goalText | $currentText"
+                    val span = SpannableString(binding.tvPostCategoryListContentsStateGoal.text)
+                    span.setSpan(
+                        StyleSpan(Typeface.BOLD),
+                        goalText.length + 2,
+                        goalText.length + 2 + currentText.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     binding.tvPostCategoryListContentsStateGoal.text = span
