@@ -22,6 +22,8 @@ import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +36,7 @@ class WriteViewModel @Inject constructor(
 
     var deadLinePeopleCount = 0
     var deadLineAmount = 0
-    var deadLineTime = "2022-12-24T16:28:27" // TODO 수정 필요
+    var deadLineTime = "2022-12-31T00:00:00" // TODO 사용자 입력이 가능해지면 사용될 변수
     var deadLineCriterion = RecruitFinishCriteria.NUMBER
     var isDeliveryFeeFree = false
     var deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
@@ -65,7 +67,33 @@ class WriteViewModel @Inject constructor(
     private val _writeSuccess = MutableLiveData<Event<Boolean>>()
     val writeSuccess: LiveData<Event<Boolean>> get() = _writeSuccess
 
-    fun searchPlaceKeyword(keyword: String, x: String = "127.076668", y: String = "37.630081") =
+    private val seoulTechEntryPointX = 127.076668
+    private val seoulTechEntryPointY = 37.630081
+
+    fun resetVariables() {
+        categoryId = 0
+        deadLinePeopleCount = 0
+        deadLineAmount = 0
+        couponAmount = 0
+        deadLineTime = "2022-12-31T00:00:00"
+        deadLineCriterion = RecruitFinishCriteria.NUMBER
+        isDeliveryFeeFree = false
+        deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
+        deliveryDormitory = Dormitory.NURI
+        deliveryStore = MutableLiveData(PlaceDto("", "", "", 0f, 0f))
+        isCouponUse = false
+        deliveryPlatform = DeliveryPlatform.BAEMIN
+        postTitle = ""
+        postDetail = ""
+        postTagList = mutableListOf<TagDto>()
+        menuList = ListLiveData<MenuDto>()
+    }
+
+    fun searchPlaceKeyword(
+        keyword: String,
+        x: String = "$seoulTechEntryPointX",
+        y: String = "$seoulTechEntryPointY"
+    ) =
         viewModelScope.launch {
             val response = kakaoLocalUseCase.invoke(
                 url = "https://dapi.kakao.com/v2/local/search/keyword.json",
@@ -87,7 +115,7 @@ class WriteViewModel @Inject constructor(
                 categoryId = categoryId,
                 coupon = couponAmount,
                 criteria = deadLineCriterion,
-                deadlineDate = deadLineTime,
+                deadlineDate = LocalDateTime.now().plusHours(3L).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
                 description = postDetail,
                 dormitory = deliveryDormitory,
                 freeShipping = isDeliveryFeeFree,

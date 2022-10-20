@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -89,7 +90,19 @@ class WriteFirstFragment : Fragment() {
     private fun setBackClickListener() {
         binding.btnWriteFirstActionbarBack.setOnClickListener {
             findNavController().navigateUp()
+            writeViewModel.resetVariables()
         }
+
+        val resetVariableOnBackPressed = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                writeViewModel.resetVariables()
+                findNavController().navigateUp()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            resetVariableOnBackPressed
+        )
     }
 
     private fun setNextClickListener() {
@@ -181,8 +194,22 @@ class WriteFirstFragment : Fragment() {
             var result = ""
             val decimalFormat = DecimalFormat("#,###")
             this.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {}
-                override fun onTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {}
+                override fun beforeTextChanged(
+                    charSequence: CharSequence?,
+                    i1: Int,
+                    i2: Int,
+                    i3: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    charSequence: CharSequence?,
+                    i1: Int,
+                    i2: Int,
+                    i3: Int
+                ) {
+                }
+
                 override fun afterTextChanged(s: Editable?) {
                     if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
                         result = decimalFormat.format(s.toString().replace(",", "").toDouble())
@@ -270,7 +297,14 @@ class WriteFirstFragment : Fragment() {
                 ItemWriteFirstDeliveryFeeRangeBinding.inflate(LayoutInflater.from(context))
             val currentIdx = binding.layoutWriteFirstDeliveryFeeRange.childCount
             val startRangeTextWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
                     if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
@@ -279,12 +313,14 @@ class WriteFirstFragment : Fragment() {
                         deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.setSelection(result.length)
                     }
 
-                    deliveryFeeRangeEmptyChkList[currentIdx] = !(deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.isNullOrEmpty() ||
+                    deliveryFeeRangeEmptyChkList[currentIdx] =
+                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.isNullOrEmpty() ||
                                 deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNullOrEmpty() ||
                                 deliveryFeeRangeViewBinding.etDeliveryFee.text.isNullOrEmpty())
 
                     if (s.toString().isNotEmpty() &&
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNotEmpty()) {
+                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNotEmpty()
+                    ) {
                         if (deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.toString()
                                 .replace(",", "")
                                 .toInt() >
@@ -321,7 +357,14 @@ class WriteFirstFragment : Fragment() {
                 }
             }
             val endRangeTextWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
                     if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
@@ -426,7 +469,8 @@ class WriteFirstFragment : Fragment() {
                 deliveryFeeTextWatcher
             )
 
-            deliveryFeeRangeViewBinding.tvDeliveryFeeRangeTitle.text = "${getString(R.string.section)} ${currentIdx.plus(1)}"
+            deliveryFeeRangeViewBinding.tvDeliveryFeeRangeTitle.text =
+                "${getString(R.string.section)} ${currentIdx.plus(1)}"
 
             val deliveryFeeRangeView = deliveryFeeRangeViewBinding.root
             binding.layoutWriteFirstDeliveryFeeRange.addView(deliveryFeeRangeView)
@@ -463,10 +507,18 @@ class WriteFirstFragment : Fragment() {
             val feeEdit = view.findViewById<EditText>(R.id.et_delivery_fee)
 
             startEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
-                    deliveryFeeRangeEmptyChkList[position] = !(startEdit.text.isEmpty() || endEdit.text.isEmpty() || feeEdit.text.isEmpty())
+                    deliveryFeeRangeEmptyChkList[position] =
+                        !(startEdit.text.isEmpty() || endEdit.text.isEmpty() || feeEdit.text.isEmpty())
                     if (s.toString().isNotEmpty() && endEdit.text.isNotEmpty()) {
                         if (startEdit.text.toString().replace(",", "")
                                 .toInt() > endEdit.text.toString().replace(",", "").toInt()
@@ -497,7 +549,14 @@ class WriteFirstFragment : Fragment() {
             })
 
             endEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
                     deliveryFeeRangeEmptyChkList[position] =
@@ -563,7 +622,8 @@ class WriteFirstFragment : Fragment() {
                     binding.etDeliveryFeeRangeStart.setSelection(result.length)
                 }
 
-                deliveryFeeRangeEmptyChkList[0] = !(binding.etDeliveryFeeRangeStart.text.isEmpty() || binding.etDeliveryFeeRangeEnd.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
+                deliveryFeeRangeEmptyChkList[0] =
+                    !(binding.etDeliveryFeeRangeStart.text.isEmpty() || binding.etDeliveryFeeRangeEnd.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
 
                 if (s.toString().isNotEmpty() && binding.etDeliveryFeeRangeEnd.text.isNotEmpty()) {
                     if (binding.etDeliveryFeeRangeStart.text.toString().replace(",", "").toInt() >
