@@ -4,13 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mate.baedalmate.common.Event
+import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderRequest
+import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
 import com.mate.baedalmate.domain.model.Dormitory
+import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
+import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
@@ -24,7 +29,8 @@ class RecruitViewModel @Inject constructor(
     private val recruitListUseCase: RequestRecruitListUseCase,
     private val recruitMainListUseCase: RequestRecruitMainListUseCase,
     private val recruitTagListUseCase: RequestRecruitTagListUseCase,
-    private val recruitPostUseCase: RequestRecruitPostUseCase
+    private val recruitPostUseCase: RequestRecruitPostUseCase,
+    private val participateRecruitPostUseCase: RequestParticipateRecruitPostUseCase
 ) : ViewModel() {
     private val _recruitListAll = MutableLiveData(RecruitList(emptyList()))
     val recruitListAll: LiveData<RecruitList> get() = _recruitListAll
@@ -54,6 +60,12 @@ class RecruitViewModel @Inject constructor(
     private val _isRecruitListLoad = MutableLiveData(false)
     val isRecruitListLoad: LiveData<Boolean> get() = _isRecruitListLoad
 
+    private val _isParticipateRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
+    val isParticipateRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isParticipateRecruitPostSuccess
+
+    private val _recruitPostParticipateInfo = MutableLiveData<CreateOrderResponse>()
+    val recruitPostParticipateInfo: LiveData<CreateOrderResponse> get() = _recruitPostParticipateInfo
+
     private val _recruitPostDetail = MutableLiveData(
         RecruitDetail(
             false,
@@ -65,12 +77,15 @@ class RecruitViewModel @Inject constructor(
             false,
             "",
             0,
+            false,
             PlaceDto("", "", "", 0f, 0f),
+            "",
             "",
             0,
             0f,
             0,
             emptyList(),
+            "",
             "",
             ""
         )
@@ -82,7 +97,7 @@ class RecruitViewModel @Inject constructor(
             listOf(
                 MainRecruitDto(
                     "", 0, "", "", 0,
-                    "", 0, "", 0, 0f, ""
+                    "", 0, 0,"", 0, 0f, ""
                 )
             )
         )
@@ -94,7 +109,7 @@ class RecruitViewModel @Inject constructor(
             listOf(
                 MainRecruitDto(
                     "", 0, "", "", 0,
-                    "", 0, "", 0, 0f, ""
+                    "", 0, 0,"", 0, 0f, ""
                 )
             )
         )
@@ -207,4 +222,19 @@ class RecruitViewModel @Inject constructor(
         } else {
         }
     }
+
+    fun requestParticipateRecruitPost(menuList: List<MenuDto>, roomId: Int) =
+        viewModelScope.launch {
+            val response = participateRecruitPostUseCase.invoke(
+                data = CreateOrderRequest(
+                    menu = menuList, recruitId = roomId
+                )
+            )
+            if (response.isSuccessful) {
+                _isParticipateRecruitPostSuccess.postValue(Event(true))
+                _recruitPostParticipateInfo.postValue(response.body())
+            } else {
+                _isParticipateRecruitPostSuccess.postValue(Event(false))
+            }
+        }
 }

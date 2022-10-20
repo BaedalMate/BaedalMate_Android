@@ -1,13 +1,17 @@
 package com.mate.baedalmate.presentation.fragment.post
 
+import android.graphics.Typeface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,7 +25,6 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
-import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.databinding.FragmentPostBinding
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.ShippingFeeDto
@@ -88,27 +91,48 @@ class PostFragment : Fragment() {
                             .centerCrop()
                             .into(imgPostBack)
 
-                        /*
-                        // TODO 플랫폼 여부 확인 필요
-                        when(플랫폼) {
-                            DeliveryPlatform.BAEMIN -> {
-                                imgPostBackDeliveryPlatform.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baemin_circle))
+                        when (recruitDetail.platform) {
+                            DeliveryPlatform.BAEMIN.name -> {
+                                imgPostBackDeliveryPlatform.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.drawable.ic_baemin_circle
+                                    )
+                                )
                             }
-                            DeliveryPlatform.COUPANG -> {
-                                imgPostBackDeliveryPlatform.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_coupang_circle))
+                            DeliveryPlatform.COUPANG.name -> {
+                                imgPostBackDeliveryPlatform.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.drawable.ic_coupang_circle
+                                    )
+                                )
                             }
-                            DeliveryPlatform.DDGNGYO -> {
-                                imgPostBackDeliveryPlatform.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_ddangyo_circle))
+                            DeliveryPlatform.DDGNGYO.name -> {
+                                imgPostBackDeliveryPlatform.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.drawable.ic_ddangyo_circle
+                                    )
+                                )
                             }
-                            DeliveryPlatform.YOGIYO -> {
-                                imgPostBackDeliveryPlatform.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_yogiyo_circle))
+                            DeliveryPlatform.YOGIYO.name -> {
+                                imgPostBackDeliveryPlatform.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.drawable.ic_yogiyo_circle
+                                    )
+                                )
                             }
-                            DeliveryPlatform.ETC -> {
-                                // TODO ETC 이미지 설정
-//                                imgPostBackDeliveryPlatform.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baemin_circle))
+                            else -> {
+                                imgPostBackDeliveryPlatform.setImageDrawable(
+                                    ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.drawable.ic_etc_circle
+                                    )
+                                )
                             }
                         }
-                        */
 
                         imgPostBackStore.setOnClickListener {
                             with(recruitDetail.place) {
@@ -160,9 +184,31 @@ class PostFragment : Fragment() {
                             binding.layoutPostFrontUserScore.addView(starIndicator[i])
                         }
 
+                        val paramsTextView = LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                        paramsTextView.setMargins(5.dp, 0, 0, 0)
+                        val scoreTextView = TextView(requireContext())
+                        scoreTextView.setTypeface(
+                            ResourcesCompat.getFont(
+                                requireContext(),
+                                R.font.applesdgothic_neo_bold
+                            ), Typeface.NORMAL
+                        )
+                        scoreTextView.text = "${recruitDetail.score}"
+                        scoreTextView.layoutParams = paramsTextView
+                        scoreTextView.gravity = Gravity.CENTER
+                        scoreTextView.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.main_FB5F1C
+                            )
+                        )
+                        binding.layoutPostFrontUserScore.addView(scoreTextView)
+
                         tvPostFrontUserName.text = recruitDetail.username
-                        // TODO: 유저 정보의 Dormitory 설정 필요
-//                        tvPostFrontUserDormitory.text = recruitDetail.dormitory.name
+                        tvPostFrontUserDormitory.text = recruitDetail.userDormitory
 
                         tvPostFrontContentsTitle.text = recruitDetail.title
 
@@ -179,7 +225,8 @@ class PostFragment : Fragment() {
                                 PostFragmentDirections.actionPostFragmentToPostDeliveryFeeHelpFragment(
                                     deliveryFeeList = deliveryFeeList.toTypedArray(),
                                     couponAmount = recruitDetail.coupon
-                                ))
+                                )
+                            )
                         }
 
                         tvPostFrontContentsDeadlineDeliveryFee.text =
@@ -192,20 +239,29 @@ class PostFragment : Fragment() {
                         btnPostFrontContentsParticipate.isEnabled = recruitDetail.active
                         if (recruitDetail.host) {
                             btnPostFrontContentsParticipate.text = "모집 마감하기"
+                            btnPostFrontContentsParticipate.isEnabled = false // TODO 모집 마감하기 기능 미구현 상태이므로 임시 추가
                             btnPostFrontContentsParticipate.setOnClickListener {
                                 // TODO 모집 마감 네트워킹 코드 삽입
                             }
                         } else {
                             btnPostFrontContentsParticipate.text =
                                 getString(R.string.post_participate_in)
-                            // TODO: 참가중인지 체크하는 조건 추가 필요
-//                            if(tmp.participate) {
-//                                btnPostFrontContentsParticipate.text = getString(R.string.post_participate_out)
-                            // TODO 모집 나가기 네트워킹 코드 삽입
-//                            } else {
-//                                btnPostFrontContentsParticipate.text = getString(R.string.post_participate_in)
-                            // TODO 모집 참여하기 네트워킹 코드 삽입
-//                            }
+                            if (recruitDetail.participate) {
+                                btnPostFrontContentsParticipate.text =
+                                    getString(R.string.post_participate_out)
+                                btnPostFrontContentsParticipate.isEnabled = false // TODO 모집 나가기 기능 미구현 상태이므로 임시 추가
+                                // TODO 모집 나가기 네트워킹 코드 삽입
+                            } else {
+                                btnPostFrontContentsParticipate.text =
+                                    getString(R.string.post_participate_in)
+                                binding.btnPostFrontContentsParticipate.setOnClickListener {
+                                    findNavController().navigate(
+                                        PostFragmentDirections.actionPostFragmentToPostMenuBottomSheetDialogFragment(
+                                            roomId = args.postId
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
                 }

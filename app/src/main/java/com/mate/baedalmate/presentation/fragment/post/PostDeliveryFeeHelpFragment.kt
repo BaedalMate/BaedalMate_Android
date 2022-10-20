@@ -48,15 +48,20 @@ class PostDeliveryFeeHelpFragment : RoundDialogFragment() {
 
     private fun initData() {
         val deliveryFeeList = args.deliveryFeeList
-        for (deliveryFee in deliveryFeeList) {
+        for (deliveryFeeIdx in deliveryFeeList.indices) {
             val rangeBinding =
                 ItemPostDeliveryFeeHelpDetailTextviewBinding.inflate(LayoutInflater.from(context))
-            rangeBinding.tvPostDeliveryFeeHelpDetailAmount.text =
-                "${decimalFormat.format(deliveryFee.lowerPrice)}${getString(R.string.unit_korea)} ~ ${
-                    decimalFormat.format(deliveryFee.upperPrice)
-                }${getString(R.string.unit_korea)}"
+            if(deliveryFeeIdx == deliveryFeeList.lastIndex) {
+                rangeBinding.tvPostDeliveryFeeHelpDetailAmount.text =
+                    "${decimalFormat.format(deliveryFeeList[deliveryFeeIdx].lowerPrice)}${getString(R.string.unit_korea)} ~ "
+            } else {
+                rangeBinding.tvPostDeliveryFeeHelpDetailAmount.text =
+                    "${decimalFormat.format(deliveryFeeList[deliveryFeeIdx].lowerPrice)}${getString(R.string.unit_korea)} ~ ${
+                        decimalFormat.format(deliveryFeeList[deliveryFeeIdx].upperPrice)
+                    }${getString(R.string.unit_korea)}"
+            }
             rangeBinding.tvPostDeliveryFeeHelpDetailFee.text =
-                "${decimalFormat.format(deliveryFee.shippingFee)}${getString(R.string.unit_korea)}"
+                "${decimalFormat.format(deliveryFeeList[deliveryFeeIdx].shippingFee)}${getString(R.string.unit_korea)}"
             val rangeView = rangeBinding.root
             binding.layoutPostDeliveryFeeHelpContentsDetail.addView(rangeView)
         }

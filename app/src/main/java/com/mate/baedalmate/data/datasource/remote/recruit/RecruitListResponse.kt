@@ -35,6 +35,8 @@ data class MainRecruitDto (
     val image: String,
     @SerializedName("minPeople")
     val minPeople: Int,
+    @SerializedName("minPrice")
+    val minPrice: Int,
     @SerializedName("place")
     val place: String,
     @SerializedName("shippingFee")
@@ -68,4 +70,11 @@ data class TagRecruitDto (
     val userScore: Float,
     @SerializedName("username")
     val username: String,
+)
+
+data class CreateOrderResponse (
+    @SerializedName("chatRoomId")
+    val chatRoomId: Int,
+    @SerializedName("id")
+    val id: Int
 )
