@@ -47,7 +47,14 @@ class HomeCategoryAdapter :
         fun bind(category: String) {
             binding.tvHomeBottomMenuItem.text = category
             when (category) {
-//                "전체" -> { binding.imgHomeBottomMenuItem.setImageDrawable(ContextCompat.getDrawable(binding.imgHomeBottomMenuItem.context, R.drawable.img_category_asia))}
+                "전체" -> {
+                    binding.imgHomeBottomMenuItem.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            binding.imgHomeBottomMenuItem.context,
+                            R.drawable.img_category_all
+                        )
+                    )
+                }
                 "한식" -> {
                     binding.imgHomeBottomMenuItem.setImageDrawable(
                         ContextCompat.getDrawable(
