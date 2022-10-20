@@ -55,9 +55,7 @@ class ChatRoomListAdapter(private val requestManager: RequestManager) :
             val lastMessageSendTimeString: String = info.lastMessage.sendDate
             var durationMinute = 0L
 
-            // binding.tvChatListTitle = info.lastMessage // TODO 현재 방 제목이 넘어오지 않음
-            binding.tvChatListTitle.text = info.lastMessage.sender // 임시로 보낸 사람으로 적용
-
+            binding.tvChatListTitle.text = info.title
             requestManager.load("http://3.35.27.107:8080/images/${info.image}")
                 .priority(Priority.HIGH)
                 .centerCrop()

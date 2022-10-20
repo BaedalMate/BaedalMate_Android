@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.HideKeyBoardUtil
@@ -115,12 +116,10 @@ class ChatFragment : Fragment() {
                         with(createdTime) { "${this.year}년 ${this.monthValue + 1}월 ${this.dayOfMonth}일 ${this.hour}시 ${this.minute}분" }
                     binding.tvChatInfoContentsTitle.text = detail.recruit.title
 
-                    // TODO 서버에서의 이미지 전송 구현 후, 구현예정
-//                    glideRequestManager.load("http://3.35.27.107:8080/images/${detail}")
-//                        .thumbnail(0.1f)
-//                        .priority(Priority.HIGH)
-//                        .centerCrop()
-//                        .into(binding.imgChatInfo)
+                    glideRequestManager.load("http://3.35.27.107:8080/images/${detail.recruit.recruitImage}")
+                        .priority(Priority.HIGH)
+                        .centerCrop()
+                        .into(binding.imgChatInfo)
 
                     when (detail.recruit.criteria) {
                         RecruitFinishCriteria.TIME -> {
@@ -146,7 +145,7 @@ class ChatFragment : Fragment() {
                                 "${decimalFormat.format(detail.recruit.minPeople)}인"
                         }
                         RecruitFinishCriteria.PRICE -> {
-                            binding.tvChatInfoContentsCriterionTitle.text = "최소주문"
+                            binding.tvChatInfoContentsCriterionTitle.text = "목표금액"
                             binding.tvChatInfoContentsCriterionDetail.text =
                                 "${decimalFormat.format(detail.recruit.minPrice)}원"
                         }

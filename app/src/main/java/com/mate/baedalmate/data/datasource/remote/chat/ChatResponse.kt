@@ -15,7 +15,9 @@ data class ChatRoomInfo(
     @SerializedName("image")
     val image: String,
     @SerializedName("lastMessage")
-    val lastMessage: MessageInfo
+    val lastMessage: MessageInfo,
+    @SerializedName("title")
+    val title: String
 )
 
 data class ChatRoomDetail(
