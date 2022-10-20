@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BaedalMate</string>
+    <string name="app_name">배달메이트</string>
     <string name="currency_unit_kor">원</string>
     <string name="delivery_fee">배달팁</string>
     <string name="delivery_min">목표금액</string>
