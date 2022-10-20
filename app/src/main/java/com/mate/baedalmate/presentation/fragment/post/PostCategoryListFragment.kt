@@ -26,6 +26,7 @@ class PostCategoryListFragment : Fragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
     private var handler = Handler(Looper.getMainLooper())
+    private var isLoaded = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,9 +38,16 @@ class PostCategoryListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBackClickListener()
         initViewPager()
         initViewpagerCurrentCategory()
         setWriteClickListener()
+    }
+
+    private fun setBackClickListener() {
+        binding.btnPostCategoryListActionbarBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun initTabLayout() {
@@ -141,19 +149,22 @@ class PostCategoryListFragment : Fragment() {
     }
 
     private fun initViewpagerCurrentCategory() {
-        when (args.currentCategory) {
-            getString(R.string.category_all) -> { setCurrentSelectedTabLayout(0) }
-            getString(R.string.category_korean) -> { setCurrentSelectedTabLayout(1) }
-            getString(R.string.category_chinese) -> { setCurrentSelectedTabLayout(2) }
-            getString(R.string.category_japanese) -> { setCurrentSelectedTabLayout(3) }
-            getString(R.string.category_western) -> { setCurrentSelectedTabLayout(4) }
-            getString(R.string.category_fastfood) -> { setCurrentSelectedTabLayout(5) }
-            getString(R.string.category_bunsik) -> { setCurrentSelectedTabLayout(6) }
-            getString(R.string.category_dessert) -> { setCurrentSelectedTabLayout(7) }
-            getString(R.string.category_chicken) -> { setCurrentSelectedTabLayout(8) }
-            getString(R.string.category_pizza) -> { setCurrentSelectedTabLayout(9) }
-            getString(R.string.category_asia) -> { setCurrentSelectedTabLayout(10) }
-            getString(R.string.category_packedmeal) -> { setCurrentSelectedTabLayout(11) }
+        if(!isLoaded)  {
+            when (args.currentCategory) {
+                getString(R.string.category_all) -> { setCurrentSelectedTabLayout(0) }
+                getString(R.string.category_korean) -> { setCurrentSelectedTabLayout(1) }
+                getString(R.string.category_chinese) -> { setCurrentSelectedTabLayout(2) }
+                getString(R.string.category_japanese) -> { setCurrentSelectedTabLayout(3) }
+                getString(R.string.category_western) -> { setCurrentSelectedTabLayout(4) }
+                getString(R.string.category_fastfood) -> { setCurrentSelectedTabLayout(5) }
+                getString(R.string.category_bunsik) -> { setCurrentSelectedTabLayout(6) }
+                getString(R.string.category_dessert) -> { setCurrentSelectedTabLayout(7) }
+                getString(R.string.category_chicken) -> { setCurrentSelectedTabLayout(8) }
+                getString(R.string.category_pizza) -> { setCurrentSelectedTabLayout(9) }
+                getString(R.string.category_asia) -> { setCurrentSelectedTabLayout(10) }
+                getString(R.string.category_packedmeal) -> { setCurrentSelectedTabLayout(11) }
+            }
+            isLoaded = true
         }
     }
 
