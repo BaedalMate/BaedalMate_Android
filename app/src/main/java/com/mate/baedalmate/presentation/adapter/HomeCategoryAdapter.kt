@@ -115,7 +115,7 @@ class HomeCategoryAdapter :
                     binding.imgHomeBottomMenuItem.setImageDrawable(
                         ContextCompat.getDrawable(
                             binding.imgHomeBottomMenuItem.context,
-                            R.drawable.img_category_chinese
+                            R.drawable.img_category_chicken
                         )
                     )
                 }
