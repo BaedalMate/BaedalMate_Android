@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.databinding.ItemPostCategoryListBinding
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
+import java.text.DecimalFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -34,6 +35,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
             ): Boolean =
                 oldItem == newItem
         }
+        private val decimalFormat = DecimalFormat("#,###")
     }
 
     interface OnItemClickListener {
@@ -121,15 +123,15 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
                     binding.tvPostCategoryListContentsStateGoal.text = span
                 }
                 RecruitFinishCriteria.PRICE -> {
-                    val goalText = "${item.minPrice}원 "
-                    val currentText = " 현재 ${item.currentPrice}원"
+                    val goalText = "${decimalFormat.format(item.minPrice)}원 "
+                    val currentText = " 현재 ${decimalFormat.format(item.currentPrice)}원"
                     binding.tvPostCategoryListContentsStateGoalTitle.text = "목표금액"
                     binding.tvPostCategoryListContentsStateGoal.text = "$goalText|$currentText"
                     val span = SpannableString(binding.tvPostCategoryListContentsStateGoal.text)
                     span.setSpan(
                         StyleSpan(Typeface.BOLD),
-                        goalText.length + 2,
-                        goalText.length + 2 + currentText.length,
+                        goalText.length + 1,
+                        goalText.length + 1 + currentText.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     binding.tvPostCategoryListContentsStateGoal.text = span
@@ -144,7 +146,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
                     span.setSpan(
                         StyleSpan(Typeface.BOLD),
                         goalText.length + 2,
-                        goalText.length + 2 + currentText.length,
+                        goalText.length + 3 + currentText.length,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     binding.tvPostCategoryListContentsStateGoal.text = span

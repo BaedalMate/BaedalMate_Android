@@ -137,7 +137,7 @@ class ChatFragment : Fragment() {
 
                             binding.tvChatInfoContentsCriterionTitle.text = "마감시간"
                             binding.tvChatInfoContentsCriterionDetail.text =
-                                "${decimalFormat.format(durationMinuteDeadLine)}분 남음"
+                                "${decimalFormat.format(durationMinuteDeadLine.toInt())}분 남음"
                         }
                         RecruitFinishCriteria.NUMBER -> {
                             binding.tvChatInfoContentsCriterionTitle.text = "최소인원"
