@@ -150,4 +150,7 @@
     <string name="chat_info_action_change_menu">메뉴변경</string>
     <string name="chat_info_action_change_review">후기 작성하기</string>
     <string name="chat_user_input_hint">채팅을 입력하세요</string>
+
+    <!-- MyPage -->
+    <string name="my_page_actionbar_title">마이페이지</string>
 </resources>
