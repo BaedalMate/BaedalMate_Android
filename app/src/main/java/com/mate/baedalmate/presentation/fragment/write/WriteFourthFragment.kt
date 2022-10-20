@@ -1,5 +1,6 @@
 package com.mate.baedalmate.presentation.fragment.write
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.databinding.FragmentWriteFourthBinding
 import com.mate.baedalmate.presentation.adapter.write.WriteFourthMenuListAdapter
@@ -29,12 +31,14 @@ class WriteFourthFragment : Fragment() {
     private lateinit var writeFourthMenuListAdapter: WriteFourthMenuListAdapter
     private var currentMenuAmount = 0
     private val decimalFormat = DecimalFormat("#,###")
+    private lateinit var loadingAlertDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentWriteFourthBinding.inflate(inflater, container, false)
+        loadingAlertDialog = LoadingAlertDialog.createLoadingDialog(requireContext())
         return binding.root
     }
 
@@ -47,6 +51,11 @@ class WriteFourthFragment : Fragment() {
         observeUploadSuccess()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
     private fun setBackClickListener() {
         binding.btnWriteFourthActionbarBack.setOnClickListener {
             findNavController().navigateUp()
@@ -56,7 +65,8 @@ class WriteFourthFragment : Fragment() {
     private fun setNextClickListener() {
         binding.btnWriteFourthNext.setOnClickListener {
             writeViewModel.requestUploadPost()
-            // TODO: 화면 터치 못하도록 Dialog 설정 필요
+            LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
+            LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
         }
     }
 
@@ -182,8 +192,10 @@ class WriteFourthFragment : Fragment() {
                             writePostId
                         )
                     )
+                    writeViewModel.resetVariables()
                 }
             } else if (isSuccess.getContentIfNotHandled() == false) {
+                LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
                 Toast.makeText(
                     requireContext(),
                     "글 작성을 다시 시도해주세요",

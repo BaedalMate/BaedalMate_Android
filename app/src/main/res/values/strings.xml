@@ -2,7 +2,7 @@
     <string name="app_name">BaedalMate</string>
     <string name="currency_unit_kor">원</string>
     <string name="delivery_fee">배달팁</string>
-    <string name="delivery_min">최소주문</string>
+    <string name="delivery_min">목표금액</string>
     <string name="write">글 작성하러 가기</string>
     <string name="home">홈</string>
     <string name="chat">채팅</string>
@@ -87,16 +87,16 @@
 
     <!-- Write First -->
     <string name="write_first_goal_people_title">최소 모집 인원</string>
-    <string name="write_first_goal_delivery_title">최소 주문 금액</string>
-    <string name="write_first_goal_delivery_error">최소 주문 금액을 입력해주세요</string>
-    <string name="write_first_goal_time_title">마감 시간 설정</string>
-    <string name="write_first_goal_time_description">모집 인원에 도달하면 모집이 완료됩니다</string>
+    <string name="write_first_goal_delivery_title">주문 목표 금액</string>
+    <string name="write_first_goal_delivery_error">주문 목표 금액을 입력해주세요</string>
+    <string name="write_first_goal_time_title">마감 시간</string>
+    <string name="write_first_goal_time_description">모집 게시글 작성시간 기준 3시간 뒤로 마감시간이 설정됩니다</string>
     <string name="write_first_goal_criterion_title">마감 기준</string>
     <string name="write_first_goal_criterion_description_people">모집 인원에 도달하면 모집이 완료됩니다</string>
-    <string name="write_first_goal_criterion_description_delivery">최소 주문 금액에 도달하면 모집이 완료됩니다</string>
+    <string name="write_first_goal_criterion_description_delivery">주문 목표 금액에 도달하면 모집이 완료됩니다</string>
     <string name="write_first_goal_criterion_description_time">마감시간이 되면 모집이 완료됩니다</string>
     <string name="write_first_goal_criterion_people">모집 인원</string>
-    <string name="write_first_goal_criterion_delivery">최소 주문</string>
+    <string name="write_first_goal_criterion_delivery">목표 금액</string>
     <string name="write_first_goal_criterion_time">마감 시간</string>
     <string name="write_first_delivery_fee_title">배달비 구간 설정</string>
     <string name="write_first_delivery_fee_description">주문금액 별 배달금액을 설정해주세요</string>
@@ -134,12 +134,12 @@
     <string name="write_fourth_menu_add_title">배달 메뉴</string>
     <string name="write_fourth_menu_add_plus_sign">+ 메뉴 추가하기</string>
     <string name="write_fourth_menu_add">메뉴 추가하기</string>
-    <string name="write_fourth_amount_title">결제하기</string>
-    <string name="write_fourth_amount_detail_title">결제금액</string>
+    <string name="write_fourth_amount_title">합산 금액</string>
+    <string name="write_fourth_amount_detail_title">현재 금액</string>
     <string name="write_fourth_amount_detail_total_title">총 주문 금액</string>
     <string name="write_fourth_amount_detail_coupon_title">쿠폰 사용금액</string>
-    <string name="write_fourth_amount_total_title">결제 예정 금액</string>
-    <string name="write_fourth_add_menu_description">모집 인원에 도달하면 모집이 추가할 메뉴를 적고 메뉴의 금액을 하단에 적어주세요</string>
+    <string name="write_fourth_amount_total_title">현재 결제 예정 금액</string>
+    <string name="write_fourth_add_menu_description">추가할 메뉴와, 해당 메뉴의 금액, 갯수를 하단에 적어주세요</string>
     <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴를 적어주세요</string>
 
     <!-- Chat List -->

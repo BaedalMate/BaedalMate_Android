@@ -389,9 +389,8 @@
                                 android:layout_height="60dp"
                                 android:layout_marginStart="13dp"
                                 android:button="@null"
-                                android:drawableStart="@drawable/selector_radiobutton_platform_ddangyo"
+                                android:drawableStart="@drawable/selector_radiobutton_platform_etc"
                                 android:drawablePadding="7dp"
-                                android:drawableTint="@color/gray_main_C4C4C4"
                                 android:minWidth="0dp"
                                 android:minHeight="0dp" />
                         </RadioGroup>
