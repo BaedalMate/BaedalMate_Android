@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
                     android:lineHeight="18dp"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/ic_baedal_mate"
                     android:textColor="@color/black_000000"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
