@@ -17,6 +17,8 @@ data class RecruitInfo(
     val minPrice: Int,
     @SerializedName("recruitId")
     val recruitId: Int,
+    @SerializedName("recruitImage")
+    val recruitImage: String,
     @SerializedName("title")
     val title: String
 )

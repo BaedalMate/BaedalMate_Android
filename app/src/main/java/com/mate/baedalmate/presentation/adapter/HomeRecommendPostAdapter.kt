@@ -78,8 +78,7 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
                 tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
                 tvHomeBottomPostRecentItemTopTime.text = "${durationMinute}분"
                 tvHomeBottomPostRecommendItemInfoBottomDeliveryCurrent.text = " ${decimalFormat.format(post.shippingFee)}원"
-                // TODO: 백엔드 최소금액 수정시 수정 필요
-                tvHomeBottomPostRecommendItemInfoBottomCurrent.text = " ${decimalFormat.format(post.minPeople)}원"
+                tvHomeBottomPostRecommendItemInfoBottomCurrent.text = " ${decimalFormat.format(post.minPrice)}원"
                 tvHomeBottomPostRecommendItemInfoBottomUser.text =
                     "${post.username} · ${post.dormitory} ★ ️${post.userScore}"
 

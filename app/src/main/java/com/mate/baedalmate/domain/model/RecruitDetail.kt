@@ -21,8 +21,12 @@ data class RecruitDetail(
     val image: String,
     @SerializedName("minPeople")
     val minPeople: Int,
+    @SerializedName("participate")
+    val participate: Boolean,
     @SerializedName("place")
     val place: PlaceDto,
+    @SerializedName("platform")
+    val platform: String,
     @SerializedName("profileImage")
     val profileImage: String,
     @SerializedName("recruitId")
@@ -35,6 +39,8 @@ data class RecruitDetail(
     val shippingFeeDetail: List<ShippingFeeDto>,
     @SerializedName("title")
     val title: String,
+    @SerializedName("userDormitory")
+    val userDormitory: String,
     @SerializedName("username")
-    val username: String,
+    val username: String
 )

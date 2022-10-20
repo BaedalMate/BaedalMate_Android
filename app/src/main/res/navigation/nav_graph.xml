@@ -134,6 +134,15 @@
             android:name="roomId"
             android:defaultValue="0"
             app:argType="integer" />
+
+        <action
+            android:id="@+id/action_postMenuBottomSheetDialogFragment_to_chatFragment"
+            app:destination="@id/ChatFragment"
+            app:popUpTo="@id/HomeFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </dialog>
     <fragment
         android:id="@+id/WriteCategoryFragment"
