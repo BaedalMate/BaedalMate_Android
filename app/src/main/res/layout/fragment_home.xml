@@ -175,19 +175,6 @@
                             app:layout_constraintTop_toTopOf="@id/tv_home_top_title_location"
                             app:layout_constraintVertical_bias="0.0"
                             tools:text="서울과기대 누리학사" />
-
-                        <ImageView
-                            android:id="@+id/img_home_top_title_location_arrow"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="7dp"
-                            android:src="@drawable/ic_arrow"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_home_top_title_location_current"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toEndOf="@id/tv_home_top_title_location_current"
-                            app:layout_constraintTop_toTopOf="@id/tv_home_top_title_location_current"
-                            app:layout_constraintVertical_bias="0.5" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout

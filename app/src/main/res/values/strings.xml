@@ -153,4 +153,11 @@
 
     <!-- MyPage -->
     <string name="my_page_actionbar_title">마이페이지</string>
+
+    <!-- Location Certification -->
+    <string name="location_certification_actionbar_title">거점 인증</string>
+    <string name="location_certification_error_message_location_out">현재 위치가 \'%s\'에 있지 않습니다</string>
+    <string name="location_certification_error_message_permission_denied_first">위치 서비스 권한을 허용해야 정상적 인증이 가능합니다</string>
+    <string name="location_certification_error_message_permission_denied_second">설정에서 위치 권한을 허용으로 변경해주세요</string>
+    <string name="location_certification_change">현재 거점 변경</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
@@ -29,8 +30,8 @@ class MemberViewModel @Inject constructor(
     private val _userInfo = MutableLiveData<UserInfoResponse>()
     val userInfo: LiveData<UserInfoResponse> get() = _userInfo
 
-    private val _isDormitoryChangeSuccess = MutableLiveData<Boolean>(false)
-    val isDormitoryChangeSuccess: LiveData<Boolean> get() = _isDormitoryChangeSuccess
+    private val _isDormitoryChangeSuccess = MutableLiveData<Event<Boolean>>()
+    val isDormitoryChangeSuccess: LiveData<Event<Boolean>> get() = _isDormitoryChangeSuccess
 
     fun setKakaoAccessToken(kakaoAccessToken: String) =
         viewModelScope.launch { tokenPreferencesRepository.setKakaoAccessToken(kakaoAccessToken) }
@@ -71,13 +72,9 @@ class MemberViewModel @Inject constructor(
     fun requestChangeUserDormitory(newDormitory: Dormitory) = viewModelScope.launch {
         val response = requestPutUserDormitoryUseCase(newDormitory = newDormitory)
         if (response.isSuccessful) {
-            _isDormitoryChangeSuccess.postValue(true)
+            _isDormitoryChangeSuccess.postValue(Event(true))
         } else {
-            _isDormitoryChangeSuccess.postValue(false)
+            _isDormitoryChangeSuccess.postValue(Event(false))
         }
-    }
-
-    fun resetChangeUserDormitorySuccess() {
-        _isDormitoryChangeSuccess.postValue(false)
     }
 }
