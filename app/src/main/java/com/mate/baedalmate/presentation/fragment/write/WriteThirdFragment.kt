@@ -53,11 +53,18 @@ class WriteThirdFragment : Fragment() {
 
     private fun setNextClickListener() {
         binding.btnWriteThirdNext.setOnClickListener {
-            writeViewModel.postTitle = binding.etWriteThirdSubjectInput.text.toString().trim()
-            writeViewModel.postDetail = binding.etWriteThirdDescriptionInput.text.toString().trim()
+            val titleText =
+                if(binding.etWriteThirdSubjectInput.text.toString().trim().length > 20) binding.etWriteThirdSubjectInput.text.toString().trim().substring(0 until 20)
+                else binding.etWriteThirdSubjectInput.text.toString().trim()
+            val descriptionText =
+                if(binding.etWriteThirdDescriptionInput.text.toString().trim().length > 200) binding.etWriteThirdDescriptionInput.text.toString().trim().substring(0 until 200)
+                else binding.etWriteThirdDescriptionInput.text.toString().trim()
+            writeViewModel.postTitle = titleText
+            writeViewModel.postDetail = descriptionText
             val tagList = mutableListOf<TagDto>()
             for(tagText in binding.chipgroupWriteThirdTagListSaved.getAllChipsTagText()) {
-                tagList.add(TagDto(tagname = tagText))
+                if (tagText.length > 8) tagList.add(TagDto(tagname = tagText.trim().substring(0 until 8)))
+                else tagList.add(TagDto(tagname = tagText))
             }
             writeViewModel.postTagList = tagList
             findNavController().navigate(R.id.action_writeThirdFragment_to_writeFourthFragment)
@@ -69,22 +76,20 @@ class WriteThirdFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
             override fun afterTextChanged(s: Editable?) {
-                if (s.toString().trim().isNullOrBlank()) { // 제목이 빈 경우
-                    binding.tvWriteThirdSubjectError.visibility = View.VISIBLE
-                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_red)
-                    deactivationButtonNext()
-                } else {
-                    binding.tvWriteThirdSubjectError.visibility = View.INVISIBLE
-                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
+                val isDescriptionTextLimitError = binding.etWriteThirdDescriptionInput.text.length > 200
+                val isDescriptionTextBlankError = binding.etWriteThirdDescriptionInput.text.trim().isNullOrBlank()
+                val isTitleTextLimitError = s.toString().length > 20
+                val isTitleTextBlankError = s.toString().trim().isNullOrBlank()
+                val isErrorButtonActivateCondition = isTitleTextBlankError || isTitleTextLimitError || isDescriptionTextBlankError || isDescriptionTextLimitError
 
-                    if(binding.etWriteThirdDescriptionInput.text.toString().trim().isNullOrBlank() ||
-                            s.toString().length > 20 || binding.etWriteThirdDescriptionInput.text.length > 200) {
-                        // 내용이 비었거나, 제목 또는 내용이 제한 글자수를 넘은 경우
-                        deactivationButtonNext()
-                    } else {
-                        activationButtonNext()
-                    }
-                }
+                displayTitleLimitError(isError = isTitleTextLimitError)
+                displayTitleBlankError(isError = isTitleTextBlankError)
+                if (isTitleTextLimitError || isTitleTextBlankError)
+                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_red)
+                else
+                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
+                activationButtonNext(isError = isErrorButtonActivateCondition)
+
                 binding.tvWriteThirdSubjectTextCountCurrent.text = binding.etWriteThirdSubjectInput.text.length.toString()
             }
         })
@@ -95,22 +100,20 @@ class WriteThirdFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
             override fun afterTextChanged(s: Editable?) {
-                if (s.toString().trim().isNullOrBlank()) { // 제목이 빈 경우
-                    binding.tvWriteThirdDescriptionError.visibility = View.VISIBLE
-                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_red)
-                    deactivationButtonNext()
-                } else {
-                    binding.tvWriteThirdDescriptionError.visibility = View.INVISIBLE
-                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
+                val isDescriptionTextLimitError = s.toString().length > 200
+                val isDescriptionTextBlankError = s.toString().trim().isNullOrBlank()
+                val isTitleTextLimitError = binding.etWriteThirdSubjectInput.text.length > 20
+                val isTitleTextBlankError = binding.etWriteThirdSubjectInput.text.trim().isNullOrBlank()
+                val isErrorButtonActivateCondition = isDescriptionTextBlankError || isDescriptionTextLimitError || isTitleTextBlankError || isTitleTextLimitError
 
-                    if(binding.etWriteThirdSubjectInput.text.toString().trim().isNullOrBlank() ||
-                        s.toString().length > 200 || binding.etWriteThirdSubjectInput.text.length > 20) {
-                        // 제목이 비었거나, 제목 또는 내용이 제한 글자수를 넘은 경우
-                        deactivationButtonNext()
-                    } else {
-                        activationButtonNext()
-                    }
-                }
+                displayDescriptionBlankError(isDescriptionTextBlankError)
+                displayDescriptionLimitError(isError = isDescriptionTextLimitError)
+                if (isDescriptionTextBlankError || isDescriptionTextLimitError)
+                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_red)
+                else
+                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
+                activationButtonNext(isError = isErrorButtonActivateCondition)
+
                 binding.tvWriteThirdDescriptionTextCountCurrent.text = binding.etWriteThirdDescriptionInput.text.length.toString()
             }
         })
@@ -220,11 +223,41 @@ class WriteThirdFragment : Fragment() {
         chipViews.forEach { removeView(it) }
     }
 
-    private fun activationButtonNext() {
-        binding.btnWriteThirdNext.isEnabled = true
+    private fun activationButtonNext(isError: Boolean) {
+        binding.btnWriteThirdNext.isEnabled = !isError
     }
 
-    private fun deactivationButtonNext() {
-        binding.btnWriteThirdNext.isEnabled = false
+    private fun displayTitleBlankError(isError: Boolean) {
+        if (isError) binding.tvWriteThirdSubjectError.visibility = View.VISIBLE
+        else binding.tvWriteThirdSubjectError.visibility = View.INVISIBLE
+    }
+
+    private fun displayTitleLimitError(isError: Boolean) {
+        with(binding) {
+            if (isError) {
+                tvWriteThirdSubjectTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
+                tvWriteThirdSubjectTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
+            } else {
+                tvWriteThirdSubjectTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
+                tvWriteThirdSubjectTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_000000))
+            }
+        }
+    }
+
+    private fun displayDescriptionBlankError(isError: Boolean) {
+        if (isError) binding.tvWriteThirdDescriptionError.visibility = View.VISIBLE
+        else binding.tvWriteThirdDescriptionError.visibility = View.INVISIBLE
+    }
+
+    private fun displayDescriptionLimitError(isError: Boolean) {
+        with(binding) {
+            if (isError) {
+                tvWriteThirdDescriptionTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
+                tvWriteThirdDescriptionTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
+            } else {
+                tvWriteThirdDescriptionTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
+                tvWriteThirdDescriptionTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_000000))
+            }
+        }
     }
 }
