@@ -26,6 +26,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.mate.baedalmate.R
+import com.mate.baedalmate.common.ExtendedEditText
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
 import com.mate.baedalmate.domain.model.ShippingFeeDto
@@ -48,6 +49,7 @@ class WriteFirstFragment : Fragment() {
     private var chkDeliveryFeeRange = MutableLiveData(true)
     private var chkDeliveryFee = MutableLiveData(true)
     private val onNext: MediatorLiveData<Boolean> = MediatorLiveData()
+    private var onDeliveryFeeAdd : MediatorLiveData<Boolean> = MediatorLiveData()
 
     init {
         onNext.addSource(chkDeadLineAmount) {
@@ -59,10 +61,23 @@ class WriteFirstFragment : Fragment() {
         onNext.addSource(chkDeliveryFee) {
             onNext.value = _onNext()
         }
+        onDeliveryFeeAdd.addSource(chkDeliveryFeeRange) {
+            onDeliveryFeeAdd.value = _onDeliveryFeeAdd()
+        }
+        onDeliveryFeeAdd.addSource(chkDeliveryFee) {
+            onDeliveryFeeAdd.value = _onDeliveryFeeAdd()
+        }
     }
 
     private fun _onNext(): Boolean {
         if ((chkDeadLineAmount.value == true) and (chkDeliveryFee.value == true) and (chkDeliveryFeeRange.value == true)) {
+            return true
+        }
+        return false
+    }
+
+    private fun _onDeliveryFeeAdd(): Boolean {
+        if ((chkDeliveryFee.value == true) and (chkDeliveryFeeRange.value == true)) {
             return true
         }
         return false
@@ -84,6 +99,7 @@ class WriteFirstFragment : Fragment() {
         validateDeadLineDeliveryInputForm()
         initDeadLineCriterion()
         initDeliveryFeeRange()
+        setDeliveryFeeRangeAddEnable()
         setDeliveryFeeRangeAddClickListener()
     }
 
@@ -138,18 +154,15 @@ class WriteFirstFragment : Fragment() {
                 for (i in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
                     val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(i)
                     val startRange =
-                        view.findViewById<EditText>(R.id.et_delivery_fee_range_start).text.toString()
-                            .replace(",", "").toInt()
-                    val endRange =
-                        view.findViewById<EditText>(R.id.et_delivery_fee_range_end).text.toString()
+                        view.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).text.toString()
                             .replace(",", "").toInt()
                     val deliveryFee =
-                        view.findViewById<EditText>(R.id.et_delivery_fee).text.toString()
+                        view.findViewById<ExtendedEditText>(R.id.et_delivery_fee).text.toString()
                             .replace(",", "").toInt()
                     feeList.add(
                         ShippingFeeDto(
                             lowerPrice = startRange,
-                            upperPrice = endRange,
+                            upperPrice = 999999999,
                             shippingFee = deliveryFee
                         )
                     )
@@ -288,6 +301,12 @@ class WriteFirstFragment : Fragment() {
         }
     }
 
+    private fun setDeliveryFeeRangeAddEnable() {
+        onDeliveryFeeAdd.observe(viewLifecycleOwner) {
+            binding.btnWriteFirstDeliveryFeeRangeAdd.isEnabled = it
+        }
+    }
+
     private fun setDeliveryFeeRangeAddClickListener() {
         var result = ""
         val decimalFormat = DecimalFormat("#,###")
@@ -309,106 +328,35 @@ class WriteFirstFragment : Fragment() {
                 override fun afterTextChanged(s: Editable?) {
                     if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
                         result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.setText(result)
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.setSelection(result.length)
+                        deliveryFeeRangeViewBinding.etDeliveryFeeRange.setText(result)
+                        deliveryFeeRangeViewBinding.etDeliveryFeeRange.setSelection(result.length)
                     }
 
                     deliveryFeeRangeEmptyChkList[currentIdx] =
-                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.isNullOrEmpty() ||
-                                deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNullOrEmpty() ||
+                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRange.text.isNullOrEmpty() ||
                                 deliveryFeeRangeViewBinding.etDeliveryFee.text.isNullOrEmpty())
 
-                    if (s.toString().isNotEmpty() &&
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNotEmpty()
-                    ) {
-                        if (deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.toString()
+                    if (s.toString().isNotEmpty()) {
+                        if (deliveryFeeRangeViewBinding.etDeliveryFeeRange.text.toString()
                                 .replace(",", "")
-                                .toInt() >
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.toString()
+                                .toInt() <=
+                            // 직전의 range
+                            binding.layoutWriteFirstDeliveryFeeRange.getChildAt(currentIdx - 1)
+                                .findViewById<EditText>(R.id.et_delivery_fee_range).text.toString()
                                 .replace(",", "")
                                 .toInt()
                         ) {
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10_stroke_red
-                                )
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.background =
+                            deliveryFeeRangeViewBinding.etDeliveryFeeRange.background =
                                 ContextCompat.getDrawable(
                                     requireContext(),
                                     R.drawable.background_white_radius_10_stroke_red
                                 )
                             deliveryFeeRangeCorrectList[currentIdx] = false
                         } else {
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.background =
+                            deliveryFeeRangeViewBinding.etDeliveryFeeRange.background =
                                 ContextCompat.getDrawable(
                                     requireContext(),
-                                    R.drawable.background_white_radius_10
-                                )
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10
-                                )
-                            deliveryFeeRangeCorrectList[currentIdx] = true
-                        }
-                    }
-                    validateDeliveryFeeRangeCorrect()
-                }
-            }
-            val endRangeTextWatcher = object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.setText(result)
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.setSelection(result.length)
-                    }
-
-                    deliveryFeeRangeEmptyChkList[currentIdx] =
-                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.isNullOrEmpty() ||
-                                deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNullOrEmpty() ||
-                                deliveryFeeRangeViewBinding.etDeliveryFee.text.isNullOrEmpty())
-
-                    if (s.toString()
-                            .isNotEmpty() && deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.isNotEmpty()
-                    ) {
-                        if (deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.toString()
-                                .replace(",", "")
-                                .toInt() >
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.toString()
-                                .replace(",", "")
-                                .toInt()
-                        ) {
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10_stroke_red
-                                )
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10_stroke_red
-                                )
-                            deliveryFeeRangeCorrectList[currentIdx] = false
-                        } else {
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10
-                                )
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10
+                                    R.drawable.selector_edittext_white_gray_line_radius_10
                                 )
                             deliveryFeeRangeCorrectList[currentIdx] = true
                         }
@@ -434,36 +382,21 @@ class WriteFirstFragment : Fragment() {
                     }
 
                     deliveryFeeRangeEmptyChkList[currentIdx] =
-                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.text.isNullOrEmpty() ||
-                                deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.text.isNullOrEmpty() ||
+                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRange.text.isNullOrEmpty() ||
                                 deliveryFeeRangeViewBinding.etDeliveryFee.text.isNullOrEmpty())
                     validateDeliveryFeeRangeCorrect()
                 }
             }
 
             deliveryFeeRangeViewBinding.btnDeliveryFeeRangeDelete.setOnClickListener {
-                binding.layoutWriteFirstDeliveryFeeRange.removeViewAt(currentIdx)
-                deliveryFeeRangeCorrectList.removeAt(currentIdx)
-                deliveryFeeRangeEmptyChkList.removeAt(currentIdx)
-                for (i in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
-                    val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(i)
-                    view.findViewById<EditText>(R.id.et_delivery_fee_range_start)
-                        .removeTextChangedListener(startRangeTextWatcher)
-                    view.findViewById<EditText>(R.id.et_delivery_fee_range_end)
-                        .removeTextChangedListener(endRangeTextWatcher)
-                    view.findViewById<EditText>(R.id.et_delivery_fee)
-                        .removeTextChangedListener(deliveryFeeTextWatcher)
-                }
+                setDeliveryFeeRangeDeleteClickListener(currentIdx)
                 setDeliveryFeeRangeDelete()
                 setDeliveryFeeRangeError()
                 validateDeliveryFeeRangeCorrect()
             }
 
-            deliveryFeeRangeViewBinding.etDeliveryFeeRangeStart.addTextChangedListener(
+            deliveryFeeRangeViewBinding.etDeliveryFeeRange.addTextChangedListener(
                 startRangeTextWatcher
-            )
-            deliveryFeeRangeViewBinding.etDeliveryFeeRangeEnd.addTextChangedListener(
-                endRangeTextWatcher
             )
             deliveryFeeRangeViewBinding.etDeliveryFee.addTextChangedListener(
                 deliveryFeeTextWatcher
@@ -477,6 +410,8 @@ class WriteFirstFragment : Fragment() {
             deliveryFeeRangeCorrectList.add(true)
             deliveryFeeRangeEmptyChkList.add(false)
             binding.scrollviewWriteFirst.smoothScrollToView(binding.btnWriteFirstDeliveryFeeRangeAdd)
+
+            setPreviousFeeRangeDisable()
             validateDeliveryFeeRangeCorrect()
         }
         setDeliveryFeeRangeFirstCheck()
@@ -489,22 +424,35 @@ class WriteFirstFragment : Fragment() {
             val rangeTitle = view.findViewById<TextView>(R.id.tv_delivery_fee_range_title)
             rangeTitle.text = "${getString(R.string.section)} ${i.plus(1)}"
             deleteButton.setOnClickListener {
-                binding.layoutWriteFirstDeliveryFeeRange.removeViewAt(i)
-                deliveryFeeRangeCorrectList.removeAt(i)
-                deliveryFeeRangeEmptyChkList.removeAt(i)
-                setDeliveryFeeRangeDelete()
-                setDeliveryFeeRangeError()
-                validateDeliveryFeeRangeCorrect()
+                setDeliveryFeeRangeDeleteClickListener(i)
             }
         }
+        setPreviousFeeRangeDisable()
+    }
+
+    private fun setDeliveryFeeRangeDeleteClickListener(index: Int) {
+        for (i in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
+            val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(i)
+            view.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).clearTextChangedListeners()
+            view.findViewById<ExtendedEditText>(R.id.et_delivery_fee).clearTextChangedListeners()
+        }
+
+        binding.layoutWriteFirstDeliveryFeeRange.removeViewAt(index)
+        deliveryFeeRangeCorrectList.removeAt(index)
+        deliveryFeeRangeEmptyChkList.removeAt(index)
+        setDeliveryFeeRangeDelete()
+        setDeliveryFeeRangeError()
+        validateDeliveryFeeRangeCorrect()
     }
 
     private fun setDeliveryFeeRangeError() {
         for (position in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
+            var result = ""
+            val decimalFormat = DecimalFormat("#,###")
+
             val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(position)
-            val startEdit = view.findViewById<EditText>(R.id.et_delivery_fee_range_start)
-            val endEdit = view.findViewById<EditText>(R.id.et_delivery_fee_range_end)
-            val feeEdit = view.findViewById<EditText>(R.id.et_delivery_fee)
+            val startEdit = view.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range)
+            val feeEdit = view.findViewById<ExtendedEditText>(R.id.et_delivery_fee)
 
             startEdit.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -517,73 +465,31 @@ class WriteFirstFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
-                    deliveryFeeRangeEmptyChkList[position] =
-                        !(startEdit.text.isEmpty() || endEdit.text.isEmpty() || feeEdit.text.isEmpty())
-                    if (s.toString().isNotEmpty() && endEdit.text.isNotEmpty()) {
-                        if (startEdit.text.toString().replace(",", "")
-                                .toInt() > endEdit.text.toString().replace(",", "").toInt()
-                        ) {
-                            startEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                            endEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                            deliveryFeeRangeCorrectList[position] = false
-                        } else {
-                            startEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                            endEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                            deliveryFeeRangeCorrectList[position] = true
-                        }
+                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
+                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
+                        startEdit.setText(result)
+                        startEdit.setSelection(result.length)
                     }
-                    validateDeliveryFeeRangeCorrect()
-                }
-            })
 
-            endEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
                     deliveryFeeRangeEmptyChkList[position] =
-                        !(startEdit.text.isEmpty() || endEdit.text.isEmpty() || feeEdit.text.isEmpty())
-                    if (startEdit.text.isNotEmpty() && endEdit.text.isNotEmpty()) {
-                        if (startEdit.text.toString().replace(",", "")
-                                .toInt() > endEdit.text.toString().replace(",", "").toInt()
-                        ) {
-                            startEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                            endEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                            deliveryFeeRangeCorrectList[position] = false
-                        } else {
-                            startEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                            endEdit.background = ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                            deliveryFeeRangeCorrectList[position] = true
+                        !(startEdit.text.isEmpty() || feeEdit.text.isEmpty())
+                    if(position != 0) {
+                        if (s.toString().isNotEmpty()) {
+                            if (startEdit.text.toString().replace(",", "")
+                                    .toInt() <= binding.layoutWriteFirstDeliveryFeeRange.getChildAt(position-1).findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).text.toString().replace(",", "").toInt()
+                            ) {
+                                startEdit.background = ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.background_white_radius_10_stroke_red
+                                )
+                                deliveryFeeRangeCorrectList[position] = false
+                            } else {
+                                startEdit.background = ContextCompat.getDrawable(
+                                    requireContext(),
+                                    R.drawable.selector_edittext_white_gray_line_radius_10
+                                )
+                                deliveryFeeRangeCorrectList[position] = true
+                            }
                         }
                     }
                     validateDeliveryFeeRangeCorrect()
@@ -600,8 +506,13 @@ class WriteFirstFragment : Fragment() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
                 override fun afterTextChanged(s: Editable?) {
+                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
+                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
+                        feeEdit.setText(result)
+                        feeEdit.setSelection(result.length)
+                    }
                     deliveryFeeRangeEmptyChkList[position] =
-                        !(startEdit.text.isEmpty() || endEdit.text.isEmpty() || feeEdit.text.isEmpty())
+                        !(startEdit.text.isEmpty() || feeEdit.text.isEmpty())
                     validateDeliveryFeeRangeCorrect()
                 }
             })
@@ -612,94 +523,18 @@ class WriteFirstFragment : Fragment() {
         var result = ""
         val decimalFormat = DecimalFormat("#,###")
 
-        binding.etDeliveryFeeRangeStart.addTextChangedListener(object : TextWatcher {
+        binding.etDeliveryFeeRange.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
                     result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                    binding.etDeliveryFeeRangeStart.setText(result)
-                    binding.etDeliveryFeeRangeStart.setSelection(result.length)
+                    binding.etDeliveryFeeRange.setText(result)
+                    binding.etDeliveryFeeRange.setSelection(result.length)
                 }
 
                 deliveryFeeRangeEmptyChkList[0] =
-                    !(binding.etDeliveryFeeRangeStart.text.isEmpty() || binding.etDeliveryFeeRangeEnd.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
-
-                if (s.toString().isNotEmpty() && binding.etDeliveryFeeRangeEnd.text.isNotEmpty()) {
-                    if (binding.etDeliveryFeeRangeStart.text.toString().replace(",", "").toInt() >
-                        binding.etDeliveryFeeRangeEnd.text.toString().replace(",", "").toInt()
-                    ) {
-                        binding.etDeliveryFeeRangeStart.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                        binding.etDeliveryFeeRangeEnd.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                        deliveryFeeRangeCorrectList[0] = false
-                    } else {
-                        binding.etDeliveryFeeRangeStart.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                        binding.etDeliveryFeeRangeEnd.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                        deliveryFeeRangeCorrectList[0] = true
-                    }
-                }
-                validateDeliveryFeeRangeCorrect()
-            }
-        })
-        binding.etDeliveryFeeRangeEnd.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                    result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                    binding.etDeliveryFeeRangeEnd.setText(result)
-                    binding.etDeliveryFeeRangeEnd.setSelection(result.length)
-                }
-                deliveryFeeRangeEmptyChkList[0] =
-                    !(binding.etDeliveryFeeRangeStart.text.isEmpty() || binding.etDeliveryFeeRangeEnd.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
-
-                if (s.toString()
-                        .isNotEmpty() && binding.etDeliveryFeeRangeStart.text.isNotEmpty()
-                ) {
-                    if (binding.etDeliveryFeeRangeStart.text.toString().replace(",", "").toInt() >
-                        binding.etDeliveryFeeRangeEnd.text.toString().replace(",", "").toInt()
-                    ) {
-                        binding.etDeliveryFeeRangeStart.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                        binding.etDeliveryFeeRangeEnd.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                        deliveryFeeRangeCorrectList[0] = false
-                    } else {
-                        binding.etDeliveryFeeRangeStart.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                        binding.etDeliveryFeeRangeEnd.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10
-                            )
-                        deliveryFeeRangeCorrectList[0] = true
-                    }
-                }
+                    !(binding.etDeliveryFeeRange.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
                 validateDeliveryFeeRangeCorrect()
             }
         })
@@ -714,7 +549,7 @@ class WriteFirstFragment : Fragment() {
                     binding.etDeliveryFee.setSelection(result.length)
                 }
                 deliveryFeeRangeEmptyChkList[0] =
-                    !(binding.etDeliveryFeeRangeStart.text.isEmpty() || binding.etDeliveryFeeRangeEnd.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
+                    !(binding.etDeliveryFeeRange.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
                 validateDeliveryFeeRangeCorrect()
             }
         })
@@ -790,5 +625,18 @@ class WriteFirstFragment : Fragment() {
             location[0] + view.measuredWidth,
             location[1] + view.measuredHeight
         )
+    }
+
+    private fun setPreviousFeeRangeDisable() {
+        for (idx in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
+            val currentView = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(idx)
+            if(idx == binding.layoutWriteFirstDeliveryFeeRange.childCount - 1) {
+                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).isEnabled = true
+                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee).isEnabled = true
+            } else {
+                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).isEnabled = false
+                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee).isEnabled = false
+            }
+        }
     }
 }
