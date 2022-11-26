@@ -25,9 +25,6 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
         <action
-            android:id="@+id/action_homeFragment_to_homeChangeDormitoryFragment"
-            app:destination="@id/HomeChangeDormitoryFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_postFragment"
             app:destination="@id/PostFragment"
             app:enterAnim="@anim/slide_in"
@@ -35,16 +32,6 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
     </fragment>
-    <dialog
-        android:id="@+id/HomeChangeDormitoryFragment"
-        android:name="com.mate.baedalmate.presentation.fragment.home.HomeChangeDormitoryFragment"
-        android:label="fragment_home_change_dormitory"
-        tools:layout="@layout/fragment_home_change_dormitory">
-        <argument
-            android:name="currentDormitory"
-            android:defaultValue="성림학사"
-            app:argType="string" />
-    </dialog>
     <fragment
         android:id="@+id/PostCategoryListFragment"
         android:name="com.mate.baedalmate.presentation.fragment.post.PostCategoryListFragment"
@@ -254,4 +241,10 @@
         android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page"></fragment>
+
+    <fragment
+        android:id="@+id/LocationCertificationFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.location.LocationCertificationFragment"
+        android:label="fragment_location_certification"
+        tools:layout="@layout/fragment_location_certification"/>
 </navigation>
