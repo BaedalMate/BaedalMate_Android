@@ -117,8 +117,13 @@ class HomeFragment : Fragment() {
             ViewPagerUtil.previewNextItem(this, 37.dp, 15.dp)
         }
 
+        setTopPostTag()
+    }
+
+    private fun setTopPostTag() {
         recruitViewModel.recruitHomeTagList.observe(viewLifecycleOwner) { tagList ->
-            val submitTagList = tagList.recruitList.toMutableList()
+            val submitTagList = setTopPostTagCountLimit(tagList.recruitList)
+            // 마지막에 글 작성하기를 보여주기 위하여 빈 아이템 추가
             submitTagList.add(
                 TagRecruitDto(
                     "", "", "", 0, "", 0, "", 0, listOf(TagDto("")),
@@ -129,6 +134,17 @@ class HomeFragment : Fragment() {
             setViewPagerChangeEvent()
             setupIndicators(submitTagList.size)
         }
+    }
+
+    private fun setTopPostTagCountLimit(tagPostList: List<TagRecruitDto>): MutableList<TagRecruitDto> {
+        val editedTagPostList = mutableListOf<TagRecruitDto>()
+        for(tagPost in tagPostList) {
+            var currentPost = tagPost
+            currentPost.tags = currentPost.tags.subList(0, MAX_TAG_COUNT)
+            editedTagPostList.add(currentPost)
+        }
+
+        return editedTagPostList
     }
 
     private fun setupIndicators(count: Int) {
@@ -253,5 +269,9 @@ class HomeFragment : Fragment() {
             startIdx + textLength,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+    }
+
+    companion object {
+        private const val MAX_TAG_COUNT = 2
     }
 }
