@@ -65,7 +65,7 @@ data class TagRecruitDto (
     @SerializedName("shippingFee")
     val shippingFee: Int,
     @SerializedName("tags")
-    val tags: List<TagDto>,
+    var tags: List<TagDto>,
     @SerializedName("userScore")
     val userScore: Float,
     @SerializedName("username")
