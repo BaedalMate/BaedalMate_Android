@@ -92,9 +92,9 @@
     <string name="write_first_goal_time_title">마감 시간</string>
     <string name="write_first_goal_time_description">모집 게시글 작성시간 기준 3시간 뒤로 마감시간이 설정됩니다</string>
     <string name="write_first_goal_criterion_title">마감 기준</string>
-    <string name="write_first_goal_criterion_description_people">모집 인원에 도달하면 모집이 완료됩니다</string>
-    <string name="write_first_goal_criterion_description_delivery">주문 목표 금액에 도달하면 모집이 완료됩니다</string>
-    <string name="write_first_goal_criterion_description_time">마감시간이 되면 모집이 완료됩니다</string>
+    <string name="write_first_goal_criterion_description_people">최소 모집인원이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 모집인원이 충족되지 못한경우, 모집이 취소됩니다.</string>
+    <string name="write_first_goal_criterion_description_delivery">최소 주문금액이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 주문금액이 충족되지 못한경우, 모집이 취소됩니다.</string>
+    <string name="write_first_goal_criterion_description_time">최소 모집인원과 최소주문 금액 목표에 관계없이 마감시간이 된 경우에만 모집이 종료됩니다.</string>
     <string name="write_first_goal_criterion_people">모집 인원</string>
     <string name="write_first_goal_criterion_delivery">목표 금액</string>
     <string name="write_first_goal_criterion_time">마감 시간</string>
