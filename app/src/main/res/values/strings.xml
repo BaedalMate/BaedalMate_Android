@@ -128,6 +128,8 @@
     <string name="write_third_tag_title">태그쓰기</string>
     <string name="write_third_tag_input_hint">#태그를 입력해주세요</string>
     <string name="write_third_tag_add">태그입력</string>
+    <string name="write_third_tag_add_error_count_limit">태그는 %d개 까지 등록 가능합니다.</string>
+    <string name="write_third_tag_add_error_length_limit">태그는 %d자 까지 입력 가능합니다.</string>
 
     <!-- Write Fourth -->
     <string name="write_fourth_menu_title">메뉴 추가</string>

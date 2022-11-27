@@ -54,16 +54,26 @@ class WriteThirdFragment : Fragment() {
     private fun setNextClickListener() {
         binding.btnWriteThirdNext.setOnClickListener {
             val titleText =
-                if(binding.etWriteThirdSubjectInput.text.toString().trim().length > 20) binding.etWriteThirdSubjectInput.text.toString().trim().substring(0 until 20)
+                if (binding.etWriteThirdSubjectInput.text.toString()
+                        .trim().length > MAX_TITLE_LENGTH
+                ) binding.etWriteThirdSubjectInput.text.toString().trim()
+                    .substring(0 until MAX_TITLE_LENGTH)
                 else binding.etWriteThirdSubjectInput.text.toString().trim()
             val descriptionText =
-                if(binding.etWriteThirdDescriptionInput.text.toString().trim().length > 200) binding.etWriteThirdDescriptionInput.text.toString().trim().substring(0 until 200)
+                if (binding.etWriteThirdDescriptionInput.text.toString()
+                        .trim().length > MAX_DESCRIPTION_LENGTH
+                ) binding.etWriteThirdDescriptionInput.text.toString().trim()
+                    .substring(0 until MAX_DESCRIPTION_LENGTH)
                 else binding.etWriteThirdDescriptionInput.text.toString().trim()
             writeViewModel.postTitle = titleText
             writeViewModel.postDetail = descriptionText
             val tagList = mutableListOf<TagDto>()
-            for(tagText in binding.chipgroupWriteThirdTagListSaved.getAllChipsTagText()) {
-                if (tagText.length > 8) tagList.add(TagDto(tagname = tagText.trim().substring(0 until 8)))
+            for (tagText in binding.chipgroupWriteThirdTagListSaved.getAllChipsTagText()) {
+                if (tagText.length > MAX_TAG_LENGTH_WRITE) tagList.add(
+                    TagDto(
+                        tagname = tagText.trim().substring(0 until MAX_TAG_LENGTH_WRITE)
+                    )
+                )
                 else tagList.add(TagDto(tagname = tagText))
             }
             writeViewModel.postTagList = tagList
@@ -73,48 +83,68 @@ class WriteThirdFragment : Fragment() {
 
     private fun initSubjectInput() {
         binding.etWriteThirdSubjectInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                val isDescriptionTextLimitError = binding.etWriteThirdDescriptionInput.text.length > 200
-                val isDescriptionTextBlankError = binding.etWriteThirdDescriptionInput.text.trim().isNullOrBlank()
-                val isTitleTextLimitError = s.toString().length > 20
+                val isDescriptionTextLimitError =
+                    binding.etWriteThirdDescriptionInput.text.length > MAX_DESCRIPTION_LENGTH
+                val isDescriptionTextBlankError =
+                    binding.etWriteThirdDescriptionInput.text.trim().isNullOrBlank()
+                val isTitleTextLimitError = s.toString().length > MAX_TITLE_LENGTH
                 val isTitleTextBlankError = s.toString().trim().isNullOrBlank()
-                val isErrorButtonActivateCondition = isTitleTextBlankError || isTitleTextLimitError || isDescriptionTextBlankError || isDescriptionTextLimitError
+                val isErrorButtonActivateCondition =
+                    isTitleTextBlankError || isTitleTextLimitError || isDescriptionTextBlankError || isDescriptionTextLimitError
 
                 displayTitleLimitError(isError = isTitleTextLimitError)
                 displayTitleBlankError(isError = isTitleTextBlankError)
                 if (isTitleTextLimitError || isTitleTextBlankError)
-                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_red)
+                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_white_radius_10_stroke_red
+                    )
                 else
-                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
+                    binding.etWriteThirdSubjectInput.background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_white_radius_10
+                    )
                 activationButtonNext(isError = isErrorButtonActivateCondition)
 
-                binding.tvWriteThirdSubjectTextCountCurrent.text = binding.etWriteThirdSubjectInput.text.length.toString()
+                binding.tvWriteThirdSubjectTextCountCurrent.text =
+                    binding.etWriteThirdSubjectInput.text.length.toString()
             }
         })
     }
 
     private fun initDescriptionInput() {
         binding.etWriteThirdDescriptionInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                val isDescriptionTextLimitError = s.toString().length > 200
+                val isDescriptionTextLimitError = s.toString().length > MAX_DESCRIPTION_LENGTH
                 val isDescriptionTextBlankError = s.toString().trim().isNullOrBlank()
-                val isTitleTextLimitError = binding.etWriteThirdSubjectInput.text.length > 20
-                val isTitleTextBlankError = binding.etWriteThirdSubjectInput.text.trim().isNullOrBlank()
-                val isErrorButtonActivateCondition = isDescriptionTextBlankError || isDescriptionTextLimitError || isTitleTextBlankError || isTitleTextLimitError
+                val isTitleTextLimitError =
+                    binding.etWriteThirdSubjectInput.text.length > MAX_TITLE_LENGTH
+                val isTitleTextBlankError =
+                    binding.etWriteThirdSubjectInput.text.trim().isNullOrBlank()
+                val isErrorButtonActivateCondition =
+                    isDescriptionTextBlankError || isDescriptionTextLimitError || isTitleTextBlankError || isTitleTextLimitError
 
                 displayDescriptionBlankError(isDescriptionTextBlankError)
                 displayDescriptionLimitError(isError = isDescriptionTextLimitError)
                 if (isDescriptionTextBlankError || isDescriptionTextLimitError)
-                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_red)
+                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_white_radius_10_stroke_red
+                    )
                 else
-                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
+                    binding.etWriteThirdDescriptionInput.background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.background_white_radius_10
+                    )
                 activationButtonNext(isError = isErrorButtonActivateCondition)
 
-                binding.tvWriteThirdDescriptionTextCountCurrent.text = binding.etWriteThirdDescriptionInput.text.length.toString()
+                binding.tvWriteThirdDescriptionTextCountCurrent.text =
+                    binding.etWriteThirdDescriptionInput.text.length.toString()
             }
         })
     }
@@ -127,17 +157,39 @@ class WriteThirdFragment : Fragment() {
 
     private fun setEditTextChangeListener() {
         binding.etWriteThirdTagInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                if(s.toString().trim().isNullOrBlank()) {
-                    binding.btnWriteThirdTagAdd.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_main_C4C4C4))
-                    binding.btnWriteThirdTagAdd.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10_stroke_gray_line)
-                    binding.btnWriteThirdTagAdd.backgroundTintList = null
-                } else {
-                    binding.btnWriteThirdTagAdd.setTextColor(ContextCompat.getColor(requireContext(), R.color.white_FFFFFF))
-                    binding.btnWriteThirdTagAdd.background = ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
-                    binding.btnWriteThirdTagAdd.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.line_orange_FFA077)
+                with(binding.btnWriteThirdTagAdd) {
+                    if (s.toString().trim().isNullOrBlank()) {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.gray_main_C4C4C4
+                            )
+                        )
+                        background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_white_radius_10_stroke_gray_line
+                        )
+                        backgroundTintList = null
+                    } else {
+                        setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.white_FFFFFF
+                            )
+                        )
+                        background = ContextCompat.getDrawable(
+                            requireContext(),
+                            R.drawable.background_white_radius_10
+                        )
+                        backgroundTintList =
+                            ContextCompat.getColorStateList(
+                                requireContext(),
+                                R.color.line_orange_FFA077
+                            )
+                    }
                 }
             }
         })
@@ -145,7 +197,7 @@ class WriteThirdFragment : Fragment() {
 
     private fun setAddTagClickListener() {
         binding.btnWriteThirdTagAdd.setOnClickListener {
-            setAddTag()
+            setAddingTag()
         }
     }
 
@@ -153,7 +205,7 @@ class WriteThirdFragment : Fragment() {
         binding.etWriteThirdTagInput.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE -> {
-                    setAddTag()
+                    setAddingTag()
                     true
                 }
                 else -> false
@@ -161,51 +213,151 @@ class WriteThirdFragment : Fragment() {
         }
     }
 
-    private fun setTagCountLimit() {
+    private fun setAddingTag() {
+        val originalTagText = binding.etWriteThirdTagInput.text.toString().trim()
+//        val removeBlankTag = ReplaceUnicode.replaceBlankText(originalTag)
+
+        if (originalTagText.isNotEmpty() && !binding.chipgroupWriteThirdTagListSaved.getAllChipsTagText()
+                .contains(originalTagText)
+        )
+            setTagChipProperties(originalTagText)
+        clearTagInputEditText()
+        displayTagCountLimitError()
+    }
+
+    private fun setTagChipProperties(tagText: String) {
+        val chip = LayoutInflater.from(requireContext())
+            .inflate(R.layout.item_write_tag_chip, null) as Chip
+        with(chip) {
+            setTextAppearance(R.style.style_body2_kor)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
+            setOnCloseIconClickListener {
+                binding.chipgroupWriteThirdTagListSaved.removeView(chip as View)
+                displayTagCountLimitError()
+
+            }
+            ensureAccessibleTouchTarget(42.dp)
+            text =
+                if (tagText.length > 8) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.write_third_tag_add_error_length_limit).format(
+                            MAX_TAG_LENGTH_WRITE
+                        ),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    "#${tagText.substring(0, MAX_TAG_LENGTH_WRITE)}"
+                } else "#$tagText"
+        }
+        setTagCountLimit(chip)
+    }
+
+    private fun setTagCountLimit(chip: Chip) {
+        val layoutParams = ViewGroup.MarginLayoutParams(
+            ViewGroup.MarginLayoutParams.WRAP_CONTENT,
+            ViewGroup.MarginLayoutParams.WRAP_CONTENT
+        )
+
+        if (binding.chipgroupWriteThirdTagListSaved.size < MAX_TAG_COUNT_WRITE) {
+            binding.chipgroupWriteThirdTagListSaved.addView(chip, layoutParams)
+        }
+    }
+
+    private fun displayTagCountLimitError() {
         with(binding) {
             val currentTagCount = chipgroupWriteThirdTagListSaved.size
-            if (currentTagCount >= 8) {
+            if (currentTagCount >= MAX_TAG_COUNT_WRITE) {
                 Toast.makeText(
                     requireContext(),
-                    "태그는 8개까지 등록 가능합니다.",
+                    getString(R.string.write_third_tag_add_error_count_limit).format(
+                        MAX_TAG_COUNT_WRITE
+                    ),
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
-    private fun setAddTag() {
-        val originalTag = binding.etWriteThirdTagInput.text.toString().trim()
-//                    val removeBlankTag = ReplaceUnicode.replaceBlankText(originalTag)
+    private fun clearTagInputEditText() {
+        binding.etWriteThirdTagInput.setText("")
+    }
 
-        if (originalTag.isEmpty()
-            || binding.chipgroupWriteThirdTagListSaved.getAllChipsTagText()
-                .contains(originalTag)
-        ) {
-            binding.etWriteThirdTagInput.setText("")
-        } else {
-            val chip = LayoutInflater.from(context)
-                .inflate(R.layout.item_write_tag_chip, null) as Chip
-            val layoutParams = ViewGroup.MarginLayoutParams(
-                ViewGroup.MarginLayoutParams.WRAP_CONTENT,
-                ViewGroup.MarginLayoutParams.WRAP_CONTENT
-            )
-            with(chip) {
-                setTextAppearance(R.style.style_body2_kor)
-                setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
-                setOnCloseIconClickListener {
-                    binding.chipgroupWriteThirdTagListSaved.removeView(chip as View)
-                    setTagCountLimit()
-                }
-                ensureAccessibleTouchTarget(42.dp)
-                text = "#$originalTag"
+    private fun activationButtonNext(isError: Boolean) {
+        binding.btnWriteThirdNext.isEnabled = !isError
+    }
+
+    private fun displayTitleBlankError(isError: Boolean) {
+        if (isError) binding.tvWriteThirdSubjectError.visibility = View.VISIBLE
+        else binding.tvWriteThirdSubjectError.visibility = View.INVISIBLE
+    }
+
+    private fun displayTitleLimitError(isError: Boolean) {
+        with(binding) {
+            if (isError) {
+                tvWriteThirdSubjectTextCountCurrent.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.error_FF0000
+                    )
+                )
+                tvWriteThirdSubjectTextCountMax.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.error_FF0000
+                    )
+                )
+            } else {
+                tvWriteThirdSubjectTextCountCurrent.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main_FB5F1C
+                    )
+                )
+                tvWriteThirdSubjectTextCountMax.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black_000000
+                    )
+                )
             }
-            if (binding.chipgroupWriteThirdTagListSaved.size < 8) {
-                binding.chipgroupWriteThirdTagListSaved.addView(chip, layoutParams)
-            }
-            binding.etWriteThirdTagInput.setText("")
         }
-        setTagCountLimit()
+    }
+
+    private fun displayDescriptionBlankError(isError: Boolean) {
+        if (isError) binding.tvWriteThirdDescriptionError.visibility = View.VISIBLE
+        else binding.tvWriteThirdDescriptionError.visibility = View.INVISIBLE
+    }
+
+    private fun displayDescriptionLimitError(isError: Boolean) {
+        with(binding) {
+            if (isError) {
+                tvWriteThirdDescriptionTextCountCurrent.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.error_FF0000
+                    )
+                )
+                tvWriteThirdDescriptionTextCountMax.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.error_FF0000
+                    )
+                )
+            } else {
+                tvWriteThirdDescriptionTextCountCurrent.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.main_FB5F1C
+                    )
+                )
+                tvWriteThirdDescriptionTextCountMax.setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black_000000
+                    )
+                )
+            }
+        }
     }
 
     private fun ChipGroup.getAllChipsTagText(): List<String> {
@@ -223,41 +375,10 @@ class WriteThirdFragment : Fragment() {
         chipViews.forEach { removeView(it) }
     }
 
-    private fun activationButtonNext(isError: Boolean) {
-        binding.btnWriteThirdNext.isEnabled = !isError
-    }
-
-    private fun displayTitleBlankError(isError: Boolean) {
-        if (isError) binding.tvWriteThirdSubjectError.visibility = View.VISIBLE
-        else binding.tvWriteThirdSubjectError.visibility = View.INVISIBLE
-    }
-
-    private fun displayTitleLimitError(isError: Boolean) {
-        with(binding) {
-            if (isError) {
-                tvWriteThirdSubjectTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
-                tvWriteThirdSubjectTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
-            } else {
-                tvWriteThirdSubjectTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
-                tvWriteThirdSubjectTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_000000))
-            }
-        }
-    }
-
-    private fun displayDescriptionBlankError(isError: Boolean) {
-        if (isError) binding.tvWriteThirdDescriptionError.visibility = View.VISIBLE
-        else binding.tvWriteThirdDescriptionError.visibility = View.INVISIBLE
-    }
-
-    private fun displayDescriptionLimitError(isError: Boolean) {
-        with(binding) {
-            if (isError) {
-                tvWriteThirdDescriptionTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
-                tvWriteThirdDescriptionTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_FF0000))
-            } else {
-                tvWriteThirdDescriptionTextCountCurrent.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
-                tvWriteThirdDescriptionTextCountMax.setTextColor(ContextCompat.getColor(requireContext(), R.color.black_000000))
-            }
-        }
+    companion object {
+        private const val MAX_TITLE_LENGTH = 20
+        private const val MAX_DESCRIPTION_LENGTH = 200
+        private const val MAX_TAG_COUNT_WRITE = 4
+        private const val MAX_TAG_LENGTH_WRITE = 8
     }
 }
