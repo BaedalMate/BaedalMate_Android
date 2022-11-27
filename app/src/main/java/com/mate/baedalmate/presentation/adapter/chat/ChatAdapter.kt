@@ -83,12 +83,15 @@ class ChatAdapter(private val requestManager: RequestManager, private val userNa
             val sendTimeString = message.sendDate
             val sendTime = LocalDateTime.parse(sendTimeString, formatter)
 
-            binding.tvChatOtherMessage.text = message.message
-            binding.tvChatOtherTime.text = sendTime.format(DateTimeFormatter.ofPattern("a h:mm"))
-            requestManager.load("${message.senderImage}")
-                .priority(Priority.HIGH)
-                .centerCrop()
-                .into(binding.imgChatOther)
+            with(binding) {
+                tvChatOtherMessage.text = message.message
+                tvChatOtherTime.text = sendTime.format(DateTimeFormatter.ofPattern("a h:mm"))
+                tvChatOtherName.text = message.sender
+                requestManager.load("${message.senderImage}")
+                    .priority(Priority.HIGH)
+                    .centerCrop()
+                    .into(imgChatOther)
+            }
         }
     }
 
