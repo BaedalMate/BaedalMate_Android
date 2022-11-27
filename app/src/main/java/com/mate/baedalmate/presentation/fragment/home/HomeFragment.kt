@@ -105,27 +105,8 @@ class HomeFragment : Fragment() {
                     binding.tvHomeTopTitleUserName.text = span
                     binding.tvHomeTopTitleLocationCurrent.text =
                         "${getString(R.string.university_seoultech)} $userDormitory"
-
-                    setChangeDormitory(currentDormitory = userDormitory)
                 }
             }
-        }
-    }
-
-    private fun setChangeDormitory(currentDormitory: String) {
-        binding.tvHomeTopTitleLocationCurrent.setOnClickListener {
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToHomeChangeDormitoryFragment(
-                    currentDormitory = currentDormitory
-                )
-            )
-        }
-        binding.imgHomeTopTitleLocationArrow.setOnClickListener {
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToHomeChangeDormitoryFragment(
-                    currentDormitory = currentDormitory
-                )
-            )
         }
     }
 
