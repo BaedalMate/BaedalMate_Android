@@ -40,6 +40,9 @@ class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: R
     override suspend fun requestRecruitPost(id: Int): Response<RecruitDetail> =
         recruitApiService.requestRecruitPost(id = id)
 
+    override suspend fun requestCancelRecruitPost(id: Int): Response<Void> =
+        recruitApiService.requestCancelRecruitPost(id = id)
+
     override suspend fun requestCloseRecruitPost(id: Int): Response<Void> =
         recruitApiService.requestCloseRecruitPost(id = id)
 

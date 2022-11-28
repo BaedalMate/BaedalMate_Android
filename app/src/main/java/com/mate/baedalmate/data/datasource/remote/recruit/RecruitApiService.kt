@@ -38,6 +38,9 @@ interface RecruitApiService {
         @Path("id") id: Int
     ): Response<RecruitDetail>
 
+    @GET("/api/v1/recruit/cancel/{id}")
+    suspend fun requestCancelRecruitPost(@Path("id") id: Int): Response<Void>
+
     @GET("/api/v1/recruit/close/{id}")
     suspend fun requestCloseRecruitPost(@Path("id") id: Int): Response<Void>
 
