@@ -25,6 +25,7 @@ interface RecruitRepository {
 
     suspend fun requestRecruitTagList(page: Int, size: Int, sort: String): Response<TagRecruitList>
     suspend fun requestRecruitPost(id: Int): Response<RecruitDetail>
+    suspend fun requestCancelRecruitPost(id: Int): Response<Void>
     suspend fun requestCloseRecruitPost(id: Int): Response<Void>
     suspend fun requestParticipateRecruitPost(data: CreateOrderRequest): Response<CreateOrderResponse>
     suspend fun requestCancelParticipateRecruitPost(data: DeleteOrderDto): Response<Void>

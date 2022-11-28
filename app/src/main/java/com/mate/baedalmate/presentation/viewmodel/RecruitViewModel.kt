@@ -17,6 +17,7 @@ import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestCancelRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
@@ -34,6 +35,7 @@ class RecruitViewModel @Inject constructor(
     private val recruitTagListUseCase: RequestRecruitTagListUseCase,
     private val recruitPostUseCase: RequestRecruitPostUseCase,
     private val closeRecruitPostUseCase: RequestCloseRecruitPostUseCase,
+    private val cancelRecruitPostUseCase: RequestCancelRecruitPostUseCase,
     private val participateRecruitPostUseCase: RequestParticipateRecruitPostUseCase,
     private val cancelParticipateRecruitPostUseCase: RequestCancelParticipateRecruitPostUseCase
 ) : ViewModel() {
@@ -64,6 +66,9 @@ class RecruitViewModel @Inject constructor(
 
     private val _isRecruitListLoad = MutableLiveData(false)
     val isRecruitListLoad: LiveData<Boolean> get() = _isRecruitListLoad
+
+    private val _isCancelRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
+    val isCancelRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isCancelRecruitPostSuccess
 
     private val _isCloseRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
     val isCloseRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isCloseRecruitPostSuccess
@@ -232,6 +237,14 @@ class RecruitViewModel @Inject constructor(
             _recruitPostDetail.postValue(response.body())
         } else {
         }
+    }
+
+    fun requestCancelRecruitPost(postId: Int) = viewModelScope.launch {
+        val response = cancelRecruitPostUseCase.invoke(id = postId)
+        if (response.isSuccessful) {
+            _isCancelRecruitPostSuccess.postValue(Event(true))
+        } else
+            _isCancelRecruitPostSuccess.postValue(Event(false))
     }
 
     fun requestCloseRecruitPost(postId: Int) = viewModelScope.launch {
