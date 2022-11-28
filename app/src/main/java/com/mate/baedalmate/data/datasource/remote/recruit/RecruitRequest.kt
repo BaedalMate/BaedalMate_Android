@@ -9,3 +9,8 @@ data class CreateOrderRequest (
     @SerializedName("recruitId")
     val recruitId: Int
 )
+
+data class DeleteOrderDto (
+    @SerializedName("recruitId")
+    val recruitId: Int
+)

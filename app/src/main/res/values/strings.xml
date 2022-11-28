@@ -79,6 +79,7 @@
     <string name="coupon_amount">쿠폰사용금액</string>
     <string name="post_map_title">배달 가게 위치</string>
     <string name="post_alert_message_close">해당 모집글이 마감처리 되었습니다</string>
+    <string name="post_alert_message_cancel_participate">참여 취소되었습니다.</string>
 
     <!-- Write -->
     <string name="write_actionbar_title">상세 설정</string>

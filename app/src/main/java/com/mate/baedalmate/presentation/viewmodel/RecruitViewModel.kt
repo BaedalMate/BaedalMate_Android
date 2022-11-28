@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderRequest
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
+import com.mate.baedalmate.data.datasource.remote.recruit.DeleteOrderDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
@@ -15,6 +16,7 @@ import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
+import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
@@ -32,7 +34,8 @@ class RecruitViewModel @Inject constructor(
     private val recruitTagListUseCase: RequestRecruitTagListUseCase,
     private val recruitPostUseCase: RequestRecruitPostUseCase,
     private val closeRecruitPostUseCase: RequestCloseRecruitPostUseCase,
-    private val participateRecruitPostUseCase: RequestParticipateRecruitPostUseCase
+    private val participateRecruitPostUseCase: RequestParticipateRecruitPostUseCase,
+    private val cancelParticipateRecruitPostUseCase: RequestCancelParticipateRecruitPostUseCase
 ) : ViewModel() {
     private val _recruitListAll = MutableLiveData(RecruitList(emptyList()))
     val recruitListAll: LiveData<RecruitList> get() = _recruitListAll
@@ -67,6 +70,9 @@ class RecruitViewModel @Inject constructor(
 
     private val _isParticipateRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
     val isParticipateRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isParticipateRecruitPostSuccess
+
+    private val _isCancelParticipateRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
+    val isCancelParticipateRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isCancelParticipateRecruitPostSuccess
 
     private val _recruitPostParticipateInfo = MutableLiveData<CreateOrderResponse>()
     val recruitPostParticipateInfo: LiveData<CreateOrderResponse> get() = _recruitPostParticipateInfo
@@ -248,6 +254,16 @@ class RecruitViewModel @Inject constructor(
                 _recruitPostParticipateInfo.postValue(response.body())
             } else {
                 _isParticipateRecruitPostSuccess.postValue(Event(false))
+            }
+        }
+
+    fun requestCancelParticipateRecruitPost(postId: Int) =
+        viewModelScope.launch {
+            val response = cancelParticipateRecruitPostUseCase.invoke(data = DeleteOrderDto(recruitId = postId))
+            if (response.isSuccessful) {
+                _isCancelParticipateRecruitPostSuccess.postValue(Event(true))
+            } else {
+                _isCancelParticipateRecruitPostSuccess.postValue(Event(false))
             }
         }
 }
