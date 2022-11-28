@@ -62,6 +62,7 @@ class PostFragment : Fragment() {
         setBackClickListener()
         initContents()
         observeCloseRecruitPostState()
+        observeCancelRecruitPostState()
     }
 
     private fun getPostDetailData() {
@@ -178,6 +179,15 @@ class PostFragment : Fragment() {
         }
     }
 
+    private fun observeCancelRecruitPostState() {
+        recruitViewModel.isCancelParticipateRecruitPostSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                Toast.makeText(requireContext(), getString(R.string.post_alert_message_cancel_participate), Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp()
+            }
+        }
+    }
+
     private fun initContentsUserInfo(recruitDetail: RecruitDetail) {
         with(binding) {
             glideRequestManager.load(recruitDetail.profileImage)
@@ -257,8 +267,7 @@ class PostFragment : Fragment() {
                 text = getString(R.string.post_participate_in)
                 if (isCurrentUserParticipant) {
                     text = getString(R.string.post_participate_out)
-                    isEnabled = false // TODO 모집 나가기 기능 미구현 상태이므로 임시 추가
-                    // TODO 모집 나가기 네트워킹 코드 삽입
+                    setOnClickListener { recruitViewModel.requestCancelParticipateRecruitPost(postId = args.postId) }
                 } else {
                     text = getString(R.string.post_participate_in)
                     setOnClickListener {

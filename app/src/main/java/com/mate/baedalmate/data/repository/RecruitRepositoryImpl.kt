@@ -2,6 +2,7 @@ package com.mate.baedalmate.data.repository
 
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderRequest
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
+import com.mate.baedalmate.data.datasource.remote.recruit.DeleteOrderDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
@@ -44,4 +45,7 @@ class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: R
 
     override suspend fun requestParticipateRecruitPost(data: CreateOrderRequest): Response<CreateOrderResponse> =
         recruitApiService.requestParticipateRecruitPost(data = data)
+
+    override suspend fun requestCancelParticipateRecruitPost(data: DeleteOrderDto): Response<Void> =
+        recruitApiService.requestCancelParticipateRecruitPost(data = data)
 }
