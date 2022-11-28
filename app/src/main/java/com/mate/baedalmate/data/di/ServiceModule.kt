@@ -19,6 +19,7 @@ import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
@@ -101,6 +102,10 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRequestRecruitPostUseCase(recruitRepository: RecruitRepository): RequestRecruitPostUseCase = RequestRecruitPostUseCase(recruitRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestCloseRecruitPostUseCase(recruitRepository: RecruitRepository): RequestCloseRecruitPostUseCase = RequestCloseRecruitPostUseCase(recruitRepository)
 
     @Singleton
     @Provides

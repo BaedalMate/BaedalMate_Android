@@ -15,6 +15,7 @@ import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
+import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
@@ -30,6 +31,7 @@ class RecruitViewModel @Inject constructor(
     private val recruitMainListUseCase: RequestRecruitMainListUseCase,
     private val recruitTagListUseCase: RequestRecruitTagListUseCase,
     private val recruitPostUseCase: RequestRecruitPostUseCase,
+    private val closeRecruitPostUseCase: RequestCloseRecruitPostUseCase,
     private val participateRecruitPostUseCase: RequestParticipateRecruitPostUseCase
 ) : ViewModel() {
     private val _recruitListAll = MutableLiveData(RecruitList(emptyList()))
@@ -59,6 +61,9 @@ class RecruitViewModel @Inject constructor(
 
     private val _isRecruitListLoad = MutableLiveData(false)
     val isRecruitListLoad: LiveData<Boolean> get() = _isRecruitListLoad
+
+    private val _isCloseRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
+    val isCloseRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isCloseRecruitPostSuccess
 
     private val _isParticipateRecruitPostSuccess = MutableLiveData<Event<Boolean>>()
     val isParticipateRecruitPostSuccess: LiveData<Event<Boolean>> get() = _isParticipateRecruitPostSuccess
@@ -221,6 +226,14 @@ class RecruitViewModel @Inject constructor(
             _recruitPostDetail.postValue(response.body())
         } else {
         }
+    }
+
+    fun requestCloseRecruitPost(postId: Int) = viewModelScope.launch {
+        val response = closeRecruitPostUseCase.invoke(id = postId)
+        if (response.isSuccessful) {
+            _isCloseRecruitPostSuccess.postValue(Event(true))
+        } else
+            _isCloseRecruitPostSuccess.postValue(Event(false))
     }
 
     fun requestParticipateRecruitPost(menuList: List<MenuDto>, roomId: Int) =
