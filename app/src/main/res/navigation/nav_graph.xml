@@ -236,6 +236,17 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <dialog
+        android:id="@+id/ParticipantListFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ParticipantListFragment"
+        android:label="fragment_participant_list"
+        tools:layout="@layout/fragment_participant_list">
+        <argument
+            android:name="roomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </dialog>
+
     <fragment
         android:id="@+id/MyPageFragment"
         android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"

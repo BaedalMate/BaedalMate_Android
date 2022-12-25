@@ -155,6 +155,8 @@
     <string name="chat_info_action_change_menu">메뉴변경</string>
     <string name="chat_info_action_change_review">후기 작성하기</string>
     <string name="chat_user_input_hint">채팅을 입력하세요</string>
+    <string name="chat_participant_list_title">현재 참여자</string>
+    <string name="chat_participant_list_next">전체 주문 확인</string>
 
     <!-- MyPage -->
     <string name="my_page_actionbar_title">마이페이지</string>
