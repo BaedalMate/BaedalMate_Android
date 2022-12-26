@@ -5,6 +5,7 @@
     tools:context=".presentation.fragment.post.PostMenuBottomSheetDialogFragment">
 
     <data>
+
         <variable
             name="currentDishCount"
             type="Integer" />
@@ -33,7 +34,7 @@
                 style="@style/style_title1_kor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/write_fourth_menu_add"
+                android:text="@string/post_menu_add_title"
                 android:textColor="@color/main_FB5F1C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -42,17 +43,33 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <LinearLayout
-                android:id="@+id/layout_post_menu_subject"
+            <TextView
+                android:id="@+id/tv_post_menu_description"
+                style="@style/style_body2_kor"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:lineHeight="24dp"
+                android:text="@string/post_menu_add_description"
+                android:textColor="@color/gray_dark_666666"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_post_menu_title"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/layout_post_menu_subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_post_menu_description"
                 app:layout_constraintVertical_bias="0.0">
 
                 <TextView
@@ -83,7 +100,7 @@
                 android:id="@+id/layout_post_menu_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="22dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -161,7 +178,7 @@
                 android:id="@+id/layout_post_menu_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="22dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -242,17 +259,6 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_post_menu_count"
                 app:layout_constraintVertical_bias="0.0" />
 
-            <View
-                android:id="@+id/view_post_menu_contents_horizontal_line_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_line_EBEBEB"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_post_menu_add"
-                app:layout_constraintVertical_bias="0.0" />
-
             <TextView
                 android:id="@+id/tv_post_menu_add"
                 style="@style/style_title2_kor"
@@ -260,8 +266,9 @@
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:gravity="center"
-                android:paddingVertical="11dp"
-                android:text="@string/add"
+                android:paddingTop="16dp"
+                android:paddingBottom="35dp"
+                android:text="@string/add_menu"
                 android:textColor="@color/black_000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -276,11 +283,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="28dp"
             android:animateLayoutChanges="true"
             android:background="@color/background_F7F8FA"
-            android:padding="15dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:paddingHorizontal="15dp"
+            android:paddingTop="15dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/btn_post_front_contents_participate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -292,8 +301,8 @@
                 style="@style/style_title1_kor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/write_fourth_menu_add_title"
-                android:textColor="@color/black_000000"
+                android:text="@string/post_menu_added_title"
+                android:textColor="@color/main_FB5F1C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -305,6 +314,7 @@
                 android:id="@+id/layout_scroll_post_menu_added"
                 android:layout_width="match_parent"
                 android:layout_height="123dp"
+                android:layout_marginTop="15dp"
                 android:overScrollMode="never"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -336,7 +346,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
-            android:layout_marginVertical="15dp"
+            android:layout_marginBottom="12dp"
             android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
             android:enabled="false"
             android:paddingVertical="14.5dp"
@@ -347,7 +357,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_post_menu_added"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/layout_post_menu_input"
+            app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
