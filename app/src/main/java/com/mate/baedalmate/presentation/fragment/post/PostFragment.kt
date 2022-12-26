@@ -256,14 +256,39 @@ class PostFragment : Fragment() {
     }
 
     private fun setRecruitActionButton(recruitDetail: RecruitDetail) {
-        with(binding.btnPostFrontContentsParticipate) {
-            isEnabled = recruitDetail.active
-            val isCurrentUserHost = recruitDetail.host
-            val isCurrentUserParticipant = recruitDetail.participate
-            if (isCurrentUserHost) {
-                text = getString(R.string.post_close)
-                setOnClickListener { recruitViewModel.requestCloseRecruitPost(postId = args.postId) }
-            } else {
+        val isCurrentUserHost = recruitDetail.host
+        val isCurrentUserParticipant = recruitDetail.participate
+
+        if (!recruitDetail.active) { // 주최자,참여자에 관계없이 마감된 모집글인 경우
+            with(binding) {
+                layoutPostFrontContentsParticipateHost.visibility = View.GONE
+                with(btnPostFrontContentsParticipateGuest) {
+                    isEnabled = false
+                    text = getString(R.string.post_not_active)
+                }
+            }
+        } else if(isCurrentUserHost) { // 주최자이면서 진행중인 모집글인 경우
+            with(binding) {
+                layoutPostFrontContentsParticipateHost.visibility = View.VISIBLE
+                btnPostFrontContentsParticipateGuest.isEnabled = false
+
+                with(btnPostFrontContentsParticipateHostCancel) {
+                    isEnabled = true
+                    setOnClickListener { recruitViewModel.requestCancelRecruitPost(postId = args.postId) }
+                }
+                with(btnPostFrontContentsParticipateHostClose) {
+                    isEnabled = true
+                    setOnClickListener { recruitViewModel.requestCloseRecruitPost(postId = args.postId) }
+                }
+            }
+
+        } else { // 참여자이면서 진행중인 모집글인 경우
+            binding.layoutPostFrontContentsParticipateHost.visibility = View.GONE
+            binding.btnPostFrontContentsParticipateHostCancel.isEnabled = false
+            binding.btnPostFrontContentsParticipateHostClose.isEnabled = false
+
+            with(binding.btnPostFrontContentsParticipateGuest) {
+                isEnabled = true
                 text = getString(R.string.post_participate_in)
                 if (isCurrentUserParticipant) {
                     text = getString(R.string.post_participate_out)
