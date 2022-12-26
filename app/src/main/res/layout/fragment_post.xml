@@ -478,23 +478,82 @@
                                 tools:text="글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. " />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_post_front_contents_participate"
-                            style="@style/style_button_title_kor"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_post_front_contents_participate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="62dp"
-                            android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
-                            android:enabled="false"
-                            android:paddingVertical="14.5dp"
-                            android:stateListAnimator="@null"
-                            android:text="@string/post_participate_in"
-                            android:textColor="@drawable/selector_textview_white_gray_main"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_detail"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_post_front_contents_participate_guest"
+                                style="@style/style_button_title_kor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="62dp"
+                                android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
+                                android:enabled="false"
+                                android:paddingVertical="14.5dp"
+                                android:stateListAnimator="@null"
+                                android:text="@string/post_participate_in"
+                                android:textColor="@drawable/selector_textview_white_gray_main"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
+
+                            <LinearLayout
+                                android:id="@+id/layout_post_front_contents_participate_host"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/btn_post_front_contents_participate_host_cancel"
+                                    style="@style/style_title2_kor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:background="@drawable/selector_btn_enabled_stroke_orange_line_white_gray_light_radius_10"
+                                    android:enabled="false"
+                                    android:stateListAnimator="@null"
+                                    android:text="@string/post_cancel"
+                                    android:textColor="@drawable/selector_textview_orange_line_gray_main"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.0" />
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/btn_post_front_contents_participate_host_close"
+                                    style="@style/style_button_title_kor"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
+                                    android:enabled="false"
+                                    android:paddingVertical="14.5dp"
+                                    android:stateListAnimator="@null"
+                                    android:text="@string/post_close"
+                                    android:textColor="@drawable/selector_textview_white_gray_main"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.0" />
+                            </LinearLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

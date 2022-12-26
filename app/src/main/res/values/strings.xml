@@ -74,6 +74,8 @@
     <string name="post_participate_in">모집 참여하기</string>
     <string name="post_participate_out">모집 나가기</string>
     <string name="post_close">모집 마감하기</string>
+    <string name="post_not_active">마감된 모집글입니다</string>
+    <string name="post_cancel">모집 취소</string>
     <string name="post_delivery_fee_help_detail_title">배달비 상세정보</string>
     <string name="post_delivery_fee_help_coupon_title">쿠폰 사용 금액</string>
     <string name="post_delivery_fee_help_coupon_description">기존 금액에서 주최자의 쿠폰 사용금액만큼 할인된 후 배달비가 나누기 됩니다.</string>
