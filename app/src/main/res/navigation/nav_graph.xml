@@ -245,8 +245,21 @@
             android:name="roomId"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_participantListFragment_to_participantsOrderListFragment"
+            app:destination="@id/ParticipantsOrderListFragment" />
     </dialog>
 
+    <fragment
+        android:id="@+id/ParticipantsOrderListFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ParticipantsOrderListFragment"
+        android:label="fragment_participants_order_list"
+        tools:layout="@layout/fragment_participants_order_list">
+        <argument
+            android:name="roomId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/MyPageFragment"
         android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"

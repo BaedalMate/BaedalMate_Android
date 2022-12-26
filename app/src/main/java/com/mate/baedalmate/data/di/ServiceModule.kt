@@ -15,6 +15,7 @@ import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
 import com.mate.baedalmate.domain.repository.RecruitRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
+import com.mate.baedalmate.domain.usecase.chat.RequestGetAllMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatParticipantsUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
@@ -141,4 +142,8 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRequestGetChatParticipantsUseCase(chatRepository: ChatRepository): RequestGetChatParticipantsUseCase = RequestGetChatParticipantsUseCase(chatRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestGetAllMenuListUseCase(chatRepository: ChatRepository): RequestGetAllMenuListUseCase = RequestGetAllMenuListUseCase(chatRepository)
 }

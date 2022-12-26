@@ -22,6 +22,7 @@
     <string name="delivery_platform">배달 플랫폼</string>
     <string name="confirm">확인</string>
     <string name="order_amount">주문금액</string>
+    <string name="bullet_textview_message_symbol">•</string>
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
 
@@ -157,6 +158,13 @@
     <string name="chat_user_input_hint">채팅을 입력하세요</string>
     <string name="chat_participant_list_title">현재 참여자</string>
     <string name="chat_participant_list_next">전체 주문 확인</string>
+    <string name="chat_participant_order_list_title">주문 내역</string>
+    <string name="chat_participant_order_list_sum_amount_title">현재 총 주문 금액</string>
+    <string name="chat_participant_order_list_mine_title">결제금액</string>
+    <string name="chat_participant_order_list_mine_description">배달팁 계산 시, 나누어 떨어지지 않는 경우 1원이 추가되어 계산됩니다.\n예시) 1000원, 3인주문 인 경우 334원으로 계산됨</string>
+    <string name="chat_participant_order_list_mine_receipt_sum_menu_title">총 주문 금액</string>
+    <string name="chat_participant_order_list_mine_receipt_coupon_title">쿠폰 사용금액</string>
+    <string name="chat_participant_order_list_mine_final_amount_title">결제 예정 금액</string>
 
     <!-- MyPage -->
     <string name="my_page_actionbar_title">마이페이지</string>
