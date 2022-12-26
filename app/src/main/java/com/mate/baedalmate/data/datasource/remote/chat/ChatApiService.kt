@@ -1,5 +1,6 @@
 package com.mate.baedalmate.data.datasource.remote.chat
 
+import com.mate.baedalmate.domain.model.ParticipantsDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,4 +11,7 @@ interface ChatApiService {
 
     @GET("/api/v1/room/{roomId}")
     suspend fun requestGetChatRoomDetail(@Path("roomId") roomId: Int): Response<ChatRoomDetail>
+
+    @GET("/api/v1/recruit/{id}/participants")
+    suspend fun requestGetChatParticipants(@Path("roomId") roomId: Int): Response<ParticipantsDto>
 }
