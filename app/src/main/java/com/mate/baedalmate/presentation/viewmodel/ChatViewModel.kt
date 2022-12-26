@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomDetail
 import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomList
 import com.mate.baedalmate.domain.model.ParticipantsDto
+import com.mate.baedalmate.domain.model.ParticipantsMenuDto
+import com.mate.baedalmate.domain.usecase.chat.RequestGetAllMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatParticipantsUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
@@ -18,7 +20,8 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val requestGetChatRoomListUseCase: RequestGetChatRoomListUseCase,
     private val requestGetChatRoomDetailUseCase: RequestGetChatRoomDetailUseCase,
-    private val requestGetChatParticipantsUseCase: RequestGetChatParticipantsUseCase
+    private val requestGetChatParticipantsUseCase: RequestGetChatParticipantsUseCase,
+    private val requestGetAllMenuListUseCase: RequestGetAllMenuListUseCase
 ) : ViewModel() {
     private val _chatRoomList = MutableLiveData<ChatRoomList>()
     val chatRoomList: LiveData<ChatRoomList> get() = _chatRoomList
@@ -28,6 +31,9 @@ class ChatViewModel @Inject constructor(
 
     private val _chatParticipants = MutableLiveData<ParticipantsDto>()
     val chatParticipants: LiveData<ParticipantsDto> get() = _chatParticipants
+
+    private val _allMenuList = MutableLiveData<ParticipantsMenuDto>()
+    val allMenuList: LiveData<ParticipantsMenuDto> get() = _allMenuList
 
     fun getChatRoomList() = viewModelScope.launch {
         val response = requestGetChatRoomListUseCase()
@@ -53,6 +59,13 @@ class ChatViewModel @Inject constructor(
             _chatParticipants.postValue(response.body())
         } else {
 
+        }
+    }
+
+    fun getAllMenuList(roomId: Int) = viewModelScope.launch {
+        val response = requestGetAllMenuListUseCase(roomId = roomId)
+        if (response.isSuccessful) {
+            _allMenuList.postValue(response.body())
         }
     }
 }
