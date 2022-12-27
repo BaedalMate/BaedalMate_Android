@@ -155,7 +155,6 @@
                 android:stateListAnimator="@null"
                 android:text="@string/chat_info_action_change_menu"
                 android:textColor="@color/line_orange_FFA077"
-                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

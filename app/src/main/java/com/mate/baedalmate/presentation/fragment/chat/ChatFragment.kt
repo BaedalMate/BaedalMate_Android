@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -20,13 +21,17 @@ import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.data.di.StompModule
 import com.mate.baedalmate.databinding.FragmentChatBinding
+import com.mate.baedalmate.domain.model.ApiErrorStatus
 import com.mate.baedalmate.domain.model.MessageInfo
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
+import com.mate.baedalmate.domain.model.RecruitInfo
 import com.mate.baedalmate.presentation.adapter.chat.ChatAdapter
 import com.mate.baedalmate.presentation.viewmodel.ChatViewModel
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
+import com.mate.baedalmate.presentation.viewmodel.ReviewViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -40,6 +45,7 @@ class ChatFragment : Fragment() {
     private var stompModule = StompModule()
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private val chatViewModel by activityViewModels<ChatViewModel>()
+    private val reviewViewModel by activityViewModels<ReviewViewModel>()
     private val args by navArgs<ChatFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var chatAdapter: ChatAdapter
@@ -67,10 +73,10 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         HideKeyBoardUtil.hideTouchDisplay(requireActivity(), view)
         setBackClickListener()
-        initChatLog()
+        initChatRoom()
         setReceiveMessage()
         setMessageSendClickListener()
-        setInfoActionClickListener()
+        observeReviewStateCallback()
     }
 
     override fun onDestroy() {
@@ -95,62 +101,70 @@ class ChatFragment : Fragment() {
         )
     }
 
-    private fun initChatLog() {
+    private fun initChatRoom() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                chatViewModel.chatRoomLog.observe(viewLifecycleOwner) { detail ->
+                    initChatRoomTitleBarInfo(detail.recruit)
+                    initChatLog(detail.messages)
+                    setInfoActionClickListener(detail.recruit)
+                }
+            }
+        }
+    }
+
+    private fun initChatLog(chatMessages: List<MessageInfo>) {
         chatAdapter = ChatAdapter(
             requestManager = glideRequestManager,
             userName = memberViewModel.userInfo.value?.nickname.toString()
         )
         binding.rvChatLog.adapter = chatAdapter
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                chatViewModel.chatRoomLog.observe(viewLifecycleOwner) { detail ->
-                    chatMessageLogList = detail.messages.toMutableList()
-                    chatAdapter.submitList(chatMessageLogList)
-                    binding.rvChatLog.scrollToPosition(chatAdapter.itemCount - 1)
+        chatMessageLogList = chatMessages.toMutableList()
+        chatAdapter.submitList(chatMessageLogList)
+        binding.rvChatLog.scrollToPosition(chatAdapter.itemCount - 1)
+    }
 
-                    val createdTimeString = detail.recruit.createDate
-                    val createdTime = LocalDateTime.parse(createdTimeString, formatter)
+    private fun initChatRoomTitleBarInfo(recruitInfo: RecruitInfo) {
+        val createdTimeString = recruitInfo.createDate
+        val createdTime = LocalDateTime.parse(createdTimeString, formatter)
 
-                    binding.tvChatInfoContentsCreatedDate.text =
-                        with(createdTime) { "${this.year}년 ${this.monthValue + 1}월 ${this.dayOfMonth}일 ${this.hour}시 ${this.minute}분" }
-                    binding.tvChatInfoContentsTitle.text = detail.recruit.title
+        binding.tvChatInfoContentsCreatedDate.text =
+            with(createdTime) { "${this.year}년 ${this.monthValue + 1}월 ${this.dayOfMonth}일 ${this.hour}시 ${this.minute}분" }
+        binding.tvChatInfoContentsTitle.text = recruitInfo.title
 
-                    glideRequestManager.load("http://3.35.27.107:8080/images/${detail.recruit.recruitImage}")
-                        .priority(Priority.HIGH)
-                        .centerCrop()
-                        .into(binding.imgChatInfo)
+        glideRequestManager.load("http://3.35.27.107:8080/images/${recruitInfo.recruitImage}")
+            .priority(Priority.HIGH)
+            .centerCrop()
+            .into(binding.imgChatInfo)
 
-                    when (detail.recruit.criteria) {
-                        RecruitFinishCriteria.TIME -> {
-                            val currentTime = LocalDateTime.now()
-                            val deadLineTimeString: String = detail.recruit.deadlineDate
-                            var durationMinuteDeadLine = "0"
+        when (recruitInfo.criteria) {
+            RecruitFinishCriteria.TIME -> {
+                val currentTime = LocalDateTime.now()
+                val deadLineTimeString: String = recruitInfo.deadlineDate
+                var durationMinuteDeadLine = "0"
 
-                            if (detail.recruit.deadlineDate.isNotEmpty()) {
-                                val deadLineTime =
-                                    LocalDateTime.parse(deadLineTimeString, formatter)
-                                val duration =
-                                    Duration.between(currentTime, deadLineTime).toMinutes()
-                                durationMinuteDeadLine = duration.toString()
-                            }
-
-                            binding.tvChatInfoContentsCriterionTitle.text = "마감시간"
-                            binding.tvChatInfoContentsCriterionDetail.text =
-                                "${decimalFormat.format(durationMinuteDeadLine.toInt())}분 남음"
-                        }
-                        RecruitFinishCriteria.NUMBER -> {
-                            binding.tvChatInfoContentsCriterionTitle.text = "최소인원"
-                            binding.tvChatInfoContentsCriterionDetail.text =
-                                "${decimalFormat.format(detail.recruit.minPeople)}인"
-                        }
-                        RecruitFinishCriteria.PRICE -> {
-                            binding.tvChatInfoContentsCriterionTitle.text = "목표금액"
-                            binding.tvChatInfoContentsCriterionDetail.text =
-                                "${decimalFormat.format(detail.recruit.minPrice)}원"
-                        }
-                    }
+                if (recruitInfo.deadlineDate.isNotEmpty()) {
+                    val deadLineTime =
+                        LocalDateTime.parse(deadLineTimeString, formatter)
+                    val duration =
+                        Duration.between(currentTime, deadLineTime).toMinutes()
+                    durationMinuteDeadLine = duration.toString()
                 }
+
+                binding.tvChatInfoContentsCriterionTitle.text = "마감시간"
+                binding.tvChatInfoContentsCriterionDetail.text =
+                    "${decimalFormat.format(durationMinuteDeadLine.toInt())}분 남음"
+            }
+            RecruitFinishCriteria.NUMBER -> {
+                binding.tvChatInfoContentsCriterionTitle.text = "최소인원"
+                binding.tvChatInfoContentsCriterionDetail.text =
+                    "${decimalFormat.format(recruitInfo.minPeople)}인"
+            }
+            RecruitFinishCriteria.PRICE -> {
+                binding.tvChatInfoContentsCriterionTitle.text = "목표금액"
+                binding.tvChatInfoContentsCriterionDetail.text =
+                    "${decimalFormat.format(recruitInfo.minPrice)}원"
             }
         }
     }
@@ -204,9 +218,50 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun setInfoActionClickListener() {
-        binding.btnChatInfoAction.setOnClickListener {
-            // TODO 메뉴 변경/후기 작성하기 기능 추가
+    private fun setInfoActionClickListener(recruitInfo: RecruitInfo) {
+        if (recruitInfo.active) {
+            with(binding.btnChatInfoAction) {
+                text = getString(R.string.chat_info_action_change_menu)
+                setOnDebounceClickListener {
+                    // TODO
+                }
+            }
+        } else {
+            with(binding.btnChatInfoAction) {
+                text = getString(R.string.chat_info_action_change_review)
+                setOnDebounceClickListener {
+                    findNavController().navigate(
+                        ChatFragmentDirections.actionChatFragmentToReviewUserFragment(recruitId = recruitInfo.recruitId)
+                    )
+                }
+            }
+        }
+    }
+
+    private fun observeReviewStateCallback() {
+        reviewViewModel.isReviewSubmitSuccess.observe(viewLifecycleOwner) {
+            val isSuccess = it.getContentIfNotHandled()
+
+            if (isSuccess == ApiErrorStatus.RESPONSE_SUCCESS) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.review_submit_toast_success,
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigateUp()
+            } else if (isSuccess == ApiErrorStatus.RESPONSE_FAIL_DUPLICATE) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.review_submit_toast_fail_duplicate,
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (isSuccess == ApiErrorStatus.RESPONSE_FAIL_UNKNOWN) {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.review_submit_toast_fail_unknown,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

@@ -172,6 +172,15 @@
     <string name="chat_participant_order_list_mine_receipt_coupon_title">쿠폰 사용금액</string>
     <string name="chat_participant_order_list_mine_final_amount_title">결제 예정 금액</string>
 
+    <!-- Review User -->
+    <string name="review_user_title">후기 남기기</string>
+    <string name="review_user_description">배달에 함께 참여한 사람들에 대한 별점을 남겨주세요\n완료버튼을 누르면 선택된 별점이 반영됩니다.</string>
+    <string name="review_user_submit">평가 완료</string>
+    <string name="review_submit_toast_loading">평가해주신 내용을 반영하고 있어요. 조금만 기다려주세요.</string>
+    <string name="review_submit_toast_success">작성한 후기가 반영되었어요!</string>
+    <string name="review_submit_toast_fail_duplicate">이미 후기 작성을 완료하셨어요</string>
+    <string name="review_submit_toast_fail_unknown">후기 작성에 실패했어요. 다시 시도해주세요</string>
+
     <!-- MyPage -->
     <string name="my_page_actionbar_title">마이페이지</string>
 

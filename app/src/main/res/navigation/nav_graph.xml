@@ -235,6 +235,9 @@
             android:name="roomId"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_chatFragment_to_reviewUserFragment"
+            app:destination="@id/ReviewUserFragment" />
     </fragment>
     <dialog
         android:id="@+id/ParticipantListFragment"
@@ -260,6 +263,18 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
+    <dialog
+        android:id="@+id/ReviewUserFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.review.ReviewUserFragment"
+        android:label="fragment_review_user"
+        tools:layout="@layout/fragment_review_user">
+        <argument
+            android:name="recruitId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </dialog>
+
     <fragment
         android:id="@+id/MyPageFragment"
         android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"
