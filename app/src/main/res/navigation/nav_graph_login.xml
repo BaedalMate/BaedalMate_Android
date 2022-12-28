@@ -10,5 +10,24 @@
         android:name="com.mate.baedalmate.presentation.fragment.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_policyFragment"
+            app:destination="@id/PolicyFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/PolicyFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.policy.PolicyFragment"
+        android:label="fragment_policy"
+        tools:layout="@layout/fragment_policy">
+        <argument
+            android:name="informationType"
+            android:defaultValue="privacy"
+            app:argType="string" />
     </fragment>
 </navigation>
