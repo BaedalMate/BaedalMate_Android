@@ -54,4 +54,19 @@
             app:layout_constraintStart_toStartOf="@id/btn_login_kakao"
             app:layout_constraintTop_toTopOf="@id/btn_login_kakao" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_login_use_guide_message"
+        style="@style/style_caption_bold_kor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="18dp"
+        android:text="@string/login_policy_guide_message"
+        android:textColor="@color/gray_main_C4C4C4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_login_method"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
