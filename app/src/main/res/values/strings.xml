@@ -194,4 +194,12 @@
     <string name="location_certification_error_message_permission_denied_first">위치 서비스 권한을 허용해야 정상적 인증이 가능합니다</string>
     <string name="location_certification_error_message_permission_denied_second">설정에서 위치 권한을 허용으로 변경해주세요</string>
     <string name="location_certification_change">현재 거점 변경</string>
+
+    <!-- Search -->
+    <string name="search_edittext_keyword_hint">검색할 키워드를 입력해주세요.</string>
+    <string name="search_result_count">%d개의 모집글이 있습니다.</string>
+    <string name="search_result_empty_not_appear">\'%s\'검색 결과가 없어요</string>
+    <string name="search_result_empty_not_appear_guide">검색어를 다시 확인해주세요</string>
+    <string name="search_result_empty_new">모집글 작성하러 가기</string>
+    <string name="search_result_empty_new_guide">함께 먹고싶은 음식을 직접 모집할 수도 있어요!</string>
 </resources>
