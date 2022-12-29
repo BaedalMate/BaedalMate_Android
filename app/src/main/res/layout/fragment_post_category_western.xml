@@ -5,6 +5,7 @@
     tools:context=".presentation.fragment.post.PostCategoryWesternFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_post_category_list_western"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -5,6 +5,7 @@
     tools:context=".presentation.fragment.post.PostCategoryJapaneseFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_post_category_list_japanese"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

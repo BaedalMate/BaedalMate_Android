@@ -90,6 +90,7 @@
     <string name="post_menu_add_title">주문메뉴 추가</string>
     <string name="post_menu_add_description">추가할 메뉴와 금액을 작성하여, 모든 메뉴를 추가한 뒤 모집에 참여하세요</string>
     <string name="post_menu_added_title">현재 작성 메뉴</string>
+    <string name="post_category_list_empty">현재 \'%s\' 에 대한\n모집글이 없어요</string>
 
     <!-- Write -->
     <string name="write_actionbar_title">상세 설정</string>
