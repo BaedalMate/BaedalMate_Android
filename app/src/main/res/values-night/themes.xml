@@ -31,4 +31,15 @@
         <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
     </style>
+
+    <style name="InfoNumberPickerTheme" parent="ThemeOverlay.Material3.MaterialTimePicker">
+        <item name="colorControlNormal">@color/main_FB5F1C</item>
+        <item name="android:textSize">@dimen/text_caption_bold_12</item>
+        <item name="android:textColorPrimary">@color/black_000000</item>
+        <item name="fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:fontFamily">@font/applesdgothic_neo_bold</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:letterSpacing">0</item>3
+    </style>
 </resources>

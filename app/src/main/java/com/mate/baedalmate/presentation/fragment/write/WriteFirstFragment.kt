@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ExtendedEditText
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
 import com.mate.baedalmate.domain.model.ShippingFeeDto
 import com.mate.baedalmate.databinding.FragmentWriteFirstBinding
@@ -36,6 +37,8 @@ import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Math.abs
 import java.text.DecimalFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class WriteFirstFragment : Fragment() {
@@ -46,6 +49,7 @@ class WriteFirstFragment : Fragment() {
     private var deliveryFeeRangeEmptyChkList = mutableListOf<Boolean>(false)
 
     private var chkDeadLineAmount = MutableLiveData(false)
+    private var chkDeadLineTime = MutableLiveData(false)
     private var chkDeliveryFeeRange = MutableLiveData(true)
     private var chkDeliveryFee = MutableLiveData(true)
     private val onNext: MediatorLiveData<Boolean> = MediatorLiveData()
@@ -53,6 +57,9 @@ class WriteFirstFragment : Fragment() {
 
     init {
         onNext.addSource(chkDeadLineAmount) {
+            onNext.value = _onNext()
+        }
+        onNext.addSource(chkDeadLineTime) {
             onNext.value = _onNext()
         }
         onNext.addSource(chkDeliveryFeeRange) {
@@ -70,7 +77,7 @@ class WriteFirstFragment : Fragment() {
     }
 
     private fun _onNext(): Boolean {
-        if ((chkDeadLineAmount.value == true) and (chkDeliveryFee.value == true) and (chkDeliveryFeeRange.value == true)) {
+        if ((chkDeadLineAmount.value == true) and (chkDeadLineTime.value == true) and (chkDeliveryFee.value == true) and (chkDeliveryFeeRange.value == true)) {
             return true
         }
         return false
@@ -101,6 +108,7 @@ class WriteFirstFragment : Fragment() {
         initDeliveryFeeRange()
         setDeliveryFeeRangeAddEnable()
         setDeliveryFeeRangeAddClickListener()
+        setGoalTimeInput()
     }
 
     private fun setBackClickListener() {
@@ -637,6 +645,27 @@ class WriteFirstFragment : Fragment() {
                 currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).isEnabled = false
                 currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee).isEnabled = false
             }
+        }
+    }
+
+    private fun setGoalTimeInput() {
+        binding.etWriteFirstGoalTimePickerHour.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+        }
+        binding.etWriteFirstGoalTimePickerMinute.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+        }
+        binding.layoutWriteFirstGoalTimePicker.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+        }
+
+        writeViewModel.deadLineTime?.observe(viewLifecycleOwner) { time ->
+            if (time != null) {
+                val deadLineTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
+                binding.etWriteFirstGoalTimePickerHour.setText("${deadLineTime.hour}")
+                binding.etWriteFirstGoalTimePickerMinute.setText("${deadLineTime.minute}")
+                chkDeadLineTime.postValue(true)
+            } else chkDeadLineTime.postValue(false)
         }
     }
 }

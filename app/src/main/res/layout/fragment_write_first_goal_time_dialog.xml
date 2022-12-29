@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_white_radius_30">
+
+    <View
+        android:id="@+id/view_write_first_goal_time_dialog_horizontal_line_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_line_EBEBEB"
+        app:layout_constraintBottom_toTopOf="@+id/tv_write_first_goal_time_dialog_cancel" />
+
+    <TextView
+        android:id="@+id/tv_write_first_goal_time_dialog_confirm"
+        style="@style/style_body1_kor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_btn_gray_line_white_radius_30_bottom_right"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="@string/confirm"
+        android:textColor="@color/black_000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tv_write_first_goal_time_dialog_cancel" />
+
+    <TextView
+        android:id="@+id/tv_write_first_goal_time_dialog_cancel"
+        style="@style/style_body1_kor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_btn_gray_line_white_radius_30_bottom_left"
+        android:gravity="center"
+        android:paddingVertical="16dp"
+        android:text="@string/cancel"
+        android:textColor="@color/black_000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_write_first_goal_time_dialog_confirm"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TimePicker
+        android:id="@+id/timepicker_write_first_goal_time_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numbersInnerTextColor="@color/main_FB5F1C"
+        android:numbersTextColor="@color/black_000000"
+        android:selectionDividerHeight="0.1dp"
+        android:theme="@style/InfoNumberPickerTheme"
+        android:timePickerMode="spinner"
+        app:layout_constraintBottom_toTopOf="@+id/view_write_first_goal_time_dialog_horizontal_line_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

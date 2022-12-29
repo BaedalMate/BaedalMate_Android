@@ -22,6 +22,7 @@
     <string name="store_location">배달 가게</string>
     <string name="delivery_platform">배달 플랫폼</string>
     <string name="confirm">확인</string>
+    <string name="cancel">취소</string>
     <string name="order_amount">주문금액</string>
     <string name="bullet_textview_message_symbol">•</string>
     <!-- University -->
@@ -104,7 +105,7 @@
     <string name="write_first_goal_delivery_title">주문 목표 금액</string>
     <string name="write_first_goal_delivery_error">주문 목표 금액을 입력해주세요</string>
     <string name="write_first_goal_time_title">마감 시간</string>
-    <string name="write_first_goal_time_description">모집 게시글 작성시간 기준 3시간 뒤로 마감시간이 설정됩니다</string>
+    <string name="write_first_goal_time_description">모집 시간에 도달하면 모집이 완료됩니다. 현재 시각 이전으로 설정시, 다음 날 해당 시각으로 마감시간이 설정됩니다.</string>
     <string name="write_first_goal_criterion_title">마감 기준</string>
     <string name="write_first_goal_criterion_description_people">최소 모집인원이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 모집인원이 충족되지 못한경우, 모집이 취소됩니다.</string>
     <string name="write_first_goal_criterion_description_delivery">최소 주문금액이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 주문금액이 충족되지 못한경우, 모집이 취소됩니다.</string>

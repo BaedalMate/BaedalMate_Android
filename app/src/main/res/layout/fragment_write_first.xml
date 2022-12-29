@@ -322,6 +322,86 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_write_first_goal_time_title"
                         app:layout_constraintVertical_bias="0.0" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_write_first_goal_time_picker"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:background="@drawable/background_white_radius_10"
+                        android:paddingVertical="3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_first_goal_time_description"
+                        app:layout_constraintVertical_bias="0.0">
+
+                        <LinearLayout
+                            android:id="@+id/layout_write_first_goal_time_picker_hour"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="7.5dp"
+                            android:gravity="end"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/layout_write_first_goal_time_picker_minute"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <EditText
+                                android:id="@+id/et_write_first_goal_time_picker_hour"
+                                style="@style/style_title2_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:focusableInTouchMode="false"
+                                android:hint="00"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="2"
+                                android:textColorHint="@color/gray_main_C4C4C4" />
+
+                            <TextView
+                                android:id="@+id/tv_write_first_goal_time_picker_hour"
+                                style="@style/style_title2_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="시"
+                                android:textColor="@color/black_000000" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_write_first_goal_time_picker_minute"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="7.5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/layout_write_first_goal_time_picker_hour"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <EditText
+                                android:id="@+id/et_write_first_goal_time_picker_minute"
+                                style="@style/style_title2_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:focusableInTouchMode="false"
+                                android:hint="00"
+                                android:imeOptions="actionNext"
+                                android:inputType="none"
+                                android:maxLength="2"
+                                android:textColorHint="@color/gray_main_C4C4C4" />
+
+                            <TextView
+                                android:id="@+id/tv_write_first_goal_time_picker_minute"
+                                style="@style/style_title2_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="분"
+                                android:textColor="@color/black_000000" />
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
