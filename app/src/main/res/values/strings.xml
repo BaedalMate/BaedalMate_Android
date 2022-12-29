@@ -202,4 +202,7 @@
     <string name="search_result_empty_not_appear_guide">검색어를 다시 확인해주세요</string>
     <string name="search_result_empty_new">모집글 작성하러 가기</string>
     <string name="search_result_empty_new_guide">함께 먹고싶은 음식을 직접 모집할 수도 있어요!</string>
+
+    <!-- Notification -->
+    <string name="notification_actionbar_title">알림</string>
 </resources>
