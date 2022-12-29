@@ -30,13 +30,12 @@ import javax.inject.Inject
 class WriteViewModel @Inject constructor(
     private val kakaoLocalUseCase: RequestKakaoLocalUseCase,
     private val uploadPostUseCase: RequestUploadPostUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
     var categoryId = 0
 
     var deadLinePeopleCount = 0
     var deadLineAmount = 0
-    var deadLineTime = "2022-12-31T00:00:00" // TODO 사용자 입력이 가능해지면 사용될 변수
+    var deadLineTime: MutableLiveData<String>? = MutableLiveData(null)
     var deadLineCriterion = RecruitFinishCriteria.NUMBER
     var isDeliveryFeeFree = false
     var deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
@@ -75,7 +74,7 @@ class WriteViewModel @Inject constructor(
         deadLinePeopleCount = 0
         deadLineAmount = 0
         couponAmount = 0
-        deadLineTime = "2022-12-31T00:00:00"
+        deadLineTime = MutableLiveData(null)
         deadLineCriterion = RecruitFinishCriteria.NUMBER
         isDeliveryFeeFree = false
         deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
@@ -115,7 +114,9 @@ class WriteViewModel @Inject constructor(
                 categoryId = categoryId,
                 coupon = couponAmount,
                 criteria = deadLineCriterion,
-                deadlineDate = LocalDateTime.now().plusHours(3L).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")),
+                deadlineDate =
+                    if(deadLineTime == null) LocalDateTime.now().plusHours(3L).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")) // null 발생으로 인해 오류가 생기는 경우에 대비해 3시간 후로도 설정될 수 있도록 구현
+                    else deadLineTime?.value!!,
                 description = postDetail,
                 dormitory = deliveryDormitory,
                 freeShipping = isDeliveryFeeFree,
