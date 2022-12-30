@@ -205,4 +205,32 @@
 
     <!-- Notification -->
     <string name="notification_actionbar_title">알림</string>
+
+    <!-- Report -->
+    <string name="report_reason_etc">다른 문제가 있어요</string>
+    <string name="report_reason_etc_hint">신고 사유를 작성해주세요. (100자 이내)</string>
+    <string name="report_post_reason_1">스팸 홍보글이에요</string>
+    <string name="report_post_reason_2">중복 모집글이에요</string>
+    <string name="report_post_reason_3">배달 모집글이 아니에요</string>
+    <string name="report_post_reason_4">혐오/차별적 내용이 담겨있어요</string>
+    <string name="report_post_reason_5">성적인 내용이 담겨있어요</string>
+    <string name="report_post_reason_6">욕설이 담겨 있어요</string>
+    <string name="report_post_reason_7">개인정보가 담겨 있어요</string>
+
+    <string name="report_user_reason_1">스팸 홍보/도배글을 올려요</string>
+    <string name="report_user_reason_2">비매너 사용자에요</string>
+    <string name="report_user_reason_3">정상적인 거래/환불이 이뤄지지 않았아요</string>
+    <string name="report_user_reason_4">욕설을 해요</string>
+    <string name="report_user_reason_5">나체 이미지/성적 행위를 해요</string>
+    <string name="report_user_reason_6">혐오/차별적 발언 또는 상징을 나타내요</string>
+
+    <string name="report_post_title">게시글을 신고하는 사유를 선택해주세요</string>
+    <string name="report_post_description">신고 사유 검토후, 검토 결과에 따라 처리됩니다.</string>
+    <string name="report_post_navigate_user_title">\'%s\' 님을 신고하고 싶으신가요?</string>
+    <string name="report_post_navigate_user_description">사용자 신고하러 가기</string>
+
+    <string name="report_user_title">\'%s\' 님을 신고하는 사유를 선택해주세요`</string>
+    <string name="report_user_description">신고 사유 검토후, 검토 결과에 따라 처리됩니다.</string>
+    <string name="report_user_navigate_user_title">\'%s\' 님을 신고하고 싶으신가요?</string>
+    <string name="report_user_navigate_user_description">사용자 신고하러 가기</string>
 </resources>
