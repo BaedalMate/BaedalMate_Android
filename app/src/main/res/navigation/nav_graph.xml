@@ -281,9 +281,24 @@
             android:defaultValue="0"
             app:argType="integer" />
         <action
+            android:id="@+id/action_chatFragment_to_changeOrderFragment"
+            app:destination="@id/ChangeOrderFragment" />
+        <action
             android:id="@+id/action_chatFragment_to_reviewUserFragment"
             app:destination="@id/ReviewUserFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/ChangeOrderFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ChangeOrderFragment"
+        android:label="fragment_change_order"
+        tools:layout="@layout/fragment_change_order">
+        <argument
+            android:name="recruitId"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </dialog>
+
     <dialog
         android:id="@+id/ParticipantListFragment"
         android:name="com.mate.baedalmate.presentation.fragment.chat.ParticipantListFragment"

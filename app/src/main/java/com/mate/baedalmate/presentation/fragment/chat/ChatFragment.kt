@@ -223,7 +223,9 @@ class ChatFragment : Fragment() {
             with(binding.btnChatInfoAction) {
                 text = getString(R.string.chat_info_action_change_menu)
                 setOnDebounceClickListener {
-                    // TODO
+                    findNavController().navigate(
+                        ChatFragmentDirections.actionChatFragmentToChangeOrderFragment(recruitId = recruitInfo.recruitId)
+                    )
                 }
             }
         } else {

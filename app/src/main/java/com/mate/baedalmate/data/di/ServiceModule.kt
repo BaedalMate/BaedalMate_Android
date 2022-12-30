@@ -22,6 +22,8 @@ import com.mate.baedalmate.domain.usecase.chat.RequestGetAllMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatParticipantsUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
+import com.mate.baedalmate.domain.usecase.chat.RequestGetMyMenuListUseCase
+import com.mate.baedalmate.domain.usecase.chat.RequestPutChangeMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
@@ -151,6 +153,14 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRequestGetAllMenuListUseCase(chatRepository: ChatRepository): RequestGetAllMenuListUseCase = RequestGetAllMenuListUseCase(chatRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestGetMyMenuListUseCase(chatRepository: ChatRepository): RequestGetMyMenuListUseCase = RequestGetMyMenuListUseCase(chatRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestPutChangeMyMenuListUseCase(chatRepository: ChatRepository): RequestPutChangeMyMenuListUseCase = RequestPutChangeMyMenuListUseCase(chatRepository)
 
     @Singleton
     @Provides
