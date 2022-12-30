@@ -176,6 +176,13 @@
     <string name="chat_participant_order_list_mine_receipt_coupon_title">쿠폰 사용금액</string>
     <string name="chat_participant_order_list_mine_final_amount_title">결제 예정 금액</string>
 
+    <!-- Change Order -->
+    <string name="change_order">메뉴 변경하기</string>
+    <string name="change_order_title">주문메뉴 변경</string>
+    <string name="change_order_description">메뉴를 변경한 뒤, \'메뉴 변경하기\' 버튼을 눌러주세요.</string>
+    <string name="change_order_success_toast_message">메뉴가 성공적으로 변경되었어요</string>
+    <string name="change_order_fail_toast_message">메뉴변경을 다시 시도해주세요</string>
+
     <!-- Review User -->
     <string name="review_user_title">후기 남기기</string>
     <string name="review_user_description">배달에 함께 참여한 사람들에 대한 별점을 남겨주세요\n완료버튼을 누르면 선택된 별점이 반영됩니다.</string>
