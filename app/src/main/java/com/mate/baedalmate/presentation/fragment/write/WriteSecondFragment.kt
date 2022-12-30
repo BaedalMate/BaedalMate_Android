@@ -35,15 +35,11 @@ class WriteSecondFragment : Fragment() {
     private val writeViewModel by activityViewModels<WriteViewModel>()
     private lateinit var spinnerAdapter: WriteSecondDormitorySpinnerAdapter
 
-    private var chkDormitoryDescription = MutableLiveData(false)
     private var chkStoreDescription = MutableLiveData(false)
     private var chkCoupon = MutableLiveData(true)
     private val onNext: MediatorLiveData<Boolean> = MediatorLiveData()
 
     init{
-        onNext.addSource(chkDormitoryDescription) {
-            onNext.value = _onNext()
-        }
         onNext.addSource(chkStoreDescription) {
             onNext.value = _onNext()
         }
@@ -53,7 +49,7 @@ class WriteSecondFragment : Fragment() {
     }
 
     private fun _onNext():Boolean {
-        if((chkDormitoryDescription.value==true) and (chkStoreDescription.value == true) and (chkCoupon.value == true)){
+        if((chkStoreDescription.value == true) and (chkCoupon.value == true)){
             return true
         }
         return false
@@ -146,17 +142,6 @@ class WriteSecondFragment : Fragment() {
             items.toMutableList()
         )
         binding.spinnerWriteSecondUserLocationInputDormitory.adapter = spinnerAdapter
-        binding.etWriteSecondUserLocationInputDetail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if(s.toString().trim().isNotEmpty()) {
-                    chkDormitoryDescription.postValue(true)
-                } else {
-                    chkDormitoryDescription.postValue(false)
-                }
-            }
-        })
     }
 
     private fun initStoreLocation() {

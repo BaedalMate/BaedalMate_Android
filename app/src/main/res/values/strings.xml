@@ -122,7 +122,6 @@
 
     <!-- Write Second -->
     <string name="write_second_user_location_description">모집 인원에 도달하면 모집이 완료됩니다</string>
-    <string name="write_second_user_location_input_detail_hint">배달을 받을 장소에 대한 설명을 적어주세요</string>
     <string name="write_second_store_location_hint">서울 노원구 공릉로 231 중앙빌딩</string>
     <string name="write_second_coupon_title">쿠폰 입력</string>
     <string name="write_second_coupon_input_error">쿠폰 금액을 입력해주세요</string>
