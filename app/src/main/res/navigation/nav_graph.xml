@@ -104,6 +104,13 @@
         <action
             android:id="@+id/action_postFragment_to_postMenuBottomSheetDialogFragment"
             app:destination="@id/PostMenuBottomSheetDialogFragment" />
+        <action
+            android:id="@+id/action_postFragment_to_reportPostFragment"
+            app:destination="@id/ReportPostFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
     </fragment>
     <dialog
         android:id="@+id/PostMapFragment"
@@ -324,4 +331,45 @@
         android:name="com.mate.baedalmate.presentation.fragment.location.LocationCertificationFragment"
         android:label="fragment_location_certification"
         tools:layout="@layout/fragment_location_certification"/>
+
+    <fragment
+        android:id="@+id/ReportPostFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.report.ReportPostFragment"
+        android:label="fragment_report_post"
+        tools:layout="@layout/fragment_report_post">
+        <argument
+            android:name="postId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="postWriterUserId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="postWriterName"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/action_reportPostFragment_to_reportUserFragment"
+            app:destination="@id/ReportUserFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/ReportUserFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.report.ReportUserFragment"
+        android:label="fragment_report_user"
+        tools:layout="@layout/fragment_report_user">
+        <argument
+            android:name="userId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="userName"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 </navigation>

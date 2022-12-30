@@ -2,6 +2,9 @@ package com.mate.baedalmate.presentation.fragment.post
 
 import android.graphics.Typeface
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.UnderlineSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +29,7 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostBinding
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.PlaceDto
@@ -61,6 +65,7 @@ class PostFragment : Fragment() {
         getPostDetailData()
         setBackClickListener()
         initContents()
+        setReportPostClickListener()
         observeCloseRecruitPostState()
         observeCancelRecruitPostState()
     }
@@ -329,6 +334,16 @@ class PostFragment : Fragment() {
                     }
                 }
             }
+        }
+    }
+
+    private fun setReportPostClickListener() {
+        val span = SpannableString(binding.tvPostFrontUserReport.text)
+        span.setSpan(UnderlineSpan(), 0, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.tvPostFrontUserReport.text = span
+
+        binding.tvPostFrontUserReport.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_postFragment_to_reportPostFragment)
         }
     }
 }
