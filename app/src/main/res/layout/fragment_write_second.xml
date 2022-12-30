@@ -175,25 +175,6 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <EditText
-                        android:id="@+id/et_write_second_user_location_input_detail"
-                        style="@style/style_body2_kor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="42dp"
-                        android:hint="@string/write_second_user_location_input_detail_hint"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:textColor="@color/black_000000"
-                        android:textColorHint="@color/gray_dark_666666"
-                        android:theme="@style/EditTextBackground"
-                        app:layout_constraintBottom_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/layout_write_second_user_location_input"
-                        app:layout_constraintVertical_bias="0.0" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
