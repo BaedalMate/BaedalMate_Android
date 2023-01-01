@@ -362,7 +362,15 @@
         android:id="@+id/MyPageFragment"
         android:name="com.mate.baedalmate.presentation.fragment.mypage.MyPageFragment"
         android:label="fragment_my_page"
-        tools:layout="@layout/fragment_my_page"></fragment>
+        tools:layout="@layout/fragment_my_page">
+        <action
+            android:id="@+id/action_myPageFragment_to_locationCertificationFragment"
+            app:destination="@id/LocationCertificationFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
 
     <fragment
         android:id="@+id/LocationCertificationFragment"
