@@ -81,7 +81,11 @@ class ParticipantListFragment : BottomSheetDialogFragment() {
 
     private fun setCheckMenuClickListener() {
         binding.btnParticipantListCheckMenu.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_participantListFragment_to_participantsOrderListFragment)
+            findNavController().navigate(
+                ParticipantListFragmentDirections.actionParticipantListFragmentToParticipantsOrderListFragment(
+                    recruitId = args.recruitId
+                )
+            )
         }
     }
 }

@@ -46,24 +46,23 @@ class ParticipantOrderAdapter(private val requestManager: RequestManager) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(participantMenu: ParticipantMenuDto) {
             val decimalFormat = DecimalFormat("#,###")
-            // TODO 주문자 정보가 안오고있음 (닉네임및 사진)
-//            requestManager.load("http://3.35.27.107:8080/images/${participantMenu.}")
-//                .thumbnail(0.1f)
-//                .priority(Priority.HIGH)
-//                .centerCrop()
-//                .into(binding.imgParticipantOrderUserInfoThumbnail)
-//            binding.tvParticipantOrderUserInfoName.text =
+            requestManager.load("http://3.35.27.107:8080/images/${participantMenu.profileImage}")
+                .thumbnail(0.1f)
+                .priority(Priority.HIGH)
+                .centerCrop()
+                .into(binding.imgParticipantOrderUserInfoThumbnail)
+            binding.tvParticipantOrderUserInfoName.text = participantMenu.nickname
 
             for (i in 0 until participantMenu.menu.size) {
                 val currentMenu = participantMenu.menu[i]
                 val bulletTextViewBinding =
-                    ItemBulletPointTextviewBinding.inflate(LayoutInflater.from(binding.root.context))
-                bulletTextViewBinding.tvBulletPoint.text = "${currentMenu.name} / ${decimalFormat.format(currentMenu.quantity)} : ${decimalFormat.format(currentMenu.price)}원"
+                    ItemBulletPointTextviewBinding.inflate(LayoutInflater.from(binding.layoutParticipantOrderMenuList.context))
+                bulletTextViewBinding.message = "${currentMenu.name} / ${decimalFormat.format(currentMenu.quantity)}개 : ${decimalFormat.format(currentMenu.price)}원"
                 val orderMenuTextView = bulletTextViewBinding.root
                 binding.layoutParticipantOrderMenuList.addView(orderMenuTextView)
             }
 
-            binding.tvParticipantOrderSumCurrent.text = participantMenu.userOrderTotal.toString()
+            binding.tvParticipantOrderSumCurrent.text = "${decimalFormat.format(participantMenu.userOrderTotal)}원"
         }
     }
 }

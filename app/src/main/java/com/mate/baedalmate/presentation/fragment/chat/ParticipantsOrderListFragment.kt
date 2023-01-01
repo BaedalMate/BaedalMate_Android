@@ -1,6 +1,8 @@
 package com.mate.baedalmate.presentation.fragment.chat
 
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.StrikethroughSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,7 +47,6 @@ class ParticipantsOrderListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getAllMenuList()
         setParticipantsOrderListAdapter()
-        setParticipantsOrderListBottomPadding()
     }
 
     private fun getAllMenuList() {
@@ -70,21 +71,26 @@ class ParticipantsOrderListFragment : Fragment() {
                 val moneyUnit = getString(R.string.unit_korea)
                 tvParticipantsOrderListSumAmountCurrent.text = "${decimalFormat.format(menuList.allOrderTotal)}${moneyUnit}"
                 tvParticipantsOrderListMineReceiptSumMenuCurrent.text = "${decimalFormat.format(menuList.myOrderPrice)}${moneyUnit}"
+
                 tvParticipantsOrderListMineReceiptDeliveryFeeOrigin.text = "${decimalFormat.format(menuList.shippingFee)}${moneyUnit}"
+                val span = SpannableString(tvParticipantsOrderListMineReceiptDeliveryFeeOrigin.text)
+                span.setSpan(StrikethroughSpan(), 0, tvParticipantsOrderListMineReceiptDeliveryFeeOrigin.length(), SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+                tvParticipantsOrderListMineReceiptDeliveryFeeOrigin.text = span
+
                 tvParticipantsOrderListMineReceiptDeliveryFeeCurrent.text = "${decimalFormat.format(menuList.shippingFeePerParticipant)}${moneyUnit}"
                 tvParticipantsOrderListMineReceiptCouponCurrent.text = "${decimalFormat.format(menuList.coupon)}${moneyUnit}"
                 tvParticipantsOrderListMineFinalAmountCurrent.text = "${decimalFormat.format(menuList.myPaymentPrice)}${moneyUnit}"
             }
+            setParticipantsOrderListBottomPadding()
         }
     }
 
     private fun setParticipantsOrderListBottomPadding() {
-        // TODO 유저 자신의 정보가 나오는 창의 크기만큼 padding을 정상적으로 추가하는지 확인 필요
         binding.layoutParticipantsOrderListContents.setPadding(
             0,
             0,
             0,
-            (25 + binding.layoutParticipantsOrderListMine.height).dp
+            (binding.layoutParticipantsOrderListMine.height)
         )
     }
 }
