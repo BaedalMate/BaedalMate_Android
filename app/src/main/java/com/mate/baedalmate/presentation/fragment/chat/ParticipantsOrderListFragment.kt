@@ -49,7 +49,7 @@ class ParticipantsOrderListFragment : Fragment() {
     }
 
     private fun getAllMenuList() {
-        chatViewModel.getAllMenuList(args.roomId)
+        chatViewModel.getAllMenuList(args.recruitId)
     }
 
     private fun setParticipantsOrderListAdapter() {

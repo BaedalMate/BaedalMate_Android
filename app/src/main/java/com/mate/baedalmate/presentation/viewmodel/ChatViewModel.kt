@@ -67,8 +67,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getChatParticipants(roomId: Int) = viewModelScope.launch {
-        val response = requestGetChatParticipantsUseCase(roomId = roomId)
+    fun getChatParticipants(id: Int) = viewModelScope.launch {
+        val response = requestGetChatParticipantsUseCase(id = id)
         if (response.isSuccessful) {
             _chatParticipants.postValue(response.body())
         } else {
@@ -76,8 +76,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getAllMenuList(roomId: Int) = viewModelScope.launch {
-        val response = requestGetAllMenuListUseCase(roomId = roomId)
+    fun getAllMenuList(id: Int) = viewModelScope.launch {
+        val response = requestGetAllMenuListUseCase(id = id)
         if (response.isSuccessful) {
             _allMenuList.postValue(response.body())
         }

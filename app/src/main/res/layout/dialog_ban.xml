@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="nickname"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_white_radius_10"
+        android:orientation="vertical"
+        android:paddingTop="25dp">
+
+        <TextView
+            android:id="@+id/tv_ban_dialog_title"
+            style="@style/style_title2_kor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{nickname +`님을 차단하시겠습니까?`}"
+            android:textColor="@color/main_FB5F1C"
+            tools:text="캡스톤디자인님을 차단 하시겠습니까?" />
+
+        <TextView
+            style="@style/style_body2_kor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginTop="16dp"
+            android:gravity="start"
+            android:text="@string/ban_dialog_description"
+            android:textColor="@color/gray_dark_666666" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_dialog_ban_cancel"
+                style="@style/style_body1_kor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom_left"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:minHeight="0dp"
+                android:paddingVertical="14dp"
+                android:text="@string/cancel"
+                android:textColor="@color/black_000000" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_dialog_ban_confirm"
+                style="@style/style_body1_kor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom_right"
+                android:gravity="center"
+                android:includeFontPadding="false"
+                android:minHeight="0dp"
+                android:paddingVertical="14dp"
+                android:text="@string/confirm"
+                android:textColor="@color/black_000000" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

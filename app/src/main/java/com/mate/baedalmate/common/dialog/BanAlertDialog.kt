@@ -10,23 +10,28 @@ import android.view.Window
 import android.view.WindowManager
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
-import com.mate.baedalmate.databinding.DialogReportBinding
+import com.mate.baedalmate.databinding.DialogBanBinding
 
-object ReportAlertDialog {
-    fun createReportDialog(
+object BanAlertDialog {
+    fun createBanDialog(
         context: Context,
-        confirmButtonFunction: (() -> Unit)? = null
+        confirmButtonFunction: (() -> Unit)? = null,
+        userNickname: String
     ): AlertDialog {
-        val binding = DialogReportBinding.inflate(LayoutInflater.from(context))
+        val binding = DialogBanBinding.inflate(LayoutInflater.from(context))
         val alertDialog = AlertDialog.Builder(context)
             .setView(binding.root)
-            .setCancelable(false)
+            .setCancelable(true)
             .create()
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
         with(binding) {
-            btnDialogReportConfirm.setOnDebounceClickListener {
+            nickname = userNickname
+            btnDialogBanCancel.setOnDebounceClickListener {
+                alertDialog.dismiss()
+            }
+            btnDialogBanConfirm.setOnDebounceClickListener {
                 if (confirmButtonFunction != null) {
                     confirmButtonFunction()
                 }
@@ -37,7 +42,6 @@ object ReportAlertDialog {
         return alertDialog
     }
 
-
     fun resizeDialogFragment(context: Context, dialog: AlertDialog, dialogSizeRatio: Float = 0.9f) {
         val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
         val deviceWidth = GetDeviceSize.getDeviceWidthSize(context)
@@ -45,11 +49,11 @@ object ReportAlertDialog {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
-    fun showReportDialog(dialog: AlertDialog) {
+    fun showBanDialog(dialog: AlertDialog) {
         dialog.show()
     }
 
-    fun hideReportDialog(dialog: AlertDialog) {
+    fun hideBanDialog(dialog: AlertDialog) {
         dialog.dismiss()
     }
 }

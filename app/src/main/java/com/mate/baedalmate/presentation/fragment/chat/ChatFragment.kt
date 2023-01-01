@@ -108,6 +108,7 @@ class ChatFragment : Fragment() {
                     initChatRoomTitleBarInfo(detail.recruit)
                     initChatLog(detail.messages)
                     setInfoActionClickListener(detail.recruit)
+                    setOptionClickListener(detail.recruit)
                 }
             }
         }
@@ -264,6 +265,14 @@ class ChatFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun setOptionClickListener(recruitInfo: RecruitInfo) {
+        binding.btnChatActionbarOption.setOnDebounceClickListener {
+            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToParticipantListFragment(
+                recruitId = recruitInfo.recruitId
+            ))
         }
     }
 }

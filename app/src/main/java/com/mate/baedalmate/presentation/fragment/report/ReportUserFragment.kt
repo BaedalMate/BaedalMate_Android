@@ -61,7 +61,7 @@ class ReportUserFragment : Fragment() {
     }
 
     private fun setUserName() {
-        binding.tvReportUserActionbarTitle.text =
+        binding.tvReportUserTitle.text =
             String.format(getString(R.string.report_user_title), args.userName)
     }
 

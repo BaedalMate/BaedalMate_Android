@@ -18,10 +18,10 @@ interface ChatApiService {
     suspend fun requestGetChatRoomDetail(@Path("roomId") roomId: Int): Response<ChatRoomDetail>
 
     @GET("/api/v1/recruit/{id}/participants")
-    suspend fun requestGetChatParticipants(@Path("roomId") roomId: Int): Response<ParticipantsDto>
+    suspend fun requestGetChatParticipants(@Path("id") id: Int): Response<ParticipantsDto>
 
     @GET("/api/v1/recruit/{id}/menu")
-    suspend fun requestGetAllMenuList(@Path("roomId") roomId: Int): Response<ParticipantsMenuDto>
+    suspend fun requestGetAllMenuList(@Path("id") id: Int): Response<ParticipantsMenuDto>
 
     @GET("/api/v1/recruit/{id}/my-menu")
     suspend fun requestGetMyMenuList(@Path("id") id: Int): Response<MyMenuDto>

@@ -19,11 +19,11 @@ class ChatRepositoryImpl @Inject constructor(private val chatApiService: ChatApi
     override suspend fun requestGetChatRoomDetail(roomId: Int): Response<ChatRoomDetail> =
         chatApiService.requestGetChatRoomDetail(roomId = roomId)
 
-    override suspend fun requestGetChatParticipants(roomId: Int): Response<ParticipantsDto> =
-        chatApiService.requestGetChatParticipants(roomId = roomId)
+    override suspend fun requestGetChatParticipants(id: Int): Response<ParticipantsDto> =
+        chatApiService.requestGetChatParticipants(id = id)
 
-    override suspend fun requestGetAllMenuList(roomId: Int): Response<ParticipantsMenuDto> =
-        chatApiService.requestGetAllMenuList(roomId = roomId)
+    override suspend fun requestGetAllMenuList(id: Int): Response<ParticipantsMenuDto> =
+        chatApiService.requestGetAllMenuList(id = id)
 
     override suspend fun requestGetMyMenuList(id: Int): Response<MyMenuDto> =
         chatApiService.requestGetMyMenuList(id = id)
