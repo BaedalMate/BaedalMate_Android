@@ -155,18 +155,18 @@
         android:label="fragment_post_menu_bottom_sheet_dialog"
         tools:layout="@layout/fragment_post_menu_bottom_sheet_dialog">
         <argument
-            android:name="roomId"
+            android:name="recruitId"
             android:defaultValue="0"
             app:argType="integer" />
 
         <action
             android:id="@+id/action_postMenuBottomSheetDialogFragment_to_chatFragment"
             app:destination="@id/ChatFragment"
-            app:popUpTo="@id/HomeFragment"
             app:enterAnim="@anim/slide_from_right"
             app:exitAnim="@anim/slide_to_left"
             app:popEnterAnim="@anim/slide_from_left"
-            app:popExitAnim="@anim/slide_to_right" />
+            app:popExitAnim="@anim/slide_to_right"
+            app:popUpTo="@id/HomeFragment" />
     </dialog>
     <fragment
         android:id="@+id/WriteCategoryFragment"
@@ -284,6 +284,9 @@
             android:id="@+id/action_chatFragment_to_changeOrderFragment"
             app:destination="@id/ChangeOrderFragment" />
         <action
+            android:id="@+id/action_chatFragment_to_participantListFragment"
+            app:destination="@id/ParticipantListFragment" />
+        <action
             android:id="@+id/action_chatFragment_to_reviewUserFragment"
             app:destination="@id/ReviewUserFragment" />
     </fragment>
@@ -305,12 +308,32 @@
         android:label="fragment_participant_list"
         tools:layout="@layout/fragment_participant_list">
         <argument
-            android:name="roomId"
+            android:name="recruitId"
             android:defaultValue="0"
             app:argType="integer" />
         <action
+            android:id="@+id/action_participantListFragment_to_participantProfileFragment"
+            app:destination="@id/ParticipantProfileFragment" />
+        <action
             android:id="@+id/action_participantListFragment_to_participantsOrderListFragment"
             app:destination="@id/ParticipantsOrderListFragment" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/ParticipantProfileFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.chat.ParticipantProfileFragment"
+        android:label="fragment_participant_list"
+        tools:layout="@layout/fragment_participant_profile">
+        <argument
+            android:name="participant"
+            app:argType="com.mate.baedalmate.domain.model.ParticipantDto" />
+        <action
+            android:id="@+id/action_participantProfileFragmentt_to_reportUserFragment"
+            app:destination="@id/ReportUserFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </dialog>
 
     <fragment
@@ -319,7 +342,7 @@
         android:label="fragment_participants_order_list"
         tools:layout="@layout/fragment_participants_order_list">
         <argument
-            android:name="roomId"
+            android:name="recruitId"
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
@@ -345,7 +368,7 @@
         android:id="@+id/LocationCertificationFragment"
         android:name="com.mate.baedalmate.presentation.fragment.location.LocationCertificationFragment"
         android:label="fragment_location_certification"
-        tools:layout="@layout/fragment_location_certification"/>
+        tools:layout="@layout/fragment_location_certification" />
 
     <fragment
         android:id="@+id/ReportPostFragment"

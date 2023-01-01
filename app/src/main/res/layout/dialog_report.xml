@@ -25,7 +25,7 @@
         android:textColor="@color/gray_dark_666666" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_dialog_report_confrim"
+        android:id="@+id/btn_dialog_report_confirm"
         style="@style/style_body1_kor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

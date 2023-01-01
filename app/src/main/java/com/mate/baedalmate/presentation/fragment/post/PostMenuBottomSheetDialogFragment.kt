@@ -172,7 +172,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
         binding.btnPostFrontContentsParticipate.setOnClickListener {
             recruitViewModel.requestParticipateRecruitPost(
                 menuList = addedMenuList.value?.toList() ?: listOf(),
-                roomId = args.roomId
+                roomId = args.recruitId
             )
         }
     }

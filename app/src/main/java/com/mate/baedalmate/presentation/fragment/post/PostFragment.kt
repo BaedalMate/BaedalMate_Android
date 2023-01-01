@@ -303,7 +303,7 @@ class PostFragment : Fragment() {
                     setOnClickListener {
                         findNavController().navigate(
                             PostFragmentDirections.actionPostFragmentToPostMenuBottomSheetDialogFragment(
-                                roomId = args.postId
+                                recruitId = args.postId
                             )
                         )
                     }
