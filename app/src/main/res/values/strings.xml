@@ -26,6 +26,12 @@
     <string name="cancel">취소</string>
     <string name="order_amount">주문금액</string>
     <string name="bullet_textview_message_symbol">•</string>
+    <string name="setting">설정</string>
+    <string name="setting_notification">알림 설정</string>
+    <string name="setting_location_change">거점 변경</string>
+    <string name="setting_ban">차단 관리</string>
+    <string name="logout">로그아웃</string>
+    <string name="resign">회원탈퇴</string>
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
 
@@ -195,6 +201,13 @@
 
     <!-- MyPage -->
     <string name="my_page_actionbar_title">마이페이지</string>
+    <string name="current_location">현재 거점</string>
+    <string name="my_page_user_info_history_participated">참여한 모집글</string>
+    <string name="my_page_user_info_history_created">주최한 모집글</string>
+    <string name="my_page_menus_info_title">이용 정보</string>
+    <string name="my_page_menus_info_notice">공지사항</string>
+    <string name="my_page_menus_info_inquiry">문의하기</string>
+    <string name="my_page_menus_info_app_version">앱 버전</string>
 
     <!-- Location Certification -->
     <string name="location_certification_actionbar_title">거점 인증</string>
