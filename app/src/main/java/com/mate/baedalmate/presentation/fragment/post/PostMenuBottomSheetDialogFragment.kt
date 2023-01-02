@@ -1,5 +1,6 @@
 package com.mate.baedalmate.presentation.fragment.post
 
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ListLiveData
@@ -35,6 +37,10 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private lateinit var writeFourthMenuListAdapter: WriteFourthMenuListAdapter
     private var addedMenuList = ListLiveData<MenuDto>()
     private var dishCount = 1
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

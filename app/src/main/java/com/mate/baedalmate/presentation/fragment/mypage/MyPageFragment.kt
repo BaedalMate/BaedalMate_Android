@@ -2,11 +2,15 @@ package com.mate.baedalmate.presentation.fragment.mypage
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -56,6 +60,11 @@ class MyPageFragment : Fragment() {
         setMenusSettingClickListener()
         setMenusInfoClickListener()
         setAccountActionClickListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initNotification()
     }
 
     override fun onDestroyView() {
@@ -161,5 +170,40 @@ class MyPageFragment : Fragment() {
 
     private fun clearLocalData() {
         // TODO 로컬 저장된 정보 삭제
+    }
+
+
+    private fun initNotification() {
+        val currentNotificationState =
+            NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
+        val intent = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+                Intent().apply {
+                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                }
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
+                Intent().apply {
+                    action = "android.settings.APP_NOTIFICATION_SETTINGS"
+                    putExtra("app_package", requireContext().packageName)
+                    putExtra("app_uid", requireContext().applicationInfo?.uid)
+                }
+            }
+            else -> {
+                Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    addCategory(Intent.CATEGORY_DEFAULT)
+                    data = Uri.parse("package:${requireContext().packageName}")
+                }
+            }
+        }
+
+        binding.btnToggleMyPageMenusSettingNotification.isChecked = currentNotificationState
+        binding.btnToggleMyPageMenusSettingNotification.setOnTouchListener { _, _ ->
+            binding.btnToggleMyPageMenusSettingNotification.isClickable = false
+            startActivity(intent)
+            false
+        }
     }
 }
