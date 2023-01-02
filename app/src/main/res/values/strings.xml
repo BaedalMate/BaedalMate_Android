@@ -264,5 +264,8 @@
     <string name="block_user_list_actionbar_title">차단 관리</string>
     <string name="block_user_unblock">차단 해제</string>
 
+    <!-- Notice -->
+    <string name="notice_list_actionbar_title">공지사항</string>
+
     <!-- Participant Profile -->
 </resources>
