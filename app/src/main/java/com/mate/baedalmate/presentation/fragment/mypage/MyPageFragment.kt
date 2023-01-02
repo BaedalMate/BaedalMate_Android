@@ -28,7 +28,6 @@ class MyPageFragment : Fragment() {
     private var binding by autoCleared<FragmentMyPageBinding>()
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private lateinit var glideRequestManager: RequestManager
-    private lateinit var starIndicator: Array<ImageView?>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +80,7 @@ class MyPageFragment : Fragment() {
         }
 
         binding.layoutMyPageMenusSettingBlock.setOnDebounceClickListener {
-            // TODO 차단관리 navigation
+            findNavController().navigate(R.id.action_myPageFragment_to_blockUserListFragment)
         }
     }
 
