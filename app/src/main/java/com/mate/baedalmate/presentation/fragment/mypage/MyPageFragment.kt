@@ -1,11 +1,12 @@
 package com.mate.baedalmate.presentation.fragment.mypage
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,8 +18,10 @@ import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.ConfirmAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentMyPageBinding
+import com.mate.baedalmate.presentation.activity.MainActivity
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,10 +31,14 @@ class MyPageFragment : Fragment() {
     private var binding by autoCleared<FragmentMyPageBinding>()
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private lateinit var glideRequestManager: RequestManager
+    private lateinit var logoutAlertDialog: AlertDialog
+    private lateinit var resignAlertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glideRequestManager = Glide.with(this)
+        createLogoutAlertDialog()
+        createResignAlertDialog()
     }
 
     override fun onCreateView(
@@ -49,6 +56,12 @@ class MyPageFragment : Fragment() {
         setMenusSettingClickListener()
         setMenusInfoClickListener()
         setAccountActionClickListener()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ConfirmAlertDialog.hideConfirmDialog(logoutAlertDialog)
+        ConfirmAlertDialog.hideConfirmDialog(resignAlertDialog)
     }
 
     private fun getUserData() {
@@ -95,10 +108,58 @@ class MyPageFragment : Fragment() {
 
     private fun setAccountActionClickListener() {
         binding.tvMyPageAccountActionLogout.setOnDebounceClickListener {
-            // TODO 로그아웃 동작
+            ConfirmAlertDialog.showConfirmDialog(logoutAlertDialog)
+            ConfirmAlertDialog.resizeDialogFragment(
+                requireContext(),
+                logoutAlertDialog,
+                dialogSizeRatio = 0.7f
+            )
         }
         binding.tvMyPageAccountActionResign.setOnDebounceClickListener {
-            // TODO 회원탈퇴 동작
+            ConfirmAlertDialog.showConfirmDialog(resignAlertDialog)
+            ConfirmAlertDialog.resizeDialogFragment(
+                requireContext(),
+                resignAlertDialog,
+                dialogSizeRatio = 0.7f
+            )
         }
+    }
+
+    private fun createLogoutAlertDialog() {
+        logoutAlertDialog = ConfirmAlertDialog.createChoiceDialog(
+            context = requireContext(),
+            title = getString(R.string.logout_dialog_title),
+            description = getString(R.string.logout_dialog_description),
+            confirmButtonFunction = {
+                // TODO 로그아웃 기능 동작 추가
+                clearLocalData()
+                navigateToLoginActivity()
+            }
+        )
+    }
+
+    private fun createResignAlertDialog() {
+        resignAlertDialog = ConfirmAlertDialog.createChoiceDialog(
+            context = requireContext(),
+            title = getString(R.string.resign_dialog_title),
+            description = getString(R.string.resign_dialog_description),
+            confirmButtonFunction = {
+                // TODO 탈퇴 기능 동작 추가
+                clearLocalData()
+                navigateToLoginActivity()
+            }
+        )
+    }
+
+    private fun navigateToLoginActivity() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        startActivity(intent)
+        requireActivity().finish()
+    }
+
+    private fun clearLocalData() {
+        // TODO 로컬 저장된 정보 삭제
     }
 }
