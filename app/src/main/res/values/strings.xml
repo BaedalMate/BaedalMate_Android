@@ -266,6 +266,8 @@
 
     <!-- Notice -->
     <string name="notice_list_actionbar_title">공지사항</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Participant Profile -->
 </resources>
