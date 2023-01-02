@@ -59,7 +59,7 @@
             app:layout_constraintTop_toBottomOf="@id/view_participant_profile_divider">
 
             <LinearLayout
-                android:id="@+id/layout_participant_profile_action_ban"
+                android:id="@+id/layout_participant_profile_action_block"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
@@ -69,14 +69,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_ban" />
+                    android:src="@drawable/ic_block" />
 
                 <TextView
                     style="@style/style_caption2_kor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="@string/ban"
+                    android:text="@string/block"
                     android:textColor="@color/black_000000" />
             </LinearLayout>
 

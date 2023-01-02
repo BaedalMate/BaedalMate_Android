@@ -10,15 +10,15 @@ import android.view.Window
 import android.view.WindowManager
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
-import com.mate.baedalmate.databinding.DialogBanBinding
+import com.mate.baedalmate.databinding.DialogBlockBinding
 
-object BanAlertDialog {
-    fun createBanDialog(
+object BlockAlertDialog {
+    fun createBlockDialog(
         context: Context,
         confirmButtonFunction: (() -> Unit)? = null,
         userNickname: String
     ): AlertDialog {
-        val binding = DialogBanBinding.inflate(LayoutInflater.from(context))
+        val binding = DialogBlockBinding.inflate(LayoutInflater.from(context))
         val alertDialog = AlertDialog.Builder(context)
             .setView(binding.root)
             .setCancelable(true)
@@ -28,10 +28,10 @@ object BanAlertDialog {
 
         with(binding) {
             nickname = userNickname
-            btnDialogBanCancel.setOnDebounceClickListener {
+            btnDialogBlockCancel.setOnDebounceClickListener {
                 alertDialog.dismiss()
             }
-            btnDialogBanConfirm.setOnDebounceClickListener {
+            btnDialogBlockConfirm.setOnDebounceClickListener {
                 if (confirmButtonFunction != null) {
                     confirmButtonFunction()
                 }
@@ -49,11 +49,11 @@ object BanAlertDialog {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
-    fun showBanDialog(dialog: AlertDialog) {
+    fun showBlockDialog(dialog: AlertDialog) {
         dialog.show()
     }
 
-    fun hideBanDialog(dialog: AlertDialog) {
+    fun hideBlockDialog(dialog: AlertDialog) {
         dialog.dismiss()
     }
 }

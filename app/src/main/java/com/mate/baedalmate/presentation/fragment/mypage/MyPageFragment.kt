@@ -80,7 +80,7 @@ class MyPageFragment : Fragment() {
             findNavController().navigate(R.id.action_myPageFragment_to_locationCertificationFragment)
         }
 
-        binding.layoutMyPageMenusSettingBan.setOnDebounceClickListener {
+        binding.layoutMyPageMenusSettingBlock.setOnDebounceClickListener {
             // TODO 차단관리 navigation
         }
     }

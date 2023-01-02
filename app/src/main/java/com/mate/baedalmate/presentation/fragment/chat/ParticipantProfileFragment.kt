@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
-import com.mate.baedalmate.common.dialog.BanAlertDialog
+import com.mate.baedalmate.common.dialog.BlockAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentParticipantProfileBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +25,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     private var binding by autoCleared<FragmentParticipantProfileBinding>()
     private val args by navArgs<ParticipantProfileFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
-    private lateinit var banAlertDialog: AlertDialog
+    private lateinit var blockAlertDialog: AlertDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
@@ -34,10 +34,10 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glideRequestManager = Glide.with(this)
-        banAlertDialog = BanAlertDialog.createBanDialog(
+        blockAlertDialog = BlockAlertDialog.createBlockDialog(
             requireContext(),
             {
-                banUser()
+                blockUser()
                 findNavController().navigateUp()
             },
             args.participant.nickname
@@ -55,13 +55,13 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUserInfo()
-        setBanClickListener()
+        setBlockClickListener()
         setReportClickListener()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        BanAlertDialog.hideBanDialog(banAlertDialog)
+        BlockAlertDialog.hideBlockDialog(blockAlertDialog)
     }
 
     private fun setUserInfo() {
@@ -84,18 +84,18 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setBanClickListener() {
-        binding.layoutParticipantProfileActionBan.setOnDebounceClickListener {
-            BanAlertDialog.showBanDialog(banAlertDialog)
-            BanAlertDialog.resizeDialogFragment(
+    private fun setBlockClickListener() {
+        binding.layoutParticipantProfileActionBlock.setOnDebounceClickListener {
+            BlockAlertDialog.showBlockDialog(blockAlertDialog)
+            BlockAlertDialog.resizeDialogFragment(
                 requireContext(),
-                banAlertDialog,
+                blockAlertDialog,
                 dialogSizeRatio = 0.8f
             )
         }
     }
 
-    private fun banUser() {
+    private fun blockUser() {
         // TODO 사용자 차단 기능 추가
     }
 }
