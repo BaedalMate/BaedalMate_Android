@@ -364,6 +364,13 @@
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page">
         <action
+            android:id="@+id/action_myPageFragment_to_blockUserListFragment"
+            app:destination="@id/BlockUserListFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+        <action
             android:id="@+id/action_myPageFragment_to_locationCertificationFragment"
             app:destination="@id/LocationCertificationFragment"
             app:enterAnim="@anim/slide_from_right"
@@ -377,6 +384,12 @@
         android:name="com.mate.baedalmate.presentation.fragment.location.LocationCertificationFragment"
         android:label="fragment_location_certification"
         tools:layout="@layout/fragment_location_certification" />
+
+    <fragment
+        android:id="@+id/BlockUserListFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.block.BlockUserListFragment"
+        android:label="fragment_block_user_list"
+        tools:layout="@layout/fragment_block_user_list" />
 
     <fragment
         android:id="@+id/ReportPostFragment"
