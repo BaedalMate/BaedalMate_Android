@@ -296,7 +296,7 @@
                         android:background="@color/gray_line_EBEBEB" />
 
                     <LinearLayout
-                        android:id="@+id/layout_my_page_menus_setting_ban"
+                        android:id="@+id/layout_my_page_menus_setting_block"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="4dp"
@@ -307,7 +307,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/setting_ban"
+                            android:text="@string/setting_block"
                             android:textColor="@color/gray_dark_666666" />
 
                         <ImageView

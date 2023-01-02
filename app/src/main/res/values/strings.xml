@@ -8,7 +8,7 @@
     <string name="chat">채팅</string>
     <string name="my_page">마이페이지</string>
     <string name="report">신고하기</string>
-    <string name="ban">차단하기</string>
+    <string name="block">차단하기</string>
     <string name="amount">금액</string>
     <string name="unit_korea">원</string>
     <string name="section">구간</string>
@@ -29,7 +29,7 @@
     <string name="setting">설정</string>
     <string name="setting_notification">알림 설정</string>
     <string name="setting_location_change">거점 변경</string>
-    <string name="setting_ban">차단 관리</string>
+    <string name="setting_block">차단 관리</string>
     <string name="logout">로그아웃</string>
     <string name="resign">회원탈퇴</string>
     <!-- University -->
@@ -259,8 +259,8 @@
     <string name="report_dialog_title">신고가 완료되었습니다.</string>
     <string name="report_dialog_description">신고 심사 결과에 따라 처리됩니다.</string>
 
-    <!-- Ban -->
-    <string name="ban_dialog_description">차단하더라도, 해당 사용자가 주최자 역할이 아닌 참여하고 있는 모집글과 채팅방은 정상적으로 보여지게 됩니다.</string>
+    <!-- Block -->
+    <string name="block_dialog_description">차단하더라도, 해당 사용자가 주최자 역할이 아닌 참여하고 있는 모집글과 채팅방은 정상적으로 보여지게 됩니다.</string>
 
     <!-- Participant Profile -->
 </resources>

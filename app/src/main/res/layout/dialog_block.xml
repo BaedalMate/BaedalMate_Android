@@ -18,7 +18,7 @@
         android:paddingTop="25dp">
 
         <TextView
-            android:id="@+id/tv_ban_dialog_title"
+            android:id="@+id/tv_block_dialog_title"
             style="@style/style_title2_kor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_marginHorizontal="17dp"
             android:layout_marginTop="16dp"
             android:gravity="start"
-            android:text="@string/ban_dialog_description"
+            android:text="@string/block_dialog_description"
             android:textColor="@color/gray_dark_666666" />
 
         <LinearLayout
@@ -44,7 +44,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_dialog_ban_cancel"
+                android:id="@+id/btn_dialog_block_cancel"
                 style="@style/style_body1_kor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                 android:textColor="@color/black_000000" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_dialog_ban_confirm"
+                android:id="@+id/btn_dialog_block_confirm"
                 style="@style/style_body1_kor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
