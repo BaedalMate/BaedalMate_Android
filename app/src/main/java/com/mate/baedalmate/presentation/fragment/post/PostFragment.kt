@@ -65,7 +65,6 @@ class PostFragment : Fragment() {
         getPostDetailData()
         setBackClickListener()
         initContents()
-        setReportPostClickListener()
         observeCloseRecruitPostState()
         observeCancelRecruitPostState()
     }
@@ -195,7 +194,7 @@ class PostFragment : Fragment() {
 
     private fun initContentsUserInfo(recruitDetail: RecruitDetail) {
         with(binding) {
-            glideRequestManager.load(recruitDetail.profileImage)
+            glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.profileImage}")
                 .override(45.dp)
                 .thumbnail(0.1f)
                 .priority(Priority.HIGH)
@@ -331,19 +330,37 @@ class PostFragment : Fragment() {
                         initContentsUserInfo(recruitDetail)
                         initContentsPostInfo(recruitDetail)
                         setRecruitActionButton(recruitDetail)
+                        setReportPostClickListener(recruitDetail)
+                        setModifyPostClickListener(recruitDetail)
                     }
                 }
             }
         }
     }
 
-    private fun setReportPostClickListener() {
-        val span = SpannableString(binding.tvPostFrontUserReport.text)
-        span.setSpan(UnderlineSpan(), 0, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        binding.tvPostFrontUserReport.text = span
+    private fun setReportPostClickListener(recruitDetail: RecruitDetail) {
+        with(binding.tvPostFrontUserReport) {
+            val span = SpannableString(this.text)
+            span.setSpan(UnderlineSpan(), 0, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            this.text = span
 
-        binding.tvPostFrontUserReport.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_postFragment_to_reportPostFragment)
+            visibility = if (recruitDetail.host) View.GONE else View.VISIBLE
+            setOnDebounceClickListener {
+                findNavController().navigate(PostFragmentDirections.actionPostFragmentToReportPostFragment(
+                    postId = args.postId,
+                    postWriterName = recruitDetail.username,
+//                    postWriterUserId = recruitDetail.id // TODO API 수정시 수정
+                ))
+            }
+        }
+    }
+
+    private fun setModifyPostClickListener(recruitDetail: RecruitDetail) {
+        with(binding.tvPostFrontContentsDetailModify) {
+            visibility = if (recruitDetail.host) View.VISIBLE else View.GONE
+            setOnDebounceClickListener {
+                // TODO 수정하기 구현 추가시 Navigate 추가
+            }
         }
     }
 }

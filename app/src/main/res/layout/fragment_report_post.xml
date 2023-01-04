@@ -233,7 +233,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="44dp"
-                    android:text="@{``}"
                     android:textColor="@color/main_FB5F1C"
                     tools:text="'캡스톤디자인' 님을 신고하고 싶으신가요?" />
 

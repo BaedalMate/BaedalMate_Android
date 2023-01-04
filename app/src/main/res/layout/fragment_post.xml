@@ -222,12 +222,14 @@
                             android:layout_marginTop="7dp"
                             android:text="@string/report"
                             android:textColor="@color/gray_dark_666666"
+                            android:visibility="visible"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/tv_post_front_user_dormitory"
-                            app:layout_constraintVertical_bias="0.0" />
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:visibility="visible" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -448,17 +450,33 @@
                             <TextView
                                 android:id="@+id/tv_post_front_contents_detail_title"
                                 style="@style/style_title2_kor"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp"
+                                android:singleLine="true"
                                 android:text="@string/post_detail_title"
                                 android:textColor="@color/main_FB5F1C"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/tv_post_front_contents_detail_modify"
                                 app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0" />
+
+                            <TextView
+                                android:id="@+id/tv_post_front_contents_detail_modify"
+                                style="@style/style_body2_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/post_modify"
+                                android:textColor="@color/gray_dark_666666"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_post_front_contents_detail_title"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="1.0"
+                                app:layout_constraintTop_toTopOf="@id/tv_post_front_contents_detail_title"
+                                app:layout_constraintVertical_bias="0.0"
+                                tools:visibility="visible" />
 
                             <TextView
                                 android:id="@+id/tv_post_front_contents_detail"
