@@ -24,6 +24,7 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ViewPagerUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitDto
 import com.mate.baedalmate.databinding.FragmentHomeBinding
 import com.mate.baedalmate.domain.model.TagDto
@@ -248,6 +249,12 @@ class HomeFragment : Fragment() {
     private fun initNavigation() {
         binding.fabHomeToWrite.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_writeCategoryFragment)
+        }
+        binding.btnHomeTopActionbarSearch.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
+        binding.btnHomeTopActionbarNotification.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
         }
     }
 

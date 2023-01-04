@@ -4,6 +4,7 @@ import com.mate.baedalmate.data.datasource.remote.chat.ChatApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.review.ReviewApiService
+import com.mate.baedalmate.data.datasource.remote.search.SearchApiService
 import com.mate.baedalmate.data.datasource.remote.write.KakaoLocalApiService
 import com.mate.baedalmate.data.datasource.remote.write.WriteApiService
 import com.mate.baedalmate.data.repository.ChatRepositoryImpl
@@ -11,12 +12,14 @@ import com.mate.baedalmate.data.repository.KakaoLocalRepositoryImpl
 import com.mate.baedalmate.data.repository.MemberRepositoryImpl
 import com.mate.baedalmate.data.repository.RecruitRepositoryImpl
 import com.mate.baedalmate.data.repository.ReviewRepositoryImpl
+import com.mate.baedalmate.data.repository.SearchRepositoryImpl
 import com.mate.baedalmate.data.repository.WriteRepositoryImpl
 import com.mate.baedalmate.domain.repository.ChatRepository
 import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
 import com.mate.baedalmate.domain.repository.RecruitRepository
 import com.mate.baedalmate.domain.repository.ReviewRepository
+import com.mate.baedalmate.domain.repository.SearchRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
 import com.mate.baedalmate.domain.usecase.chat.RequestGetAllMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatParticipantsUseCase
@@ -36,6 +39,7 @@ import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
 import com.mate.baedalmate.domain.usecase.review.RequestGetTargetReviewUserListUseCase
 import com.mate.baedalmate.domain.usecase.review.RequestReviewUsersUseCase
+import com.mate.baedalmate.domain.usecase.search.RequestGetSearchTagKeywordUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
 import dagger.Module
@@ -177,4 +181,17 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideReviewUsersUseCase(reviewRepository: ReviewRepository): RequestReviewUsersUseCase = RequestReviewUsersUseCase(reviewRepository)
+
+    @Singleton
+    @Provides
+    fun provideSearchApiService(retrofit: Retrofit) = retrofit.create(SearchApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideSearchRepository(searchRepositoryImpl: SearchRepositoryImpl): SearchRepository = searchRepositoryImpl
+
+    @Singleton
+    @Provides
+    fun provideRequestGetSearchTagKeywordUseCase(searchRepository: SearchRepository): RequestGetSearchTagKeywordUseCase = RequestGetSearchTagKeywordUseCase(searchRepository)
+
 }
