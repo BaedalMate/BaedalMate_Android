@@ -1,5 +1,6 @@
 package com.mate.baedalmate.presentation.fragment.post
 
+import android.app.AlertDialog
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
@@ -17,9 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -28,6 +27,7 @@ import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.ConfirmAlertDialog
 import com.mate.baedalmate.common.dp
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostBinding
@@ -50,6 +50,14 @@ class PostFragment : Fragment() {
     private lateinit var glideRequestManager: RequestManager
     private lateinit var starIndicator: Array<ImageView?>
     private var deliveryFeeList = listOf<ShippingFeeDto>()
+    private lateinit var cancelPostAlertDialog: AlertDialog
+    private lateinit var closePostAlertDialog: AlertDialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        createCancelPostAlertDialog()
+        createClosePostAlertDialog()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,6 +75,31 @@ class PostFragment : Fragment() {
         initContents()
         observeCloseRecruitPostState()
         observeCancelRecruitPostState()
+        observeCancelParticipatePostState()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        ConfirmAlertDialog.hideConfirmDialog(cancelPostAlertDialog)
+        ConfirmAlertDialog.hideConfirmDialog(closePostAlertDialog)
+    }
+
+    private fun createCancelPostAlertDialog() {
+        cancelPostAlertDialog = ConfirmAlertDialog.createChoiceDialog(
+            context = requireContext(),
+            title = getString(R.string.post_cancel_dialog_title),
+            description = getString(R.string.post_cancel_dialog_description),
+            confirmButtonFunction = { recruitViewModel.requestCancelRecruitPost(postId = args.postId) }
+        )
+    }
+
+    private fun createClosePostAlertDialog() {
+        closePostAlertDialog = ConfirmAlertDialog.createChoiceDialog(
+            context = requireContext(),
+            title = getString(R.string.post_close_dialog_title),
+            description = getString(R.string.post_close_dialog_description),
+            confirmButtonFunction = { recruitViewModel.requestCloseRecruitPost(postId = args.postId) }
+        )
     }
 
     private fun getPostDetailData() {
@@ -174,19 +207,40 @@ class PostFragment : Fragment() {
         }
     }
 
+    private fun observeCancelRecruitPostState() {
+        recruitViewModel.isCancelRecruitPostSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.post_alert_message_cancel),
+                    Toast.LENGTH_SHORT
+                ).show()
+                getPostDetailData()
+            }
+        }
+    }
+
     private fun observeCloseRecruitPostState() {
         recruitViewModel.isCloseRecruitPostSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess.getContentIfNotHandled() == true) {
-                Toast.makeText(requireContext(), getString(R.string.post_alert_message_close), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.post_alert_message_close),
+                    Toast.LENGTH_SHORT
+                ).show()
                 findNavController().navigateUp()
             }
         }
     }
 
-    private fun observeCancelRecruitPostState() {
+    private fun observeCancelParticipatePostState() {
         recruitViewModel.isCancelParticipateRecruitPostSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess.getContentIfNotHandled() == true) {
-                Toast.makeText(requireContext(), getString(R.string.post_alert_message_cancel_participate), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.post_alert_message_cancel_participate),
+                    Toast.LENGTH_SHORT
+                ).show()
                 findNavController().navigateUp()
             }
         }
@@ -271,18 +325,32 @@ class PostFragment : Fragment() {
                     text = getString(R.string.post_not_active)
                 }
             }
-        } else if(isCurrentUserHost) { // 주최자이면서 진행중인 모집글인 경우
+        } else if (isCurrentUserHost) { // 주최자이면서 진행중인 모집글인 경우
             with(binding) {
                 layoutPostFrontContentsParticipateHost.visibility = View.VISIBLE
                 btnPostFrontContentsParticipateGuest.isEnabled = false
 
                 with(btnPostFrontContentsParticipateHostCancel) {
                     isEnabled = true
-                    setOnClickListener { recruitViewModel.requestCancelRecruitPost(postId = args.postId) }
+                    setOnClickListener {
+                        ConfirmAlertDialog.showConfirmDialog(cancelPostAlertDialog)
+                        ConfirmAlertDialog.resizeDialogFragment(
+                            requireContext(),
+                            cancelPostAlertDialog,
+                            dialogSizeRatio = 0.7f
+                        )
+                    }
                 }
                 with(btnPostFrontContentsParticipateHostClose) {
                     isEnabled = true
-                    setOnClickListener { recruitViewModel.requestCloseRecruitPost(postId = args.postId) }
+                    setOnClickListener {
+                        ConfirmAlertDialog.showConfirmDialog(cancelPostAlertDialog)
+                        ConfirmAlertDialog.resizeDialogFragment(
+                            requireContext(),
+                            cancelPostAlertDialog,
+                            dialogSizeRatio = 0.7f
+                        )
+                    }
                 }
             }
 
@@ -316,23 +384,21 @@ class PostFragment : Fragment() {
             starIndicator = arrayOfNulls<ImageView>(5)
 
             viewLifecycleOwner.lifecycleScope.launch {
-                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    recruitViewModel.recruitPostDetail.observe(viewLifecycleOwner) { recruitDetail ->
-                        glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.image}")
-                            .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
-                            .thumbnail(0.1f)
-                            .priority(Priority.HIGH)
-                            .centerCrop()
-                            .into(imgPostBack)
+                recruitViewModel.recruitPostDetail.observe(viewLifecycleOwner) { recruitDetail ->
+                    glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.image}")
+                        .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
+                        .thumbnail(0.1f)
+                        .priority(Priority.HIGH)
+                        .centerCrop()
+                        .into(imgPostBack)
 
-                        displayPostPlatform(recruitDetail.platform)
-                        setStoreIconClickListener(recruitDetail.place)
-                        initContentsUserInfo(recruitDetail)
-                        initContentsPostInfo(recruitDetail)
-                        setRecruitActionButton(recruitDetail)
-                        setReportPostClickListener(recruitDetail)
-                        setModifyPostClickListener(recruitDetail)
-                    }
+                    displayPostPlatform(recruitDetail.platform)
+                    setStoreIconClickListener(recruitDetail.place)
+                    initContentsUserInfo(recruitDetail)
+                    initContentsPostInfo(recruitDetail)
+                    setRecruitActionButton(recruitDetail)
+                    setReportPostClickListener(recruitDetail)
+                    setModifyPostClickListener(recruitDetail)
                 }
             }
         }
@@ -346,18 +412,20 @@ class PostFragment : Fragment() {
 
             visibility = if (recruitDetail.host) View.GONE else View.VISIBLE
             setOnDebounceClickListener {
-                findNavController().navigate(PostFragmentDirections.actionPostFragmentToReportPostFragment(
-                    postId = args.postId,
-                    postWriterName = recruitDetail.username,
+                findNavController().navigate(
+                    PostFragmentDirections.actionPostFragmentToReportPostFragment(
+                        postId = args.postId,
+                        postWriterName = recruitDetail.username,
 //                    postWriterUserId = recruitDetail.id // TODO API 수정시 수정
-                ))
+                    )
+                )
             }
         }
     }
 
     private fun setModifyPostClickListener(recruitDetail: RecruitDetail) {
         with(binding.tvPostFrontContentsDetailModify) {
-            visibility = if (recruitDetail.host) View.VISIBLE else View.GONE
+            visibility = if (recruitDetail.host && recruitDetail.active) View.VISIBLE else View.GONE
             setOnDebounceClickListener {
                 // TODO 수정하기 구현 추가시 Navigate 추가
             }
