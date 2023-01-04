@@ -1,8 +1,10 @@
 package com.mate.baedalmate.presentation.fragment.location
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -18,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentLocationCertificationBinding
 import com.mate.baedalmate.domain.model.Dormitory
@@ -36,6 +39,7 @@ class LocationCertificationFragment : Fragment() {
     private lateinit var locationManager: LocationManager
     private lateinit var spinnerAdapter: WriteSecondDormitorySpinnerAdapter
     private lateinit var mapView: MapView
+    private lateinit var loadingAlertDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +51,7 @@ class LocationCertificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAlertDialog()
         initDormitorySpinner()
         setDormitoryLocation()
         checkUserLocationServiceEnabled()
@@ -54,6 +59,16 @@ class LocationCertificationFragment : Fragment() {
         observeChangeSpinnerSelectedItem()
         observeLocationChange()
         initMap()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun initAlertDialog() {
+        loadingAlertDialog = LoadingAlertDialog.createLoadingDialog(requireContext())
+        loadingAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private val permissionLauncher =
@@ -169,6 +184,7 @@ class LocationCertificationFragment : Fragment() {
 
     private fun setLocationChangeClickListener() {
         binding.btnLocationCertificationChange.setOnDebounceClickListener {
+            showLoadingDialog()
             val newDormitory =
                 when (binding.spinnerLocationCertificationUserLocationInputDormitory.selectedItem) {
                     getString(R.string.sunglim) -> Dormitory.SUNGLIM
@@ -317,5 +333,10 @@ class LocationCertificationFragment : Fragment() {
             DORMITORY_SULIM_LOCATION.longitude = 127.078285
             DORMITORY_SULIM_LOCATION.latitude = 37.636044
         }
+    }
+
+    private fun showLoadingDialog() {
+        LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
+        LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
     }
 }

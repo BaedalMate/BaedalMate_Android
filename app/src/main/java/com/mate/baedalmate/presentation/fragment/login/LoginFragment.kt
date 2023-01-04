@@ -1,8 +1,11 @@
 package com.mate.baedalmate.presentation.fragment.login
 
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -24,6 +27,7 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.databinding.FragmentLoginBinding
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import com.mate.baedalmate.presentation.activity.MainActivity
@@ -33,21 +37,34 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : Fragment() {
     private var binding by autoCleared<FragmentLoginBinding>()
     private val loginViewModel by activityViewModels<MemberViewModel>()
+    private lateinit var loadingAlertDialog: AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
-
+        initAlertDialog()
         loginSuccess()
         setKakaoLoginButtonClickListener()
         setPolicy()
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun initAlertDialog() {
+        loadingAlertDialog = LoadingAlertDialog.createLoadingDialog(requireContext())
+        loadingAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
     val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        showLoadingDialog()
         if (error != null) {
+            LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
             Log.e(ContentValues.TAG, "카카오 로그인 실패", error)
         } else if (token != null) {
             Log.i(ContentValues.TAG, "카카오 로그인 성공 ${token.accessToken}")
@@ -72,6 +89,7 @@ class LoginFragment : Fragment() {
 
     private fun setKakaoLoginButtonClickListener() {
         binding.btnLoginKakao.setOnClickListener {
+            showLoadingDialog()
             if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
                 UserApiClient.instance.loginWithKakaoTalk(requireContext(), callback = callback)
             } else {
@@ -131,5 +149,12 @@ class LoginFragment : Fragment() {
             span.indexOf(text) + text.length,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+    }
+
+    private fun showLoadingDialog() {
+        with(LoadingAlertDialog) {
+            showLoadingDialog(loadingAlertDialog)
+            resizeDialogFragment(requireContext(), loadingAlertDialog)
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.mate.baedalmate.common.dialog
 
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -19,11 +21,13 @@ object LoadingAlertDialog {
             .setView(dialogView)
             .setCancelable(false)
             .create()
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         return alertDialog
     }
 
 
-    fun resizeDialogFragment(context: Context, dialog: AlertDialog, dialogSizeRatio: Float = 0.9f) {
+    fun resizeDialogFragment(context: Context, dialog: AlertDialog, dialogSizeRatio: Float = 0.7f) {
         val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
         val deviceWidth = GetDeviceSize.getDeviceWidthSize(context)
         params?.width = (deviceWidth * dialogSizeRatio).toInt()

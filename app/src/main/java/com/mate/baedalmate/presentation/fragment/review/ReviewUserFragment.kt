@@ -1,11 +1,13 @@
 package com.mate.baedalmate.presentation.fragment.review
 
+import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentReviewUserBinding
 import com.mate.baedalmate.domain.model.UserDto
@@ -31,7 +34,7 @@ class ReviewUserFragment : BottomSheetDialogFragment() {
     private lateinit var glideRequestManager: RequestManager
     private lateinit var reviewUserAdapter: ReviewUserAdapter
     private var reviewedUserList: MutableList<UserDto> = mutableListOf<UserDto>()
-    private lateinit var loadingToastMessage: Toast
+    private lateinit var loadingAlertDialog: AlertDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
@@ -40,8 +43,6 @@ class ReviewUserFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glideRequestManager = Glide.with(this)
-        loadingToastMessage =
-            Toast.makeText(requireContext(), R.string.review_submit_toast_loading, Toast.LENGTH_SHORT)
     }
 
     override fun onCreateView(
@@ -54,15 +55,21 @@ class ReviewUserFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAlertDialog()
         getReviewTargetUserList()
         setSubmitClickListener()
         setReviewUserListAdapter()
         setMenuListOriginalValue()
     }
 
-    override fun onDestroy() {
-        loadingToastMessage.cancel()
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun initAlertDialog() {
+        loadingAlertDialog = LoadingAlertDialog.createLoadingDialog(requireContext())
+        loadingAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private fun getReviewTargetUserList() {
@@ -104,13 +111,17 @@ class ReviewUserFragment : BottomSheetDialogFragment() {
 
     private fun setSubmitClickListener() {
         binding.btnReviewUserSubmit.setOnDebounceClickListener {
-            loadingToastMessage.show()
-
+            showLoadingDialog()
             reviewViewModel.requestCreateReviewUsers(
                 recruitId = args.recruitId,
                 participatedUsers = reviewedUserList
             )
             findNavController().navigateUp()
         }
+    }
+
+    private fun showLoadingDialog() {
+        LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
+        LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
     }
 }

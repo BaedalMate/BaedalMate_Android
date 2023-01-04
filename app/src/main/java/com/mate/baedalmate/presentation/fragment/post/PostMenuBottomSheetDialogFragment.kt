@@ -1,7 +1,9 @@
 package com.mate.baedalmate.presentation.fragment.post
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -21,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ListLiveData
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.common.dp
 import com.mate.baedalmate.databinding.FragmentPostMenuBottomSheetDialogBinding
 import com.mate.baedalmate.domain.model.MenuDto
@@ -35,6 +38,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private val args by navArgs<PostMenuBottomSheetDialogFragmentArgs>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var writeFourthMenuListAdapter: WriteFourthMenuListAdapter
+    private lateinit var loadingAlertDialog: AlertDialog
     private var addedMenuList = ListLiveData<MenuDto>()
     private var dishCount = 1
 
@@ -52,6 +56,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initAlertDialog()
         initMenuNameEditText()
         validateDeadLineDeliveryInputForm()
         setAddMenuClickListener()
@@ -59,6 +64,16 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
         setParticipateClickListener()
         observeParticipateSuccess()
         setMenuListOriginalValue()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun initAlertDialog() {
+        loadingAlertDialog = LoadingAlertDialog.createLoadingDialog(requireContext())
+        loadingAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
     private fun initMenuNameEditText() {
@@ -176,6 +191,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun setParticipateClickListener() {
         binding.btnPostFrontContentsParticipate.setOnClickListener {
+            showLoadingDialog()
             recruitViewModel.requestParticipateRecruitPost(
                 menuList = addedMenuList.value?.toList() ?: listOf(),
                 roomId = args.recruitId
@@ -228,5 +244,10 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 writeFourthMenuListAdapter.notifyDataSetChanged()
             }
         })
+    }
+
+    private fun showLoadingDialog() {
+        LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
+        LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
     }
 }
