@@ -220,6 +220,7 @@
                 android:paddingTop="10dp"
                 android:paddingBottom="13dp"
                 android:text="@string/confirm"
+                android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom"
                 android:textColor="@color/black_000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

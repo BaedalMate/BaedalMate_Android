@@ -18,6 +18,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
@@ -41,9 +42,12 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private lateinit var loadingAlertDialog: AlertDialog
     private var addedMenuList = ListLiveData<MenuDto>()
     private var dishCount = 1
+    private lateinit var bottomSheetDialog: BottomSheetDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        return bottomSheetDialog
     }
 
     override fun onCreateView(
@@ -217,6 +221,8 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
                 writeFourthMenuListAdapter.notifyDataSetChanged()
                 binding.layoutPostMenuAdded.visibility = View.VISIBLE
                 binding.btnPostFrontContentsParticipate.isEnabled = true
+
+                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED // HALF EXPAND를 false 처리했음에도 처음에 동적으로 크기가 변하는 경우 절반만 보여지는 상태에 의해 해결을 위해 추가
             } else {
                 binding.layoutPostMenuAdded.visibility = View.GONE
                 binding.btnPostFrontContentsParticipate.isEnabled = false

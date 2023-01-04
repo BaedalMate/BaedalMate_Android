@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/background_white_radius_30_top"
-        android:paddingTop="15dp">
+        android:paddingTop="30dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_post_menu_input"
