@@ -377,6 +377,13 @@
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page">
         <action
+            android:id="@+id/action_myPageFragment_to_myProfileChangeFragment"
+            app:destination="@id/MyProfileChangeFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+        <action
             android:id="@+id/action_myPageFragment_to_blockUserListFragment"
             app:destination="@id/BlockUserListFragment"
             app:enterAnim="@anim/slide_from_right"
@@ -391,6 +398,12 @@
             app:popEnterAnim="@anim/slide_from_left"
             app:popExitAnim="@anim/slide_to_right" />
     </fragment>
+
+    <fragment
+        android:id="@+id/MyProfileChangeFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.profile.MyProfileChangeFragment"
+        android:label="fragment_my_profile_change"
+        tools:layout="@layout/fragment_my_profile_change" />
 
     <fragment
         android:id="@+id/LocationCertificationFragment"
