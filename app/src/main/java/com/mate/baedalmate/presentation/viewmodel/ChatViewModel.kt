@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomDetail
 import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomList
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.MyMenuDto
 import com.mate.baedalmate.domain.model.OrderDto
@@ -50,50 +51,68 @@ class ChatViewModel @Inject constructor(
     val isChangeMyMenuListSuccess: LiveData<Event<Boolean>> get() = _isChangeMyMenuListSuccess
 
     fun getChatRoomList() = viewModelScope.launch {
-        val response = requestGetChatRoomListUseCase()
-        if (response.isSuccessful) {
-            _chatRoomList.postValue(response.body())
-        } else {
-
+        requestGetChatRoomListUseCase().let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _chatRoomList.postValue(it) }
+                }
+            }
         }
     }
 
     fun getChatRoomDetailLog(roomId: Int) = viewModelScope.launch {
-        val response = requestGetChatRoomDetailUseCase(roomId = roomId)
-        if (response.isSuccessful) {
-            _chatRoomLog.postValue(response.body())
-        } else {
-
+        requestGetChatRoomDetailUseCase(roomId = roomId).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _chatRoomLog.postValue(it) }
+                }
+            }
         }
     }
 
     fun getChatParticipants(id: Int) = viewModelScope.launch {
-        val response = requestGetChatParticipantsUseCase(id = id)
-        if (response.isSuccessful) {
-            _chatParticipants.postValue(response.body())
-        } else {
-
+        requestGetChatParticipantsUseCase(id = id).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _chatParticipants.postValue(it) }
+                }
+            }
         }
     }
 
     fun getAllMenuList(id: Int) = viewModelScope.launch {
-        val response = requestGetAllMenuListUseCase(id = id)
-        if (response.isSuccessful) {
-            _allMenuList.postValue(response.body())
+        requestGetAllMenuListUseCase(id = id).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _allMenuList.postValue(it) }
+                }
+            }
         }
     }
 
     fun getMyMenuList(id: Int) = viewModelScope.launch {
-        val response = requestGetMyMenuListUseCase(id = id)
-        if (response.isSuccessful) {
-            _myMenuList.postValue(response.body())
+        requestGetMyMenuListUseCase(id = id).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _myMenuList.postValue(it) }
+                }
+            }
         }
     }
 
-    fun putChangeMyMenuList(changedMenuList: List<MenuDto>, recruitId: Int) = viewModelScope.launch {
-        val response = requestPutChangeMyMenuListUseCase(OrderDto(changedMenuList, recruitId))
-        if (response.isSuccessful) {
-            _isChangeMyMenuListSuccess.postValue(Event(true))
+    fun putChangeMyMenuList(changedMenuList: List<MenuDto>, recruitId: Int) =
+        viewModelScope.launch {
+            requestPutChangeMyMenuListUseCase(
+                OrderDto(
+                    changedMenuList,
+                    recruitId
+                )
+            ).let { ApiResponse ->
+                when (ApiResponse.status) {
+                    ApiResult.Status.SUCCESS -> {
+                        _isChangeMyMenuListSuccess.postValue(Event(true))
+                    }
+                }
+            }
         }
-    }
 }

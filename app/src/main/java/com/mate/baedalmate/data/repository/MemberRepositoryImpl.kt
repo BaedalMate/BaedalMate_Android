@@ -4,8 +4,10 @@ import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.domain.model.UpdateUserDto
+import com.mate.baedalmate.domain.model.setExceptionHandling
 import com.mate.baedalmate.domain.repository.MemberRepository
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -13,19 +15,18 @@ import javax.inject.Inject
 
 class MemberRepositoryImpl @Inject constructor(private val memberApiService: MemberApiService) :
     MemberRepository {
-    override suspend fun requestLoginKakao(data: MemberOAuthRequest): Response<MemberOAuthResponse> {
-        return memberApiService.requestLoginKakao(data)
-    }
+    override suspend fun requestLoginKakao(data: MemberOAuthRequest): ApiResult<MemberOAuthResponse> =
+        setExceptionHandling { memberApiService.requestLoginKakao(data) }
 
-    override suspend fun requestGetUserInfo(): Response<UserInfoResponse> =
-        memberApiService.requestGetUserInfo()
+    override suspend fun requestGetUserInfo(): ApiResult<UserInfoResponse> =
+        setExceptionHandling { memberApiService.requestGetUserInfo() }
 
-    override suspend fun requestPutUserDormitory(newDormitory: Dormitory): Response<Void> =
-        memberApiService.requestPutUserDormitory(dormitory = newDormitory)
+    override suspend fun requestPutUserDormitory(newDormitory: Dormitory): ApiResult<Void> =
+        setExceptionHandling { memberApiService.requestPutUserDormitory(dormitory = newDormitory) }
 
-    override suspend fun requestPutChangeMyProfile(updateUserInfo: UpdateUserDto): Response<UserInfoResponse> =
-        memberApiService.requestPutChangeMyProfile(updateUserInfo = updateUserInfo)
+    override suspend fun requestPutChangeMyProfile(updateUserInfo: UpdateUserDto): ApiResult<UserInfoResponse> =
+        setExceptionHandling { memberApiService.requestPutChangeMyProfile(updateUserInfo = updateUserInfo) }
 
-    override suspend fun requestPutChangeMyProfilePhoto(uploadfile: MultipartBody.Part?): Response<Void> =
-        memberApiService.requestPutChangeMyProfilePhoto(uploadfile = uploadfile)
+    override suspend fun requestPutChangeMyProfilePhoto(uploadfile: MultipartBody.Part?): ApiResult<Void> =
+        setExceptionHandling { memberApiService.requestPutChangeMyProfilePhoto(uploadfile = uploadfile) }
 }

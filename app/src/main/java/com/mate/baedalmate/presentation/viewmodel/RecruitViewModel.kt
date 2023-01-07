@@ -11,6 +11,7 @@ import com.mate.baedalmate.data.datasource.remote.recruit.DeleteOrderDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.PlaceDto
@@ -113,7 +114,7 @@ class RecruitViewModel @Inject constructor(
             listOf(
                 MainRecruitDto(
                     "", 0, "", "", 0,
-                    "", 0, 0,"", 0, 0f, ""
+                    "", 0, 0, "", 0, 0f, ""
                 )
             )
         )
@@ -125,7 +126,7 @@ class RecruitViewModel @Inject constructor(
             listOf(
                 MainRecruitDto(
                     "", 0, "", "", 0,
-                    "", 0, 0,"", 0, 0f, ""
+                    "", 0, 0, "", 0, 0f, ""
                 )
             )
         )
@@ -148,135 +149,148 @@ class RecruitViewModel @Inject constructor(
         sort: String
     ) =
         viewModelScope.launch {
-            val response = recruitListUseCase.invoke(
+            recruitListUseCase.invoke(
                 categoryId = categoryId,
                 page = page,
                 size = size,
                 sort = sort
-            )
-            if (response.isSuccessful) {
-                when (categoryId) {
-                    null -> {
-                        _recruitListAll.postValue(response.body())
-                    }
-                    1 -> {
-                        _recruitListKorean.postValue(response.body())
-                    }
-                    2 -> {
-                        _recruitListChinese.postValue(response.body())
-                    }
-                    3 -> {
-                        _recruitListJapanese.postValue(response.body())
-                    }
-                    4 -> {
-                        _recruitListWestern.postValue(response.body())
-                    }
-                    5 -> {
-                        _recruitListFastfood.postValue(response.body())
-                    }
-                    6 -> {
-                        _recruitListBunsik.postValue(response.body())
-                    }
-                    7 -> {
-                        _recruitListDessert.postValue(response.body())
-                    }
-                    8 -> {
-                        _recruitListChicken.postValue(response.body())
-                    }
-                    9 -> {
-                        _recruitListPizza.postValue(response.body())
-                    }
-                    10 -> {
-                        _recruitListAsia.postValue(response.body())
-                    }
-                    11 -> {
-                        _recruitListPackedmeal.postValue(response.body())
+            ).let { ApiResponse ->
+                when (ApiResponse.status) {
+                    ApiResult.Status.SUCCESS -> {
+                        ApiResponse.data.let { recruitList ->
+                            when (categoryId) {
+                                null -> _recruitListAll.postValue(recruitList)
+                                1 -> _recruitListKorean.postValue(recruitList)
+                                2 -> _recruitListChinese.postValue(recruitList)
+                                3 -> _recruitListJapanese.postValue(recruitList)
+                                4 -> _recruitListWestern.postValue(recruitList)
+                                5 -> _recruitListFastfood.postValue(recruitList)
+                                6 -> _recruitListBunsik.postValue(recruitList)
+                                7 -> _recruitListDessert.postValue(recruitList)
+                                8 -> _recruitListChicken.postValue(recruitList)
+                                9 -> _recruitListPizza.postValue(recruitList)
+                                10 -> _recruitListAsia.postValue(recruitList)
+                                11 -> _recruitListPackedmeal.postValue(recruitList)
+                                else -> _recruitListAll.postValue(recruitList)
+                            }
+
+                        }
+                        _isRecruitListLoad.postValue(true)
                     }
                     else -> {
-                        _recruitListAll.postValue(response.body())
+                        _isRecruitListLoad.postValue(false)
+
                     }
                 }
-                _isRecruitListLoad.postValue(true)
-            } else {
-                _isRecruitListLoad.postValue(false)
             }
         }
 
     fun requestHomeRecruitRecentList(page: Int = 0, size: Int = 4, sort: String) =
         viewModelScope.launch {
-            val response = recruitMainListUseCase.invoke(page = page, size = size, sort = sort)
-            if (response.isSuccessful) {
-                _recruitHomeRecentList.postValue(response.body())
-            } else {
-            }
+            recruitMainListUseCase.invoke(page = page, size = size, sort = sort)
+                .let { ApiResponse ->
+                    when (ApiResponse.status) {
+                        ApiResult.Status.SUCCESS -> {
+                            _recruitHomeRecentList.postValue(ApiResponse.data)
+                        }
+                    }
+                }
         }
 
     fun requestHomeRecruitRecommendList(page: Int = 0, size: Int = 4, sort: String) =
         viewModelScope.launch {
-            val response = recruitMainListUseCase.invoke(page = page, size = size, sort = sort)
-            if (response.isSuccessful) {
-                _recruitHomeRecommendList.postValue(response.body())
-            } else {
-            }
+            recruitMainListUseCase.invoke(page = page, size = size, sort = sort)
+                .let { ApiResponse ->
+                    when (ApiResponse.status) {
+                        ApiResult.Status.SUCCESS -> {
+                            _recruitHomeRecommendList.postValue(ApiResponse.data)
+                        }
+                    }
+                }
         }
 
     fun requestHomeRecruitTagList(page: Int = 0, size: Int = 4, sort: String) =
         viewModelScope.launch {
-            val response = recruitTagListUseCase.invoke(page = page, size = size, sort = sort)
-            if (response.isSuccessful) {
-                _recruitHomeTagList.postValue(response.body())
-                _isRecruitTagListLoad.postValue(true)
-            } else {
-                _isRecruitTagListLoad.postValue(false)
+            recruitTagListUseCase.invoke(page = page, size = size, sort = sort).let { ApiResponse ->
+                when (ApiResponse.status) {
+                    ApiResult.Status.SUCCESS -> {
+                        ApiResponse.data.let { _recruitHomeTagList.postValue(it) }
+                        _isRecruitTagListLoad.postValue(true)
+                    }
+                    else -> {
+                        _isRecruitTagListLoad.postValue(false)
+                    }
+                }
             }
         }
 
     fun requestRecruitPost(postId: Int) = viewModelScope.launch {
-        val response = recruitPostUseCase.invoke(id = postId)
-        if (response.isSuccessful) {
-            _recruitPostDetail.postValue(response.body())
-        } else {
+        recruitPostUseCase.invoke(id = postId).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _recruitPostDetail.postValue(it) }
+                }
+            }
         }
     }
 
     fun requestCancelRecruitPost(postId: Int) = viewModelScope.launch {
-        val response = cancelRecruitPostUseCase.invoke(id = postId)
-        if (response.isSuccessful) {
-            _isCancelRecruitPostSuccess.postValue(Event(true))
-        } else
-            _isCancelRecruitPostSuccess.postValue(Event(false))
+        cancelRecruitPostUseCase.invoke(id = postId).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isCancelRecruitPostSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isCancelRecruitPostSuccess.postValue(Event(false))
+                }
+            }
+        }
     }
 
     fun requestCloseRecruitPost(postId: Int) = viewModelScope.launch {
-        val response = closeRecruitPostUseCase.invoke(id = postId)
-        if (response.isSuccessful) {
-            _isCloseRecruitPostSuccess.postValue(Event(true))
-        } else
-            _isCloseRecruitPostSuccess.postValue(Event(false))
+        closeRecruitPostUseCase.invoke(id = postId).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isCloseRecruitPostSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isCloseRecruitPostSuccess.postValue(Event(false))
+                }
+            }
+        }
     }
 
     fun requestParticipateRecruitPost(menuList: List<MenuDto>, roomId: Int) =
         viewModelScope.launch {
-            val response = participateRecruitPostUseCase.invoke(
+            participateRecruitPostUseCase.invoke(
                 data = CreateOrderRequest(
                     menu = menuList, recruitId = roomId
                 )
-            )
-            if (response.isSuccessful) {
-                _isParticipateRecruitPostSuccess.postValue(Event(true))
-                _recruitPostParticipateInfo.postValue(response.body())
-            } else {
-                _isParticipateRecruitPostSuccess.postValue(Event(false))
+            ).let { ApiResponse ->
+                when (ApiResponse.status) {
+                    ApiResult.Status.SUCCESS -> {
+                        _isParticipateRecruitPostSuccess.postValue(Event(true))
+                        ApiResponse.data.let { _recruitPostParticipateInfo.postValue(it) }
+                    }
+                    else -> {
+                        _isParticipateRecruitPostSuccess.postValue(Event(false))
+                    }
+                }
             }
         }
 
     fun requestCancelParticipateRecruitPost(postId: Int) =
         viewModelScope.launch {
-            val response = cancelParticipateRecruitPostUseCase.invoke(data = DeleteOrderDto(recruitId = postId))
-            if (response.isSuccessful) {
-                _isCancelParticipateRecruitPostSuccess.postValue(Event(true))
-            } else {
-                _isCancelParticipateRecruitPostSuccess.postValue(Event(false))
-            }
+            cancelParticipateRecruitPostUseCase.invoke(data = DeleteOrderDto(recruitId = postId))
+                .let { ApiResponse ->
+                    when (ApiResponse.status) {
+                        ApiResult.Status.SUCCESS -> {
+                            _isCancelParticipateRecruitPostSuccess.postValue(Event(true))
+                        }
+                        else -> {
+                            _isCancelParticipateRecruitPostSuccess.postValue(Event(false))
+                        }
+                    }
+                }
         }
 }

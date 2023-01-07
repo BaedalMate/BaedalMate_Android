@@ -18,6 +18,7 @@ import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.data.datasource.remote.write.PlaceMeta
 import com.mate.baedalmate.data.datasource.remote.write.RegionInfo
 import com.mate.baedalmate.data.datasource.remote.write.ResultSearchKeyword
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -94,29 +95,33 @@ class WriteViewModel @Inject constructor(
         y: String = "$seoulTechEntryPointY"
     ) =
         viewModelScope.launch {
-            val response = kakaoLocalUseCase.invoke(
+            kakaoLocalUseCase.invoke(
                 url = "https://dapi.kakao.com/v2/local/search/keyword.json",
                 key = "KakaoAK ${BuildConfig.KAKAO_REST_API_KEY}",
                 query = keyword,
                 x = x,
                 y = y
-            )
-            if (response.isSuccessful) {
-                _searchResultList.postValue(response.body()!!)
+            ).let { ApiResponse ->
+                when (ApiResponse.status) {
+                    ApiResult.Status.SUCCESS -> {
+                        ApiResponse.data.let { _searchResultList.postValue(it) }
+                    }
+                }
             }
         }
 
     fun requestUploadPost() = viewModelScope.launch {
         _writeSuccess.postValue(Event(false))
 
-        val response = uploadPostUseCase.invoke(
+        uploadPostUseCase.invoke(
             body = CreateRecruitRequest(
                 categoryId = categoryId,
                 coupon = couponAmount,
                 criteria = deadLineCriterion,
                 deadlineDate =
-                    if(deadLineTime == null) LocalDateTime.now().plusHours(3L).format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")) // null 발생으로 인해 오류가 생기는 경우에 대비해 3시간 후로도 설정될 수 있도록 구현
-                    else deadLineTime?.value!!,
+                if (deadLineTime == null) LocalDateTime.now().plusHours(3L)
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")) // null 발생으로 인해 오류가 생기는 경우에 대비해 3시간 후로도 설정될 수 있도록 구현
+                else deadLineTime?.value!!,
                 description = postDetail,
                 dormitory = deliveryDormitory,
                 freeShipping = isDeliveryFeeFree,
@@ -129,13 +134,18 @@ class WriteViewModel @Inject constructor(
                 tags = postTagList,
                 title = postTitle
             )
-        )
-
-        if (response.isSuccessful) {
-            _writePostId.postValue(response.body()?.let { Event(it.id) })
-            _writeSuccess.postValue(Event(true))
-        } else {
-            _writeSuccess.postValue(Event(false))
+        ).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { ResponseData ->
+                        _writePostId.postValue(ResponseData?.let { Event(it.id) })
+                    }
+                    _writeSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _writeSuccess.postValue(Event(false))
+                }
+            }
         }
     }
 }

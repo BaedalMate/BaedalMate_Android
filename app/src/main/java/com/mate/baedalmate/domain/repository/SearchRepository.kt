@@ -1,7 +1,7 @@
 package com.mate.baedalmate.domain.repository
 
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.RecruitList
-import retrofit2.Response
 
 interface SearchRepository {
     suspend fun requestGetSearchTagKeyword(
@@ -9,5 +9,5 @@ interface SearchRepository {
         page: Int,
         size: Int,
         sort: String
-    ): Response<RecruitList>
+    ): ApiResult<RecruitList>
 }

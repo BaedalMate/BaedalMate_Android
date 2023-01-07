@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.review.CreateReviewDto
 import com.mate.baedalmate.domain.model.ApiErrorStatus
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.ParticipantsDto
 import com.mate.baedalmate.domain.model.UserDto
 import com.mate.baedalmate.domain.usecase.review.RequestGetTargetReviewUserListUseCase
@@ -27,20 +28,30 @@ class ReviewViewModel @Inject constructor(
     val isReviewSubmitSuccess: LiveData<Event<ApiErrorStatus>> get() = _isReviewSubmitSuccess
 
     fun requestGetTargetReviewUserList(recruitId: Int) = viewModelScope.launch {
-        val response = getTargetReviewUserListUseCase.invoke(recruitId = recruitId)
-        if (response.isSuccessful) {
-            _reviewTargetUserList.postValue(response.body())
+        getTargetReviewUserListUseCase.invoke(recruitId = recruitId).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _reviewTargetUserList.postValue(ApiResponse.data)
+                }
+            }
         }
     }
 
-    fun requestCreateReviewUsers(participatedUsers: List<UserDto>, recruitId: Int) = viewModelScope.launch {
-        val response = reviewUsersUseCase.invoke(body = CreateReviewDto(participatedUsers, recruitId))
-        if (response.isSuccessful) {
-            _isReviewSubmitSuccess.postValue(Event(ApiErrorStatus.RESPONSE_SUCCESS))
-        } else if (response.code() == 400) {
-            _isReviewSubmitSuccess.postValue(Event(ApiErrorStatus.RESPONSE_FAIL_DUPLICATE))
-        } else {
-            _isReviewSubmitSuccess.postValue(Event(ApiErrorStatus.RESPONSE_FAIL_UNKNOWN))
+    fun requestCreateReviewUsers(participatedUsers: List<UserDto>, recruitId: Int) =
+        viewModelScope.launch {
+            reviewUsersUseCase.invoke(body = CreateReviewDto(participatedUsers, recruitId))
+                .let { ApiResponse ->
+                    when (ApiResponse.status) {
+                        ApiResult.Status.SUCCESS -> {
+                            _isReviewSubmitSuccess.postValue(Event(ApiErrorStatus.RESPONSE_SUCCESS))
+                        }
+                        ApiResult.Status.API_ERROR -> {
+                            when (ApiResponse.code) {
+                                "400" -> _isReviewSubmitSuccess.postValue(Event(ApiErrorStatus.RESPONSE_FAIL_DUPLICATE))
+                                else -> _isReviewSubmitSuccess.postValue(Event(ApiErrorStatus.RESPONSE_FAIL_UNKNOWN))
+                            }
+                        }
+                    }
+                }
         }
-    }
 }

@@ -8,6 +8,7 @@ import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.repository.TokenPreferencesRepository
@@ -36,6 +37,9 @@ class MemberViewModel @Inject constructor(
     private val _userInfo = MutableLiveData<UserInfoResponse>()
     val userInfo: LiveData<UserInfoResponse> get() = _userInfo
 
+    private val _getUserInfoSuccess = MutableLiveData<Boolean>()
+    val getUserInfoSuccess get() = _getUserInfoSuccess
+
     private val _isDormitoryChangeSuccess = MutableLiveData<Event<Boolean>>()
     val isDormitoryChangeSuccess: LiveData<Event<Boolean>> get() = _isDormitoryChangeSuccess
 
@@ -49,22 +53,27 @@ class MemberViewModel @Inject constructor(
         viewModelScope.launch { tokenPreferencesRepository.setKakaoAccessToken(kakaoAccessToken) }
 
     fun requestLoginKakao(kakaoAccessToken: String) = viewModelScope.launch {
-        val response =
-            requestLoginKakaoUseCase(MemberOAuthRequest(kakaoAccessToken = kakaoAccessToken))
-        if (response.isSuccessful) {
-            tokenPreferencesRepository.setOAuthToken(
-                MemberOAuthResponse(
-                    response.body()!!.accessToken,
-                    response.body()!!.refreshToken
-                )
-            )
-            _loginSuccess.postValue(true)
-        } else {
-            _loginSuccess.postValue(false)
+        requestLoginKakaoUseCase(MemberOAuthRequest(kakaoAccessToken = kakaoAccessToken)).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data?.let {
+                        tokenPreferencesRepository.setOAuthToken(
+                            MemberOAuthResponse(
+                                it.accessToken,
+                                it.refreshToken
+                            )
+                        )
+                    }
+                    _loginSuccess.postValue(true)
+                }
+                else -> {
+                    _loginSuccess.postValue(false)
+                }
+            }
         }
     }
 
-    fun getAccessToken() : String {
+    fun getAccessToken(): String {
         var accessToken = ""
         viewModelScope.launch {
             accessToken = tokenPreferencesRepository.getOAuthToken().accessToken
@@ -73,39 +82,55 @@ class MemberViewModel @Inject constructor(
     }
 
     fun requestUserInfo() = viewModelScope.launch {
-        val response = requestGetUserInfoUseCase()
-        if (response.isSuccessful) {
-            _userInfo.postValue(response.body())
-        } else {
-
+        requestGetUserInfoUseCase()?.let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _getUserInfoSuccess.postValue(true)
+                    ApiResponse.data?.let { _userInfo.postValue(it) }
+                }
+                ApiResult.Status.API_ERROR -> {
+                    _getUserInfoSuccess.postValue(false)
+                }
+                else -> {}
+            }
         }
     }
 
     fun requestChangeUserDormitory(newDormitory: Dormitory) = viewModelScope.launch {
-        val response = requestPutUserDormitoryUseCase(newDormitory = newDormitory)
-        if (response.isSuccessful) {
-            _isDormitoryChangeSuccess.postValue(Event(true))
-        } else {
-            _isDormitoryChangeSuccess.postValue(Event(false))
+        requestPutUserDormitoryUseCase(newDormitory = newDormitory).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isDormitoryChangeSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isDormitoryChangeSuccess.postValue(Event(false))
+                }
+            }
         }
     }
 
     fun requestPutChangeMyProfile(newNickname: String) = viewModelScope.launch {
-        requestPutChangeMyProfileUseCase(updateUserInfo = UpdateUserDto(nickname = newNickname)).let {
-            if (it.isSuccessful) {
-                _isMyProfileChangeSuccess.postValue(Event(true))
-            } else {
-                _isMyProfileChangeSuccess.postValue(Event(false))
+        requestPutChangeMyProfileUseCase(updateUserInfo = UpdateUserDto(nickname = newNickname)).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isMyProfileChangeSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isMyProfileChangeSuccess.postValue(Event(false))
+                }
             }
         }
     }
 
     fun requestPutChangeMyProfilePhoto(newImageFile: File) = viewModelScope.launch {
-        requestPutChangeMyProfilePhotoUseCase(newImageFile = newImageFile)?.let {
-            if (it.isSuccessful) {
-                _isMyProfilePhotoChangeSuccess.postValue(Event(true))
-            } else {
-                _isMyProfilePhotoChangeSuccess.postValue(Event(false))
+        requestPutChangeMyProfilePhotoUseCase(newImageFile = newImageFile).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isMyProfilePhotoChangeSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isMyProfilePhotoChangeSuccess.postValue(Event(false))
+                }
             }
         }
     }
