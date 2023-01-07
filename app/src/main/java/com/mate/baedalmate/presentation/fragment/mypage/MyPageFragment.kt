@@ -1,6 +1,7 @@
 package com.mate.baedalmate.presentation.fragment.mypage
 
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
+import com.mate.baedalmate.BuildConfig
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
@@ -114,9 +116,7 @@ class MyPageFragment : Fragment() {
         binding.layoutMyPageMenusInfoNotice.setOnDebounceClickListener {
             // TODO 공지사항 navigation
         }
-        binding.layoutMyPageMenusInfoInquiry.setOnDebounceClickListener {
-            // TODO 문의하기 클릭
-        }
+        setInquiryClickListener()
     }
 
     private fun setAccountActionClickListener() {
@@ -208,6 +208,28 @@ class MyPageFragment : Fragment() {
             binding.btnToggleMyPageMenusSettingNotification.isClickable = false
             startActivity(intent)
             false
+        }
+    }
+
+    private fun setInquiryClickListener() {
+        binding.layoutMyPageMenusInfoInquiry.setOnDebounceClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:") // only email apps should handle this
+                putExtra(Intent.EXTRA_EMAIL, arrayOf("baedalmate.official@gmail.com"))
+                putExtra(Intent.EXTRA_SUBJECT, "[문의사항] 제목을 작성해주세요!")
+                putExtra(
+                    Intent.EXTRA_TEXT, String.format(
+                        "[기본 사항] \nApp Version : ${BuildConfig.VERSION_NAME}\nDevice : ${Build.MODEL}\nAndroid(SDK) : ${Build.VERSION.SDK_INT}(${Build.VERSION.RELEASE})\n\n문의 내용 : 내용을 작성해주세요!"
+                    )
+                );
+            }
+            val chooser = Intent.createChooser(intent, "Select an email app to open")
+
+            try {
+                startActivity(chooser)
+            } catch (e: ActivityNotFoundException) {
+                e.stackTrace
+            }
         }
     }
 }
