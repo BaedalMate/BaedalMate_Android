@@ -286,7 +286,9 @@
 
     <!-- My Profile -->
     <string name="my_profile_change">프로필 수정</string>
-    <string name="my_profile_change_nickname_hint">닉네임을 작성해 주세요</string>
+    <string name="my_profile_change_nickname_hint">5자 이내로 닉네임을 작성해 주세요</string>
+    <string name="my_profile_change_success_toast_message">프로필이 변경되었습니다</string>
+    <string name="my_profile_change_photo_success_toast_message">프로필 이미지가 변경되었습니다</string>
 
     <!-- Participant Profile -->
 </resources>
