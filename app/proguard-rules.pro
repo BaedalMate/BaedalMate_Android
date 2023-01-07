@@ -19,3 +19,21 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# KAKAO
+-keep class com.kakao.sdk.**.model.* { *; }
+-keep class * extends com.google.gson.TypeAdapter
+
+# ==================================
+# Sentry
+# ==================================
+-keepattributes SourceFile, LineNumberTable, Annotation
+-dontwarn org.slf4j.**
+-dontwarn javax.**
+-keep class io.sentry.**.* { *; }
+
+# GooglePlay Services
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-keep class com.google.common.** { *; }
+-dontwarn com.google.common.**
