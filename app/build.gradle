@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-parcelize'
+    id 'io.sentry.android.gradle'
 }
 
 Properties properties = new Properties()
@@ -52,6 +53,7 @@ dependencies {
     def nav_version = "2.4.2"
     def kakao_version = "2.9.0"
     def lifecycle_version = "2.5.1"
+    def sentry_version = "6.11.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -131,4 +133,8 @@ dependencies {
     // GPS
     implementation('com.google.android.gms:play-services-location:20.0.0')
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+
+    // Sentry
+    implementation "io.sentry:sentry-android:$sentry_version"
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
 }
