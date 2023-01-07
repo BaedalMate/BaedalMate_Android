@@ -28,6 +28,8 @@ import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestPutChangeMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfilePhotoUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelRecruitPostUseCase
@@ -69,6 +71,14 @@ object ServiceModule {
     @Singleton
     @Provides
     fun providePutUserDormitoryUseCase(memberRepository: MemberRepository): RequestPutUserDormitoryUseCase = RequestPutUserDormitoryUseCase(memberRepository)
+
+    @Singleton
+    @Provides
+    fun providePutChangeMyProfileUseCase(memberRepository: MemberRepository): RequestPutChangeMyProfileUseCase = RequestPutChangeMyProfileUseCase(memberRepository)
+
+    @Singleton
+    @Provides
+    fun providePutChangeMyProfilePhotoUseCase(memberRepository: MemberRepository): RequestPutChangeMyProfilePhotoUseCase = RequestPutChangeMyProfilePhotoUseCase(memberRepository)
 
     @Singleton
     @Provides

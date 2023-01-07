@@ -269,6 +269,33 @@
                         android:background="@color/gray_line_EBEBEB" />
 
                     <LinearLayout
+                        android:id="@+id/layout_my_page_menus_setting_my_profile_change"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:paddingVertical="10dp">
+
+                        <TextView
+                            style="@style/style_body2_kor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/my_profile_change"
+                            android:textColor="@color/gray_dark_666666" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_arrow_right" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_line_EBEBEB" />
+
+                    <LinearLayout
                         android:id="@+id/layout_my_page_menus_setting_location_change"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

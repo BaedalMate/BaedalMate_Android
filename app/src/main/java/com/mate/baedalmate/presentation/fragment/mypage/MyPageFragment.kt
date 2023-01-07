@@ -97,6 +97,10 @@ class MyPageFragment : Fragment() {
 
     private fun setMenusSettingClickListener() {
         // TODO 알림 설정
+        binding.layoutMyPageMenusSettingMyProfileChange.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_myProfileChangeFragment)
+        }
+
         binding.layoutMyPageMenusSettingLocationChange.setOnDebounceClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_locationCertificationFragment)
         }

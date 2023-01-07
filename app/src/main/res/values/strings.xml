@@ -32,6 +32,8 @@
     <string name="setting_block">차단 관리</string>
     <string name="logout">로그아웃</string>
     <string name="resign">회원탈퇴</string>
+    <string name="nickname">닉네임</string>
+    <string name="save">저장하기</string>
     <string name="dialog_loading_wait_description">잠시만 기다려 주세요!</string>
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
@@ -281,6 +283,12 @@
     <!-- Resign -->
     <string name="resign_dialog_title">탈퇴 하시겠습니까?</string>
     <string name="resign_dialog_description">회원 탈퇴시, 현재까지 모집글에 참여한 기록이 삭제됩니다.</string>
+
+    <!-- My Profile -->
+    <string name="my_profile_change">프로필 수정</string>
+    <string name="my_profile_change_nickname_hint">5자 이내로 닉네임을 작성해 주세요</string>
+    <string name="my_profile_change_success_toast_message">프로필이 변경되었습니다</string>
+    <string name="my_profile_change_photo_success_toast_message">프로필 이미지가 변경되었습니다</string>
 
     <!-- Participant Profile -->
 </resources>

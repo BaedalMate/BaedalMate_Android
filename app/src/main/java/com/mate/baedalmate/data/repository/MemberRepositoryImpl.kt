@@ -5,7 +5,9 @@ import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.domain.model.Dormitory
+import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.repository.MemberRepository
+import okhttp3.MultipartBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -20,4 +22,10 @@ class MemberRepositoryImpl @Inject constructor(private val memberApiService: Mem
 
     override suspend fun requestPutUserDormitory(newDormitory: Dormitory): Response<Void> =
         memberApiService.requestPutUserDormitory(dormitory = newDormitory)
+
+    override suspend fun requestPutChangeMyProfile(updateUserInfo: UpdateUserDto): Response<UserInfoResponse> =
+        memberApiService.requestPutChangeMyProfile(updateUserInfo = updateUserInfo)
+
+    override suspend fun requestPutChangeMyProfilePhoto(uploadfile: MultipartBody.Part?): Response<Void> =
+        memberApiService.requestPutChangeMyProfilePhoto(uploadfile = uploadfile)
 }
