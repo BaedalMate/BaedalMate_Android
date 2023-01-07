@@ -5,9 +5,9 @@ import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
 import com.mate.baedalmate.data.datasource.remote.recruit.DeleteOrderDto
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.RecruitDetail
 import com.mate.baedalmate.domain.model.RecruitList
-import retrofit2.Response
 
 interface RecruitRepository {
     suspend fun requestRecruitList(
@@ -15,18 +15,18 @@ interface RecruitRepository {
         page: Int,
         size: Int,
         sort: String
-    ): Response<RecruitList>
+    ): ApiResult<RecruitList>
 
     suspend fun requestRecruitMainList(
         page: Int,
         size: Int,
         sort: String
-    ): Response<MainRecruitList>
+    ): ApiResult<MainRecruitList>
 
-    suspend fun requestRecruitTagList(page: Int, size: Int, sort: String): Response<TagRecruitList>
-    suspend fun requestRecruitPost(id: Int): Response<RecruitDetail>
-    suspend fun requestCancelRecruitPost(id: Int): Response<Void>
-    suspend fun requestCloseRecruitPost(id: Int): Response<Void>
-    suspend fun requestParticipateRecruitPost(data: CreateOrderRequest): Response<CreateOrderResponse>
-    suspend fun requestCancelParticipateRecruitPost(data: DeleteOrderDto): Response<Void>
+    suspend fun requestRecruitTagList(page: Int, size: Int, sort: String): ApiResult<TagRecruitList>
+    suspend fun requestRecruitPost(id: Int): ApiResult<RecruitDetail>
+    suspend fun requestCancelRecruitPost(id: Int): ApiResult<Void>
+    suspend fun requestCloseRecruitPost(id: Int): ApiResult<Void>
+    suspend fun requestParticipateRecruitPost(data: CreateOrderRequest): ApiResult<CreateOrderResponse>
+    suspend fun requestCancelParticipateRecruitPost(data: DeleteOrderDto): ApiResult<Void>
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.RecruitList
 import com.mate.baedalmate.domain.usecase.search.RequestGetSearchTagKeywordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,14 +24,17 @@ class SearchViewModel @Inject constructor(
         size: Int = 100,
         sort: String
     ) = viewModelScope.launch {
-        val response = requestGetSearchTagKeywordUseCase(
+        requestGetSearchTagKeywordUseCase(
             keyword = keyword,
             page = page,
             size = size,
             sort = sort
-        )
-        if (response.isSuccessful) {
-            _searchKeywordResults.postValue(response.body())
+        ).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _searchKeywordResults.postValue(it) }
+                }
+            }
         }
     }
 
