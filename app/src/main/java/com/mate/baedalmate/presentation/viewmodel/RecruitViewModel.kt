@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.common.Event
+import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderRequest
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
 import com.mate.baedalmate.data.datasource.remote.recruit.DeleteOrderDto
@@ -103,8 +104,10 @@ class RecruitViewModel @Inject constructor(
             0,
             emptyList(),
             "",
-            "",
-            ""
+            UserInfoResponse("", "", "", 5f, 0L),
+            0,
+            0,
+            false
         )
     )
     val recruitPostDetail: LiveData<RecruitDetail> get() = _recruitPostDetail
@@ -114,7 +117,7 @@ class RecruitViewModel @Inject constructor(
             listOf(
                 MainRecruitDto(
                     "", 0, "", "", 0,
-                    "", 0, 0, "", 0, 0f, ""
+                    "", 0, 0, "", 0, 0f, "", true
                 )
             )
         )
@@ -126,7 +129,7 @@ class RecruitViewModel @Inject constructor(
             listOf(
                 MainRecruitDto(
                     "", 0, "", "", 0,
-                    "", 0, 0, "", 0, 0f, ""
+                    "", 0, 0, "", 0, 0f, "", true
                 )
             )
         )

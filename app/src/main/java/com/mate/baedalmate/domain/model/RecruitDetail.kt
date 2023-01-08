@@ -1,6 +1,7 @@
 package com.mate.baedalmate.domain.model
 
 import com.google.gson.annotations.SerializedName
+import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 
 data class RecruitDetail(
     @SerializedName("active")
@@ -39,8 +40,12 @@ data class RecruitDetail(
     val shippingFeeDetail: List<ShippingFeeDto>,
     @SerializedName("title")
     val title: String,
-    @SerializedName("userDormitory")
-    val userDormitory: String,
-    @SerializedName("username")
-    val username: String
+    @SerializedName("userInfo")
+    val userInfo: UserInfoResponse,
+    @SerializedName("currentPrice")
+    val currentPrice: Int,
+    @SerializedName("minPrice")
+    val minPrice: Int,
+    @SerializedName("cancel")
+    val cancel: Boolean
 )

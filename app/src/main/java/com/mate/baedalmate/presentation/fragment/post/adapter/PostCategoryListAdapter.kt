@@ -5,12 +5,16 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
+import com.mate.baedalmate.R
+import com.mate.baedalmate.common.TimeChangerUtil.getTimePassed
 import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.databinding.ItemPostCategoryListBinding
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
@@ -27,7 +31,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
                 oldItem: RecruitDto,
                 newItem: RecruitDto,
             ) =
-                oldItem.id == newItem.id
+                oldItem.recruitId == newItem.recruitId
 
             override fun areContentsTheSame(
                 oldItem: RecruitDto,
@@ -82,8 +86,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
 
             if (item.createDate.isNotEmpty()) {
                 val createTime = LocalDateTime.parse(createdTimeString, formatter)
-                val duration = Duration.between(createTime, currentTime).toMinutes()
-                durationMinuteCreated = duration.toString()
+                durationMinuteCreated = getTimePassed(binding.layoutPostCategoryList.context, createTime, currentTime)
             }
             if (item.deadlineDate.isNotEmpty()) {
                 val deadLineTime = LocalDateTime.parse(deadLineTimeString, formatter)
@@ -94,7 +97,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
             val pos = adapterPosition
             if (pos != RecyclerView.NO_POSITION) {
                 binding.layoutPostCategoryList.setOnClickListener {
-                    listener?.postClick(item.id, pos)
+                    listener?.postClick(item.recruitId, pos)
                 }
             }
 
@@ -106,7 +109,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
             binding.tvPostCategoryListTitle.text = item.title
             binding.tvPostCategoryListLocationStore.text = item.place
             binding.tvPostCategoryListLocationUser.text = item.dormitory
-            binding.tvPostCategoryListTimePassed.text = "${durationMinuteCreated}분 전"
+            binding.tvPostCategoryListTimePassed.text = durationMinuteCreated
             when (item.criteria) {
                 RecruitFinishCriteria.NUMBER -> {
                     val goalText = "${item.minPeople}인 모집 "
@@ -150,6 +153,89 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                     )
                     binding.tvPostCategoryListContentsStateGoal.text = span
+                }
+            }
+
+            setParticipateCloseLayout(item.active, binding)
+        }
+
+        private fun setParticipateCloseLayout(
+            isActive: Boolean,
+            itemLayout: ItemPostCategoryListBinding
+        ) {
+            with(itemLayout) {
+                if (isActive) {
+                    layoutPostCategoryList.background = ContextCompat.getDrawable(
+                        layoutPostCategoryList.context,
+                        R.drawable.selector_post_category_list
+                    )
+                    imgPostCategoryList.imageTintList = null
+                    tvPostCategoryListParticipateClose.visibility = View.GONE
+                    tvPostCategoryListTitle.setTextColor(
+                        ContextCompat.getColor(
+                            tvPostCategoryListTitle.context,
+                            R.color.black_000000
+                        )
+                    )
+                    imgPostCategoryListLocationStore.imageTintList = null
+                    tvPostCategoryListLocationStore.setTextColor(
+                        ContextCompat.getColor(
+                            tvPostCategoryListTitle.context,
+                            R.color.black_000000
+                        )
+                    )
+                    imgPostCategoryListLocationUser.imageTintList = null
+                    tvPostCategoryListLocationUser.setTextColor(
+                        ContextCompat.getColor(
+                            tvPostCategoryListLocationUser.context,
+                            R.color.black_000000
+                        )
+                    )
+                    tvPostCategoryListContentsStateGoalTitle.backgroundTintList = null
+                    tvPostCategoryListContentsStateGoal.visibility = View.VISIBLE
+                } else {
+                    layoutPostCategoryList.background = ContextCompat.getDrawable(
+                        layoutPostCategoryList.context,
+                        R.color.gray_main_C4C4C4
+                    )
+                    imgPostCategoryList.imageTintList = ContextCompat.getColorStateList(
+                        imgPostCategoryList.context,
+                        R.color.overray_black_B3212123
+                    )
+                    tvPostCategoryListParticipateClose.visibility = View.VISIBLE
+                    tvPostCategoryListTitle.setTextColor(
+                        ContextCompat.getColor(
+                            tvPostCategoryListTitle.context,
+                            R.color.gray_dark_666666
+                        )
+                    )
+                    imgPostCategoryListLocationStore.imageTintList =
+                        ContextCompat.getColorStateList(
+                            imgPostCategoryListLocationStore.context,
+                            R.color.gray_dark_666666
+                        )
+                    tvPostCategoryListLocationStore.setTextColor(
+                        ContextCompat.getColor(
+                            tvPostCategoryListTitle.context,
+                            R.color.gray_dark_666666
+                        )
+                    )
+                    imgPostCategoryListLocationUser.imageTintList = ContextCompat.getColorStateList(
+                        imgPostCategoryListLocationUser.context,
+                        R.color.gray_dark_666666
+                    )
+                    tvPostCategoryListLocationUser.setTextColor(
+                        ContextCompat.getColor(
+                            tvPostCategoryListLocationUser.context,
+                            R.color.gray_dark_666666
+                        )
+                    )
+                    tvPostCategoryListContentsStateGoalTitle.backgroundTintList =
+                        ContextCompat.getColorStateList(
+                            tvPostCategoryListContentsStateGoalTitle.context,
+                            R.color.gray_line_EBEBEB
+                        )
+                    tvPostCategoryListContentsStateGoal.visibility = View.GONE
                 }
             }
         }

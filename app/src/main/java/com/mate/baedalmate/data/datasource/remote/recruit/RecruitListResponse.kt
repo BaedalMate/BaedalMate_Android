@@ -29,8 +29,8 @@ data class MainRecruitDto (
     val deadlineDate: String,
     @SerializedName("dormitory")
     val dormitory: String,
-    @SerializedName("id")
-    val id: Int,
+    @SerializedName("recruitId")
+    val recruitId: Int,
     @SerializedName("image")
     val image: String,
     @SerializedName("minPeople")
@@ -45,6 +45,8 @@ data class MainRecruitDto (
     val userScore: Float,
     @SerializedName("username")
     val username: String,
+    @SerializedName("active")
+    val active: Boolean
 )
 
 data class TagRecruitDto (
@@ -54,8 +56,8 @@ data class TagRecruitDto (
     val deadlineDate: String,
     @SerializedName("dormitory")
     val dormitory: String,
-    @SerializedName("id")
-    val id: Int,
+    @SerializedName("recruitId")
+    val recruitId: Int,
     @SerializedName("image")
     val image: String,
     @SerializedName("minPrice")
@@ -70,6 +72,8 @@ data class TagRecruitDto (
     val userScore: Float,
     @SerializedName("username")
     val username: String,
+    @SerializedName("active")
+    val active: Boolean,
 )
 
 data class CreateOrderResponse (

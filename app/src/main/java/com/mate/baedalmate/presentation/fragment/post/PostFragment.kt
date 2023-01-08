@@ -256,8 +256,8 @@ class PostFragment : Fragment() {
                 .into(imgPostFrontUser)
             displayUserScore(recruitDetail.score)
 
-            tvPostFrontUserName.text = recruitDetail.username
-            tvPostFrontUserDormitory.text = recruitDetail.userDormitory
+            tvPostFrontUserName.text = recruitDetail.userInfo.nickname
+            tvPostFrontUserDormitory.text = recruitDetail.userInfo.userDormitory
         }
     }
 
@@ -415,8 +415,8 @@ class PostFragment : Fragment() {
                 findNavController().navigate(
                     PostFragmentDirections.actionPostFragmentToReportPostFragment(
                         postId = args.postId,
-                        postWriterName = recruitDetail.username,
-//                    postWriterUserId = recruitDetail.id // TODO API 수정시 수정
+                        postWriterName = recruitDetail.userInfo.nickname,
+                        postWriterUserId = recruitDetail.userInfo.userId.toInt()
                     )
                 )
             }

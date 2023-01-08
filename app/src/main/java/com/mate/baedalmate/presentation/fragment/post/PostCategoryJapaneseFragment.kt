@@ -57,7 +57,7 @@ class PostCategoryJapaneseFragment : Fragment() {
         recruitViewModel.requestCategoryRecruitList(
             categoryId = 3,
             page = 0,
-            size = 25,
+            size = 10000,
             sort = sort
         )
     }

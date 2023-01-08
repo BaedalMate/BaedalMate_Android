@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 memberViewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
                     userName = userInfo.nickname
-                    userDormitory = userInfo.dormitory
+                    userDormitory = userInfo.userDormitory
 
                     val span = SpannableString(userName)
                     setRoundTextView(span, "rounded", 0, span.length)
@@ -128,7 +128,7 @@ class HomeFragment : Fragment() {
             submitTagList.add(
                 TagRecruitDto(
                     "", "", "", 0, "", 0, "", 0, listOf(TagDto("")),
-                    0f, ""
+                    0f, "", true
                 )
             )
             homeTopPostAdapter.submitList(submitTagList)

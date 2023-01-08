@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+ㅂ
     <color name="black_000000">#FF000000</color>
     <color name="white_FFFFFF">#FFFFFFFF</color>
     <color name="main_FB5F1C">#FFFB5F1C</color>
@@ -20,4 +20,5 @@
     <color name="line_orange_FFA077">#FFFFA077</color>
     <color name="fill_orange_FFF3F0">#FFFFF3F0</color>
     <color name="background_F7F8FA">#FFF7F8FA</color>
+    <color name="overray_black_B3212123">#B3212123</color>
 </resources>

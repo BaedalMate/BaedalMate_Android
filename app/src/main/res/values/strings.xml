@@ -35,6 +35,15 @@
     <string name="nickname">닉네임</string>
     <string name="save">저장하기</string>
     <string name="dialog_loading_wait_description">잠시만 기다려 주세요!</string>
+    <string name="participate_close">모집 완료</string>
+    <!-- Time Unit -->
+    <string name="time_unit_years">년 전</string>
+    <string name="time_unit_months">달 전</string>
+    <string name="time_unit_days">일 전</string>
+    <string name="time_unit_hours">시간 전</string>
+    <string name="time_unit_minutes">분 전</string>
+    <string name="time_unit_seconds">초 전</string>
+
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
 

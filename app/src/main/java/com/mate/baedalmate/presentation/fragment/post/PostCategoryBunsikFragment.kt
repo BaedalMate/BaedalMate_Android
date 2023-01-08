@@ -56,7 +56,7 @@ class PostCategoryBunsikFragment : Fragment() {
         recruitViewModel.requestCategoryRecruitList(
             categoryId = 6,
             page = 0,
-            size = 25,
+            size = 10000,
             sort = sort
         )
     }
