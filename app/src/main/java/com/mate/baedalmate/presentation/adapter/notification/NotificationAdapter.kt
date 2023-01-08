@@ -17,7 +17,7 @@ class NotificationAdapter (private val requestManager: RequestManager) :
                 oldItem: RecruitDto,
                 newItem: RecruitDto,
             ) =
-                oldItem.id == newItem.id
+                oldItem.recruitId == newItem.recruitId
 
             override fun areContentsTheSame(
                 oldItem: RecruitDto,
@@ -66,7 +66,7 @@ class NotificationAdapter (private val requestManager: RequestManager) :
             val pos = adapterPosition
             if (pos != RecyclerView.NO_POSITION) {
                 binding.layoutNotificationItem.setOnClickListener {
-                    listener?.notificationClick(item.id, pos)
+                    listener?.notificationClick(item.recruitId, pos)
                 }
             }
 

@@ -200,7 +200,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
                     )
                     imgPostCategoryList.imageTintList = ContextCompat.getColorStateList(
                         imgPostCategoryList.context,
-                        R.color.overray_black_B3212123
+                        R.color.overlay_black_B3212123
                     )
                     tvPostCategoryListParticipateClose.visibility = View.VISIBLE
                     tvPostCategoryListTitle.setTextColor(
