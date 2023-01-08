@@ -281,6 +281,10 @@
     <string name="report_user_navigate_user_description">사용자 신고하러 가기</string>
 
     <string name="report_reason_etc_empty_toast_message">신고 내용을 입력해주세요.</string>
+    <string name="report_submit_fail_select_reason_toast_message">신고 사항을 선택해주세요.</string>
+    <string name="report_submit_fail_network_toast_message">신고가 정상적으로 이루어지지 않았습니다. 다시 시도해주세요</string>
+    <string name="report_submit_fail_duplicated_recruit_toast_message">이미 신고하신 게시글입니다</string>
+    <string name="report_submit_fail_duplicated_user_toast_message">이미 신고하신 사용자입니다</string>
     <string name="report_dialog_title">신고가 완료되었습니다.</string>
     <string name="report_dialog_description">신고 심사 결과에 따라 처리됩니다.</string>
 

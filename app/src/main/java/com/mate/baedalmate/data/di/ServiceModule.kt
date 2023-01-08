@@ -3,6 +3,7 @@ package com.mate.baedalmate.data.di
 import com.mate.baedalmate.data.datasource.remote.chat.ChatApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
+import com.mate.baedalmate.data.datasource.remote.report.ReportApiService
 import com.mate.baedalmate.data.datasource.remote.review.ReviewApiService
 import com.mate.baedalmate.data.datasource.remote.search.SearchApiService
 import com.mate.baedalmate.data.datasource.remote.write.KakaoLocalApiService
@@ -11,6 +12,7 @@ import com.mate.baedalmate.data.repository.ChatRepositoryImpl
 import com.mate.baedalmate.data.repository.KakaoLocalRepositoryImpl
 import com.mate.baedalmate.data.repository.MemberRepositoryImpl
 import com.mate.baedalmate.data.repository.RecruitRepositoryImpl
+import com.mate.baedalmate.data.repository.ReportRepositoryImpl
 import com.mate.baedalmate.data.repository.ReviewRepositoryImpl
 import com.mate.baedalmate.data.repository.SearchRepositoryImpl
 import com.mate.baedalmate.data.repository.WriteRepositoryImpl
@@ -18,6 +20,7 @@ import com.mate.baedalmate.domain.repository.ChatRepository
 import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
 import com.mate.baedalmate.domain.repository.RecruitRepository
+import com.mate.baedalmate.domain.repository.ReportRepository
 import com.mate.baedalmate.domain.repository.ReviewRepository
 import com.mate.baedalmate.domain.repository.SearchRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
@@ -41,6 +44,8 @@ import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
+import com.mate.baedalmate.domain.usecase.report.RequestPostReportRecruitUseCase
+import com.mate.baedalmate.domain.usecase.report.RequestPostReportUserUseCase
 import com.mate.baedalmate.domain.usecase.review.RequestGetTargetReviewUserListUseCase
 import com.mate.baedalmate.domain.usecase.review.RequestReviewUsersUseCase
 import com.mate.baedalmate.domain.usecase.search.RequestGetSearchTagKeywordUseCase
@@ -214,4 +219,19 @@ object ServiceModule {
     @Provides
     fun provideRequestGetSearchTagKeywordUseCase(searchRepository: SearchRepository): RequestGetSearchTagKeywordUseCase = RequestGetSearchTagKeywordUseCase(searchRepository)
 
+    @Singleton
+    @Provides
+    fun provideReportApiService(retrofit: Retrofit) = retrofit.create(ReportApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideReportRepository(reportRepositoryImpl: ReportRepositoryImpl): ReportRepository = reportRepositoryImpl
+
+    @Singleton
+    @Provides
+    fun provideRequestPostReportUserUseCase(reportRepository: ReportRepository): RequestPostReportUserUseCase = RequestPostReportUserUseCase(reportRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestPostReportRecruitUseCase(reportRepository: ReportRepository): RequestPostReportRecruitUseCase = RequestPostReportRecruitUseCase(reportRepository)
 }
