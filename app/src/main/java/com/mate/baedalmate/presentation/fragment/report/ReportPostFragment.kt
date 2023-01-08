@@ -10,6 +10,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mate.baedalmate.R
@@ -17,11 +18,13 @@ import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.ReportAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentReportPostBinding
+import com.mate.baedalmate.presentation.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ReportPostFragment : Fragment() {
     private var binding by autoCleared<FragmentReportPostBinding>()
+    private val reportViewModel by activityViewModels<ReportViewModel>()
     private val args by navArgs<ReportPostFragmentArgs>()
     private lateinit var reportSubmitAlertDialog: AlertDialog
 
@@ -48,6 +51,7 @@ class ReportPostFragment : Fragment() {
         setReasonSelectClickListener()
         setReportUserClickListener()
         setReportPostSubmitClickListener()
+        observeReportSubmitSuccess()
     }
 
     override fun onDestroyView() {
@@ -106,12 +110,49 @@ class ReportPostFragment : Fragment() {
             if (binding.radiogroupReportPostReason.checkedRadioButtonId == R.id.radiobutton_report_post_reason_etc &&
                 binding.etReportPostReasonEtc.text.trim().isEmpty()
             ) {
-                Toast.makeText(requireContext(), getString(R.string.report_reason_etc_empty_toast_message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.report_reason_etc_empty_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (binding.radiogroupReportPostReason.checkedRadioButtonId == -1) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.report_submit_fail_select_reason_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
             } else {
-                showSubmitCompleteDialog()
+                reportViewModel.requestPostReportRecruit(
+                    targetRecruitId = args.postId,
+                    reportReason = requireView().findViewById<RadioButton>(binding.radiogroupReportPostReason.checkedRadioButtonId).text.toString(),
+                    reportDetail = binding.etReportPostReasonEtc.text.trim().toString()
+                )
+            }
+        }
+    }
 
-                // args.postId
-                // TODO
+    private fun observeReportSubmitSuccess() {
+        reportViewModel.isSuccessReportRecruit.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true)
+                showSubmitCompleteDialog()
+            else if (isSuccess.getContentIfNotHandled() == false) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.report_submit_fail_network_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigateUp()
+            }
+        }
+
+        reportViewModel.isDuplicatedReportRecruit.observe(viewLifecycleOwner) { isDuplicated ->
+            if (isDuplicated.getContentIfNotHandled() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.report_submit_fail_duplicated_recruit_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigateUp()
             }
         }
     }
