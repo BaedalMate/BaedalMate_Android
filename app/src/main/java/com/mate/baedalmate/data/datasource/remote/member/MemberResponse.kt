@@ -1,6 +1,7 @@
 package com.mate.baedalmate.data.datasource.remote.member
 
 import com.google.gson.annotations.SerializedName
+import com.mate.baedalmate.domain.model.RecruitFinishCriteria
 
 data class MemberOAuthResponse(
     @SerializedName("accessToken")
@@ -10,8 +11,8 @@ data class MemberOAuthResponse(
 )
 
 data class UserInfoResponse(
-    @SerializedName("userDormitory")
-    val userDormitory: String,
+    @SerializedName("dormitory")
+    val dormitory: String,
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImage")
@@ -20,4 +21,34 @@ data class UserInfoResponse(
     val score: Float,
     @SerializedName("userId")
     val userId: Long,
+)
+
+data class HistoryRecruitList (
+    @SerializedName("recruitList")
+    val recruitList: List<HistoryRecruitResponseDto>
+)
+
+data class HistoryRecruitResponseDto (
+    @SerializedName("createDate")
+    val createDate: String,
+    @SerializedName("deadlineDate")
+    val deadlineDate: String,
+    @SerializedName("dormitory")
+    val dormitory: String,
+    @SerializedName("recruitId")
+    val recruitId: Int,
+    @SerializedName("image")
+    val image: String,
+    @SerializedName("place")
+    val place: String,
+    @SerializedName("active")
+    val active: Boolean,
+    @SerializedName("criteria")
+    val criteria: RecruitFinishCriteria,
+    @SerializedName("title")
+    val title: String,
+    @SerializedName("cancel")
+    val cancel: Boolean,
+    @SerializedName("fail")
+    val fail: Boolean
 )

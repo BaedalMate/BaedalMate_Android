@@ -377,6 +377,20 @@
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page">
         <action
+            android:id="@+id/action_myPageFragment_to_historyPostCreatedFragment"
+            app:destination="@id/HistoryPostCreatedFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+        <action
+            android:id="@+id/action_myPageFragment_to_historyPostParticipatedFragment"
+            app:destination="@id/HistoryPostParticipatedFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+        <action
             android:id="@+id/action_myPageFragment_to_myProfileChangeFragment"
             app:destination="@id/MyProfileChangeFragment"
             app:enterAnim="@anim/slide_from_right"
@@ -393,6 +407,34 @@
         <action
             android:id="@+id/action_myPageFragment_to_locationCertificationFragment"
             app:destination="@id/LocationCertificationFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/HistoryPostCreatedFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.history.HistoryPostCreatedFragment"
+        android:label="fragment_history_post_created"
+        tools:layout="@layout/fragment_history_post_created">
+        <action
+            android:id="@+id/action_historyPostCreatedFragment_to_postFragment"
+            app:destination="@id/PostFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/HistoryPostParticipatedFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.history.HistoryPostParticipatedFragment"
+        android:label="fragment_history_post_participated"
+        tools:layout="@layout/fragment_history_post_participated">
+        <action
+            android:id="@+id/action_historyPostParticipatedFragment_to_postFragment"
+            app:destination="@id/PostFragment"
             app:enterAnim="@anim/slide_from_right"
             app:exitAnim="@anim/slide_to_left"
             app:popEnterAnim="@anim/slide_from_left"

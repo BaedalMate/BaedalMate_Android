@@ -1,5 +1,6 @@
 package com.mate.baedalmate.domain.repository
 
+import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
@@ -7,7 +8,6 @@ import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.domain.model.UpdateUserDto
 import okhttp3.MultipartBody
-import retrofit2.Response
 
 interface MemberRepository {
     suspend fun requestLoginKakao(body: MemberOAuthRequest): ApiResult<MemberOAuthResponse>
@@ -17,4 +17,14 @@ interface MemberRepository {
     suspend fun requestPutChangeMyProfilePhoto(
         uploadfile: MultipartBody.Part?
     ): ApiResult<Void>
+    suspend fun requestGetHistoryPostCreated(
+        page: Int,
+        size: Int,
+        sort: String
+    ): ApiResult<HistoryRecruitList>
+    suspend fun requestGetHistoryPostParticipated(
+        page: Int,
+        size: Int,
+        sort: String
+    ): ApiResult<HistoryRecruitList>
 }
