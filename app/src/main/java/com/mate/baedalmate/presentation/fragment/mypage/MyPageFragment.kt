@@ -59,6 +59,7 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initUserData()
+        setUserInfoClickListener()
         setMenusSettingClickListener()
         setMenusInfoClickListener()
         setAccountActionClickListener()
@@ -94,6 +95,15 @@ class MyPageFragment : Fragment() {
             binding.tvMyPageUserInfoNickname.text = info.nickname
             binding.tvMyPageUserInfoDormitory.text = "${info.userDormitory}"
             binding.tvMyPageUserInfoScore.text = info.score.toString()
+        }
+    }
+
+    private fun setUserInfoClickListener() {
+        binding.tvMyPageUserInfoHistoryParticipated.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_historyPostParticipatedFragment)
+        }
+        binding.tvMyPageUserInfoHistoryCreated.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_historyPostCreatedFragment)
         }
     }
 

@@ -27,6 +27,8 @@ import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestPutChangeMyMenuListUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfilePhotoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
@@ -79,6 +81,14 @@ object ServiceModule {
     @Singleton
     @Provides
     fun providePutChangeMyProfilePhotoUseCase(memberRepository: MemberRepository): RequestPutChangeMyProfilePhotoUseCase = RequestPutChangeMyProfilePhotoUseCase(memberRepository)
+
+    @Singleton
+    @Provides
+    fun provideGetHistoryPostCreatedUseCase(memberRepository: MemberRepository): RequestGetHistoryPostCreatedUseCase = RequestGetHistoryPostCreatedUseCase(memberRepository)
+
+    @Singleton
+    @Provides
+    fun provideGetHistoryPostParticipatedUseCase(memberRepository: MemberRepository): RequestGetHistoryPostParticipatedUseCase = RequestGetHistoryPostParticipatedUseCase(memberRepository)
 
     @Singleton
     @Provides

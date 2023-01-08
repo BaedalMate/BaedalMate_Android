@@ -49,6 +49,7 @@
                     style="@style/style_title2_kor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
                     android:singleLine="true"
                     android:textColor="@color/black_000000"
                     android:textFontWeight="400"
@@ -113,6 +114,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
                                 android:lineHeight="4dp"
                                 android:singleLine="true"
                                 android:textColor="@color/gray_dark_666666"
@@ -168,11 +170,13 @@
                                 app:tint="@color/gray_dark_666666" />
 
                             <TextView
-                                android:id="@+id/history_post_criterion"
+                                android:id="@+id/tv_history_post_criterion"
                                 style="@style/style_body2_kor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                android:singleLine="true"
                                 android:textColor="@color/gray_dark_666666"
                                 tools:text="최소 인원" />
                         </LinearLayout>
@@ -193,11 +197,12 @@
                                 app:tint="@color/gray_dark_666666" />
 
                             <TextView
-                                android:id="@+id/history_post_upload_date"
+                                android:id="@+id/tv_history_post_upload_date"
                                 style="@style/style_body2_kor"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="5dp"
+                                android:singleLine="true"
                                 android:textColor="@color/gray_dark_666666"
                                 tools:text="2022.12.23" />
                         </LinearLayout>

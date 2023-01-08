@@ -1,5 +1,6 @@
 package com.mate.baedalmate.data.repository
 
+import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
@@ -10,7 +11,6 @@ import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.model.setExceptionHandling
 import com.mate.baedalmate.domain.repository.MemberRepository
 import okhttp3.MultipartBody
-import retrofit2.Response
 import javax.inject.Inject
 
 class MemberRepositoryImpl @Inject constructor(private val memberApiService: MemberApiService) :
@@ -29,4 +29,30 @@ class MemberRepositoryImpl @Inject constructor(private val memberApiService: Mem
 
     override suspend fun requestPutChangeMyProfilePhoto(uploadfile: MultipartBody.Part?): ApiResult<Void> =
         setExceptionHandling { memberApiService.requestPutChangeMyProfilePhoto(uploadfile = uploadfile) }
+
+    override suspend fun requestGetHistoryPostCreated(
+        page: Int,
+        size: Int,
+        sort: String
+    ): ApiResult<HistoryRecruitList> =
+        setExceptionHandling {
+            memberApiService.requestGetHistoryPostCreated(
+                page = page,
+                size = size,
+                sort = sort
+            )
+        }
+
+    override suspend fun requestGetHistoryPostParticipated(
+        page: Int,
+        size: Int,
+        sort: String
+    ): ApiResult<HistoryRecruitList>  =
+        setExceptionHandling {
+            memberApiService.requestGetHistoryPostParticipated(
+                page = page,
+                size = size,
+                sort = sort
+            )
+        }
 }

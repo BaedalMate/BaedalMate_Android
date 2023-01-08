@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.common.Event
+import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
@@ -12,6 +13,8 @@ import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.repository.TokenPreferencesRepository
+import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLoginKakaoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfilePhotoUseCase
@@ -29,7 +32,9 @@ class MemberViewModel @Inject constructor(
     private val requestPutUserDormitoryUseCase: RequestPutUserDormitoryUseCase,
     private val tokenPreferencesRepository: TokenPreferencesRepository,
     private val requestPutChangeMyProfileUseCase: RequestPutChangeMyProfileUseCase,
-    private val requestPutChangeMyProfilePhotoUseCase: RequestPutChangeMyProfilePhotoUseCase
+    private val requestPutChangeMyProfilePhotoUseCase: RequestPutChangeMyProfilePhotoUseCase,
+    private val requestGetHistoryPostCreatedUseCase: RequestGetHistoryPostCreatedUseCase,
+    private val requestGetHistoryPostParticipatedUseCase: RequestGetHistoryPostParticipatedUseCase
 ) : ViewModel() {
     private val _loginSuccess = MutableLiveData<Boolean>(false)
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
@@ -48,6 +53,12 @@ class MemberViewModel @Inject constructor(
 
     private val _isMyProfilePhotoChangeSuccess = MutableLiveData<Event<Boolean>>()
     val isMyProfilePhotoChangeSuccess: LiveData<Event<Boolean>> get() = _isMyProfilePhotoChangeSuccess
+
+    private val _historyPostCreatedList = MutableLiveData(HistoryRecruitList(emptyList()))
+    val historyPostCreatedList: LiveData<HistoryRecruitList> get() = _historyPostCreatedList
+
+    private val _historyPostParticipatedList = MutableLiveData(HistoryRecruitList(emptyList()))
+    val historyPostParticipatedList: LiveData<HistoryRecruitList> get() = _historyPostParticipatedList
 
     fun setKakaoAccessToken(kakaoAccessToken: String) =
         viewModelScope.launch { tokenPreferencesRepository.setKakaoAccessToken(kakaoAccessToken) }
@@ -130,6 +141,26 @@ class MemberViewModel @Inject constructor(
                 }
                 else -> {
                     _isMyProfilePhotoChangeSuccess.postValue(Event(false))
+                }
+            }
+        }
+    }
+
+    fun requestGetHistoryPostCreatedList(page: Int, size: Int, sort: String) = viewModelScope.launch {
+        requestGetHistoryPostCreatedUseCase.invoke(page = page, size = size, sort = sort).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _historyPostCreatedList.postValue(ApiResponse.data)
+                }
+            }
+        }
+    }
+
+    fun requestGetHistoryPostParticipatedList(page: Int, size: Int, sort: String) = viewModelScope.launch {
+        requestGetHistoryPostParticipatedUseCase.invoke(page = page, size = size, sort = sort).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _historyPostParticipatedList.postValue(ApiResponse.data)
                 }
             }
         }
