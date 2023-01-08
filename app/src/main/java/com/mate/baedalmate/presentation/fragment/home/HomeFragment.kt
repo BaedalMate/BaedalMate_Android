@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 memberViewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
                     userName = userInfo.nickname
-                    userDormitory = userInfo.userDormitory
+                    userDormitory = userInfo.dormitory
 
                     val span = SpannableString(userName)
                     setRoundTextView(span, "rounded", 0, span.length)

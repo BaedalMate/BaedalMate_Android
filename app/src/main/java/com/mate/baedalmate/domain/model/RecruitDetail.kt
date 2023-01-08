@@ -28,8 +28,6 @@ data class RecruitDetail(
     val place: PlaceDto,
     @SerializedName("platform")
     val platform: String,
-    @SerializedName("profileImage")
-    val profileImage: String,
     @SerializedName("recruitId")
     val recruitId: Int,
     @SerializedName("score")

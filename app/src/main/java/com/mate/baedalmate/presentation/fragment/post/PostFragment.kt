@@ -248,7 +248,7 @@ class PostFragment : Fragment() {
 
     private fun initContentsUserInfo(recruitDetail: RecruitDetail) {
         with(binding) {
-            glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.profileImage}")
+            glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.userInfo.profileImage}")
                 .override(45.dp)
                 .thumbnail(0.1f)
                 .priority(Priority.HIGH)
@@ -257,7 +257,7 @@ class PostFragment : Fragment() {
             displayUserScore(recruitDetail.score)
 
             tvPostFrontUserName.text = recruitDetail.userInfo.nickname
-            tvPostFrontUserDormitory.text = recruitDetail.userInfo.userDormitory
+            tvPostFrontUserDormitory.text = recruitDetail.userInfo.dormitory
         }
     }
 
