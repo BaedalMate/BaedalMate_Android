@@ -98,7 +98,6 @@ class RecruitViewModel @Inject constructor(
             false,
             PlaceDto("", "", "", 0f, 0f),
             "",
-            "",
             0,
             0f,
             0,
