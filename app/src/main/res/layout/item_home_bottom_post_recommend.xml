@@ -34,6 +34,41 @@
                 app:shapeAppearanceOverlay="@style/radius10_ImageView" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_home_bottom_post_recommend_participate_close"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/img_home_bottom_post_recommend_item"
+                app:layout_constraintEnd_toEndOf="@id/img_home_bottom_post_recommend_item"
+                app:layout_constraintStart_toStartOf="@id/img_home_bottom_post_recommend_item"
+                app:layout_constraintTop_toTopOf="@id/img_home_bottom_post_recommend_item"
+                tools:visibility="visible">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/overlay_black_B3212123"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/radius10_ImageView" />
+
+                <TextView
+                    style="@style/style_semi_title_kor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/participate_close"
+                    android:textColor="@color/white_FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.5" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_home_bottom_post_recommend_item_info"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

@@ -12,9 +12,9 @@
             android:id="@+id/layout_post_category_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/selector_post_category_list"
             android:paddingHorizontal="15dp"
             android:paddingVertical="18dp"
-            android:background="@drawable/selector_post_category_list"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.5"
-                app:shapeAppearanceOverlay="@style/roundImageView" />
+                app:shapeAppearanceOverlay="@style/roundImageView"
+                app:tintMode="src_atop"
+                tools:src="@drawable/img_category_packedmeal" />
+
+            <TextView
+                android:id="@+id/tv_post_category_list_participate_close"
+                style="@style/style_semi_title_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/participate_close"
+                android:textColor="@color/white_FFFFFF"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/img_post_category_list"
+                app:layout_constraintEnd_toEndOf="@id/img_post_category_list"
+                app:layout_constraintStart_toStartOf="@id/img_post_category_list"
+                app:layout_constraintTop_toTopOf="@id/img_post_category_list" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_post_category_list_contents"

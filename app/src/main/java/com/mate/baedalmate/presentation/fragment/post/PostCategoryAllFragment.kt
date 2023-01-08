@@ -51,7 +51,7 @@ class PostCategoryAllFragment : Fragment() {
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
             page = 0,
-            size = 25,
+            size = 10000,
             sort = sort
         )
     }

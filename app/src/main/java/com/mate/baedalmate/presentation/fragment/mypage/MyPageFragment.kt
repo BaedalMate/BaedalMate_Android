@@ -92,7 +92,7 @@ class MyPageFragment : Fragment() {
                 .into(binding.imgMyPageUserInfo)
 
             binding.tvMyPageUserInfoNickname.text = info.nickname
-            binding.tvMyPageUserInfoDormitory.text = "${info.dormitory}"
+            binding.tvMyPageUserInfoDormitory.text = "${info.userDormitory}"
             binding.tvMyPageUserInfoScore.text = info.score.toString()
         }
     }

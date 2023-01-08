@@ -15,8 +15,8 @@ data class RecruitDto (
     val deadlineDate: String,
     @SerializedName("dormitory")
     val dormitory: String,
-    @SerializedName("id")
-    val id: Int,
+    @SerializedName("recruitId")
+    val recruitId: Int,
     @SerializedName("image")
     val image: String,
     @SerializedName("minPeople")
@@ -28,5 +28,7 @@ data class RecruitDto (
     @SerializedName("title")
     val title: String,
     @SerializedName("userScore")
-    val userScore: Float
+    val userScore: Float,
+    @SerializedName("active")
+    val active: Boolean
 )

@@ -32,7 +32,7 @@ class HomeTopPostAdapter(private val requestManager: RequestManager) :
                 oldItem: TagRecruitDto,
                 newItem: TagRecruitDto,
             ) =
-                oldItem.id == newItem.id
+                oldItem.recruitId == newItem.recruitId
 
             override fun areContentsTheSame(
                 oldItem: TagRecruitDto,
@@ -153,16 +153,23 @@ class HomeTopPostAdapter(private val requestManager: RequestManager) :
 
             binding.root.setOnClickListener {
                 findNavController(binding.root.findFragment()).navigate(HomeFragmentDirections.actionHomeFragmentToPostFragment(
-                    postId = post.id
+                    postId = post.recruitId
                 ))
             }
+
+            setParticipateCloseLayout(post.active, binding)
         }
     }
 
-    fun checkMoneyUnit(money: Int): Int {
-        if (money < 1000) return money
-        else {
-            return 0
+    fun setParticipateCloseLayout(isActive: Boolean, itemLayout: ItemHomeTopPostBinding) {
+        with(itemLayout) {
+            if (isActive) {
+                layoutHomeTopPostParticipateClose.visibility = View.GONE
+                tvHomeTopPostContentsInformationDescriptionTime.visibility = View.VISIBLE
+            } else {
+                layoutHomeTopPostParticipateClose.visibility = View.VISIBLE
+                tvHomeTopPostContentsInformationDescriptionTime.visibility = View.INVISIBLE
+            }
         }
     }
 }

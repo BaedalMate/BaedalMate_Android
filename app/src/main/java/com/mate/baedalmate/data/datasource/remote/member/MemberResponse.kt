@@ -10,8 +10,8 @@ data class MemberOAuthResponse(
 )
 
 data class UserInfoResponse(
-    @SerializedName("dormitory")
-    val dormitory: String,
+    @SerializedName("userDormitory")
+    val userDormitory: String,
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("profileImage")

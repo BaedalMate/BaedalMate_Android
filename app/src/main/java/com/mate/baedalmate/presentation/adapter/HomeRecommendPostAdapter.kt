@@ -1,6 +1,7 @@
 package com.mate.baedalmate.presentation.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.findFragment
 import androidx.navigation.fragment.NavHostFragment
@@ -22,7 +23,7 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<MainRecruitDto>() {
             override fun areItemsTheSame(oldItem: MainRecruitDto, newItem: MainRecruitDto) =
-                oldItem.id == newItem.id
+                oldItem.recruitId == newItem.recruitId
 
             override fun areContentsTheSame(
                 oldItem: MainRecruitDto,
@@ -85,8 +86,24 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
                 root.setOnClickListener {
                     NavHostFragment.findNavController(binding.root.findFragment()).navigate(
                         HomeFragmentDirections.actionHomeFragmentToPostFragment(
-                        postId = post.id
+                        postId = post.recruitId
                     ))
+                }
+                setParticipateCloseLayout(post.active, this)
+            }
+
+        }
+
+        private fun setParticipateCloseLayout(isActive: Boolean, itemLayout: ItemHomeBottomPostRecommendBinding) {
+            with(itemLayout) {
+                if (isActive) {
+                    layoutHomeBottomPostRecommendParticipateClose.visibility = View.GONE
+                    imgHomeBottomPostRecentItemTopTime.visibility = View.VISIBLE
+                    tvHomeBottomPostRecentItemTopTime.visibility = View.VISIBLE
+                } else {
+                    layoutHomeBottomPostRecommendParticipateClose.visibility = View.VISIBLE
+                    imgHomeBottomPostRecentItemTopTime.visibility = View.GONE
+                    tvHomeBottomPostRecentItemTopTime.visibility = View.GONE
                 }
             }
         }
