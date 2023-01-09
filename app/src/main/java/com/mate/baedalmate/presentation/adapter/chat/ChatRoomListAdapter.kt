@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
+import com.mate.baedalmate.common.TimeChangerUtil
 import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomInfo
 import com.mate.baedalmate.databinding.ItemChatListBinding
 import com.mate.baedalmate.presentation.fragment.chat.ChatListFragmentDirections
@@ -53,7 +54,6 @@ class ChatRoomListAdapter(private val requestManager: RequestManager) :
         fun bind(info: ChatRoomInfo) {
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val lastMessageSendTimeString: String = info.lastMessage.sendDate
-            var durationMinute = 0L
 
             binding.tvChatListTitle.text = info.title
             requestManager.load("http://3.35.27.107:8080/images/${info.image}")
@@ -63,27 +63,16 @@ class ChatRoomListAdapter(private val requestManager: RequestManager) :
 
             binding.tvChatListMessage.text = info.lastMessage.message
 
-
             if (info.lastMessage.sendDate != "") {
                 val lastMessageSendTime = LocalDateTime.parse(lastMessageSendTimeString, formatter)
                 val currentTime = LocalDateTime.now()
-                val duration = Duration.between(lastMessageSendTime, currentTime).toMinutes()
-                durationMinute = duration
-            }
-
-            if (durationMinute / 60 >= 1) {
-                if (durationMinute / 60 >= 24) {
-                    binding.tvChatListTimePassed.text = "${durationMinute / 60 / 24}일 전"
-                } else {
-                    binding.tvChatListTimePassed.text = "${durationMinute / 60}시간 전"
-                }
-            } else {
-                binding.tvChatListTimePassed.text = "${durationMinute}분 전"
+                val timePassed = TimeChangerUtil.getTimePassed(binding.tvChatListTimePassed.context, lastMessageSendTime, currentTime)
+                binding.tvChatListTimePassed.text = timePassed
             }
 
             binding.root.setOnClickListener {
                 NavHostFragment.findNavController(binding.root.findFragment())
-                    .navigate(ChatListFragmentDirections.actionChatListFragmentToChatFragment(roomId = info.id))
+                    .navigate(ChatListFragmentDirections.actionChatListFragmentToChatFragment(roomId = info.chatRoomId))
             }
         }
     }

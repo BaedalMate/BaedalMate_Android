@@ -3,12 +3,12 @@ package com.mate.baedalmate.presentation.fragment.chat
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,16 +18,17 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
+import com.google.gson.Gson
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
+import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomRecruitDetailDto
 import com.mate.baedalmate.data.di.StompModule
 import com.mate.baedalmate.databinding.FragmentChatBinding
 import com.mate.baedalmate.domain.model.ApiErrorStatus
 import com.mate.baedalmate.domain.model.MessageInfo
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
-import com.mate.baedalmate.domain.model.RecruitInfo
 import com.mate.baedalmate.presentation.adapter.chat.ChatAdapter
 import com.mate.baedalmate.presentation.viewmodel.ChatViewModel
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
@@ -105,10 +106,14 @@ class ChatFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 chatViewModel.chatRoomLog.observe(viewLifecycleOwner) { detail ->
-                    initChatRoomTitleBarInfo(detail.recruit)
+                    val recruitDetail = Gson().fromJson(
+                        detail.recruit.toString(),
+                        ChatRoomRecruitDetailDto::class.java
+                    )
+                    initChatRoomTitleBarInfo(recruitDetail)
+                    setInfoActionClickListener(recruitDetail, detail.reviewed)
+                    setOptionClickListener(recruitDetail)
                     initChatLog(detail.messages)
-                    setInfoActionClickListener(detail.recruit)
-                    setOptionClickListener(detail.recruit)
                 }
             }
         }
@@ -126,7 +131,7 @@ class ChatFragment : Fragment() {
         binding.rvChatLog.scrollToPosition(chatAdapter.itemCount - 1)
     }
 
-    private fun initChatRoomTitleBarInfo(recruitInfo: RecruitInfo) {
+    private fun initChatRoomTitleBarInfo(recruitInfo: ChatRoomRecruitDetailDto) {
         val createdTimeString = recruitInfo.createDate
         val createdTime = LocalDateTime.parse(createdTimeString, formatter)
 
@@ -176,7 +181,7 @@ class ChatFragment : Fragment() {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             chatMessageLogList.add(
                 MessageInfo(
-                    id = 0, // TODO 메시지 ID 수정
+                    messageId = 0,
                     message = it.message.trim(),
                     sendDate = currentTimeString,
                     sender = it.sender,
@@ -219,7 +224,10 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun setInfoActionClickListener(recruitInfo: RecruitInfo) {
+    private fun setInfoActionClickListener(
+        recruitInfo: ChatRoomRecruitDetailDto,
+        isReviewed: Boolean
+    ) {
         if (recruitInfo.active) {
             with(binding.btnChatInfoAction) {
                 text = getString(R.string.chat_info_action_change_menu)
@@ -237,6 +245,8 @@ class ChatFragment : Fragment() {
                         ChatFragmentDirections.actionChatFragmentToReviewUserFragment(recruitId = recruitInfo.recruitId)
                     )
                 }
+                if (isReviewed)
+                    this.isEnabled = false
             }
         }
     }
@@ -268,11 +278,13 @@ class ChatFragment : Fragment() {
         }
     }
 
-    private fun setOptionClickListener(recruitInfo: RecruitInfo) {
+    private fun setOptionClickListener(recruitInfo: ChatRoomRecruitDetailDto) {
         binding.btnChatActionbarOption.setOnDebounceClickListener {
-            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToParticipantListFragment(
-                recruitId = recruitInfo.recruitId
-            ))
+            findNavController().navigate(
+                ChatFragmentDirections.actionChatFragmentToParticipantListFragment(
+                    recruitId = recruitInfo.recruitId
+                )
+            )
         }
     }
 }
