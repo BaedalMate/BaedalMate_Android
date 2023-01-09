@@ -1,5 +1,6 @@
 package com.mate.baedalmate.data.di
 
+import com.mate.baedalmate.data.datasource.remote.block.BlockApiService
 import com.mate.baedalmate.data.datasource.remote.chat.ChatApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
@@ -8,6 +9,7 @@ import com.mate.baedalmate.data.datasource.remote.review.ReviewApiService
 import com.mate.baedalmate.data.datasource.remote.search.SearchApiService
 import com.mate.baedalmate.data.datasource.remote.write.KakaoLocalApiService
 import com.mate.baedalmate.data.datasource.remote.write.WriteApiService
+import com.mate.baedalmate.data.repository.BlockRepositoryImpl
 import com.mate.baedalmate.data.repository.ChatRepositoryImpl
 import com.mate.baedalmate.data.repository.KakaoLocalRepositoryImpl
 import com.mate.baedalmate.data.repository.MemberRepositoryImpl
@@ -16,6 +18,7 @@ import com.mate.baedalmate.data.repository.ReportRepositoryImpl
 import com.mate.baedalmate.data.repository.ReviewRepositoryImpl
 import com.mate.baedalmate.data.repository.SearchRepositoryImpl
 import com.mate.baedalmate.data.repository.WriteRepositoryImpl
+import com.mate.baedalmate.domain.repository.BlockRepository
 import com.mate.baedalmate.domain.repository.ChatRepository
 import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
@@ -24,6 +27,8 @@ import com.mate.baedalmate.domain.repository.ReportRepository
 import com.mate.baedalmate.domain.repository.ReviewRepository
 import com.mate.baedalmate.domain.repository.SearchRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
+import com.mate.baedalmate.domain.usecase.block.RequestPostBlockUserUseCase
+import com.mate.baedalmate.domain.usecase.block.RequestPostUnblockUserUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetAllMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatParticipantsUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
@@ -234,4 +239,20 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRequestPostReportRecruitUseCase(reportRepository: ReportRepository): RequestPostReportRecruitUseCase = RequestPostReportRecruitUseCase(reportRepository)
+
+    @Singleton
+    @Provides
+    fun provideBlockApiService(retrofit: Retrofit) = retrofit.create(BlockApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideBlockRepository(blockRepositoryImpl: BlockRepositoryImpl): BlockRepository = blockRepositoryImpl
+
+    @Singleton
+    @Provides
+    fun providePostBlockUserUseCase(blockRepository: BlockRepository): RequestPostBlockUserUseCase = RequestPostBlockUserUseCase(blockRepository)
+
+    @Singleton
+    @Provides
+    fun providePostUnblockUserUseCase(blockRepository: BlockRepository): RequestPostUnblockUserUseCase = RequestPostUnblockUserUseCase(blockRepository)
 }

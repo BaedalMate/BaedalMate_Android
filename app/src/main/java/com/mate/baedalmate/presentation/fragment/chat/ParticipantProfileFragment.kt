@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -18,11 +20,13 @@ import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.BlockAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentParticipantProfileBinding
+import com.mate.baedalmate.presentation.viewmodel.BlockViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ParticipantProfileFragment : BottomSheetDialogFragment() {
     private var binding by autoCleared<FragmentParticipantProfileBinding>()
+    private val blockViewModel by activityViewModels<BlockViewModel>()
     private val args by navArgs<ParticipantProfileFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var blockAlertDialog: AlertDialog
@@ -34,14 +38,6 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glideRequestManager = Glide.with(this)
-        blockAlertDialog = BlockAlertDialog.createBlockDialog(
-            requireContext(),
-            {
-                blockUser()
-                findNavController().navigateUp()
-            },
-            args.participant.nickname
-        )
     }
 
     override fun onCreateView(
@@ -86,6 +82,15 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
 
     private fun setBlockClickListener() {
         binding.layoutParticipantProfileActionBlock.setOnDebounceClickListener {
+            blockAlertDialog = BlockAlertDialog.createBlockDialog(
+                requireContext(),
+                {
+                    blockUser()
+                    observeBlockUserSuccess()
+                },
+                args.participant.nickname
+            )
+
             BlockAlertDialog.showBlockDialog(blockAlertDialog)
             BlockAlertDialog.resizeDialogFragment(
                 requireContext(),
@@ -96,6 +101,67 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     }
 
     private fun blockUser() {
-        // TODO 사용자 차단 기능 추가
+        blockViewModel.requestPostBlockUser(blockUserId = args.participant.userId)
+    }
+
+    private fun observeBlockUserSuccess() {
+        blockViewModel.isSuccessBlockUser.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    String.format(
+                        getString(R.string.block_user_block_success_toast_message),
+                        "${args.participant.nickname}"
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (isSuccess.getContentIfNotHandled() == false) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.block_user_block_fail_unknown_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            findNavController().navigateUp()
+        }
+        blockViewModel.isAlreadyBlockedUser.observe(viewLifecycleOwner) { isAlreadyBlocked ->
+            if (isAlreadyBlocked.getContentIfNotHandled() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    String.format(
+                        getString(R.string.block_user_block_fail_already_blocked_toast_message),
+                        "${args.participant.nickname}"
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun unblockUser() { // TODO 차단여부 서버에서 받아올 수 있는 경우 차단해제를 같은 위치에 보여줄 수 있도록 구현해야함
+        blockViewModel.requestPostUnblockUser(blockedUserId = args.participant.userId)
+    }
+
+    private fun observeUnBlockUserSuccess() {
+        blockViewModel.isSuccessUnblockUser.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    String.format(
+                        getString(R.string.block_user_unblock_success_toast_message),
+                        "${args.participant.nickname}"
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else if (isSuccess.getContentIfNotHandled() == false) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.block_user_unblock_fail_unknown_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            findNavController().navigateUp()
+        }
     }
 }

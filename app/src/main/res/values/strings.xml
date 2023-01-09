@@ -292,6 +292,11 @@
     <string name="block_dialog_description">차단하더라도, 해당 사용자가 주최자 역할이 아닌 참여하고 있는 모집글과 채팅방은 정상적으로 보여지게 됩니다.</string>
     <string name="block_user_list_actionbar_title">차단 관리</string>
     <string name="block_user_unblock">차단 해제</string>
+    <string name="block_user_block_success_toast_message">%s님이 차단되었습니다.</string>
+    <string name="block_user_block_fail_unknown_toast_message">차단을 다시 시도해주세요.</string>
+    <string name="block_user_block_fail_already_blocked_toast_message">%s님은 이미 차단된 상태입니다.</string>
+    <string name="block_user_unblock_success_toast_message">%s님이 차단 해제되었습니다.</string>
+    <string name="block_user_unblock_fail_unknown_toast_message">차단 해제를 다시 시도해주세요.</string>
 
     <!-- Notice -->
     <string name="notice_list_actionbar_title">공지사항</string>
