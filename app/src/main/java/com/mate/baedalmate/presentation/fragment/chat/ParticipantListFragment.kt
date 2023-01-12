@@ -13,19 +13,23 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
+import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.databinding.FragmentParticipantListBinding
 import com.mate.baedalmate.domain.model.ParticipantDto
 import com.mate.baedalmate.presentation.adapter.chat.ParticipantListAdapter
 import com.mate.baedalmate.presentation.viewmodel.ChatViewModel
+import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ParticipantListFragment : BottomSheetDialogFragment() {
     private var binding by autoCleared<FragmentParticipantListBinding>()
+    private val memberViewModel by activityViewModels<MemberViewModel>()
     private val chatViewModel by activityViewModels<ChatViewModel>()
     private val args by navArgs<ParticipantListFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var participantListAdapter: ParticipantListAdapter
+    private var currentUserInfo = UserInfoResponse("", "", "", 0f, 0L)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +46,22 @@ class ParticipantListFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getUserInfo()
+        observeUserInfo()
         getChatParticipants()
         setParticipantListAdapter()
         setCheckMenuClickListener()
+    }
+
+    // TODO 내 정보를 체크하는 것을 API를 다시 불러오는 방법이 아닌 로컬 정보를 활용하거나 참여자 API에서 받아오는 쪽으로 추후 변경 필요
+    private fun getUserInfo() {
+        memberViewModel.requestUserInfo()
+    }
+
+    private fun observeUserInfo() {
+        memberViewModel.userInfo.observe(viewLifecycleOwner) {
+            currentUserInfo = it
+        }
     }
 
     private fun getChatParticipants() {
@@ -69,12 +86,14 @@ class ParticipantListFragment : BottomSheetDialogFragment() {
     private fun setUserProfileClickListener() {
         participantListAdapter.setOnItemClickListener(object : ParticipantListAdapter.OnItemClickListener {
             override fun setUserProfileClickListener(userInfo: ParticipantDto, pos: Int) {
-                findNavController().navigate(
-                    ParticipantListFragmentDirections.actionParticipantListFragmentToParticipantProfileFragment(
-                        participant = userInfo
+                if (currentUserInfo.userId != 0L && userInfo.userId != currentUserInfo.userId.toInt()) {
+                    findNavController().navigate(
+                        ParticipantListFragmentDirections.actionParticipantListFragmentToParticipantProfileFragment(
+                            participant = userInfo,
+                            recruitId = args.recruitId
+                        )
                     )
-                )
-                // TODO 본인 프로필을 눌러도 아무 동작이 없도록 필터링해야함
+                }
             }
         })
     }

@@ -27,6 +27,7 @@ import com.mate.baedalmate.domain.repository.ReportRepository
 import com.mate.baedalmate.domain.repository.ReviewRepository
 import com.mate.baedalmate.domain.repository.SearchRepository
 import com.mate.baedalmate.domain.repository.WriteRepository
+import com.mate.baedalmate.domain.usecase.block.RequestGetBlockUserListUseCase
 import com.mate.baedalmate.domain.usecase.block.RequestPostBlockUserUseCase
 import com.mate.baedalmate.domain.usecase.block.RequestPostUnblockUserUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetAllMenuListUseCase
@@ -255,4 +256,8 @@ object ServiceModule {
     @Singleton
     @Provides
     fun providePostUnblockUserUseCase(blockRepository: BlockRepository): RequestPostUnblockUserUseCase = RequestPostUnblockUserUseCase(blockRepository)
+
+    @Singleton
+    @Provides
+    fun provideGetBlockedUserListUseCase(blockRepository: BlockRepository): RequestGetBlockUserListUseCase = RequestGetBlockUserListUseCase(blockRepository)
 }

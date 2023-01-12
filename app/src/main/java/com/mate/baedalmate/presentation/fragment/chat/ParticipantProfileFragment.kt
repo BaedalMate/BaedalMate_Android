@@ -21,11 +21,13 @@ import com.mate.baedalmate.common.dialog.BlockAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentParticipantProfileBinding
 import com.mate.baedalmate.presentation.viewmodel.BlockViewModel
+import com.mate.baedalmate.presentation.viewmodel.ChatViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ParticipantProfileFragment : BottomSheetDialogFragment() {
     private var binding by autoCleared<FragmentParticipantProfileBinding>()
+    private val chatViewModel by activityViewModels<ChatViewModel>()
     private val blockViewModel by activityViewModels<BlockViewModel>()
     private val args by navArgs<ParticipantProfileFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
@@ -51,7 +53,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUserInfo()
-        setBlockClickListener()
+        initBlockDialog()
         setReportClickListener()
     }
 
@@ -67,6 +69,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
             .centerCrop()
             .into(binding.imgParticipantProfileThumbnail)
         binding.tvParticipantProfileNickname.text = args.participant.nickname
+        setBlockClickListener(isBlockedUser = args.participant.block)
     }
 
     private fun setReportClickListener() {
@@ -80,23 +83,53 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun setBlockClickListener() {
-        binding.layoutParticipantProfileActionBlock.setOnDebounceClickListener {
-            blockAlertDialog = BlockAlertDialog.createBlockDialog(
-                requireContext(),
-                {
+    private fun initBlockDialog() {
+        blockAlertDialog = BlockAlertDialog.createBlockDialog(
+            requireContext(),
+            "${args.participant.nickname} 님을 차단하시겠습니까?",
+            getString(R.string.block_dialog_description)
+        ) { findNavController().navigateUp() }
+    }
+
+    private fun setBlockClickListener(isBlockedUser: Boolean) {
+        if (isBlockedUser) {
+            binding.tvParticipantProfileActionBlock.text = getString(R.string.unblock)
+            binding.layoutParticipantProfileActionBlock.setOnDebounceClickListener {
+                blockAlertDialog = BlockAlertDialog.createBlockDialog(
+                    requireContext(),
+                    getString(R.string.unblock_dialog_title),
+                    getString(R.string.unblock_dialog_description),
+                ) {
+                    unblockUser()
+                    observeUnBlockUserSuccess()
+                }
+
+                BlockAlertDialog.showBlockDialog(blockAlertDialog)
+                BlockAlertDialog.resizeDialogFragment(
+                    requireContext(),
+                    blockAlertDialog,
+                    dialogSizeRatio = 0.8f
+                )
+            }
+        } else {
+            binding.tvParticipantProfileActionBlock.text = getString(R.string.block)
+            binding.layoutParticipantProfileActionBlock.setOnDebounceClickListener {
+                blockAlertDialog = BlockAlertDialog.createBlockDialog(
+                    requireContext(),
+                    "${args.participant.nickname} 님을 차단하시겠습니까?",
+                    getString(R.string.block_dialog_description)
+                ) {
                     blockUser()
                     observeBlockUserSuccess()
-                },
-                args.participant.nickname
-            )
+                }
 
-            BlockAlertDialog.showBlockDialog(blockAlertDialog)
-            BlockAlertDialog.resizeDialogFragment(
-                requireContext(),
-                blockAlertDialog,
-                dialogSizeRatio = 0.8f
-            )
+                BlockAlertDialog.showBlockDialog(blockAlertDialog)
+                BlockAlertDialog.resizeDialogFragment(
+                    requireContext(),
+                    blockAlertDialog,
+                    dialogSizeRatio = 0.8f
+                )
+            }
         }
     }
 
@@ -122,6 +155,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            chatViewModel.getChatParticipants(args.recruitId)
             findNavController().navigateUp()
         }
         blockViewModel.isAlreadyBlockedUser.observe(viewLifecycleOwner) { isAlreadyBlocked ->
@@ -135,11 +169,12 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            chatViewModel.getChatParticipants(args.recruitId)
             findNavController().navigateUp()
         }
     }
 
-    private fun unblockUser() { // TODO 차단여부 서버에서 받아올 수 있는 경우 차단해제를 같은 위치에 보여줄 수 있도록 구현해야함
+    private fun unblockUser() {
         blockViewModel.requestPostUnblockUser(blockedUserId = args.participant.userId)
     }
 
@@ -161,6 +196,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            chatViewModel.getChatParticipants(args.recruitId)
             findNavController().navigateUp()
         }
     }

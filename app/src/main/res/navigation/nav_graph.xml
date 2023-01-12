@@ -340,6 +340,10 @@
         <argument
             android:name="participant"
             app:argType="com.mate.baedalmate.domain.model.ParticipantDto" />
+        <argument
+            android:name="recruitId"
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
             android:id="@+id/action_participantProfileFragmentt_to_reportUserFragment"
             app:destination="@id/ReportUserFragment"
