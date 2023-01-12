@@ -141,7 +141,8 @@ class HomeFragment : Fragment() {
         val editedTagPostList = mutableListOf<TagRecruitDto>()
         for(tagPost in tagPostList) {
             var currentPost = tagPost
-            currentPost.tags = currentPost.tags.subList(0, MAX_TAG_COUNT)
+            if (currentPost.tags.size >= MAX_TAG_COUNT)
+                currentPost.tags = currentPost.tags.subList(0, MAX_TAG_COUNT)
             editedTagPostList.add(currentPost)
         }
 
