@@ -277,7 +277,7 @@
     <string name="report_post_navigate_user_description">사용자 신고하러 가기</string>
 
     <string name="report_user_title">\'%s\' 님을 신고하는 사유를 선택해주세요`</string>
-    <string name="report_user_description">신고 사유 검토후, 검토 결과에 따라 처리됩니다.</string>
+    <string name="report_user_description">신고 심사 결과에 따라 처리됩니다. \n%s님을 차단하시겠습니까?</string>
     <string name="report_user_navigate_user_title">\'%s\' 님을 신고하고 싶으신가요?</string>
     <string name="report_user_navigate_user_description">사용자 신고하러 가기</string>
 
