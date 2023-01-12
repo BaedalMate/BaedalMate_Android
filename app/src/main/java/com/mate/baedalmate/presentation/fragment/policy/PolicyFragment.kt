@@ -51,7 +51,10 @@ class PolicyFragment : Fragment() {
                 webViewClient = WebViewClient()
                 settings.javaScriptEnabled = false
             }
-            loadUrl("http://3.35.27.107:808/$informationType.html")
+            when(informationType) {
+                "privacy" -> loadUrl("http://3.35.27.107:8080/terms/service-privacy.html")
+                else -> loadUrl("http://3.35.27.107:8080/terms/service.html")
+            }
         }
         binding.webviewPolicyContents.visibility = View.VISIBLE
     }
