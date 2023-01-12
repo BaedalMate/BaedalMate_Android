@@ -4,10 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="nickname"
-            type="String" />
     </data>
 
     <LinearLayout
@@ -23,11 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@{nickname +`님을 차단하시겠습니까?`}"
             android:textColor="@color/main_FB5F1C"
             tools:text="캡스톤디자인님을 차단 하시겠습니까?" />
 
         <TextView
+            android:id="@+id/tv_block_dialog_description"
             style="@style/style_body2_kor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

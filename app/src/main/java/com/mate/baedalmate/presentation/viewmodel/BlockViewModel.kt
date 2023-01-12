@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.block.BlockRequestDto
+import com.mate.baedalmate.data.datasource.remote.block.BlockedUserListDto
 import com.mate.baedalmate.domain.model.ApiResult
+import com.mate.baedalmate.domain.usecase.block.RequestGetBlockUserListUseCase
 import com.mate.baedalmate.domain.usecase.block.RequestPostBlockUserUseCase
 import com.mate.baedalmate.domain.usecase.block.RequestPostUnblockUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,9 +17,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BlockViewModel @Inject constructor(
+    private val requestGetBlockUserListUseCase: RequestGetBlockUserListUseCase,
     private val requestPostBlockUserUseCase: RequestPostBlockUserUseCase,
     private val requestPostUnblockUserUseCase: RequestPostUnblockUserUseCase
 ) : ViewModel() {
+    private val _blockedUserList = MutableLiveData<BlockedUserListDto>()
+    val blockedUserList: LiveData<BlockedUserListDto> get() = _blockedUserList
+
     private val _isSuccessBlockUser = MutableLiveData<Event<Boolean>>()
     val isSuccessBlockUser: LiveData<Event<Boolean>> get() = _isSuccessBlockUser
     private val _isAlreadyBlockedUser = MutableLiveData<Event<Boolean>>()
@@ -25,6 +31,18 @@ class BlockViewModel @Inject constructor(
 
     private val _isSuccessUnblockUser = MutableLiveData<Event<Boolean>>()
     val isSuccessUnblockUser: LiveData<Event<Boolean>> get() = _isSuccessUnblockUser
+
+    fun requestGetBlockedUserList() = viewModelScope.launch {
+        requestGetBlockUserListUseCase().let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data?.let { userList ->
+                        _blockedUserList.postValue(userList)
+                    }
+                }
+            }
+        }
+    }
 
     fun requestPostBlockUser(blockUserId: Int) = viewModelScope.launch {
         requestPostBlockUserUseCase(

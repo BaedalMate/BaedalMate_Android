@@ -72,6 +72,7 @@
                     android:src="@drawable/ic_block" />
 
                 <TextView
+                    android:id="@+id/tv_participant_profile_action_block"
                     style="@style/style_caption2_kor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

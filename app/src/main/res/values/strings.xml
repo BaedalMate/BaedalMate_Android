@@ -9,6 +9,7 @@
     <string name="my_page">마이페이지</string>
     <string name="report">신고하기</string>
     <string name="block">차단하기</string>
+    <string name="unblock">차단해제</string>
     <string name="amount">금액</string>
     <string name="unit_korea">원</string>
     <string name="section">구간</string>
@@ -290,7 +291,10 @@
 
     <!-- Block -->
     <string name="block_dialog_description">차단하더라도, 해당 사용자가 주최자 역할이 아닌 참여하고 있는 모집글과 채팅방은 정상적으로 보여지게 됩니다.</string>
+    <string name="unblock_dialog_title">차단을 해제하시겠습니까?</string>
+    <string name="unblock_dialog_description">해당 유저가 주최하는 모집글을 다시 볼 수 있게 됩니다.</string>
     <string name="block_user_list_actionbar_title">차단 관리</string>
+    <string name="block_user_list_empty">현재 차단중인 유저가 없습니다.</string>
     <string name="block_user_unblock">차단 해제</string>
     <string name="block_user_block_success_toast_message">%s님이 차단되었습니다.</string>
     <string name="block_user_block_fail_unknown_toast_message">차단을 다시 시도해주세요.</string>

@@ -15,8 +15,9 @@ import com.mate.baedalmate.databinding.DialogBlockBinding
 object BlockAlertDialog {
     fun createBlockDialog(
         context: Context,
-        confirmButtonFunction: (() -> Unit)? = null,
-        userNickname: String
+        title: String,
+        description: String,
+        confirmButtonFunction: (() -> Unit)? = null
     ): AlertDialog {
         val binding = DialogBlockBinding.inflate(LayoutInflater.from(context))
         val alertDialog = AlertDialog.Builder(context)
@@ -27,7 +28,8 @@ object BlockAlertDialog {
         alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
         with(binding) {
-            nickname = userNickname
+            tvBlockDialogTitle.text = title
+            tvBlockDialogDescription.text = description
             btnDialogBlockCancel.setOnDebounceClickListener {
                 alertDialog.dismiss()
             }

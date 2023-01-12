@@ -45,6 +45,19 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/tv_block_user_list_empty"
+            style="@style/style_semi_title_kor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/block_user_list_empty"
+            android:textColor="@color/black_000000"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_block_user_list_actionbar" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_block_user_list"
             android:layout_width="match_parent"

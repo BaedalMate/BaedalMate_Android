@@ -11,5 +11,7 @@ data class ParticipantDto(
     @SerializedName("profileImage")
     val profileImage: String,
     @SerializedName("userId")
-    val userId: Int
+    val userId: Int,
+    @SerializedName("block")
+    val block: Boolean
 ): Parcelable
