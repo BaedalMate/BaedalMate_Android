@@ -4,6 +4,7 @@ import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
+import com.mate.baedalmate.data.datasource.remote.member.ResultSuccessResponseDto
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
@@ -55,4 +56,7 @@ class MemberRepositoryImpl @Inject constructor(private val memberApiService: Mem
                 sort = sort
             )
         }
+
+    override suspend fun requestGetResignUser(): ApiResult<ResultSuccessResponseDto> =
+        setExceptionHandling { memberApiService.requestGetResignUser() }
 }

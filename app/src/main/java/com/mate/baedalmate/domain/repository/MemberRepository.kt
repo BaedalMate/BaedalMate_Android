@@ -3,6 +3,7 @@ package com.mate.baedalmate.domain.repository
 import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
+import com.mate.baedalmate.data.datasource.remote.member.ResultSuccessResponseDto
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
@@ -27,4 +28,5 @@ interface MemberRepository {
         size: Int,
         sort: String
     ): ApiResult<HistoryRecruitList>
+    suspend fun requestGetResignUser(): ApiResult<ResultSuccessResponseDto>
 }

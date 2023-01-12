@@ -7,4 +7,5 @@ interface TokenPreferencesRepository {
     suspend fun getKakaoAccessToken(): String
     suspend fun setOAuthToken(memberOAuthResponse: MemberOAuthResponse)
     suspend fun getOAuthToken(): MemberOAuthResponse
+    suspend fun clearAllInfo()
 }
