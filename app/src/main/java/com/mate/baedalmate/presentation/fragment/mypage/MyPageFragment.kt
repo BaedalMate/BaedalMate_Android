@@ -62,6 +62,7 @@ class MyPageFragment : Fragment() {
         setUserInfoClickListener()
         setMenusSettingClickListener()
         setMenusInfoClickListener()
+        setAppVersion()
         setAccountActionClickListener()
     }
 
@@ -123,6 +124,7 @@ class MyPageFragment : Fragment() {
     }
 
     private fun setMenusInfoClickListener() {
+        binding.layoutMyPageMenusInfoNotice.visibility = View.GONE
         binding.layoutMyPageMenusInfoNotice.setOnDebounceClickListener {
             // TODO 공지사항 navigation
         }
@@ -241,5 +243,9 @@ class MyPageFragment : Fragment() {
                 e.stackTrace
             }
         }
+    }
+
+    private fun setAppVersion() {
+        binding.tvMyPageMenusInfoAppVersionCurrent.text = BuildConfig.VERSION_NAME
     }
 }
