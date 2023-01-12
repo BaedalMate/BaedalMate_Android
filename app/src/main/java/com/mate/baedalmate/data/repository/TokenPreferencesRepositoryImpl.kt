@@ -2,6 +2,7 @@ package com.mate.baedalmate.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.mate.baedalmate.common.extension.readValue
 import com.mate.baedalmate.common.extension.storeValue
@@ -34,5 +35,11 @@ class TokenPreferencesRepositoryImpl @Inject constructor(private val tokenDataSt
         val kakaoAccessTokenKey = stringPreferencesKey("kakaoAccessToken")
         val accessTokenKey = stringPreferencesKey("accessToken")
         val refreshTokenKey = stringPreferencesKey("refreshToken")
+    }
+
+    override suspend fun clearAllInfo() {
+        tokenDataStorePreferences.edit {
+            it.clear()
+        }
     }
 }

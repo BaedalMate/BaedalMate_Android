@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -27,6 +28,7 @@ import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.ConfirmAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentMyPageBinding
+import com.mate.baedalmate.presentation.activity.LoginActivity
 import com.mate.baedalmate.presentation.activity.MainActivity
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -156,7 +158,6 @@ class MyPageFragment : Fragment() {
             title = getString(R.string.logout_dialog_title),
             description = getString(R.string.logout_dialog_description),
             confirmButtonFunction = {
-                // TODO 로그아웃 기능 동작 추가
                 clearLocalData()
                 navigateToLoginActivity()
             }
@@ -169,15 +170,13 @@ class MyPageFragment : Fragment() {
             title = getString(R.string.resign_dialog_title),
             description = getString(R.string.resign_dialog_description),
             confirmButtonFunction = {
-                // TODO 탈퇴 기능 동작 추가
-                clearLocalData()
-                navigateToLoginActivity()
+                setResignUser()
             }
         )
     }
 
     private fun navigateToLoginActivity() {
-        val intent = Intent(requireContext(), MainActivity::class.java)
+        val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
@@ -185,9 +184,29 @@ class MyPageFragment : Fragment() {
     }
 
     private fun clearLocalData() {
-        // TODO 로컬 저장된 정보 삭제
+        memberViewModel.requestClearAllLocalData()
     }
 
+    private fun setResignUser() {
+        observeResignResult()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                memberViewModel.requestResign()
+            }
+        }
+    }
+
+    private fun observeResignResult() {
+        memberViewModel.isResignSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                clearLocalData()
+                navigateToLoginActivity()
+                Toast.makeText(requireContext(), getString(R.string.resign_success_toast_message), Toast.LENGTH_SHORT).show()
+            } else if (isSuccess.getContentIfNotHandled() == false) {
+                Toast.makeText(requireContext(), getString(R.string.resign_fail_toast_message), Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun initNotification() {
         val currentNotificationState =

@@ -52,3 +52,8 @@ data class HistoryRecruitResponseDto (
     @SerializedName("fail")
     val fail: Boolean
 )
+
+data class ResultSuccessResponseDto (
+    @SerializedName("result")
+    val result: String,
+)

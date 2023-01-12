@@ -43,4 +43,7 @@ interface MemberApiService {
         @Query("size") size: Int,
         @Query("sort") sort: String
     ): Response<HistoryRecruitList>
+
+    @GET("/api/v1/user/deactivate")
+    suspend fun requestGetResignUser(): Response<ResultSuccessResponseDto>
 }

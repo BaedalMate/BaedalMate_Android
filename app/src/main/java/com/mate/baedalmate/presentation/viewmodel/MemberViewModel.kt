@@ -15,6 +15,7 @@ import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.repository.TokenPreferencesRepository
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestGetResignUserUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLoginKakaoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfilePhotoUseCase
@@ -34,7 +35,8 @@ class MemberViewModel @Inject constructor(
     private val requestPutChangeMyProfileUseCase: RequestPutChangeMyProfileUseCase,
     private val requestPutChangeMyProfilePhotoUseCase: RequestPutChangeMyProfilePhotoUseCase,
     private val requestGetHistoryPostCreatedUseCase: RequestGetHistoryPostCreatedUseCase,
-    private val requestGetHistoryPostParticipatedUseCase: RequestGetHistoryPostParticipatedUseCase
+    private val requestGetHistoryPostParticipatedUseCase: RequestGetHistoryPostParticipatedUseCase,
+    private val requestGetResignUserUseCase: RequestGetResignUserUseCase
 ) : ViewModel() {
     private val _loginSuccess = MutableLiveData<Boolean>(false)
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
@@ -59,6 +61,9 @@ class MemberViewModel @Inject constructor(
 
     private val _historyPostParticipatedList = MutableLiveData(HistoryRecruitList(emptyList()))
     val historyPostParticipatedList: LiveData<HistoryRecruitList> get() = _historyPostParticipatedList
+
+    private val _isResignSuccess = MutableLiveData<Event<Boolean>>()
+    val isResignSuccess: LiveData<Event<Boolean>> get() = _isResignSuccess
 
     fun setKakaoAccessToken(kakaoAccessToken: String) =
         viewModelScope.launch { tokenPreferencesRepository.setKakaoAccessToken(kakaoAccessToken) }
@@ -161,6 +166,23 @@ class MemberViewModel @Inject constructor(
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     _historyPostParticipatedList.postValue(ApiResponse.data)
+                }
+            }
+        }
+    }
+    
+    fun requestClearAllLocalData() = viewModelScope.launch {
+        tokenPreferencesRepository.clearAllInfo()
+    }
+
+    fun requestResign() = viewModelScope.launch {
+        requestGetResignUserUseCase().let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isResignSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isResignSuccess.postValue(Event(false))
                 }
             }
         }
