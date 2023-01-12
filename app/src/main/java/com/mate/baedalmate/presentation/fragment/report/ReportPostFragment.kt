@@ -18,12 +18,14 @@ import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.ReportAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentReportPostBinding
+import com.mate.baedalmate.presentation.viewmodel.BlockViewModel
 import com.mate.baedalmate.presentation.viewmodel.ReportViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ReportPostFragment : Fragment() {
     private var binding by autoCleared<FragmentReportPostBinding>()
+    private val blockViewModel by activityViewModels<BlockViewModel>()
     private val reportViewModel by activityViewModels<ReportViewModel>()
     private val args by navArgs<ReportPostFragmentArgs>()
     private lateinit var reportSubmitAlertDialog: AlertDialog
@@ -32,6 +34,11 @@ class ReportPostFragment : Fragment() {
         super.onCreate(savedInstanceState)
         reportSubmitAlertDialog = ReportAlertDialog.createReportDialog(
             requireContext(),
+            getString(R.string.report_dialog_title),
+            String.format(
+                getString(R.string.report_user_description),
+                args.postWriterName
+            ),
             { findNavController().navigateUp() }
         )
     }
@@ -133,8 +140,10 @@ class ReportPostFragment : Fragment() {
 
     private fun observeReportSubmitSuccess() {
         reportViewModel.isSuccessReportRecruit.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess.getContentIfNotHandled() == true)
+            if (isSuccess.getContentIfNotHandled() == true) {
                 showSubmitCompleteDialog()
+                observeBlockUserResult()
+            }
             else if (isSuccess.getContentIfNotHandled() == false) {
                 Toast.makeText(
                     requireContext(),
@@ -158,11 +167,38 @@ class ReportPostFragment : Fragment() {
     }
 
     private fun showSubmitCompleteDialog() {
+        reportSubmitAlertDialog = ReportAlertDialog.createReportDialog(
+            requireContext(),
+            getString(R.string.report_dialog_title),
+            String.format(
+                getString(R.string.report_user_description),
+                args.postWriterName
+            )
+        ) {
+            blockViewModel.requestPostBlockUser(blockUserId = args.postWriterUserId)
+        }
+
         ReportAlertDialog.showReportDialog(reportSubmitAlertDialog)
         ReportAlertDialog.resizeDialogFragment(
             requireContext(),
             reportSubmitAlertDialog,
             dialogSizeRatio = 0.8f
         )
+    }
+
+    private fun observeBlockUserResult() {
+        blockViewModel.isSuccessBlockUser.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                Toast.makeText(
+                    requireContext(),
+                    String.format(
+                        getString(R.string.block_user_block_success_toast_message),
+                        args.postWriterName
+                    ),
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigateUp()
+            }
+        }
     }
 }

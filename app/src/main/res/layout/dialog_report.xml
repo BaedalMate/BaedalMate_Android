@@ -8,6 +8,7 @@
     android:paddingTop="25dp">
 
     <TextView
+        android:id="@+id/tv_dialog_report_title"
         style="@style/style_title2_kor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,25 +17,50 @@
         android:textColor="@color/main_FB5F1C" />
 
     <TextView
+        android:id="@+id/tv_dialog_report_description"
         style="@style/style_body2_kor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="17dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/report_dialog_description"
         android:textColor="@color/gray_dark_666666" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_dialog_report_confirm"
-        style="@style/style_body1_kor"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom"
-        android:gravity="center"
-        android:includeFontPadding="false"
-        android:minHeight="0dp"
-        android:paddingVertical="14dp"
-        android:text="@string/confirm"
-        android:textColor="@color/black_000000" />
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_dialog_report_cancel"
+            style="@style/style_body1_kor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom_left"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minHeight="0dp"
+            android:paddingVertical="14dp"
+            android:text="@string/cancel"
+            android:textColor="@color/black_000000" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_dialog_report_confirm"
+            style="@style/style_body1_kor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom_right"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minHeight="0dp"
+            android:paddingVertical="14dp"
+            android:text="@string/confirm"
+            android:textColor="@color/black_000000" />
+    </LinearLayout>
 </LinearLayout>

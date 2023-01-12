@@ -15,6 +15,8 @@ import com.mate.baedalmate.databinding.DialogReportBinding
 object ReportAlertDialog {
     fun createReportDialog(
         context: Context,
+        title: String,
+        description: String,
         confirmButtonFunction: (() -> Unit)? = null
     ): AlertDialog {
         val binding = DialogReportBinding.inflate(LayoutInflater.from(context))
@@ -26,6 +28,11 @@ object ReportAlertDialog {
         alertDialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
 
         with(binding) {
+            tvDialogReportTitle.text = title
+            tvDialogReportDescription.text = description
+            btnDialogReportCancel.setOnDebounceClickListener {
+                alertDialog.dismiss()
+            }
             btnDialogReportConfirm.setOnDebounceClickListener {
                 if (confirmButtonFunction != null) {
                     confirmButtonFunction()
