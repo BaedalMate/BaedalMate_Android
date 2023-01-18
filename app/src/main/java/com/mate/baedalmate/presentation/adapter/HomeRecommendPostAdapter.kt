@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
+import com.mate.baedalmate.R
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.databinding.ItemHomeBottomPostRecommendBinding
 import com.mate.baedalmate.presentation.fragment.home.HomeFragmentDirections
@@ -78,32 +79,36 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
                 tvHomeBottomPostRecommendItemInfoTitle.text = "${post.place}"
                 tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
                 tvHomeBottomPostRecentItemTopTime.text = "${durationMinute}분"
-                tvHomeBottomPostRecommendItemInfoBottomDeliveryCurrent.text = " ${decimalFormat.format(post.shippingFee)}원"
-                tvHomeBottomPostRecommendItemInfoBottomCurrent.text = " ${decimalFormat.format(post.minPrice)}원"
+                tvHomeBottomPostRecommendItemInfoBottomDeliveryCurrent.text =
+                    " ${decimalFormat.format(post.shippingFee)}원"
+                tvHomeBottomPostRecommendItemInfoBottomCurrent.text =
+                    " ${decimalFormat.format(post.minPrice)}원"
                 tvHomeBottomPostRecommendItemInfoBottomUser.text =
                     "${post.username} · ${post.dormitory} ★ ️${post.userScore}"
 
                 root.setOnClickListener {
                     NavHostFragment.findNavController(binding.root.findFragment()).navigate(
                         HomeFragmentDirections.actionHomeFragmentToPostFragment(
-                        postId = post.recruitId
-                    ))
+                            postId = post.recruitId
+                        )
+                    )
                 }
                 setParticipateCloseLayout(post.active, this)
             }
 
         }
 
-        private fun setParticipateCloseLayout(isActive: Boolean, itemLayout: ItemHomeBottomPostRecommendBinding) {
+        private fun setParticipateCloseLayout(
+            isActive: Boolean,
+            itemLayout: ItemHomeBottomPostRecommendBinding
+        ) {
             with(itemLayout) {
                 if (isActive) {
                     layoutHomeBottomPostRecommendParticipateClose.visibility = View.GONE
-                    imgHomeBottomPostRecentItemTopTime.visibility = View.VISIBLE
-                    tvHomeBottomPostRecentItemTopTime.visibility = View.VISIBLE
                 } else {
                     layoutHomeBottomPostRecommendParticipateClose.visibility = View.VISIBLE
-                    imgHomeBottomPostRecentItemTopTime.visibility = View.GONE
-                    tvHomeBottomPostRecentItemTopTime.visibility = View.GONE
+                    tvHomeBottomPostRecentItemTopTime.text =
+                        tvHomeBottomPostRecentItemTopTime.context.getString(R.string.participate_close)
                 }
             }
         }

@@ -124,7 +124,7 @@
 
                     <TextView
                         android:id="@+id/tv_home_bottom_post_recent_item_top_person"
-                        style="@style/style_title2_kor"
+                        style="@style/style_semi_title_kor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"
@@ -154,7 +154,7 @@
 
                     <TextView
                         android:id="@+id/tv_home_bottom_post_recent_item_top_time"
-                        style="@style/style_title2_kor"
+                        style="@style/style_semi_title_kor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="5dp"

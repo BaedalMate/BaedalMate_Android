@@ -165,10 +165,9 @@ class HomeTopPostAdapter(private val requestManager: RequestManager) :
         with(itemLayout) {
             if (isActive) {
                 layoutHomeTopPostParticipateClose.visibility = View.GONE
-                tvHomeTopPostContentsInformationDescriptionTime.visibility = View.VISIBLE
             } else {
                 layoutHomeTopPostParticipateClose.visibility = View.VISIBLE
-                tvHomeTopPostContentsInformationDescriptionTime.visibility = View.INVISIBLE
+                tvHomeTopPostContentsInformationDescriptionTime.text = tvHomeTopPostContentsInformationDescriptionTime.context.getString(R.string.participate_close)
             }
         }
     }
