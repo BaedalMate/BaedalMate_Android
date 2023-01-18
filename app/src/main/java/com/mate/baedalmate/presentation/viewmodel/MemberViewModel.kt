@@ -1,9 +1,12 @@
 package com.mate.baedalmate.presentation.viewmodel
 
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.mate.baedalmate.BaedalMateApplication
 import com.mate.baedalmate.common.Event
 import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
@@ -40,6 +43,8 @@ class MemberViewModel @Inject constructor(
 ) : ViewModel() {
     private val _loginSuccess = MutableLiveData<Boolean>(false)
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
+
+    val isAccountValid: LiveData<Boolean?> get() = tokenPreferencesRepository.isAccountValid.asLiveData()
 
     private val _userInfo = MutableLiveData<UserInfoResponse>()
     val userInfo: LiveData<UserInfoResponse> get() = _userInfo
@@ -102,7 +107,10 @@ class MemberViewModel @Inject constructor(
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     _getUserInfoSuccess.postValue(true)
-                    ApiResponse.data?.let { _userInfo.postValue(it) }
+                    ApiResponse.data?.let {
+                        _userInfo.postValue(it)
+                        tokenPreferencesRepository.setUserInfo(it)
+                    }
                 }
                 ApiResult.Status.API_ERROR -> {
                     _getUserInfoSuccess.postValue(false)

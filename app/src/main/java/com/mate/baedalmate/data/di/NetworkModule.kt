@@ -113,6 +113,17 @@ object NetworkModule {
                                             stringPreferencesKey("refreshToken"),
                                             refreshedRefreshToken,
                                         )
+                                        if (tokenRefreshResponse.code == 200) {
+                                            BaedalMateApplication.applicationContext().tokenDataStore.storeValue(
+                                                booleanPreferencesKey("userAccountValid"), true
+                                            )
+                                        } else {
+                                            runBlocking {
+                                                BaedalMateApplication.applicationContext().tokenDataStore.storeValue(
+                                                    booleanPreferencesKey("userAccountValid"), false
+                                                )
+                                            }
+                                        }
                                     }
                                     val newTokenOriginalRequest = chain.request().newBuilder()
                                         .removeHeader("Authorization")
@@ -164,9 +175,19 @@ object NetworkModule {
                         tokenRefreshResponse
                     }
                     403 -> {
+                        runBlocking {
+                            BaedalMateApplication.applicationContext().tokenDataStore.storeValue(
+                                booleanPreferencesKey("userAccountValid"), false
+                            )
+                        }
                         originalResponse
                     }
                     else -> {
+                        runBlocking {
+                            BaedalMateApplication.applicationContext().tokenDataStore.storeValue(
+                                booleanPreferencesKey("userAccountValid"), true
+                            )
+                        }
                         originalResponse
                     }
                 }

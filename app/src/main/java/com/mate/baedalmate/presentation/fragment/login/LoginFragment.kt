@@ -44,6 +44,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+        checkAccountIsValid()
         initAlertDialog()
         loginSuccess()
         setKakaoLoginButtonClickListener()
@@ -54,6 +55,12 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun checkAccountIsValid() {
+        val isValid = requireActivity().intent.getBooleanExtra("isValid", true)
+        if (!isValid) {
+        }
     }
 
     private fun initAlertDialog() {
