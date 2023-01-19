@@ -1,5 +1,9 @@
 package com.mate.baedalmate.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.mate.baedalmate.data.datasource.PostPagingSource
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderRequest
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
 import com.mate.baedalmate.data.datasource.remote.recruit.DeleteOrderDto
@@ -8,24 +12,22 @@ import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.RecruitDetail
-import com.mate.baedalmate.domain.model.RecruitList
+import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.domain.model.setExceptionHandling
 import com.mate.baedalmate.domain.repository.RecruitRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: RecruitApiService) :
     RecruitRepository {
     override suspend fun requestRecruitList(
         categoryId: Int?,
-        page: Int,
-        size: Int,
         sort: String
-    ): ApiResult<RecruitList> =
-        setExceptionHandling {
-            recruitApiService.requestRecruitList(
-                categoryId = categoryId, page = page, size = size, sort = sort
-            )
-        }
+    ): Flow<PagingData<RecruitDto>> =
+        Pager(
+            config = PagingConfig(pageSize = 6, maxSize = 30, enablePlaceholders = false),
+            pagingSourceFactory = { PostPagingSource(recruitApiService, categoryId, sort) }
+        ).flow
 
     override suspend fun requestRecruitMainList(
         page: Int,

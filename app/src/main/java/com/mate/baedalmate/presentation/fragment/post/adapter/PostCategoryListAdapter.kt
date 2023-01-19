@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
@@ -24,7 +24,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class PostCategoryListAdapter(private val requestManager: RequestManager) :
-    ListAdapter<RecruitDto, PostCategoryListAdapter.PostCategoryListViewHolder>(diffCallback) {
+    PagingDataAdapter<RecruitDto, PostCategoryListAdapter.PostCategoryListViewHolder>(diffCallback) {
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<RecruitDto>() {
             override fun areItemsTheSame(
@@ -67,11 +67,7 @@ class PostCategoryListAdapter(private val requestManager: RequestManager) :
         holder: PostCategoryListAdapter.PostCategoryListViewHolder,
         position: Int,
     ) {
-        holder.bind(getItem(position))
-    }
-
-    override fun submitList(list: MutableList<RecruitDto>?) {
-        super.submitList(list?.let { ArrayList(it) })
+        getItem(position)?.let { holder.bind(it) }
     }
 
     inner class PostCategoryListViewHolder(private val binding: ItemPostCategoryListBinding) :
