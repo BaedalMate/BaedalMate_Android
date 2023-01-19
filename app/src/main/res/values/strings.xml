@@ -111,6 +111,7 @@
     <string name="post_not_active">마감된 모집글입니다</string>
     <string name="post_cancel">모집 취소</string>
     <string name="post_delivery_fee_help_detail_title">배달비 상세정보</string>
+    <string name="post_delivery_fee_help_detail_description">배달팁 계산 시, 나누어 떨어지지 않는 경우 1원이 추가되어 계산됩니다.</string>
     <string name="post_delivery_fee_help_coupon_title">쿠폰 사용 금액</string>
     <string name="post_delivery_fee_help_coupon_description">기존 금액에서 주최자의 쿠폰 사용금액만큼 할인된 후 배달비가 나누기 됩니다.</string>
     <string name="coupon_amount">쿠폰사용금액</string>
@@ -122,6 +123,7 @@
     <string name="post_menu_add_description">추가할 메뉴와 금액을 작성하여, 모든 메뉴를 추가한 뒤 모집에 참여하세요</string>
     <string name="post_menu_added_title">현재 작성 메뉴</string>
     <string name="post_category_list_empty">현재 \'%s\' 에 대한\n모집글이 없어요</string>
+    <string name="post_category_list_load_fail">네트워크 통신이 원활하지 않습니다.</string>
     <string name="post_modify"><u>모집글 수정하기</u></string>
     <string name="post_cancel_dialog_title">모집을 취소하시겠습니까?</string>
     <string name="post_cancel_dialog_description">모집 취소 시, 지금까지 진행된 모집이 중단됩니다.</string>
@@ -330,6 +332,10 @@
     <string name="history_post_status_success">모집 성공</string>
     <string name="history_post_status_cancel">모집 취소</string>
     <string name="history_post_status_fail">모집 실패</string>
+
+    <!-- Update -->
+    <string name="update_dialog_title">업데이트</string>
+    <string name="update_dialog_description">업데이트가 필요합니다</string>
 
     <!-- Participant Profile -->
 </resources>
