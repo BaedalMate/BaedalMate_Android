@@ -21,6 +21,7 @@ import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipat
 import com.mate.baedalmate.domain.usecase.member.RequestGetResignUserUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLoginKakaoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -64,6 +65,9 @@ class MemberViewModel @Inject constructor(
 
     private val _historyPostParticipatedList = MutableLiveData(HistoryRecruitList(emptyList()))
     val historyPostParticipatedList: LiveData<HistoryRecruitList> get() = _historyPostParticipatedList
+
+    private val _isLogoutSuccess = MutableLiveData<Event<Boolean>>()
+    val isLogoutSuccess: LiveData<Event<Boolean>> get() = _isLogoutSuccess
 
     private val _isResignSuccess = MutableLiveData<Event<Boolean>>()
     val isResignSuccess: LiveData<Event<Boolean>> get() = _isResignSuccess
@@ -174,8 +178,31 @@ class MemberViewModel @Inject constructor(
                 ApiResult.Status.SUCCESS -> {
                     _isResignSuccess.postValue(Event(true))
                 }
+                ApiResult.Status.API_ERROR -> {
+                    when (ApiResponse.code) {
+                        "400" -> Toast.makeText(
+                            BaedalMateApplication.applicationContext(),
+                            "참여중인 모집글이 있어 탈퇴처리가 완료되지 않았습니다",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        else -> _isResignSuccess.postValue(Event(false))
+                    }
+                }
                 else -> {
                     _isResignSuccess.postValue(Event(false))
+                }
+            }
+        }
+    }
+
+    fun requestLogout() = viewModelScope.launch {
+        requestLogoutUseCase().let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isLogoutSuccess.postValue(Event(true))
+                }
+                else -> {
+                    _isLogoutSuccess.postValue(Event(false))
                 }
             }
         }

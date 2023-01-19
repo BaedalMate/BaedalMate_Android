@@ -158,8 +158,7 @@ class MyPageFragment : Fragment() {
             title = getString(R.string.logout_dialog_title),
             description = getString(R.string.logout_dialog_description),
             confirmButtonFunction = {
-                clearLocalData()
-                navigateToLoginActivity()
+                setLogout()
             }
         )
     }
@@ -185,6 +184,27 @@ class MyPageFragment : Fragment() {
 
     private fun clearLocalData() {
         memberViewModel.requestClearAllLocalData()
+    }
+
+    private fun setLogout() {
+        observeLogoutResult()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                memberViewModel.requestLogout()
+            }
+        }
+    }
+
+    private fun observeLogoutResult() {
+        memberViewModel.isLogoutSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true) {
+                clearLocalData()
+                navigateToLoginActivity()
+                Toast.makeText(requireContext(), getString(R.string.logout_success_toast_message), Toast.LENGTH_SHORT).show()
+            } else if (isSuccess.getContentIfNotHandled() == false) {
+                Toast.makeText(requireContext(), getString(R.string.logout_fail_toast_message), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun setResignUser() {

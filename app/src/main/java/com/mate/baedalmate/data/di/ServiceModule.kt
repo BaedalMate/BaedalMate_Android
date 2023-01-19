@@ -40,7 +40,7 @@ import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUse
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetResignUserUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
-import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfilePhotoUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
@@ -101,6 +101,10 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideGetHistoryPostParticipatedUseCase(memberRepository: MemberRepository): RequestGetHistoryPostParticipatedUseCase = RequestGetHistoryPostParticipatedUseCase(memberRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestLogoutUseCase(memberRepository: MemberRepository): RequestLogoutUseCase = RequestLogoutUseCase(memberRepository)
 
     @Singleton
     @Provides
