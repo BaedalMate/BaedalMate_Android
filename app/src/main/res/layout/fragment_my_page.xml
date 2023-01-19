@@ -387,7 +387,8 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray_line_EBEBEB" />
+                        android:background="@color/gray_line_EBEBEB"
+                        android:visibility="invisible" />
 
                     <LinearLayout
                         android:id="@+id/layout_my_page_menus_info_inquiry"

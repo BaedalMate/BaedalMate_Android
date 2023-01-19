@@ -38,6 +38,9 @@ interface MemberApiService {
         @Query("sort") sort: String
     ): Response<HistoryRecruitList>
 
+    @POST("/logout")
+    suspend fun requestPostLogout(): Response<ResultSuccessResponseDto>
+
     @GET("/api/v1/user/deactivate")
     suspend fun requestGetResignUser(): Response<ResultSuccessResponseDto>
 }

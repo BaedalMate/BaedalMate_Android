@@ -311,6 +311,8 @@
     <!-- Logout -->
     <string name="logout_dialog_title">로그아웃 하시겠습니까?</string>
     <string name="logout_dialog_description">로그아웃하는 경우, 다음 앱 접속시에 다시 로그인을 해야 이용 가능합니다.</string>
+    <string name="logout_success_toast_message">정상적으로 로그아웃되었습니다.</string>
+    <string name="logout_fail_toast_message">정상적으로 로그아웃이 완료되지 않았습니다. 다시 시도 해주세요</string>
     <!-- Resign -->
     <string name="resign_dialog_title">탈퇴 하시겠습니까?</string>
     <string name="resign_dialog_description">회원 탈퇴시, 현재까지 모집글에 참여한 기록이 삭제됩니다.</string>
