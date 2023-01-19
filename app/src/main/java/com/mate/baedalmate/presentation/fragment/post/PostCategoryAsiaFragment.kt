@@ -11,7 +11,11 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -19,9 +23,14 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.databinding.FragmentPostCategoryAsiaBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostCategoryAsiaFragment : Fragment() {
@@ -56,8 +65,6 @@ class PostCategoryAsiaFragment : Fragment() {
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
             categoryId = 10,
-            page = 0,
-            size = 10000,
             sort = sort
         )
     }
@@ -66,7 +73,9 @@ class PostCategoryAsiaFragment : Fragment() {
         postCategoryListAdapter = PostCategoryListAdapter(requestManager = glideRequestManager)
         binding.rvPostCategoryAsiaList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
-            rvPostCategoryAsiaList.adapter = postCategoryListAdapter
+            rvPostCategoryAsiaList.adapter = postCategoryListAdapter.withLoadStateFooter(
+                PostCategoryLoadStateAdapter { postCategoryListAdapter.retry() }
+            )
         }
     }
 
@@ -102,19 +111,30 @@ class PostCategoryAsiaFragment : Fragment() {
         val emptyView = emptyPostCategoryViewBinding.root
         addEmptyView(emptyView)
 
-        recruitViewModel.recruitListAsia.observe(viewLifecycleOwner) { recruitList ->
-            if (recruitList.recruitList.isNotEmpty()) {
-                postCategoryListAdapter.submitList(recruitList.recruitList.toMutableList())
-                with(constraintSet) {
-                    clone(binding.layoutPostCategoryListAsia)
-                    setVisibility(emptyView.id, View.GONE)
-                    applyTo(binding.layoutPostCategoryListAsia)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    recruitViewModel.recruitListAsia.collectLatest { recruitList ->
+                        postCategoryListAdapter.submitData(recruitList)
+                    }
                 }
-            } else {
-                with(constraintSet) {
-                    clone(binding.layoutPostCategoryListAsia)
-                    setVisibility(emptyView.id, View.VISIBLE)
-                    applyTo(binding.layoutPostCategoryListAsia)
+
+                launch {
+                    postCategoryListAdapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collect {
+                            if (it is LoadState.NotLoading) {
+                                if (postCategoryListAdapter.itemCount == 0) {
+                                    constraintSet.clone(binding.layoutPostCategoryListAsia)
+                                    constraintSet.setVisibility(emptyView.id, View.VISIBLE)
+                                    constraintSet.applyTo(binding.layoutPostCategoryListAsia)
+                                } else {
+                                    constraintSet.clone(binding.layoutPostCategoryListAsia)
+                                    constraintSet.setVisibility(emptyView.id, View.GONE)
+                                    constraintSet.applyTo(binding.layoutPostCategoryListAsia)
+                                }
+                            }
+                        }
                 }
             }
         }

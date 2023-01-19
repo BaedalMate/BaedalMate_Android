@@ -11,7 +11,11 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -19,9 +23,14 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.databinding.FragmentPostCategoryFastfoodBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostCategoryFastfoodFragment : Fragment() {
@@ -56,8 +65,6 @@ class PostCategoryFastfoodFragment : Fragment() {
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
             categoryId = 5,
-            page = 0,
-            size = 10000,
             sort = sort
         )
     }
@@ -66,7 +73,9 @@ class PostCategoryFastfoodFragment : Fragment() {
         postCategoryListAdapter = PostCategoryListAdapter(requestManager = glideRequestManager)
         binding.rvPostCategoryFastfoodList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
-            rvPostCategoryFastfoodList.adapter = postCategoryListAdapter
+            rvPostCategoryFastfoodList.adapter = postCategoryListAdapter.withLoadStateFooter(
+                PostCategoryLoadStateAdapter { postCategoryListAdapter.retry() }
+            )
         }
     }
 
@@ -102,19 +111,30 @@ class PostCategoryFastfoodFragment : Fragment() {
         val emptyView = emptyPostCategoryViewBinding.root
         addEmptyView(emptyView)
 
-        recruitViewModel.recruitListFastfood.observe(viewLifecycleOwner) { recruitList ->
-            if (recruitList.recruitList.isNotEmpty()) {
-                postCategoryListAdapter.submitList(recruitList.recruitList.toMutableList())
-                with(constraintSet) {
-                    clone(binding.layoutPostCategoryListFastfood)
-                    setVisibility(emptyView.id, View.GONE)
-                    applyTo(binding.layoutPostCategoryListFastfood)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    recruitViewModel.recruitListFastfood.collectLatest { recruitList ->
+                        postCategoryListAdapter.submitData(recruitList)
+                    }
                 }
-            } else {
-                with(constraintSet) {
-                    clone(binding.layoutPostCategoryListFastfood)
-                    setVisibility(emptyView.id, View.VISIBLE)
-                    applyTo(binding.layoutPostCategoryListFastfood)
+
+                launch {
+                    postCategoryListAdapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collect {
+                            if (it is LoadState.NotLoading) {
+                                if (postCategoryListAdapter.itemCount == 0) {
+                                    constraintSet.clone(binding.layoutPostCategoryListFastfood)
+                                    constraintSet.setVisibility(emptyView.id, View.VISIBLE)
+                                    constraintSet.applyTo(binding.layoutPostCategoryListFastfood)
+                                } else {
+                                    constraintSet.clone(binding.layoutPostCategoryListFastfood)
+                                    constraintSet.setVisibility(emptyView.id, View.GONE)
+                                    constraintSet.applyTo(binding.layoutPostCategoryListFastfood)
+                                }
+                            }
+                        }
                 }
             }
         }

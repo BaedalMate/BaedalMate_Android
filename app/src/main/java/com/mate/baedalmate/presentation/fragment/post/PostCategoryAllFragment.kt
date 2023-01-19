@@ -7,17 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.databinding.FragmentPostCategoryAllBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PostCategoryAllFragment : Fragment() {
@@ -50,8 +60,7 @@ class PostCategoryAllFragment : Fragment() {
 
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
-            page = 0,
-            size = 10000,
+            categoryId = null,
             sort = sort
         )
     }
@@ -60,7 +69,10 @@ class PostCategoryAllFragment : Fragment() {
         postCategoryListAdapter = PostCategoryListAdapter(requestManager = glideRequestManager)
         binding.rvPostCategoryAllList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
-            rvPostCategoryAllList.adapter = postCategoryListAdapter
+            rvPostCategoryAllList.adapter = postCategoryListAdapter.withLoadStateFooter(
+                PostCategoryLoadStateAdapter { postCategoryListAdapter.retry() }
+            )
+            postCategoryListAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
     }
 
@@ -86,18 +98,31 @@ class PostCategoryAllFragment : Fragment() {
         emptyPostCategoryViewBinding.tvEmptyPostCategoryGuideNotAppear.text = "현재 모집글이 없어요"
         val emptyView = emptyPostCategoryViewBinding.root
         addEmptyView(emptyView)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    recruitViewModel.recruitListAll.collectLatest { recruitList ->
+                        postCategoryListAdapter.submitData(recruitList)
+                    }
+                }
 
-        recruitViewModel.recruitListAll.observe(viewLifecycleOwner) { recruitList ->
-            if (recruitList.recruitList.isNotEmpty()) {
-                postCategoryListAdapter.submitList(recruitList.recruitList.toMutableList())
-                constraintSet.clone(binding.layoutPostCategoryListAll)
-                constraintSet.setVisibility(emptyView.id, View.GONE)
-                constraintSet.applyTo(binding.layoutPostCategoryListAll)
-            }
-            else {
-                constraintSet.clone(binding.layoutPostCategoryListAll)
-                constraintSet.setVisibility(emptyView.id, View.VISIBLE)
-                constraintSet.applyTo(binding.layoutPostCategoryListAll)
+                launch {
+                    postCategoryListAdapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collect {
+                            if (it is LoadState.NotLoading) {
+                                if (postCategoryListAdapter.itemCount == 0) {
+                                    constraintSet.clone(binding.layoutPostCategoryListAll)
+                                    constraintSet.setVisibility(emptyView.id, View.VISIBLE)
+                                    constraintSet.applyTo(binding.layoutPostCategoryListAll)
+                                } else {
+                                    constraintSet.clone(binding.layoutPostCategoryListAll)
+                                    constraintSet.setVisibility(emptyView.id, View.GONE)
+                                    constraintSet.applyTo(binding.layoutPostCategoryListAll)
+                                }
+                            }
+                        }
+                }
             }
         }
 
@@ -117,10 +142,34 @@ class PostCategoryAllFragment : Fragment() {
         binding.layoutPostCategoryListAll.addView(emptyView)
 
         constraintSet.clone(binding.layoutPostCategoryListAll)
-        constraintSet.connect(emptyView.id, ConstraintSet.TOP, binding.layoutPostCategoryListAll.id, ConstraintSet.TOP, 0)
-        constraintSet.connect(emptyView.id, ConstraintSet.BOTTOM, binding.layoutPostCategoryListAll.id, ConstraintSet.BOTTOM, 0)
-        constraintSet.connect(emptyView.id, ConstraintSet.START, binding.layoutPostCategoryListAll.id, ConstraintSet.START, 0)
-        constraintSet.connect(emptyView.id, ConstraintSet.END, binding.layoutPostCategoryListAll.id, ConstraintSet.END, 0)
+        constraintSet.connect(
+            emptyView.id,
+            ConstraintSet.TOP,
+            binding.layoutPostCategoryListAll.id,
+            ConstraintSet.TOP,
+            0
+        )
+        constraintSet.connect(
+            emptyView.id,
+            ConstraintSet.BOTTOM,
+            binding.layoutPostCategoryListAll.id,
+            ConstraintSet.BOTTOM,
+            0
+        )
+        constraintSet.connect(
+            emptyView.id,
+            ConstraintSet.START,
+            binding.layoutPostCategoryListAll.id,
+            ConstraintSet.START,
+            0
+        )
+        constraintSet.connect(
+            emptyView.id,
+            ConstraintSet.END,
+            binding.layoutPostCategoryListAll.id,
+            ConstraintSet.END,
+            0
+        )
         constraintSet.applyTo(binding.layoutPostCategoryListAll)
     }
 }
