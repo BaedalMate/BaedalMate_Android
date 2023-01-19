@@ -5,6 +5,7 @@ import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.ResultSuccessResponseDto
+import com.mate.baedalmate.data.datasource.remote.member.UpdateDormitoryDto
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
@@ -22,14 +23,20 @@ class MemberRepositoryImpl @Inject constructor(private val memberApiService: Mem
     override suspend fun requestGetUserInfo(): ApiResult<UserInfoResponse> =
         setExceptionHandling { memberApiService.requestGetUserInfo() }
 
-    override suspend fun requestPutUserDormitory(newDormitory: Dormitory): ApiResult<Void> =
-        setExceptionHandling { memberApiService.requestPutUserDormitory(dormitory = newDormitory) }
+    override suspend fun requestPutUserDormitory(newDormitory: Dormitory): ApiResult<ResultSuccessResponseDto> =
+        setExceptionHandling {
+            memberApiService.requestPutUserDormitory(
+                dormitory = UpdateDormitoryDto(
+                    newDormitory
+                )
+            )
+        }
 
-    override suspend fun requestPutChangeMyProfile(updateUserInfo: UpdateUserDto): ApiResult<UserInfoResponse> =
-        setExceptionHandling { memberApiService.requestPutChangeMyProfile(updateUserInfo = updateUserInfo) }
-
-    override suspend fun requestPutChangeMyProfilePhoto(uploadfile: MultipartBody.Part?): ApiResult<Void> =
-        setExceptionHandling { memberApiService.requestPutChangeMyProfilePhoto(uploadfile = uploadfile) }
+    override suspend fun requestPutChangeMyProfile(
+        newNickname: String,
+        uploadfile: MultipartBody.Part?
+    ): ApiResult<UserInfoResponse> =
+        setExceptionHandling { memberApiService.requestPutChangeMyProfile(nickname = newNickname, uploadfile = uploadfile) }
 
     override suspend fun requestGetHistoryPostCreated(
         page: Int,

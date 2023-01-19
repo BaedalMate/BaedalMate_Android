@@ -60,6 +60,12 @@ class LoginFragment : Fragment() {
     private fun checkAccountIsValid() {
         val isValid = requireActivity().intent.getBooleanExtra("isValid", true)
         if (!isValid) {
+            with(findNavController()) {
+                if (currentDestination?.id == R.id.LoginFragment) {
+                    currentDestination?.getAction(R.id.action_loginFragment_to_setAccountMyProfileFragment)
+                        ?.let { navigate(R.id.action_loginFragment_to_setAccountMyProfileFragment) }
+                }
+            }
         }
     }
 

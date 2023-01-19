@@ -455,7 +455,12 @@
         android:id="@+id/LocationCertificationFragment"
         android:name="com.mate.baedalmate.presentation.fragment.location.LocationCertificationFragment"
         android:label="fragment_location_certification"
-        tools:layout="@layout/fragment_location_certification" />
+        tools:layout="@layout/fragment_location_certification">
+        <argument
+            android:name="isInitialCertificate"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
 
     <fragment
         android:id="@+id/BlockUserListFragment"

@@ -56,8 +56,9 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_my_profile_change_photo"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -68,16 +69,20 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img_my_profile_change_photo_thumbnail"
                     android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="48dp"
-                    android:src="@color/gray_dark_666666"
+                    android:layout_height="0dp"
+                    android:background="#8F939B"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_person"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="W,1:1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:shapeAppearanceOverlay="@style/roundImageView" />
+                    app:shapeAppearanceOverlay="@style/roundImageView"
+                    app:strokeColor="@color/gray_line_EBEBEB"
+                    app:strokeWidth="1dp" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img_my_profile_change_photo_thumbnail_icon"
@@ -134,6 +139,7 @@
                     android:background="@drawable/background_white_radius_10_stroke_gray_line"
                     android:hint="@string/my_profile_change_nickname_hint"
                     android:imeOptions="actionDone"
+                    android:inputType="textNoSuggestions"
                     android:maxLength="5"
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="10dp"
@@ -153,9 +159,10 @@
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
+                android:enabled="false"
                 android:stateListAnimator="@null"
                 android:text="@string/save"
-                android:textColor="@color/white_FFFFFF"
+                android:textColor="@drawable/selector_textview_white_gray_main"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
