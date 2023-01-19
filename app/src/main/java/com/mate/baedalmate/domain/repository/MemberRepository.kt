@@ -13,11 +13,8 @@ import okhttp3.MultipartBody
 interface MemberRepository {
     suspend fun requestLoginKakao(body: MemberOAuthRequest): ApiResult<MemberOAuthResponse>
     suspend fun requestGetUserInfo(): ApiResult<UserInfoResponse>
-    suspend fun requestPutUserDormitory(newDormitory: Dormitory): ApiResult<Void>
-    suspend fun requestPutChangeMyProfile(updateUserInfo: UpdateUserDto): ApiResult<UserInfoResponse>
-    suspend fun requestPutChangeMyProfilePhoto(
-        uploadfile: MultipartBody.Part?
-    ): ApiResult<Void>
+    suspend fun requestPutUserDormitory(newDormitory: Dormitory): ApiResult<ResultSuccessResponseDto>
+    suspend fun requestPutChangeMyProfile(newNickname: String, uploadfile: MultipartBody.Part?): ApiResult<UserInfoResponse>
     suspend fun requestGetHistoryPostCreated(
         page: Int,
         size: Int,

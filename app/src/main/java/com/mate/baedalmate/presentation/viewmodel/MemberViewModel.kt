@@ -21,7 +21,6 @@ import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipat
 import com.mate.baedalmate.domain.usecase.member.RequestGetResignUserUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLoginKakaoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
-import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfilePhotoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,7 +35,6 @@ class MemberViewModel @Inject constructor(
     private val requestPutUserDormitoryUseCase: RequestPutUserDormitoryUseCase,
     private val tokenPreferencesRepository: TokenPreferencesRepository,
     private val requestPutChangeMyProfileUseCase: RequestPutChangeMyProfileUseCase,
-    private val requestPutChangeMyProfilePhotoUseCase: RequestPutChangeMyProfilePhotoUseCase,
     private val requestGetHistoryPostCreatedUseCase: RequestGetHistoryPostCreatedUseCase,
     private val requestGetHistoryPostParticipatedUseCase: RequestGetHistoryPostParticipatedUseCase,
     private val requestGetResignUserUseCase: RequestGetResignUserUseCase
@@ -133,27 +131,14 @@ class MemberViewModel @Inject constructor(
         }
     }
 
-    fun requestPutChangeMyProfile(newNickname: String) = viewModelScope.launch {
-        requestPutChangeMyProfileUseCase(updateUserInfo = UpdateUserDto(nickname = newNickname)).let { ApiResponse ->
+    fun requestPutChangeMyProfile(newNickname: String, newImageFile: File?) = viewModelScope.launch {
+        requestPutChangeMyProfileUseCase(newNickname = newNickname, newImageFile = newImageFile).let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     _isMyProfileChangeSuccess.postValue(Event(true))
                 }
                 else -> {
                     _isMyProfileChangeSuccess.postValue(Event(false))
-                }
-            }
-        }
-    }
-
-    fun requestPutChangeMyProfilePhoto(newImageFile: File) = viewModelScope.launch {
-        requestPutChangeMyProfilePhotoUseCase(newImageFile = newImageFile).let { ApiResponse ->
-            when (ApiResponse.status) {
-                ApiResult.Status.SUCCESS -> {
-                    _isMyProfilePhotoChangeSuccess.postValue(Event(true))
-                }
-                else -> {
-                    _isMyProfilePhotoChangeSuccess.postValue(Event(false))
                 }
             }
         }

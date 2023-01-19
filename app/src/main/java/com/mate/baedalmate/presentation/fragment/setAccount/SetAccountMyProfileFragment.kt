@@ -1,4 +1,4 @@
-package com.mate.baedalmate.presentation.fragment.profile
+package com.mate.baedalmate.presentation.fragment.setAccount
 
 import android.Manifest
 import android.app.Activity
@@ -14,20 +14,15 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.InputFilter
-import android.text.InputFilter.LengthFilter
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
@@ -41,7 +36,6 @@ import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentMyProfileChangeBinding
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -51,7 +45,7 @@ import java.util.Locale
 import java.util.regex.Pattern
 
 @AndroidEntryPoint
-class MyProfileChangeFragment : Fragment() {
+class SetAccountMyProfileFragment : Fragment() {
     private var binding by autoCleared<FragmentMyProfileChangeBinding>()
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private lateinit var glideRequestManager: RequestManager
@@ -79,11 +73,9 @@ class MyProfileChangeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         HideKeyBoardUtil.hideTouchDisplay(requireActivity(), view)
         initAlertDialog()
-        getUserData()
-        initUserData()
-        setBackClickListener()
+        setActionbarInfo()
         setImageChangeClickListener()
-        setChangeSubmitClickListener()
+        setInitSubmitClick()
         setLimitEditTextInputType()
         observeMyProfileChange()
     }
@@ -98,29 +90,12 @@ class MyProfileChangeFragment : Fragment() {
         loadingAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun getUserData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                memberViewModel.requestUserInfo()
-            }
-        }
-    }
-
-    private fun initUserData() {
-        memberViewModel.userInfo.observe(viewLifecycleOwner) { info ->
-            glideRequestManager.load("http://3.35.27.107:8080/images/${info.profileImage}")
-                .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
-                .priority(Priority.HIGH)
-                .centerCrop()
-                .into(binding.imgMyProfileChangePhotoThumbnail)
-
-            binding.etMyProfileChangeNickname.setText(info.nickname)
-        }
-    }
-
-    private fun setBackClickListener() {
-        binding.btnMyProfileChangeActionbarBack.setOnDebounceClickListener {
-            findNavController().navigateUp()
+    private fun setActionbarInfo() {
+        with(binding) {
+            btnMyProfileChangeActionbarBack.visibility = View.INVISIBLE
+            btnMyProfileChangeActionbarBack.isEnabled = false
+            tvMyProfileChangeActionbarTitle.text =
+                getString(R.string.set_account_my_profile_actionbar_title)
         }
     }
 
@@ -135,10 +110,12 @@ class MyProfileChangeFragment : Fragment() {
         }
     }
 
-    private fun setChangeSubmitClickListener() {
-        binding.btnMyProfileChangeSubmit.setOnDebounceClickListener {
-            setMyProfileSubmit()
+    private fun setInitSubmitClick() {
+        with(binding.btnMyProfileChangeSubmit) {
+            text = getString(R.string.next_to)
+            setOnDebounceClickListener { setMyProfileSubmit() }
         }
+
         binding.etMyProfileChangeNickname.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -157,7 +134,7 @@ class MyProfileChangeFragment : Fragment() {
                 }
                 null
             }
-        val lengthFilter: InputFilter = LengthFilter(5)
+        val lengthFilter: InputFilter = InputFilter.LengthFilter(5)
         binding.etMyProfileChangeNickname.filters =
             arrayOf(filterInputCheck, lengthFilter)
     }
@@ -173,12 +150,18 @@ class MyProfileChangeFragment : Fragment() {
     private fun observeMyProfileChange() {
         memberViewModel.isMyProfileChangeSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess.getContentIfNotHandled() == true) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.my_profile_change_success_toast_message),
-                    Toast.LENGTH_SHORT
-                ).show()
-                findNavController().navigateUp()
+                with(findNavController()) {
+                    if (currentDestination?.id == R.id.SetAccountMyProfileFragment) {
+                        currentDestination?.getAction(R.id.action_setAccountMyProfileFragment_to_locationCertificationFragment)
+                            ?.let {
+                                navigate(
+                                    SetAccountMyProfileFragmentDirections.actionSetAccountMyProfileFragmentToLocationCertificationFragment(
+                                        isInitialCertificate = true
+                                    )
+                                )
+                            }
+                    }
+                }
             }
         }
     }

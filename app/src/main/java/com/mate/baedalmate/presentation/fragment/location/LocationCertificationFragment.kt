@@ -3,6 +3,7 @@ package com.mate.baedalmate.presentation.fragment.location
 import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
@@ -18,12 +19,14 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentLocationCertificationBinding
 import com.mate.baedalmate.domain.model.Dormitory
+import com.mate.baedalmate.presentation.activity.MainActivity
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +39,7 @@ import net.daum.mf.map.api.MapView
 class LocationCertificationFragment : Fragment() {
     private var binding by autoCleared<FragmentLocationCertificationBinding>()
     private val memberViewModel by activityViewModels<MemberViewModel>()
+    private val args by navArgs<LocationCertificationFragmentArgs>()
     private lateinit var locationManager: LocationManager
     private lateinit var spinnerAdapter: WriteSecondDormitorySpinnerAdapter
     private lateinit var mapView: MapView
@@ -52,13 +56,19 @@ class LocationCertificationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAlertDialog()
+        setInitialLocationCertification()
         initDormitorySpinner()
         setDormitoryLocation()
         checkUserLocationServiceEnabled()
         setLocationChangeClickListener()
         observeChangeSpinnerSelectedItem()
-        observeLocationChange()
+        observeLocationChange(isInitialCertificate = args.isInitialCertificate)
         initMap()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        clearMapView()
     }
 
     override fun onDestroyView() {
@@ -113,6 +123,23 @@ class LocationCertificationFragment : Fragment() {
                 }
             }
         }
+
+    private fun setInitialLocationCertification() {
+        if (args.isInitialCertificate) {
+            with(binding.btnLocationCertificationActionbarBack) {
+                visibility = View.INVISIBLE
+            }
+            binding.btnLocationCertificationChange.text = "거점 인증하기"
+        } else {
+            with(binding.btnLocationCertificationActionbarBack) {
+                visibility = View.VISIBLE
+                setOnDebounceClickListener {
+                    findNavController().navigateUp()
+                }
+            }
+            binding.btnLocationCertificationChange.text = getString(R.string.location_certification_change)
+        }
+    }
 
     private fun initDormitorySpinner() {
         val items = resources.getStringArray(R.array.dormitory_list)
@@ -198,10 +225,19 @@ class LocationCertificationFragment : Fragment() {
         }
     }
 
-    private fun observeLocationChange() {
+    private fun observeLocationChange(isInitialCertificate: Boolean?) {
         memberViewModel.isDormitoryChangeSuccess.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess.getContentIfNotHandled() == true)
-                findNavController().navigateUp()
+            if (isSuccess.getContentIfNotHandled() == true) {
+                if (isInitialCertificate == true) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.flags =
+                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    startActivity(intent)
+                    requireActivity().finish()
+                } else {
+                    findNavController().navigateUp()
+                }
+            }
         }
     }
 
@@ -338,5 +374,9 @@ class LocationCertificationFragment : Fragment() {
     private fun showLoadingDialog() {
         LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
         LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
+    }
+
+    private fun clearMapView() {
+        binding.layoutLocationCertificationUserMap.removeAllViews()
     }
 }
