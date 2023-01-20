@@ -108,7 +108,7 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
                 } else {
                     layoutHomeBottomPostRecommendParticipateClose.visibility = View.VISIBLE
                     tvHomeBottomPostRecentItemTopTime.text =
-                        tvHomeBottomPostRecentItemTopTime.context.getString(R.string.participate_close)
+                        tvHomeBottomPostRecentItemTopTime.context.getString(R.string.participate_complete)
                 }
             }
         }

@@ -36,7 +36,8 @@
     <string name="nickname">닉네임</string>
     <string name="save">저장하기</string>
     <string name="dialog_loading_wait_description">잠시만 기다려 주세요!</string>
-    <string name="participate_close">모집 완료</string>소
+    <string name="participate_complete">모집 완료</string>
+    <string name="participate_close">모집 마감</string>
 
     <!-- Finish Criterion -->
     <string name="finish_criterion_number_people">최소인원</string>
