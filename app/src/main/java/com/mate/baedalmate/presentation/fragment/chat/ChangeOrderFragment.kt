@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
@@ -34,11 +35,12 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
     private val args by navArgs<ChangeOrderFragmentArgs>()
     private val chatViewModel by activityViewModels<ChatViewModel>()
     private lateinit var writeFourthMenuListAdapter: WriteFourthMenuListAdapter
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     private var addedMenuList = ListLiveData<MenuDto>()
     private var dishCount = 1
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        return initBottomSheetDialog()
     }
 
     override fun onCreateView(
@@ -60,6 +62,13 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
         setChangeOrderClickListener()
         observeChangeOrderSuccess()
         setMenuListOriginalValue()
+    }
+
+    private fun initBottomSheetDialog(): BottomSheetDialog {
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog.setCanceledOnTouchOutside(true)
+        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        return bottomSheetDialog
     }
 
     private fun getMyMenuList() {
@@ -226,6 +235,7 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
                 writeFourthMenuListAdapter.notifyDataSetChanged()
                 binding.layoutChangeOrderAdded.visibility = View.VISIBLE
                 binding.btnChangeOrderSubmit.isEnabled = true
+                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED // HALF EXPAND를 false 처리했음에도 처음에 동적으로 크기가 변하는 경우 절반만 보여지는 상태에 의해 해결을 위해 추가
             } else {
                 binding.layoutChangeOrderAdded.visibility = View.GONE
                 binding.btnChangeOrderSubmit.isEnabled = false

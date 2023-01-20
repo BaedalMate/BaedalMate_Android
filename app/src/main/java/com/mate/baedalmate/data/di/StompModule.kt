@@ -50,7 +50,7 @@ class StompModule {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { topicMessage ->
-                val senderId = JSONObject(topicMessage.payload).getLong("senderId")
+                val senderId = JSONObject(topicMessage.payload).getInt("senderId")
                 val sender = JSONObject(topicMessage.payload).getString("sender")
                 val senderImage = JSONObject(topicMessage.payload).getString("senderImage")
                 val roomIdRecv = JSONObject(topicMessage.payload).getLong("roomId")
@@ -82,7 +82,7 @@ class StompModule {
         compositeDisposable = CompositeDisposable()
     }
 
-    fun sendMessage(roomId: Long, message: String, senderId: Long) {
+    fun sendMessage(roomId: Long, message: String, senderId: Int) {
         // 전송할 값
         val data = JSONObject()
         data.put("roomId", roomId)

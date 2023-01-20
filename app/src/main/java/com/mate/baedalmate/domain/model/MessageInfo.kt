@@ -11,13 +11,15 @@ data class MessageInfo(
     val sendDate: String,
     @SerializedName("sender")
     val sender: String,
+    @SerializedName("senderId")
+    val senderId: Int,
     @SerializedName("senderImage")
     val senderImage: String?,
 )
 
 data class ReceiveMessageInfo(
     @SerializedName("senderId")
-    val senderId: Long,
+    val senderId: Int,
     @SerializedName("sender")
     val sender: String,
     @SerializedName("senderImage")

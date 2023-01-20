@@ -20,14 +20,14 @@ class ChatRepositoryImpl @Inject constructor(private val chatApiService: ChatApi
     override suspend fun requestGetChatRoomDetail(roomId: Int): ApiResult<ChatRoomDetail> =
         setExceptionHandling { chatApiService.requestGetChatRoomDetail(roomId = roomId) }
 
-    override suspend fun requestGetChatParticipants(id: Int): ApiResult<ParticipantsDto> =
-        setExceptionHandling { chatApiService.requestGetChatParticipants(id = id) }
+    override suspend fun requestGetChatParticipants(recruitId: Int): ApiResult<ParticipantsDto> =
+        setExceptionHandling { chatApiService.requestGetChatParticipants(id = recruitId) }
 
-    override suspend fun requestGetAllMenuList(id: Int): ApiResult<ParticipantsMenuDto> =
-        setExceptionHandling { chatApiService.requestGetAllMenuList(id = id) }
+    override suspend fun requestGetAllMenuList(recruitId: Int): ApiResult<ParticipantsMenuDto> =
+        setExceptionHandling { chatApiService.requestGetAllMenuList(id = recruitId) }
 
-    override suspend fun requestGetMyMenuList(id: Int): ApiResult<MyMenuDto> =
-        setExceptionHandling { chatApiService.requestGetMyMenuList(id = id) }
+    override suspend fun requestGetMyMenuList(recruitId: Int): ApiResult<MyMenuDto> =
+        setExceptionHandling { chatApiService.requestGetMyMenuList(id = recruitId) }
 
     override suspend fun requestPutChangeMyMenuList(data: OrderDto): ApiResult<Void> =
         setExceptionHandling { chatApiService.requestPutChangeMyMenuList(data = data) }

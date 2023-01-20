@@ -13,56 +13,63 @@
         android:orientation="horizontal"
         android:paddingBottom="15dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_chat_other_log"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="7.5dp"
-            android:orientation="vertical"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias=".0"
             app:layout_constraintStart_toEndOf="@id/img_chat_other"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@id/tv_chat_other_name"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_max="wrap"
+            app:layout_constraintWidth_percent="0.65">
 
             <TextView
                 android:id="@+id/tv_chat_other_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:background="@drawable/background_white_radius_20"
                 android:backgroundTint="@color/background_F7F8FA"
-                android:gravity="start"
                 android:paddingHorizontal="15dp"
                 android:paddingVertical="10dp"
                 android:textColor="@color/black_000000"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_chat_other_time"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 tools:text="계좌번호 알려주세요" />
 
             <TextView
                 android:id="@+id/tv_chat_other_time"
                 style="@style/style_caption1_kor"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
                 android:singleLine="true"
                 android:textColor="@color/gray_dark_666666"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/layout_chat_other_log"
+                app:layout_constraintStart_toEndOf="@id/tv_chat_other_message"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
                 tools:text="오후 6:51" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/img_chat_other"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
             android:layout_gravity="top|start"
             android:layout_marginTop="6dp"
             android:src="@color/gray_dark_666666"
@@ -77,15 +84,14 @@
         <TextView
             android:id="@+id/tv_chat_other_name"
             style="@style/style_body2_kor"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="7.5dp"
+            android:maxLength="5"
             android:textColor="@color/black_000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/img_chat_other"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_chat_other"
+            app:layout_constraintStart_toEndOf="@id/img_chat_other"
+            app:layout_constraintTop_toTopOf="@id/img_chat_other"
             app:layout_constraintVertical_bias="0.0"
             tools:text="JunJunJunJunJunJunJun" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,8 +70,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getChatParticipants(id: Int) = viewModelScope.launch {
-        requestGetChatParticipantsUseCase(id = id).let { ApiResponse ->
+    fun getChatParticipants(recruitId: Int) = viewModelScope.launch {
+        requestGetChatParticipantsUseCase(recruitId = recruitId).let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     ApiResponse.data.let { _chatParticipants.postValue(it) }
@@ -80,8 +80,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getAllMenuList(id: Int) = viewModelScope.launch {
-        requestGetAllMenuListUseCase(id = id).let { ApiResponse ->
+    fun getAllMenuList(recruitId: Int) = viewModelScope.launch {
+        requestGetAllMenuListUseCase(recruitId = recruitId).let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     ApiResponse.data.let { _allMenuList.postValue(it) }
@@ -90,8 +90,8 @@ class ChatViewModel @Inject constructor(
         }
     }
 
-    fun getMyMenuList(id: Int) = viewModelScope.launch {
-        requestGetMyMenuListUseCase(id = id).let { ApiResponse ->
+    fun getMyMenuList(recruitId: Int) = viewModelScope.launch {
+        requestGetMyMenuListUseCase(recruitId = recruitId).let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     ApiResponse.data.let { _myMenuList.postValue(it) }
