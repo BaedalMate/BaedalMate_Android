@@ -7,6 +7,8 @@ plugins {
     id 'kotlin-parcelize'
     id 'kotlinx-serialization'
     id 'io.sentry.android.gradle'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 Properties properties = new Properties()
@@ -158,4 +160,9 @@ dependencies {
     // Jetpack Paging3
     implementation "androidx.paging:paging-runtime:$paging_version"
 //    implementation "androidx.paging:paging-compose:1.0.0-alpha17" // optional - Jetpack Compose integration
+
+    // Firebase
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

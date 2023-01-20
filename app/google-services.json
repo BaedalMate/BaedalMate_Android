@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "219881756238",
+    "project_id": "baedalmate-bc331",
+    "storage_bucket": "baedalmate-bc331.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219881756238:android:cca07cb0e8f2225dc4551f",
+        "android_client_info": {
+          "package_name": "com.mate.baedalmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219881756238-fk65liloq2bmqtkkaac7sdcbbe52r7lh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mate.baedalmate",
+            "certificate_hash": "f4a31e3c50fb3e550bebd87b2be2be1bdbdaa14c"
+          }
+        },
+        {
+          "client_id": "219881756238-7g6call0k738qhhhprikhfp3c469hiia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByM5h4Rssb0nHXXhsvZNPm2I1IDALtQOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219881756238-7g6call0k738qhhhprikhfp3c469hiia.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

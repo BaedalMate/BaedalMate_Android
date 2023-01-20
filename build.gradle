@@ -9,6 +9,8 @@ buildscript {
     dependencies {
         def nav_version = "2.4.2"
         def sentry_version = "3.4.0"
+        def gms_version ="4.3.15"
+        def crashlytics_version ="2.9.2"
 
         classpath 'com.android.tools.build:gradle:7.2.1'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
@@ -16,7 +18,8 @@ buildscript {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "io.sentry:sentry-android-gradle-plugin:$sentry_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
-
+        classpath "com.google.gms:google-services:$gms_version"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$crashlytics_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
