@@ -87,7 +87,7 @@ class ChatAdapter(private val requestManager: RequestManager, private val userNa
                 tvChatOtherMessage.text = message.message
                 tvChatOtherTime.text = sendTime.format(DateTimeFormatter.ofPattern("a h:mm"))
                 tvChatOtherName.text = message.sender
-                requestManager.load("${message.senderImage}")
+                requestManager.load("http://3.35.27.107:8080/images/${message.senderImage}")
                     .priority(Priority.HIGH)
                     .centerCrop()
                     .into(imgChatOther)

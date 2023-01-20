@@ -294,6 +294,13 @@
             android:defaultValue="0"
             app:argType="integer" />
         <action
+            android:id="@+id/action_chatFragment_to_postFragment"
+            app:destination="@id/PostFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
             android:id="@+id/action_chatFragment_to_changeOrderFragment"
             app:destination="@id/ChangeOrderFragment" />
         <action
@@ -329,7 +336,11 @@
             app:destination="@id/ParticipantProfileFragment" />
         <action
             android:id="@+id/action_participantListFragment_to_participantsOrderListFragment"
-            app:destination="@id/ParticipantsOrderListFragment" />
+            app:destination="@id/ParticipantsOrderListFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </dialog>
 
     <dialog

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -15,6 +16,7 @@ import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentParticipantsOrderListBinding
 import com.mate.baedalmate.presentation.adapter.post.ParticipantOrderAdapter
 import com.mate.baedalmate.presentation.viewmodel.ChatViewModel
@@ -45,8 +47,15 @@ class ParticipantsOrderListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setBackClickListener()
         getAllMenuList()
         setParticipantsOrderListAdapter()
+    }
+
+    private fun setBackClickListener() {
+        binding.btnParticipantsOrderListActionbarBack.setOnDebounceClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun getAllMenuList() {

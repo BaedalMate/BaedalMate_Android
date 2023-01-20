@@ -12,8 +12,8 @@ import retrofit2.Response
 interface ChatRepository {
     suspend fun requestGetChatRoomList(): ApiResult<ChatRoomList>
     suspend fun requestGetChatRoomDetail(roomId: Int): ApiResult<ChatRoomDetail>
-    suspend fun requestGetChatParticipants(id: Int): ApiResult<ParticipantsDto>
-    suspend fun requestGetAllMenuList(id: Int): ApiResult<ParticipantsMenuDto>
-    suspend fun requestGetMyMenuList(id: Int): ApiResult<MyMenuDto>
+    suspend fun requestGetChatParticipants(recruitId: Int): ApiResult<ParticipantsDto>
+    suspend fun requestGetAllMenuList(recruitId: Int): ApiResult<ParticipantsMenuDto>
+    suspend fun requestGetMyMenuList(recruitId: Int): ApiResult<MyMenuDto>
     suspend fun requestPutChangeMyMenuList(data: OrderDto): ApiResult<Void>
 }

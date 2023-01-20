@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -21,9 +23,12 @@ import com.bumptech.glide.RequestManager
 import com.google.gson.Gson
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.HideKeyBoardUtil
+import com.mate.baedalmate.common.KeyboardVisibilityUtils
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.dp
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.data.datasource.remote.chat.ChatRoomRecruitDetailDto
+import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.data.di.StompModule
 import com.mate.baedalmate.databinding.FragmentChatBinding
 import com.mate.baedalmate.domain.model.ApiErrorStatus
@@ -50,6 +55,8 @@ class ChatFragment : Fragment() {
     private val args by navArgs<ChatFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var chatAdapter: ChatAdapter
+    private lateinit var keyboardVisibilityUtils: KeyboardVisibilityUtils
+    private var currentUser: UserInfoResponse? = null
 
     private var chatMessageLogList = mutableListOf<MessageInfo>()
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -72,12 +79,19 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        HideKeyBoardUtil.hideTouchDisplay(requireActivity(), view)
+        setHideKeyboard()
         setBackClickListener()
+        initCurrentUser()
         initChatRoom()
         setReceiveMessage()
+        setMessageInputClickListener()
         setMessageSendClickListener()
         observeReviewStateCallback()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        keyboardVisibilityUtils.detachKeyboardListeners()
     }
 
     override fun onDestroy() {
@@ -85,9 +99,39 @@ class ChatFragment : Fragment() {
         stompModule.disconnectStomp()
     }
 
+    private fun setHideKeyboard() {
+        HideKeyBoardUtil.hideTouchDisplay(requireActivity(), requireView())
+
+        var startClickTime = 0L;
+        binding.rvChatLog.setOnTouchListener(object : View.OnTouchListener {
+            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                if (event?.action == MotionEvent.ACTION_DOWN) {
+                    startClickTime = System.currentTimeMillis()
+                } else if (event?.action == MotionEvent.ACTION_UP) {
+                    if (System.currentTimeMillis() - startClickTime < ViewConfiguration.getTapTimeout()) {
+                        // Touch was a simple tap. Do whatever.
+                        HideKeyBoardUtil.hide(requireActivity())
+                    } else {
+                        // Touch was a not a simple tap.
+                    }
+                }
+                return false
+                // true로 설정시, touch event가 consume됨
+            }
+        })
+    }
+
     private fun setBackClickListener() {
         binding.btnChatActionbarBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+    }
+
+    private fun initCurrentUser() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                currentUser = memberViewModel.getUserInfo()
+            }
         }
     }
 
@@ -104,7 +148,7 @@ class ChatFragment : Fragment() {
 
     private fun initChatRoom() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 chatViewModel.chatRoomLog.observe(viewLifecycleOwner) { detail ->
                     val recruitDetail = Gson().fromJson(
                         detail.recruit.toString(),
@@ -122,11 +166,12 @@ class ChatFragment : Fragment() {
     private fun initChatLog(chatMessages: List<MessageInfo>) {
         chatAdapter = ChatAdapter(
             requestManager = glideRequestManager,
-            userName = memberViewModel.userInfo.value?.nickname.toString()
+            userName = currentUser?.nickname ?: ""
         )
         binding.rvChatLog.adapter = chatAdapter
 
         chatMessageLogList = chatMessages.toMutableList()
+        chatMessageLogList.removeIf { message -> message.message.trim().isEmpty() }
         chatAdapter.submitList(chatMessageLogList)
         binding.rvChatLog.scrollToPosition(chatAdapter.itemCount - 1)
     }
@@ -134,6 +179,8 @@ class ChatFragment : Fragment() {
     private fun initChatRoomTitleBarInfo(recruitInfo: ChatRoomRecruitDetailDto) {
         val createdTimeString = recruitInfo.createDate
         val createdTime = LocalDateTime.parse(createdTimeString, formatter)
+        navigateToRecruitPost(binding.imgChatInfo, recruitInfo.recruitId)
+        navigateToRecruitPost(binding.layoutChatInfoContents, recruitInfo.recruitId)
 
         binding.tvChatInfoContentsCreatedDate.text =
             with(createdTime) { "${this.year}년 ${this.monthValue + 1}월 ${this.dayOfMonth}일 ${this.hour}시 ${this.minute}분" }
@@ -160,7 +207,12 @@ class ChatFragment : Fragment() {
 
                 binding.tvChatInfoContentsCriterionTitle.text = "마감시간"
                 binding.tvChatInfoContentsCriterionDetail.text =
-                    "${decimalFormat.format(durationMinuteDeadLine.toInt())}분 남음"
+                    if (durationMinuteDeadLine.toInt() < 0) getString(R.string.participate_close)
+                    else "${
+                        decimalFormat.format(
+                            durationMinuteDeadLine.toInt()
+                        )
+                    }분 남음"
             }
             RecruitFinishCriteria.NUMBER -> {
                 binding.tvChatInfoContentsCriterionTitle.text = "최소인원"
@@ -175,22 +227,45 @@ class ChatFragment : Fragment() {
         }
     }
 
+    private fun navigateToRecruitPost(view: View, recruitId: Int) {
+        view.setOnDebounceClickListener {
+            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToPostFragment(
+                postId = recruitId
+            ))
+        }
+    }
+
     private fun setReceiveMessage() {
         stompModule.chatMessage.observe(viewLifecycleOwner) {
             val currentTimeString =
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-            chatMessageLogList.add(
-                MessageInfo(
-                    messageId = 0,
-                    message = it.message.trim(),
-                    sendDate = currentTimeString,
-                    sender = it.sender,
-                    senderImage = it.senderImage
+            if (it.message.trim() != "")
+                chatMessageLogList.add(
+                    MessageInfo(
+                        messageId = 0,
+                        message = it.message.trim(),
+                        sendDate = currentTimeString,
+                        sender = it.sender,
+                        senderId = it.senderId,
+                        senderImage = it.senderImage
+                    )
                 )
-            )
             chatAdapter.submitList(chatMessageLogList)
             binding.rvChatLog.smoothScrollToPosition(chatMessageLogList.size - 1)
         }
+    }
+
+    private fun setMessageInputClickListener() {
+        keyboardVisibilityUtils = KeyboardVisibilityUtils(requireActivity().window,
+            onShowKeyboard = { keyboardHeight ->
+                binding.rvChatLog.run {
+                    smoothScrollBy(
+                        scrollX,
+                        scrollY + keyboardHeight - binding.layoutChatUserInput.height + 15.dp
+                    )
+                }
+            }
+        )
     }
 
     private fun setMessageSendClickListener() {
@@ -215,7 +290,7 @@ class ChatFragment : Fragment() {
                 stompModule.sendMessage(
                     roomId = args.roomId.toLong(),
                     message = binding.etChatUserInput.text.trim().toString(),
-                    senderId = memberViewModel.userInfo.value?.userId ?: 0
+                    senderId = currentUser?.userId?.toInt() ?: 0
                 )
                 binding.etChatUserInput.setText("")
                 binding.btnChatUserInputSend.imageTintList =

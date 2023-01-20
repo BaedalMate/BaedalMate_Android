@@ -35,9 +35,10 @@ class ReviewUserFragment : BottomSheetDialogFragment() {
     private lateinit var reviewUserAdapter: ReviewUserAdapter
     private var reviewedUserList: MutableList<UserDto> = mutableListOf<UserDto>()
     private lateinit var loadingAlertDialog: AlertDialog
+    private lateinit var bottomSheetDialog: BottomSheetDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        return initBottomSheetDialog()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +66,13 @@ class ReviewUserFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun initBottomSheetDialog(): BottomSheetDialog {
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog.setCanceledOnTouchOutside(true)
+        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        return bottomSheetDialog
     }
 
     private fun initAlertDialog() {

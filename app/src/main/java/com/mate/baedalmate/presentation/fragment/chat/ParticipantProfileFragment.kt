@@ -32,9 +32,10 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     private val args by navArgs<ParticipantProfileFragmentArgs>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var blockAlertDialog: AlertDialog
+    private lateinit var bottomSheetDialog: BottomSheetDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        return initBottomSheetDialog()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +61,13 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         BlockAlertDialog.hideBlockDialog(blockAlertDialog)
+    }
+
+    private fun initBottomSheetDialog(): BottomSheetDialog {
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog.setCanceledOnTouchOutside(true)
+        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        return bottomSheetDialog
     }
 
     private fun setUserInfo() {
