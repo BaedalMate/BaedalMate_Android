@@ -344,10 +344,10 @@ class PostFragment : Fragment() {
                 with(btnPostFrontContentsParticipateHostClose) {
                     isEnabled = true
                     setOnClickListener {
-                        ConfirmAlertDialog.showConfirmDialog(cancelPostAlertDialog)
+                        ConfirmAlertDialog.showConfirmDialog(closePostAlertDialog)
                         ConfirmAlertDialog.resizeDialogFragment(
                             requireContext(),
-                            cancelPostAlertDialog,
+                            closePostAlertDialog,
                             dialogSizeRatio = 0.7f
                         )
                     }
