@@ -176,6 +176,7 @@ class PostFragment : Fragment() {
                     )
                 )
             }
+            starIndicator[i]!!.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.main_FB5F1C)
             starIndicator[i]!!.layoutParams = params
             binding.layoutPostFrontUserScore.addView(starIndicator[i])
         }
@@ -184,7 +185,7 @@ class PostFragment : Fragment() {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        paramsTextView.setMargins(5.dp, 0, 0, 0)
+        paramsTextView.setMargins(6.dp, 0, 0, 0)
         val scoreTextView = TextView(requireContext())
         scoreTextView.apply {
             setTypeface(
@@ -194,12 +195,14 @@ class PostFragment : Fragment() {
                 ), Typeface.NORMAL
             )
             text = "$userScore"
+            textSize = 12f
+            lineHeight = 18
             layoutParams = paramsTextView
             gravity = Gravity.CENTER
             setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.main_FB5F1C
+                    R.color.black_000000
                 )
             )
 
