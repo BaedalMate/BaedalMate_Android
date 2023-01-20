@@ -79,7 +79,6 @@ class MyProfileChangeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         HideKeyBoardUtil.hideTouchDisplay(requireActivity(), view)
         initAlertDialog()
-        getUserData()
         initUserData()
         setBackClickListener()
         setImageChangeClickListener()
@@ -98,23 +97,19 @@ class MyProfileChangeFragment : Fragment() {
         loadingAlertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    private fun getUserData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                memberViewModel.requestUserInfo()
-            }
-        }
-    }
-
     private fun initUserData() {
-        memberViewModel.userInfo.observe(viewLifecycleOwner) { info ->
-            glideRequestManager.load("http://3.35.27.107:8080/images/${info.profileImage}")
-                .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
-                .priority(Priority.HIGH)
-                .centerCrop()
-                .into(binding.imgMyProfileChangePhotoThumbnail)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                memberViewModel.getUserInfo()?.let { currentUser ->
+                    glideRequestManager.load("http://3.35.27.107:8080/images/${currentUser.profileImage}")
+                        .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
+                        .priority(Priority.HIGH)
+                        .centerCrop()
+                        .into(binding.imgMyProfileChangePhotoThumbnail)
 
-            binding.etMyProfileChangeNickname.setText(info.nickname)
+                    binding.etMyProfileChangeNickname.setText(currentUser.nickname)
+                }
+            }
         }
     }
 
