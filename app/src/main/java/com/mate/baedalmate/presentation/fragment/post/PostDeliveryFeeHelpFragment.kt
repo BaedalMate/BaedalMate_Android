@@ -48,6 +48,10 @@ class PostDeliveryFeeHelpFragment : RoundDialogFragment() {
 
     private fun initData() {
         val deliveryFeeList = args.deliveryFeeList
+        val isDeliveryFeeFreeVisible = deliveryFeeList.isEmpty()
+        binding.layoutPostDeliveryFeeHelpContents.visibility = if (isDeliveryFeeFreeVisible) View.INVISIBLE else View.VISIBLE
+        binding.tvPostDeliveryFeeHelpContentsEmpty.visibility = if (isDeliveryFeeFreeVisible) View.VISIBLE else View.GONE
+
         for (deliveryFeeIdx in deliveryFeeList.indices) {
             val rangeBinding =
                 ItemPostDeliveryFeeHelpDetailTextviewBinding.inflate(LayoutInflater.from(context))

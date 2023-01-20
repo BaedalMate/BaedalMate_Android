@@ -41,14 +41,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text="@string/post_delivery_fee_help_detail_description"
                 android:textColor="@color/gray_dark_666666"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_post_delivery_fee_help_detail_title"
-                app:layout_constraintVertical_bias="0.0"
-                tools:text="배달비 상세정보 설명입력 배달비 상세정보 설명입력 배달비 상세정보 설명입력" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <View
                 android:id="@+id/view_post_delivery_fee_help_horizontal_line"
@@ -72,7 +72,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_post_delivery_fee_help_horizontal_line"
-                app:layout_constraintVertical_bias="0.0">
+                app:layout_constraintVertical_bias="0.0"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -107,6 +108,22 @@
                     android:layout_marginBottom="28dp"
                     android:orientation="vertical" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_post_delivery_fee_help_contents_empty"
+                style="@style/style_large_title_kor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="45dp"
+                android:text="@string/post_delivery_fee_help_detail_free"
+                android:textColor="@color/black_000000"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_post_delivery_fee_help_horizontal_line"
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -216,11 +233,11 @@
                 android:id="@+id/tv_post_delivery_fee_help_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom"
                 android:gravity="center"
                 android:paddingTop="10dp"
                 android:paddingBottom="13dp"
                 android:text="@string/confirm"
-                android:background="@drawable/selector_btn_gray_line_white_radius_10_bottom"
                 android:textColor="@color/black_000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
