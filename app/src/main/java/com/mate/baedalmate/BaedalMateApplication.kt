@@ -2,6 +2,7 @@ package com.mate.baedalmate
 
 import android.app.Application
 import android.content.Context
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.HiltAndroidApp
 
@@ -22,5 +23,7 @@ class BaedalMateApplication : Application() {
 
         // Kakao SDK Initialize
         KakaoSdk.init(this, BuildConfig.NATIVE_APP_KEY)
+        // Firebase Crashlytics Enable at Release
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG)
     }
 }
