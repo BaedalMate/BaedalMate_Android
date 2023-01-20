@@ -92,10 +92,6 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun providePutChangeMyProfilePhotoUseCase(memberRepository: MemberRepository): RequestPutChangeMyProfilePhotoUseCase = RequestPutChangeMyProfilePhotoUseCase(memberRepository)
-
-    @Singleton
-    @Provides
     fun provideGetHistoryPostCreatedUseCase(memberRepository: MemberRepository): RequestGetHistoryPostCreatedUseCase = RequestGetHistoryPostCreatedUseCase(memberRepository)
 
     @Singleton
