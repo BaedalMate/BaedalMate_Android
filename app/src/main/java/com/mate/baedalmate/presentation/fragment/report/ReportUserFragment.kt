@@ -39,7 +39,8 @@ class ReportUserFragment : Fragment() {
                 getString(R.string.report_user_description),
                 args.userName
             ),
-            { findNavController().navigateUp() }
+            cancelButtonFunction = { findNavController().navigateUp() },
+            confirmButtonFunction = { findNavController().navigateUp() }
         )
     }
 
@@ -131,8 +132,7 @@ class ReportUserFragment : Fragment() {
             if (isSuccess.getContentIfNotHandled() == true) {
                 showSubmitCompleteDialog()
                 observeBlockUserResult()
-            }
-            else if (isSuccess.getContentIfNotHandled() == false) {
+            } else if (isSuccess.getContentIfNotHandled() == false) {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.report_submit_fail_network_toast_message),
@@ -161,10 +161,9 @@ class ReportUserFragment : Fragment() {
             String.format(
                 getString(R.string.report_user_description),
                 args.userName
-            )
-        ) {
-            blockViewModel.requestPostBlockUser(blockUserId = args.userId)
-        }
+            ),
+            cancelButtonFunction = { findNavController().navigateUp() },
+            confirmButtonFunction = { blockViewModel.requestPostBlockUser(blockUserId = args.userId) })
 
         ReportAlertDialog.showReportDialog(reportSubmitAlertDialog)
         ReportAlertDialog.resizeDialogFragment(
