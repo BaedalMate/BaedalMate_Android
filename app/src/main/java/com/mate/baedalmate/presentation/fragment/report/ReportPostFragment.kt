@@ -39,8 +39,8 @@ class ReportPostFragment : Fragment() {
                 getString(R.string.report_user_description),
                 args.postWriterName
             ),
-            { findNavController().navigateUp() }
-        )
+            cancelButtonFunction = { findNavController().navigateUp() },
+            confirmButtonFunction = { findNavController().navigateUp() })
     }
 
     override fun onCreateView(
@@ -143,8 +143,7 @@ class ReportPostFragment : Fragment() {
             if (isSuccess.getContentIfNotHandled() == true) {
                 showSubmitCompleteDialog()
                 observeBlockUserResult()
-            }
-            else if (isSuccess.getContentIfNotHandled() == false) {
+            } else if (isSuccess.getContentIfNotHandled() == false) {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.report_submit_fail_network_toast_message),
@@ -173,10 +172,9 @@ class ReportPostFragment : Fragment() {
             String.format(
                 getString(R.string.report_user_description),
                 args.postWriterName
-            )
-        ) {
-            blockViewModel.requestPostBlockUser(blockUserId = args.postWriterUserId)
-        }
+            ),
+            cancelButtonFunction = { findNavController().navigateUp() },
+            confirmButtonFunction = { blockViewModel.requestPostBlockUser(blockUserId = args.postWriterUserId) })
 
         ReportAlertDialog.showReportDialog(reportSubmitAlertDialog)
         ReportAlertDialog.resizeDialogFragment(

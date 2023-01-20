@@ -17,6 +17,7 @@ object ReportAlertDialog {
         context: Context,
         title: String,
         description: String,
+        cancelButtonFunction: (() -> Unit)? = null,
         confirmButtonFunction: (() -> Unit)? = null
     ): AlertDialog {
         val binding = DialogReportBinding.inflate(LayoutInflater.from(context))
@@ -31,6 +32,9 @@ object ReportAlertDialog {
             tvDialogReportTitle.text = title
             tvDialogReportDescription.text = description
             btnDialogReportCancel.setOnDebounceClickListener {
+                if (cancelButtonFunction != null) {
+                    cancelButtonFunction()
+                }
                 alertDialog.dismiss()
             }
             btnDialogReportConfirm.setOnDebounceClickListener {
