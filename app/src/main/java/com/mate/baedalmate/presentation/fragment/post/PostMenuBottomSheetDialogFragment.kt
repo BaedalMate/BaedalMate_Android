@@ -45,9 +45,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private lateinit var bottomSheetDialog: BottomSheetDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
-        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
-        return bottomSheetDialog
+        return initBottomSheetDialog()
     }
 
     override fun onCreateView(
@@ -73,6 +71,13 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+    }
+
+    private fun initBottomSheetDialog(): BottomSheetDialog {
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog.setCanceledOnTouchOutside(true)
+        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        return bottomSheetDialog
     }
 
     private fun initAlertDialog() {
