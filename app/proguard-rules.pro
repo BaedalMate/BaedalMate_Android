@@ -37,3 +37,10 @@
 -dontwarn com.google.android.gms.**
 -keep class com.google.common.** { *; }
 -dontwarn com.google.common.**
+
+# KAKAO MAP
+-keep class net.daum.mf.map.n.** { *; }
+-keep class net.daum.mf.map.api.MapView { *; }
+-keep class net.daum.android.map.location.MapViewLocationManager { *; }
+-keep class net.daum.mf.map.api.MapPolyline { *; }
+-keep class net.daum.mf.map.api.MapPoint { *; }
