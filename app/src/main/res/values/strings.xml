@@ -311,6 +311,7 @@
 
     <!-- Notice -->
     <string name="notice_list_actionbar_title">공지사항</string>
+    <string name="notice_actionbar_title">공지사항</string>
 
     <!-- Logout -->
     <string name="logout_dialog_title">로그아웃 하시겠습니까?</string>
