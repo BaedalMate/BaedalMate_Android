@@ -68,6 +68,6 @@ class MemberRepositoryImpl @Inject constructor(private val memberApiService: Mem
     override suspend fun requestPostLogout(): ApiResult<ResultSuccessResponseDto> =
         setExceptionHandling { memberApiService.requestPostLogout() }
 
-    override suspend fun requestGetResignUser(): ApiResult<ResultSuccessResponseDto> =
-        setExceptionHandling { memberApiService.requestGetResignUser() }
+    override suspend fun requestDeleteResignUser(): ApiResult<ResultSuccessResponseDto> =
+        setExceptionHandling { memberApiService.requestDeleteResignUser() }
 }

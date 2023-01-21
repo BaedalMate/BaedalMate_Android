@@ -18,7 +18,7 @@ import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.repository.TokenPreferencesRepository
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
-import com.mate.baedalmate.domain.usecase.member.RequestGetResignUserUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestDeleteResignUserUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLoginKakaoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
@@ -38,7 +38,8 @@ class MemberViewModel @Inject constructor(
     private val requestPutChangeMyProfileUseCase: RequestPutChangeMyProfileUseCase,
     private val requestGetHistoryPostCreatedUseCase: RequestGetHistoryPostCreatedUseCase,
     private val requestGetHistoryPostParticipatedUseCase: RequestGetHistoryPostParticipatedUseCase,
-    private val requestGetResignUserUseCase: RequestGetResignUserUseCase
+    private val requestLogoutUseCase: RequestLogoutUseCase,
+    private val requestDeleteResignUserUseCase: RequestDeleteResignUserUseCase
 ) : ViewModel() {
     private val _loginSuccess = MutableLiveData<Boolean>(false)
     val loginSuccess: LiveData<Boolean> get() = _loginSuccess
@@ -174,7 +175,7 @@ class MemberViewModel @Inject constructor(
     }
 
     fun requestResign() = viewModelScope.launch {
-        requestGetResignUserUseCase().let { ApiResponse ->
+        requestDeleteResignUserUseCase().let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     _isResignSuccess.postValue(Event(true))
