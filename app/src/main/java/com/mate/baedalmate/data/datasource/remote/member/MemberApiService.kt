@@ -3,6 +3,7 @@ package com.mate.baedalmate.data.datasource.remote.member
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -41,6 +42,6 @@ interface MemberApiService {
     @POST("/logout")
     suspend fun requestPostLogout(): Response<ResultSuccessResponseDto>
 
-    @GET("/api/v1/user/deactivate")
-    suspend fun requestGetResignUser(): Response<ResultSuccessResponseDto>
+    @DELETE("/api/v1/user/withdrawal")
+    suspend fun requestDeleteResignUser(): Response<ResultSuccessResponseDto>
 }

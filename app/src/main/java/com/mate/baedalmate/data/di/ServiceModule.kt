@@ -38,7 +38,7 @@ import com.mate.baedalmate.domain.usecase.chat.RequestGetMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestPutChangeMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
-import com.mate.baedalmate.domain.usecase.member.RequestGetResignUserUseCase
+import com.mate.baedalmate.domain.usecase.member.RequestDeleteResignUserUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
@@ -104,7 +104,7 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideGetResignUserUseCase(memberRepository: MemberRepository): RequestGetResignUserUseCase = RequestGetResignUserUseCase(memberRepository)
+    fun provideDeleteResignUserUseCase(memberRepository: MemberRepository): RequestDeleteResignUserUseCase = RequestDeleteResignUserUseCase(memberRepository)
 
     @Singleton
     @Provides

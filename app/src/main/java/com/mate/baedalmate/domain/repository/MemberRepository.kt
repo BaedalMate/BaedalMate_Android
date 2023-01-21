@@ -25,5 +25,5 @@ interface MemberRepository {
         sort: String
     ): ApiResult<HistoryRecruitList>
     suspend fun requestPostLogout(): ApiResult<ResultSuccessResponseDto>
-    suspend fun requestGetResignUser(): ApiResult<ResultSuccessResponseDto>
+    suspend fun requestDeleteResignUser(): ApiResult<ResultSuccessResponseDto>
 }
