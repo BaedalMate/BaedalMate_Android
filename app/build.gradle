@@ -63,6 +63,7 @@ dependencies {
     def sentry_version = "6.11.0"
     def paging_version = "3.1.1"
     def lottie_version = "5.0.3"
+    def firebase_bom_version = "31.2.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
