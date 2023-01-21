@@ -142,6 +142,7 @@ class SetAccountMyProfileFragment : Fragment() {
     private fun setMyProfileSubmit() {
         showLoadingDialog()
         memberViewModel.requestPutChangeMyProfile(
+            isChangingDefaultImage = getMyProfileImageFile() == null,
             newNickname = binding.etMyProfileChangeNickname.text.trim().toString(),
             newImageFile = getMyProfileImageFile()
         )

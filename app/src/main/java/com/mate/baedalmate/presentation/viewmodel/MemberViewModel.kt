@@ -57,9 +57,6 @@ class MemberViewModel @Inject constructor(
     private val _isMyProfileChangeSuccess = MutableLiveData<Event<Boolean>>()
     val isMyProfileChangeSuccess: LiveData<Event<Boolean>> get() = _isMyProfileChangeSuccess
 
-    private val _isMyProfilePhotoChangeSuccess = MutableLiveData<Event<Boolean>>()
-    val isMyProfilePhotoChangeSuccess: LiveData<Event<Boolean>> get() = _isMyProfilePhotoChangeSuccess
-
     private val _historyPostCreatedList = MutableLiveData(HistoryRecruitList(emptyList()))
     val historyPostCreatedList: LiveData<HistoryRecruitList> get() = _historyPostCreatedList
 
@@ -104,6 +101,10 @@ class MemberViewModel @Inject constructor(
         return accessToken
     }
 
+    suspend fun getUserInfo(): UserInfoResponse? {
+        return tokenPreferencesRepository.getUserInfo()
+    }
+
     fun requestUserInfo() = viewModelScope.launch {
         requestGetUserInfoUseCase()?.let { ApiResponse ->
             when (ApiResponse.status) {
@@ -135,8 +136,8 @@ class MemberViewModel @Inject constructor(
         }
     }
 
-    fun requestPutChangeMyProfile(newNickname: String, newImageFile: File?) = viewModelScope.launch {
-        requestPutChangeMyProfileUseCase(newNickname = newNickname, newImageFile = newImageFile).let { ApiResponse ->
+    fun requestPutChangeMyProfile(isChangingDefaultImage: Boolean = false, newNickname: String, newImageFile: File?) = viewModelScope.launch {
+        requestPutChangeMyProfileUseCase(isChangingDefaultImage = isChangingDefaultImage, newNickname = newNickname, newImageFile = newImageFile).let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     _isMyProfileChangeSuccess.postValue(Event(true))
