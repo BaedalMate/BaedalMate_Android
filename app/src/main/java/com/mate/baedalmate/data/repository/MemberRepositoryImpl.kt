@@ -32,11 +32,12 @@ class MemberRepositoryImpl @Inject constructor(private val memberApiService: Mem
             )
         }
 
-    override suspend fun requestPutChangeMyProfile(
+    override suspend fun requestPostChangeMyProfile(
+        isChangingDefaultImage: Boolean,
         newNickname: String,
         uploadfile: MultipartBody.Part?
     ): ApiResult<UserInfoResponse> =
-        setExceptionHandling { memberApiService.requestPutChangeMyProfile(nickname = newNickname, uploadfile = uploadfile) }
+        setExceptionHandling { memberApiService.requestPostChangeMyProfile(default_image = isChangingDefaultImage,nickname = newNickname, uploadfile = uploadfile) }
 
     override suspend fun requestGetHistoryPostCreated(
         page: Int,

@@ -21,8 +21,8 @@ interface MemberApiService {
     suspend fun requestPutUserDormitory(@Body dormitory: UpdateDormitoryDto): Response<ResultSuccessResponseDto>
 
     @Multipart
-    @PUT("/api/v1/user")
-    suspend fun requestPutChangeMyProfile(@Query("nickname") nickname: String, @Part uploadfile: MultipartBody.Part?= null): Response<UserInfoResponse>
+    @POST("/api/v1/user")
+    suspend fun requestPostChangeMyProfile(@Query("default_image") default_image: Boolean = false, @Query("nickname") nickname: String, @Part uploadfile: MultipartBody.Part?= null): Response<UserInfoResponse>
 
     @GET("/api/v1/user/hosted-recruit")
     suspend fun requestGetHistoryPostCreated(
