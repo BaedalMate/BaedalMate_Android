@@ -434,7 +434,7 @@ class PostFragment : Fragment() {
         if (recruitDetail.host) {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    recruitViewModel.requestRecruitPostForModify(postId = recruitDetail.recruitId)
+                    recruitViewModel.requestRecruitPostForModify(postId = args.postId)
                 }
             }
         }
