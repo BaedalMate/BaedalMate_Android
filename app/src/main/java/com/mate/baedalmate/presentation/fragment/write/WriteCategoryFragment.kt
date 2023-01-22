@@ -68,7 +68,11 @@ class WriteCategoryFragment : Fragment() {
             if (childView is ShapeableImageView) {
                 childView.setOnClickListener {
                     writeViewModel.categoryId = (i / 3) + 1
-                    findNavController().navigate(R.id.action_writeCategoryFragment_to_writeFirstFragment)
+                    findNavController().navigate(
+                        WriteCategoryFragmentDirections.actionWriteCategoryFragmentToWriteFirstFragment(
+                            null
+                        )
+                    )
                 }
             }
         }

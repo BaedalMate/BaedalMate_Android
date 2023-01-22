@@ -18,7 +18,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -176,7 +178,8 @@ class PostFragment : Fragment() {
                     )
                 )
             }
-            starIndicator[i]!!.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.main_FB5F1C)
+            starIndicator[i]!!.imageTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.main_FB5F1C)
             starIndicator[i]!!.layoutParams = params
             binding.layoutPostFrontUserScore.addView(starIndicator[i])
         }
@@ -401,6 +404,7 @@ class PostFragment : Fragment() {
                     initContentsPostInfo(recruitDetail)
                     setRecruitActionButton(recruitDetail)
                     setReportPostClickListener(recruitDetail)
+                    requestRecruitPostDetailForModify(recruitDetail)
                     setModifyPostClickListener(recruitDetail)
                 }
             }
@@ -426,11 +430,27 @@ class PostFragment : Fragment() {
         }
     }
 
+    private fun requestRecruitPostDetailForModify(recruitDetail: RecruitDetail) {
+        if (recruitDetail.host) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    recruitViewModel.requestRecruitPostForModify(postId = recruitDetail.recruitId)
+                }
+            }
+        }
+    }
+
     private fun setModifyPostClickListener(recruitDetail: RecruitDetail) {
         with(binding.tvPostFrontContentsDetailModify) {
             visibility = if (recruitDetail.host && recruitDetail.active) View.VISIBLE else View.GONE
-            setOnDebounceClickListener {
-                // TODO 수정하기 구현 추가시 Navigate 추가
+            recruitViewModel.recruitPostDetailForModify.observe(viewLifecycleOwner) { recruitDetailForModify ->
+                setOnDebounceClickListener {
+                    findNavController().navigate(
+                        PostFragmentDirections.actionPostFragmentToModifyPostFragment(
+                            recruitDetailForModify
+                        )
+                    )
+                }
             }
         }
     }
