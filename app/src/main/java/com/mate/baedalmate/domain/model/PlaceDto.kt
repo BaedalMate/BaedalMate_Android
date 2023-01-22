@@ -1,7 +1,10 @@
 package com.mate.baedalmate.domain.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class PlaceDto(
     @SerializedName("addressName")
     val addressName: String,
@@ -13,4 +16,4 @@ data class PlaceDto(
     val x: Float,
     @SerializedName("y")
     val y: Float,
-)
+): Parcelable

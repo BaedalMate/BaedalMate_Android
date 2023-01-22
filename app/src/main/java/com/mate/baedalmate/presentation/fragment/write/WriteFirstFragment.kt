@@ -11,28 +11,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.get
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.R
-import com.mate.baedalmate.common.ExtendedEditText
+import com.mate.baedalmate.common.ListLiveData
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
+import com.mate.baedalmate.databinding.FragmentWriteFirstBinding
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
 import com.mate.baedalmate.domain.model.ShippingFeeDto
-import com.mate.baedalmate.databinding.FragmentWriteFirstBinding
-import com.mate.baedalmate.databinding.ItemWriteFirstDeliveryFeeRangeBinding
+import com.mate.baedalmate.presentation.adapter.write.WriteFirstDeliveryFeeRangeAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Math.abs
@@ -40,20 +42,27 @@ import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+private const val DELIVERY_FEE_RANGE_MAX = 999999999
+
 @AndroidEntryPoint
 class WriteFirstFragment : Fragment() {
     private var binding by autoCleared<FragmentWriteFirstBinding>()
+    private val args by navArgs<WriteFirstFragmentArgs>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
-    private var leastPeopleCount = 1
-    private var deliveryFeeRangeCorrectList = mutableListOf<Boolean>(true)
-    private var deliveryFeeRangeEmptyChkList = mutableListOf<Boolean>(false)
+    private lateinit var writeFirstDeliveryFeeRangeAdapter: WriteFirstDeliveryFeeRangeAdapter
+    private val decimalFormat = DecimalFormat("#,###")
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+
+    private val currentDeliveryFeeList = mutableListOf<ShippingFeeDto>()
+    private var deliveryFeeRangeCorrectList = ListLiveData<Boolean>()
+    private var deliveryFeeRangeEmptyChkList = ListLiveData<Boolean>()
 
     private var chkDeadLineAmount = MutableLiveData(false)
     private var chkDeadLineTime = MutableLiveData(false)
     private var chkDeliveryFeeRange = MutableLiveData(true)
     private var chkDeliveryFee = MutableLiveData(true)
     private val onNext: MediatorLiveData<Boolean> = MediatorLiveData()
-    private var onDeliveryFeeAdd : MediatorLiveData<Boolean> = MediatorLiveData()
+    private var onDeliveryFeeAdd: MediatorLiveData<Boolean> = MediatorLiveData()
 
     init {
         onNext.addSource(chkDeadLineAmount) {
@@ -91,8 +100,7 @@ class WriteFirstFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentWriteFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -101,18 +109,13 @@ class WriteFirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBackClickListener()
+        initUserInputForms()
+        initDetailForModify()
         setNextClickListener()
-        initDeadLinePeople()
-        validateDeadLineDeliveryInputForm()
-        initDeadLineCriterion()
-        initDeliveryFeeRange()
-        setDeliveryFeeRangeAddEnable()
-        setDeliveryFeeRangeAddClickListener()
-        setGoalTimeInput()
     }
 
     private fun setBackClickListener() {
-        binding.btnWriteFirstActionbarBack.setOnClickListener {
+        binding.btnWriteFirstActionbarBack.setOnDebounceClickListener {
             findNavController().navigateUp()
             writeViewModel.resetVariables()
         }
@@ -129,77 +132,67 @@ class WriteFirstFragment : Fragment() {
         )
     }
 
-    private fun setNextClickListener() {
-        onNext.observe(viewLifecycleOwner) {
-            binding.btnWriteFirstNext.isEnabled = it
-        }
+    private fun initUserInputForms() {
+        initDeadLinePeople()
+        initGoalAmount()
+        setGoalTimeInput()
+        initDeadLineCriterion()
+        initDeliveryFeeRange()
+    }
 
-        binding.btnWriteFirstNext.setOnClickListener {
-            writeViewModel.deadLinePeopleCount = binding.currentPeopleDeadLineCount ?: 0
-            if (binding.etWriteFirstGoalDeliveryUserInput.text.isNotEmpty()) {
-                writeViewModel.deadLineAmount =
-                    binding.etWriteFirstGoalDeliveryUserInput.text.toString().replace(",", "")
-                        .toInt()
-            } else {
-                writeViewModel.deadLineAmount = 0
+    private fun initDetailForModify() {
+        args.recruitDetailForModify?.let { originDetail ->
+            with(originDetail) {
+                initDetailForModifyDeadLinePeople(minPeople)
+                initDetailForModifyGoalAmount(minPrice)
+                initDetailForModifyGoalTime(deadlineDate)
+                initDetailForModifyCriterion(criteria)
+                initDetailForModifyDeliveryFeeRange(freeShipping, shippingFee)
             }
-            when (binding.radiogroupWriteFirstGoalCriterion.checkedRadioButtonId) {
-                R.id.radiobutton_write_first_goal_criterion_people -> {
-                    writeViewModel.deadLineCriterion = RecruitFinishCriteria.NUMBER
-                }
-                R.id.radiobutton_write_first_goal_criterion_delivery -> {
-                    writeViewModel.deadLineCriterion = RecruitFinishCriteria.PRICE
-                }
-                R.id.radiobutton_write_first_goal_criterion_time -> {
-                    writeViewModel.deadLineCriterion = RecruitFinishCriteria.TIME
-                }
+        }
+    }
+
+    private fun setNextClickListener() {
+        with(binding.btnWriteFirstNext) {
+            onNext.observe(viewLifecycleOwner) { isNextEnable ->
+                this.isEnabled = isNextEnable
             }
-            if (binding.radiogroupWriteFirstDeliveryFee.checkedRadioButtonId == R.id.radiobutton_write_first_delivery_fee_free) {
-                writeViewModel.isDeliveryFeeFree = true
-            } else {
-                writeViewModel.isDeliveryFeeFree = false
-                val feeList = mutableListOf<ShippingFeeDto>()
-                for (i in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
-                    val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(i)
-                    val startRange =
-                        view.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).text.toString()
-                            .replace(",", "").toInt()
-                    val deliveryFee =
-                        view.findViewById<ExtendedEditText>(R.id.et_delivery_fee).text.toString()
-                            .replace(",", "").toInt()
-                    feeList.add(
-                        ShippingFeeDto(
-                            lowerPrice = startRange,
-                            upperPrice = 999999999,
-                            shippingFee = deliveryFee
-                        )
+
+            setOnDebounceClickListener {
+                setUserInputInformation()
+                findNavController().navigate(
+                    WriteFirstFragmentDirections.actionWriteFirstFragmentToWriteSecondFragment(
+                        recruitDetailForModify = args.recruitDetailForModify
                     )
-                }
-                feeList.sortWith(compareBy({ it.lowerPrice }, { it.upperPrice }))
-                writeViewModel.deliveryFeeRangeList = feeList
+                )
             }
-            findNavController().navigate(R.id.action_writeFirstFragment_to_writeSecondFragment)
         }
     }
 
     private fun initDeadLinePeople() {
         with(binding) {
-            currentPeopleDeadLineCount = leastPeopleCount
+            currentPeopleDeadLineCount = 1
+            setDeadLinePeopleCountClickListener()
+        }
+    }
+
+    private fun setDeadLinePeopleCountClickListener() {
+        with(binding) {
             with(imgWriteFirstGoalPeopleDecrease) {
-                isEnabled = false
-                this.setOnClickListener {
-                    leastPeopleCount--
-                    binding.currentPeopleDeadLineCount = leastPeopleCount
-                    if (leastPeopleCount <= 1) {
-                        this.background = Color.parseColor("#D9D9D9").toDrawable()
-                        this.isEnabled = false
+                isEnabled = (binding.currentPeopleDeadLineCount ?: 1) >= 2
+                setOnDebounceClickListener(300L) {
+                    binding.currentPeopleDeadLineCount =
+                        (binding.currentPeopleDeadLineCount ?: 1) - 1
+                    if ((binding.currentPeopleDeadLineCount ?: 1) <= 1) {
+                        imgWriteFirstGoalPeopleDecrease.background =
+                            Color.parseColor("#D9D9D9").toDrawable()
+                        imgWriteFirstGoalPeopleDecrease.isEnabled = false
                     }
                 }
-
-                imgWriteFirstGoalPeopleIncrease.setOnClickListener {
-                    leastPeopleCount++
-                    currentPeopleDeadLineCount = leastPeopleCount
-                    if (leastPeopleCount >= 2) {
+                imgWriteFirstGoalPeopleIncrease.setOnDebounceClickListener(300L) {
+                    binding.currentPeopleDeadLineCount =
+                        (binding.currentPeopleDeadLineCount ?: 1) + 1
+                    if ((binding.currentPeopleDeadLineCount ?: 1) >= 2) {
                         this.background =
                             ContextCompat.getDrawable(requireContext(), R.color.white_FFFFFF)
                         this.isEnabled = true
@@ -209,77 +202,87 @@ class WriteFirstFragment : Fragment() {
         }
     }
 
+    private fun initGoalAmount() {
+        validateDeadLineDeliveryInputForm()
+        setGoalAmountFocusListener()
+        setGoalAmountSoftKeyboardDoneClickListener()
+    }
+
     private fun validateDeadLineDeliveryInputForm() {
         with(binding.etWriteFirstGoalDeliveryUserInput) {
-            this.setText("0")
-            var result = ""
-            val decimalFormat = DecimalFormat("#,###")
+            var currentEditTextInput = ""
             this.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
-                    charSequence: CharSequence?,
-                    i1: Int,
-                    i2: Int,
-                    i3: Int
+                    charSequence: CharSequence?, i1: Int, i2: Int, i3: Int
                 ) {
                 }
 
-                override fun onTextChanged(
-                    charSequence: CharSequence?,
-                    i1: Int,
-                    i2: Int,
-                    i3: Int
-                ) {
+                override fun onTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        this@with.setText(result)
-                        this@with.setSelection(result.length)
+                    s?.let { currentText ->
+                        with(currentText.toString()) {
+                            setDeliveryFeeRangeError(isError = (this.isEmpty()))
 
-                        if (result.replace(",", "").toInt() > 0) {
-                            binding.tvWriteFirstGoalDeliveryError.visibility = View.INVISIBLE
-                            binding.viewWriteFristGoalDeliveryUserInputBackground.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10
+                            if (!TextUtils.isEmpty(this) && this != currentEditTextInput) {
+                                currentEditTextInput =
+                                    decimalFormat.format(s.toString().replace(",", "").toDouble())
+                                setText(currentEditTextInput)
+                                setSelection(currentEditTextInput.length)
+
+                                setDeliveryFeeRangeError(
+                                    isError =
+                                    currentEditTextInput.replace(",", "").toInt() <= 0
                                 )
-                            chkDeadLineAmount.postValue(true)
-                        } else {
-                            binding.tvWriteFirstGoalDeliveryError.visibility = View.VISIBLE
-                            binding.viewWriteFristGoalDeliveryUserInputBackground.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10_stroke_red
-                                )
-                            chkDeadLineAmount.postValue(false)
+                            }
                         }
-                    } else if (s.isEmpty()) {
-                        binding.tvWriteFirstGoalDeliveryError.visibility = View.VISIBLE
-                        binding.viewWriteFristGoalDeliveryUserInputBackground.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                        chkDeadLineAmount.postValue(false)
                     }
                 }
             })
+        }
+    }
 
-            this@with.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && this@with.text.toString() == "0") {
-                    this@with.setText("")
-                } else if (!hasFocus && this@with.text.isEmpty()) {
-                    this@with.setText("0")
+    private fun setDeliveryFeeRangeError(isError: Boolean) {
+        with(binding) {
+            if (isError) {
+                tvWriteFirstGoalDeliveryError.visibility = View.VISIBLE
+                viewWriteFristGoalDeliveryUserInputBackground.background =
+                    ContextCompat.getDrawable(
+                        requireContext(), R.drawable.background_white_radius_10_stroke_red
+                    )
+                chkDeadLineAmount.postValue(false)
+            } else {
+                tvWriteFirstGoalDeliveryError.visibility = View.INVISIBLE
+                viewWriteFristGoalDeliveryUserInputBackground.background =
+                    ContextCompat.getDrawable(
+                        requireContext(), R.drawable.background_white_radius_10
+                    )
+                chkDeadLineAmount.postValue(true)
+            }
+        }
+    }
+
+    private fun setGoalAmountFocusListener() {
+        with(binding.etWriteFirstGoalDeliveryUserInput) {
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus && text.toString() == "0") {
+                    setText("")
+                } else if (!hasFocus && text.isEmpty()) {
+                    setText("0")
                 }
             }
+        }
+    }
 
-            this@with.setOnEditorActionListener { _, actionId, _ ->
+    private fun setGoalAmountSoftKeyboardDoneClickListener() {
+        with(binding.etWriteFirstGoalDeliveryUserInput) {
+            setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE -> {
-                        if (this@with.text.isEmpty())
-                            this@with.setText("0")
-                        this@with.clearFocus()
+                        if (text.isEmpty())
+                            setText("0")
+                        clearFocus()
                         false
                     }
                     else -> false
@@ -288,25 +291,125 @@ class WriteFirstFragment : Fragment() {
         }
     }
 
-    private fun initDeliveryFeeRange() {
+    private fun setGoalTimeInput() {
         with(binding) {
-            radiogroupWriteFirstDeliveryFee.setOnCheckedChangeListener { group, checkedId ->
-                when (checkedId) {
-                    radiobuttonWriteFirstDeliveryFeeFree.id -> {
-                        chkDeliveryFee.postValue(true)
-                        chkDeliveryFeeRange.postValue(true)
-                        tvWriteFirstDeliveryFeeRangeError.visibility = View.INVISIBLE
-                        btnWriteFirstDeliveryFeeRangeAdd.visibility = View.GONE
-                        layoutWriteFirstDeliveryFeeRange.visibility = View.GONE
-                    }
-                    radiobuttonWriteFirstDeliveryFeeFreeNot.id -> {
-                        validateDeliveryFeeRangeCorrect()
-                        btnWriteFirstDeliveryFeeRangeAdd.visibility = View.VISIBLE
-                        layoutWriteFirstDeliveryFeeRange.visibility = View.VISIBLE
-                    }
+            etWriteFirstGoalTimePickerHour.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+            }
+            etWriteFirstGoalTimePickerMinute.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+            }
+            layoutWriteFirstGoalTimePicker.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+            }
+
+            writeViewModel.deadLineTime?.observe(viewLifecycleOwner) { time ->
+                val isTimeBlank = time != null
+                chkDeadLineTime.postValue(isTimeBlank)
+
+                if (isTimeBlank) {
+                    val deadLineTime = LocalDateTime.parse(time, dateTimeFormatter)
+                    etWriteFirstGoalTimePickerHour.setText("${deadLineTime.hour}")
+                    etWriteFirstGoalTimePickerMinute.setText("${deadLineTime.minute}")
                 }
             }
         }
+    }
+
+    private fun initDeadLineCriterion() {
+        with(binding) {
+            radiogroupWriteFirstGoalCriterion.setOnCheckedChangeListener { group, checkedId ->
+                tvWriteFirstGoalCriterionDescription.text = when (checkedId) {
+                    R.id.radiobutton_write_first_goal_criterion_people -> getString(R.string.write_first_goal_criterion_description_people)
+                    R.id.radiobutton_write_first_goal_criterion_delivery -> getString(R.string.write_first_goal_criterion_description_delivery)
+                    R.id.radiobutton_write_first_goal_criterion_time -> getString(R.string.write_first_goal_criterion_description_time)
+                    else -> ""
+                }
+            }
+        }
+    }
+
+    private fun initDeliveryFeeRange() {
+        initDeliveryFeeRangeView()
+        setCurrentDeliveryFeeRangeIsError()
+
+        // 최초 작성시 WriteSecond로 넘어간뒤 다시 돌아왔을 때 초기 배달비 구간관련 chk 변수들이 false로 되어있어 다음으로 버튼이 갱신되지 않는 문제를 다시 체크하도록 처리하여 해결
+        refreshOriginDeliveryFeeRangeCorrect()
+    }
+
+    private fun initDeliveryFeeRangeView() {
+        initDeliveryFeeRangeAdapter()
+        setDeliveryFeeRangeAddListener()
+        setDeliveryFeeRangeRemoveListener()
+    }
+
+    private fun initDeliveryFeeRangeAdapter() {
+        writeFirstDeliveryFeeRangeAdapter = WriteFirstDeliveryFeeRangeAdapter(
+            currentDeliveryFeeList,
+            deliveryFeeRangeCorrectList,
+            deliveryFeeRangeEmptyChkList
+        )
+
+        with(binding.rvWriteFirstDeliveryFeeRange) {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = writeFirstDeliveryFeeRangeAdapter
+        }
+    }
+
+    private fun setDeliveryFeeRangeAddListener() {
+        binding.btnWriteFirstDeliveryFeeRangeAdd.setOnDebounceClickListener {
+            addDeliveryFeeRangeItem()
+        }
+    }
+
+    private fun setDeliveryFeeRangeRemoveListener() {
+        writeFirstDeliveryFeeRangeAdapter.setOnItemClickListener(object :
+            WriteFirstDeliveryFeeRangeAdapter.OnItemClickListener {
+            override fun removeItem(contents: ShippingFeeDto, pos: Int) {
+                deleteDeliveryFeeRangeItem(pos)
+            }
+        })
+    }
+
+    private fun addDeliveryFeeRangeItem() {
+        currentDeliveryFeeList.add(ShippingFeeDto(0, 0, DELIVERY_FEE_RANGE_MAX))
+        deliveryFeeRangeCorrectList.add(true)
+        deliveryFeeRangeEmptyChkList.add(false)
+
+        with(writeFirstDeliveryFeeRangeAdapter) {
+            notifyItemInserted(currentDeliveryFeeList.lastIndex)
+            notifyItemRangeChanged(
+                currentDeliveryFeeList.lastIndex - 1,
+                currentDeliveryFeeList.size
+            )
+        }
+        binding.scrollviewWriteFirst.smoothScrollToView(binding.btnWriteFirstDeliveryFeeRangeAdd)
+    }
+
+    private fun deleteDeliveryFeeRangeItem(pos: Int) {
+        setDeleteCurrentRangeItemAnimation(pos)
+        currentDeliveryFeeList.removeAt(pos)
+        deliveryFeeRangeCorrectList.removeAt(pos)
+        deliveryFeeRangeEmptyChkList.removeAt(pos)
+
+        with(writeFirstDeliveryFeeRangeAdapter) {
+            notifyItemRemoved(pos)
+            notifyItemRangeChanged(0, currentDeliveryFeeList.size)
+        }
+    }
+
+    private fun setDeleteCurrentRangeItemAnimation(pos: Int) {
+        val deleteAnimation: Animation =
+            AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_out_right)
+        deleteAnimation.duration = 100
+        binding.rvWriteFirstDeliveryFeeRange[pos].startAnimation(deleteAnimation)
+
+    }
+
+    private fun setCurrentDeliveryFeeRangeIsError() {
+        setDeliveryFeeRangeAddEnable()
+        validateDeliveryFeeRangeCorrect()
+        displayDeliveryFeeRangeIsError()
     }
 
     private fun setDeliveryFeeRangeAddEnable() {
@@ -315,274 +418,167 @@ class WriteFirstFragment : Fragment() {
         }
     }
 
-    private fun setDeliveryFeeRangeAddClickListener() {
-        var result = ""
-        val decimalFormat = DecimalFormat("#,###")
-
-        binding.btnWriteFirstDeliveryFeeRangeAdd.setOnClickListener {
-            val deliveryFeeRangeViewBinding =
-                ItemWriteFirstDeliveryFeeRangeBinding.inflate(LayoutInflater.from(context))
-            val currentIdx = binding.layoutWriteFirstDeliveryFeeRange.childCount
-            val startRangeTextWatcher = object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRange.setText(result)
-                        deliveryFeeRangeViewBinding.etDeliveryFeeRange.setSelection(result.length)
-                    }
-
-                    deliveryFeeRangeEmptyChkList[currentIdx] =
-                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRange.text.isNullOrEmpty() ||
-                                deliveryFeeRangeViewBinding.etDeliveryFee.text.isNullOrEmpty())
-
-                    if (s.toString().isNotEmpty()) {
-                        if (deliveryFeeRangeViewBinding.etDeliveryFeeRange.text.toString()
-                                .replace(",", "")
-                                .toInt() <=
-                            // 직전의 range
-                            binding.layoutWriteFirstDeliveryFeeRange.getChildAt(currentIdx - 1)
-                                .findViewById<EditText>(R.id.et_delivery_fee_range).text.toString()
-                                .replace(",", "")
-                                .toInt()
-                        ) {
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRange.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10_stroke_red
-                                )
-                            deliveryFeeRangeCorrectList[currentIdx] = false
-                        } else {
-                            deliveryFeeRangeViewBinding.etDeliveryFeeRange.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.selector_edittext_white_gray_line_radius_10
-                                )
-                            deliveryFeeRangeCorrectList[currentIdx] = true
-                        }
-                    }
-                    validateDeliveryFeeRangeCorrect()
-                }
-            }
-            val deliveryFeeTextWatcher = object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        deliveryFeeRangeViewBinding.etDeliveryFee.setText(result)
-                        deliveryFeeRangeViewBinding.etDeliveryFee.setSelection(result.length)
-                    }
-
-                    deliveryFeeRangeEmptyChkList[currentIdx] =
-                        !(deliveryFeeRangeViewBinding.etDeliveryFeeRange.text.isNullOrEmpty() ||
-                                deliveryFeeRangeViewBinding.etDeliveryFee.text.isNullOrEmpty())
-                    validateDeliveryFeeRangeCorrect()
-                }
-            }
-
-            deliveryFeeRangeViewBinding.btnDeliveryFeeRangeDelete.setOnClickListener {
-                setDeliveryFeeRangeDeleteClickListener(currentIdx)
-                setDeliveryFeeRangeDelete()
-                setDeliveryFeeRangeError()
-                validateDeliveryFeeRangeCorrect()
-            }
-
-            deliveryFeeRangeViewBinding.etDeliveryFeeRange.addTextChangedListener(
-                startRangeTextWatcher
-            )
-            deliveryFeeRangeViewBinding.etDeliveryFee.addTextChangedListener(
-                deliveryFeeTextWatcher
-            )
-
-            deliveryFeeRangeViewBinding.tvDeliveryFeeRangeTitle.text =
-                "${getString(R.string.section)} ${currentIdx.plus(1)}"
-
-            val deliveryFeeRangeView = deliveryFeeRangeViewBinding.root
-            binding.layoutWriteFirstDeliveryFeeRange.addView(deliveryFeeRangeView)
-            deliveryFeeRangeCorrectList.add(true)
-            deliveryFeeRangeEmptyChkList.add(false)
-            binding.scrollviewWriteFirst.smoothScrollToView(binding.btnWriteFirstDeliveryFeeRangeAdd)
-
-            setPreviousFeeRangeDisable()
-            validateDeliveryFeeRangeCorrect()
-        }
-        setDeliveryFeeRangeFirstCheck()
-    }
-
-    private fun setDeliveryFeeRangeDelete() {
-        for (i in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
-            val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(i)
-            val deleteButton = view.findViewById<ImageButton>(R.id.btn_delivery_fee_range_delete)
-            val rangeTitle = view.findViewById<TextView>(R.id.tv_delivery_fee_range_title)
-            rangeTitle.text = "${getString(R.string.section)} ${i.plus(1)}"
-            deleteButton.setOnClickListener {
-                setDeliveryFeeRangeDeleteClickListener(i)
-            }
-        }
-        setPreviousFeeRangeDisable()
-    }
-
-    private fun setDeliveryFeeRangeDeleteClickListener(index: Int) {
-        for (i in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
-            val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(i)
-            view.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).clearTextChangedListeners()
-            view.findViewById<ExtendedEditText>(R.id.et_delivery_fee).clearTextChangedListeners()
-        }
-
-        binding.layoutWriteFirstDeliveryFeeRange.removeViewAt(index)
-        deliveryFeeRangeCorrectList.removeAt(index)
-        deliveryFeeRangeEmptyChkList.removeAt(index)
-        setDeliveryFeeRangeDelete()
-        setDeliveryFeeRangeError()
-        validateDeliveryFeeRangeCorrect()
-    }
-
-    private fun setDeliveryFeeRangeError() {
-        for (position in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
-            var result = ""
-            val decimalFormat = DecimalFormat("#,###")
-
-            val view = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(position)
-            val startEdit = view.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range)
-            val feeEdit = view.findViewById<ExtendedEditText>(R.id.et_delivery_fee)
-
-            startEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        startEdit.setText(result)
-                        startEdit.setSelection(result.length)
-                    }
-
-                    deliveryFeeRangeEmptyChkList[position] =
-                        !(startEdit.text.isEmpty() || feeEdit.text.isEmpty())
-                    if(position != 0) {
-                        if (s.toString().isNotEmpty()) {
-                            if (startEdit.text.toString().replace(",", "")
-                                    .toInt() <= binding.layoutWriteFirstDeliveryFeeRange.getChildAt(position-1).findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).text.toString().replace(",", "").toInt()
-                            ) {
-                                startEdit.background = ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10_stroke_red
-                                )
-                                deliveryFeeRangeCorrectList[position] = false
-                            } else {
-                                startEdit.background = ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.selector_edittext_white_gray_line_radius_10
-                                )
-                                deliveryFeeRangeCorrectList[position] = true
-                            }
-                        }
-                    }
-                    validateDeliveryFeeRangeCorrect()
-                }
-            })
-            feeEdit.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        feeEdit.setText(result)
-                        feeEdit.setSelection(result.length)
-                    }
-                    deliveryFeeRangeEmptyChkList[position] =
-                        !(startEdit.text.isEmpty() || feeEdit.text.isEmpty())
-                    validateDeliveryFeeRangeCorrect()
-                }
-            })
-        }
-    }
-
-    private fun setDeliveryFeeRangeFirstCheck() {
-        var result = ""
-        val decimalFormat = DecimalFormat("#,###")
-
-        binding.etDeliveryFeeRange.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                    result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                    binding.etDeliveryFeeRange.setText(result)
-                    binding.etDeliveryFeeRange.setSelection(result.length)
-                }
-
-                deliveryFeeRangeEmptyChkList[0] =
-                    !(binding.etDeliveryFeeRange.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
-                validateDeliveryFeeRangeCorrect()
-            }
-        })
-
-        binding.etDeliveryFee.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                    result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                    binding.etDeliveryFee.setText(result)
-                    binding.etDeliveryFee.setSelection(result.length)
-                }
-                deliveryFeeRangeEmptyChkList[0] =
-                    !(binding.etDeliveryFeeRange.text.isEmpty() || binding.etDeliveryFee.text.isEmpty())
-                validateDeliveryFeeRangeCorrect()
-            }
-        })
-    }
-
     private fun validateDeliveryFeeRangeCorrect() {
-        if (deliveryFeeRangeCorrectList.contains(false)) {
-            binding.tvWriteFirstDeliveryFeeRangeError.visibility = View.VISIBLE
-            chkDeliveryFeeRange.postValue(false)
-        } else {
-            binding.tvWriteFirstDeliveryFeeRangeError.visibility = View.INVISIBLE
-            chkDeliveryFeeRange.postValue(true)
+        deliveryFeeRangeCorrectList.observe(viewLifecycleOwner) { list ->
+            chkDeliveryFeeRange.postValue(!list.contains(false))
+            binding.tvWriteFirstDeliveryFeeRangeError.visibility =
+                if (list.contains(false)) View.VISIBLE else View.INVISIBLE
         }
 
-        if (deliveryFeeRangeEmptyChkList.contains(false)) {
-            chkDeliveryFee.postValue(false)
+        deliveryFeeRangeEmptyChkList.observe(viewLifecycleOwner) { list ->
+            chkDeliveryFee.postValue(!list.contains(false))
+        }
+    }
+
+    private fun displayDeliveryFeeRangeIsError() {
+        with(binding) {
+            radiogroupWriteFirstDeliveryFee.setOnCheckedChangeListener { group, checkedId ->
+                when (checkedId) {
+                    radiobuttonWriteFirstDeliveryFeeFree.id -> {
+                        chkDeliveryFee.postValue(true)
+                        chkDeliveryFeeRange.postValue(true)
+                        tvWriteFirstDeliveryFeeRangeError.visibility = View.INVISIBLE
+                        btnWriteFirstDeliveryFeeRangeAdd.visibility = View.GONE
+                        rvWriteFirstDeliveryFeeRange.visibility = View.GONE
+                    }
+                    radiobuttonWriteFirstDeliveryFeeFreeNot.id -> {
+                        refreshOriginDeliveryFeeRangeCorrect()
+                        btnWriteFirstDeliveryFeeRangeAdd.visibility = View.VISIBLE
+                        rvWriteFirstDeliveryFeeRange.visibility = View.VISIBLE
+
+                        if (currentDeliveryFeeList.isNullOrEmpty())
+                            addDeliveryFeeRangeItem() // 첫번째 구간은 기본으로 추가될수 있도록 설정
+                    }
+                }
+            }
+        }
+    }
+
+    private fun refreshOriginDeliveryFeeRangeCorrect() {
+        deliveryFeeRangeCorrectList.notifyChange()
+        deliveryFeeRangeEmptyChkList.notifyChange()
+    }
+
+    private fun setUserInputInformation() {
+        setUserInputInformationDeadLinePeopleCount()
+        setUserInputInformationGoalAmount()
+        setUserInputInformationCriterion()
+        setUserInputInformationFeeRange()
+    }
+
+    private fun setUserInputInformationDeadLinePeopleCount() {
+        writeViewModel.deadLinePeopleCount = binding.currentPeopleDeadLineCount ?: 1
+    }
+
+    private fun setUserInputInformationGoalAmount() {
+        with(binding.etWriteFirstGoalDeliveryUserInput.text) {
+            writeViewModel.deadLineAmount =
+                if (this.isNotEmpty()) this.toString().replace(",", "").toInt()
+                else 0
+        }
+    }
+
+    private fun setUserInputInformationCriterion() {
+        writeViewModel.deadLineCriterion =
+            when (binding.radiogroupWriteFirstGoalCriterion.checkedRadioButtonId) {
+                R.id.radiobutton_write_first_goal_criterion_people -> RecruitFinishCriteria.NUMBER
+                R.id.radiobutton_write_first_goal_criterion_delivery -> RecruitFinishCriteria.PRICE
+                R.id.radiobutton_write_first_goal_criterion_time -> RecruitFinishCriteria.TIME
+                else -> RecruitFinishCriteria.NUMBER
+            }
+    }
+
+    private fun setUserInputInformationFeeRange() {
+        writeViewModel.isDeliveryFeeFree =
+            binding.radiogroupWriteFirstDeliveryFee.checkedRadioButtonId == R.id.radiobutton_write_first_delivery_fee_free
+
+        if (!writeViewModel.isDeliveryFeeFree) {
+            val feeList = currentDeliveryFeeList
+            feeList.sortWith(compareBy({ it.lowerPrice }, { it.upperPrice }))
+            writeViewModel.deliveryFeeRangeList = feeList
+        }
+    }
+
+    private fun initDetailForModifyDeadLinePeople(currentDeadLinePeople: Int) {
+        with(currentDeadLinePeople) {
+            binding.currentPeopleDeadLineCount = this
+            binding.imgWriteFirstGoalPeopleDecrease.let { decreaseButton ->
+                if (this > 1) {
+                    decreaseButton.isEnabled = true
+                    decreaseButton.background =
+                        ContextCompat.getDrawable(requireContext(), R.color.white_FFFFFF)
+                } else {
+                    decreaseButton.isEnabled = false
+                    decreaseButton.background =
+                        Color.parseColor("#D9D9D9").toDrawable()
+                }
+            }
+        }
+    }
+
+    private fun initDetailForModifyGoalAmount(currentMinPrice: Int) {
+        with(binding) {
+            etWriteFirstGoalDeliveryUserInput.setText(decimalFormat.format(currentMinPrice))
+            tvWriteFirstGoalDeliveryError.visibility = View.INVISIBLE
+            viewWriteFristGoalDeliveryUserInputBackground.background =
+                ContextCompat.getDrawable(
+                    requireContext(),
+                    R.drawable.background_white_radius_10
+                )
+            chkDeadLineAmount.postValue(true)
+        }
+    }
+
+    private fun initDetailForModifyGoalTime(currentGoalTime: String) {
+        writeViewModel.deadLineTime!!.postValue(currentGoalTime)
+        val parsedDeadLineTime = LocalDateTime.parse(currentGoalTime, dateTimeFormatter)
+        with(binding) {
+            etWriteFirstGoalTimePickerHour.setText("${parsedDeadLineTime.hour}")
+            etWriteFirstGoalTimePickerMinute.setText("${parsedDeadLineTime.minute}")
+        }
+        chkDeadLineTime.postValue(true)
+    }
+
+    private fun initDetailForModifyCriterion(currentCriteria: RecruitFinishCriteria) {
+        when (currentCriteria) {
+            RecruitFinishCriteria.NUMBER -> binding.radiogroupWriteFirstGoalCriterion.check(R.id.radiobutton_write_first_goal_criterion_people)
+            RecruitFinishCriteria.PRICE -> binding.radiogroupWriteFirstGoalCriterion.check(R.id.radiobutton_write_first_goal_criterion_delivery)
+            RecruitFinishCriteria.TIME -> binding.radiogroupWriteFirstGoalCriterion.check(R.id.radiobutton_write_first_goal_criterion_time)
+        }
+    }
+
+    private fun initDetailForModifyDeliveryFeeRange(
+        isDeliveryFeeFree: Boolean,
+        newDeliveryFeeRanges: List<ShippingFeeDto>
+    ) {
+        if (isDeliveryFeeFree) {
+            binding.radiogroupWriteFirstDeliveryFee.check(R.id.radiobutton_write_first_delivery_fee_free)
         } else {
-            chkDeliveryFee.postValue(true)
+            binding.radiogroupWriteFirstDeliveryFee.check(R.id.radiobutton_write_first_delivery_fee_free_not)
+            currentDeliveryFeeList.let { originFeeRanges ->
+                // 배달비 구간 무료배송 아님 체크시 자동으로 구간이 추가되어있는 것을 비우고 전부 새로 추가
+                if (originFeeRanges.isNotEmpty()) {
+                    originFeeRanges.clear()
+                    deliveryFeeRangeCorrectList.clear(true)
+                    deliveryFeeRangeEmptyChkList.clear(true)
+                }
+
+                originFeeRanges.addAll(newDeliveryFeeRanges)
+                deliveryFeeRangeCorrectList.addAll(List(newDeliveryFeeRanges.size) { true })
+                deliveryFeeRangeEmptyChkList.addAll(List(newDeliveryFeeRanges.size) { true })
+
+                with(writeFirstDeliveryFeeRangeAdapter) {
+                    notifyItemRangeInserted(0, originFeeRanges.size)
+                    notifyItemRangeChanged(0, originFeeRanges.size)
+                }
+            }
         }
     }
 
     fun NestedScrollView.smoothScrollToView(
         view: View,
         marginTop: Int = 0,
-        maxDuration: Long = 100L,
+        maxDuration: Long = 300L,
         onEnd: () -> Unit = {}
     ) {
         if (this.getChildAt(0).height <= this.height) { // 스크롤의 의미가 없다.
@@ -601,25 +597,6 @@ class WriteFirstFragment : Fragment() {
         }
     }
 
-    private fun initDeadLineCriterion() {
-        binding.radiogroupWriteFirstGoalCriterion.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.radiobutton_write_first_goal_criterion_people -> {
-                    binding.tvWriteFirstGoalCriterionDescription.text =
-                        getString(R.string.write_first_goal_criterion_description_people)
-                }
-                R.id.radiobutton_write_first_goal_criterion_delivery -> {
-                    binding.tvWriteFirstGoalCriterionDescription.text =
-                        getString(R.string.write_first_goal_criterion_description_delivery)
-                }
-                R.id.radiobutton_write_first_goal_criterion_time -> {
-                    binding.tvWriteFirstGoalCriterionDescription.text =
-                        getString(R.string.write_first_goal_criterion_description_time)
-                }
-            }
-        }
-    }
-
     private fun NestedScrollView.computeDistanceToView(view: View): Int {
         return abs(calculateRectOnScreen(this).top - (this.scrollY + calculateRectOnScreen(view).top))
     }
@@ -633,39 +610,5 @@ class WriteFirstFragment : Fragment() {
             location[0] + view.measuredWidth,
             location[1] + view.measuredHeight
         )
-    }
-
-    private fun setPreviousFeeRangeDisable() {
-        for (idx in 0 until binding.layoutWriteFirstDeliveryFeeRange.childCount) {
-            val currentView = binding.layoutWriteFirstDeliveryFeeRange.getChildAt(idx)
-            if(idx == binding.layoutWriteFirstDeliveryFeeRange.childCount - 1) {
-                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).isEnabled = true
-                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee).isEnabled = true
-            } else {
-                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee_range).isEnabled = false
-                currentView.findViewById<ExtendedEditText>(R.id.et_delivery_fee).isEnabled = false
-            }
-        }
-    }
-
-    private fun setGoalTimeInput() {
-        binding.etWriteFirstGoalTimePickerHour.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
-        }
-        binding.etWriteFirstGoalTimePickerMinute.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
-        }
-        binding.layoutWriteFirstGoalTimePicker.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
-        }
-
-        writeViewModel.deadLineTime?.observe(viewLifecycleOwner) { time ->
-            if (time != null) {
-                val deadLineTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))
-                binding.etWriteFirstGoalTimePickerHour.setText("${deadLineTime.hour}")
-                binding.etWriteFirstGoalTimePickerMinute.setText("${deadLineTime.minute}")
-                chkDeadLineTime.postValue(true)
-            } else chkDeadLineTime.postValue(false)
-        }
     }
 }

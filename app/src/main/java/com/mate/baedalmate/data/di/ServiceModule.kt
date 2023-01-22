@@ -49,6 +49,7 @@ import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostForModifyUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
 import com.mate.baedalmate.domain.usecase.report.RequestPostReportRecruitUseCase
@@ -153,6 +154,10 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideRequestRecruitPostUseCase(recruitRepository: RecruitRepository): RequestRecruitPostUseCase = RequestRecruitPostUseCase(recruitRepository)
+
+    @Singleton
+    @Provides
+    fun provideRequestRecruitPostForModifyUseCase(recruitRepository: RecruitRepository): RequestRecruitPostForModifyUseCase = RequestRecruitPostForModifyUseCase(recruitRepository)
 
     @Singleton
     @Provides

@@ -18,6 +18,7 @@ import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitDetail
+import com.mate.baedalmate.domain.model.RecruitDetailForModify
 import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelRecruitPostUseCase
@@ -25,6 +26,7 @@ import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitListUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitMainListUseCase
+import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostForModifyUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestRecruitTagListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +42,7 @@ class RecruitViewModel @Inject constructor(
     private val recruitMainListUseCase: RequestRecruitMainListUseCase,
     private val recruitTagListUseCase: RequestRecruitTagListUseCase,
     private val recruitPostUseCase: RequestRecruitPostUseCase,
+    private val recruitPostForModifyUseCase: RequestRecruitPostForModifyUseCase,
     private val closeRecruitPostUseCase: RequestCloseRecruitPostUseCase,
     private val cancelRecruitPostUseCase: RequestCancelRecruitPostUseCase,
     private val participateRecruitPostUseCase: RequestParticipateRecruitPostUseCase,
@@ -114,6 +117,9 @@ class RecruitViewModel @Inject constructor(
         )
     )
     val recruitPostDetail: LiveData<RecruitDetail> get() = _recruitPostDetail
+
+    private val _recruitPostDetailForModify = MutableLiveData<RecruitDetailForModify>()
+    val recruitPostDetailForModify get() = _recruitPostDetailForModify
 
     private val _recruitHomeRecentList = MutableLiveData(
         MainRecruitList(
@@ -217,6 +223,16 @@ class RecruitViewModel @Inject constructor(
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     ApiResponse.data.let { _recruitPostDetail.postValue(it) }
+                }
+            }
+        }
+    }
+
+    fun requestRecruitPostForModify(postId: Int) = viewModelScope.launch {
+        recruitPostForModifyUseCase.invoke(id = postId).let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data.let { _recruitPostDetailForModify.postValue(it) }
                 }
             }
         }

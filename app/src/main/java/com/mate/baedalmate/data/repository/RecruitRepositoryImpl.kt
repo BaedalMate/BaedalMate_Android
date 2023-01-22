@@ -12,6 +12,7 @@ import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.RecruitDetail
+import com.mate.baedalmate.domain.model.RecruitDetailForModify
 import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.domain.model.setExceptionHandling
 import com.mate.baedalmate.domain.repository.RecruitRepository
@@ -54,6 +55,11 @@ class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: R
     override suspend fun requestRecruitPost(id: Int): ApiResult<RecruitDetail> =
         setExceptionHandling {
             recruitApiService.requestRecruitPost(id = id)
+        }
+
+    override suspend fun requestRecruitPostDetailForModify(id: Int): ApiResult<RecruitDetailForModify> =
+        setExceptionHandling {
+            recruitApiService.requestRecruitPostDetailForModify(id = id)
         }
 
     override suspend fun requestCancelRecruitPost(id: Int): ApiResult<Void> =

@@ -8,6 +8,7 @@ import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitList
 import com.mate.baedalmate.data.datasource.remote.recruit.TagRecruitList
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.RecruitDetail
+import com.mate.baedalmate.domain.model.RecruitDetailForModify
 import com.mate.baedalmate.domain.model.RecruitDto
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +22,7 @@ interface RecruitRepository {
 
     suspend fun requestRecruitTagList(page: Int, size: Int, sort: String): ApiResult<TagRecruitList>
     suspend fun requestRecruitPost(id: Int): ApiResult<RecruitDetail>
+    suspend fun requestRecruitPostDetailForModify(id: Int): ApiResult<RecruitDetailForModify>
     suspend fun requestCancelRecruitPost(id: Int): ApiResult<Void>
     suspend fun requestCloseRecruitPost(id: Int): ApiResult<Void>
     suspend fun requestParticipateRecruitPost(data: CreateOrderRequest): ApiResult<CreateOrderResponse>

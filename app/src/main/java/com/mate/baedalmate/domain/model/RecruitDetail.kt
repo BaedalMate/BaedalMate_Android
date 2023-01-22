@@ -1,7 +1,9 @@
 package com.mate.baedalmate.domain.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
+import kotlinx.parcelize.Parcelize
 
 data class RecruitDetail(
     @SerializedName("active")
@@ -47,3 +49,39 @@ data class RecruitDetail(
     @SerializedName("cancel")
     val cancel: Boolean
 )
+
+@Parcelize
+data class RecruitDetailForModify(
+    @SerializedName("recruitId")
+    val recruitId: Int,
+    @SerializedName("categoryId")
+    val categoryId: Int,
+    @SerializedName("place")
+    val place: PlaceDto,
+    @SerializedName("dormitory")
+    val dormitory: String,
+    @SerializedName("criteria")
+    val criteria: RecruitFinishCriteria,
+    @SerializedName("minPrice")
+    val minPrice: Int,
+    @SerializedName("minPeople")
+    val minPeople: Int,
+    @SerializedName("shippingFee")
+    val shippingFee: List<ShippingFeeDto>,
+    @SerializedName("coupon")
+    val coupon: Int,
+    @SerializedName("platform")
+    val platform: String,
+    @SerializedName("deadlineDate")
+    val deadlineDate: String,
+    @SerializedName("title")
+    val title: String,
+    @SerializedName("description")
+    val description: String,
+    @SerializedName("freeShipping")
+    val freeShipping: Boolean,
+    @SerializedName("menu")
+    val menu: List<MenuDto>,
+    @SerializedName("tags")
+    val tags: List<TagDto>
+): Parcelable

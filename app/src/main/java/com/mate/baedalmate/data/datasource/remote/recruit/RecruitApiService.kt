@@ -1,6 +1,7 @@
 package com.mate.baedalmate.data.datasource.remote.recruit
 
 import com.mate.baedalmate.domain.model.RecruitDetail
+import com.mate.baedalmate.domain.model.RecruitDetailForModify
 import com.mate.baedalmate.domain.model.RecruitList
 import retrofit2.Response
 import retrofit2.http.Body
@@ -37,6 +38,11 @@ interface RecruitApiService {
     suspend fun requestRecruitPost(
         @Path("id") id: Int
     ): Response<RecruitDetail>
+
+    @GET("/api/v1/recruit/{id}/detail")
+    suspend fun requestRecruitPostDetailForModify(
+        @Path("id") id: Int
+    ): Response<RecruitDetailForModify>
 
     @GET("/api/v1/recruit/cancel/{id}")
     suspend fun requestCancelRecruitPost(@Path("id") id: Int): Response<Void>
