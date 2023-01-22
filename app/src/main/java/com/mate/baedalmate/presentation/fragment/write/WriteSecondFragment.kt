@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
@@ -24,6 +25,7 @@ import com.mate.baedalmate.common.dp
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.databinding.FragmentWriteSecondBinding
+import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +34,7 @@ import java.text.DecimalFormat
 @AndroidEntryPoint
 class WriteSecondFragment : Fragment() {
     private var binding by autoCleared<FragmentWriteSecondBinding>()
+    private val args by navArgs<WriteSecondFragmentArgs>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
     private lateinit var spinnerAdapter: WriteSecondDormitorySpinnerAdapter
 
@@ -39,7 +42,7 @@ class WriteSecondFragment : Fragment() {
     private var chkCoupon = MutableLiveData(true)
     private val onNext: MediatorLiveData<Boolean> = MediatorLiveData()
 
-    init{
+    init {
         onNext.addSource(chkStoreDescription) {
             onNext.value = _onNext()
         }
@@ -48,8 +51,8 @@ class WriteSecondFragment : Fragment() {
         }
     }
 
-    private fun _onNext():Boolean {
-        if((chkStoreDescription.value == true) and (chkCoupon.value == true)){
+    private fun _onNext(): Boolean {
+        if ((chkStoreDescription.value == true) and (chkCoupon.value == true)) {
             return true
         }
         return false
@@ -72,6 +75,7 @@ class WriteSecondFragment : Fragment() {
         initPlatform()
         setCouponInputForm()
         validateCouponInputForm()
+        initDetailForModify()
     }
 
     private fun setBackClickListener() {
@@ -86,51 +90,38 @@ class WriteSecondFragment : Fragment() {
         }
 
         binding.btnWriteSecondNext.setOnClickListener {
-            val selectedDormitory = when(binding.spinnerWriteSecondUserLocationInputDormitory.selectedItem) {
-                "누리학사" -> {
-                    Dormitory.NURI
+            val selectedDormitory =
+                when (binding.spinnerWriteSecondUserLocationInputDormitory.selectedItem) {
+                    "누리학사" -> Dormitory.NURI
+                    "성림학사" -> Dormitory.SUNGLIM
+                    "KB학사" -> Dormitory.KB
+                    "불암학사" -> Dormitory.BURAM
+                    "수림학사" -> Dormitory.SULIM
+                    else -> Dormitory.NURI
                 }
-                "성림학사" -> {
-                    Dormitory.SUNGLIM
-                }
-                "KB학사" -> {
-                    Dormitory.KB
-                }
-                "불암학사" -> {
-                    Dormitory.BURAM
-                }
-                "수림학사" -> {
-                    Dormitory.SULIM
-                }
-                else -> { Dormitory.NURI }
-            }
             writeViewModel.deliveryDormitory = selectedDormitory
-            writeViewModel.deliveryPlatform = when(binding.radiogroupWriteSecondPlatformList.checkedRadioButtonId) {
-                R.id.radiobutton_write_second_platform_baemin -> {
-                    DeliveryPlatform.BAEMIN
+            writeViewModel.deliveryPlatform =
+                when (binding.radiogroupWriteSecondPlatformList.checkedRadioButtonId) {
+                    R.id.radiobutton_write_second_platform_baemin -> DeliveryPlatform.BAEMIN
+                    R.id.radiobutton_write_second_platform_yogiyo -> DeliveryPlatform.YOGIYO
+                    R.id.radiobutton_write_second_platform_coupang -> DeliveryPlatform.COUPANG
+                    R.id.radiobutton_write_second_platform_ddangyo -> DeliveryPlatform.DDGNGYO
+                    R.id.radiobutton_write_second_platform_etc -> DeliveryPlatform.ETC
+                    else -> DeliveryPlatform.ETC
                 }
-                R.id.radiobutton_write_second_platform_yogiyo -> {
-                    DeliveryPlatform.YOGIYO
-                }
-                R.id.radiobutton_write_second_platform_coupang -> {
-                    DeliveryPlatform.COUPANG
-                }
-                R.id.radiobutton_write_second_platform_ddangyo -> {
-                    DeliveryPlatform.DDGNGYO
-                }
-                R.id.radiobutton_write_second_platform_etc -> {
-                    DeliveryPlatform.ETC
-                }
-                else -> DeliveryPlatform.ETC
-            }
 
             if (binding.checkboxWriteSecondCouponUse.isChecked) {
                 writeViewModel.isCouponUse = false
             } else {
                 writeViewModel.isCouponUse = true
-                writeViewModel.couponAmount = binding.etWriteSecondCouponUserInput.text.toString().replace(",", "").toInt()
+                writeViewModel.couponAmount =
+                    binding.etWriteSecondCouponUserInput.text.toString().replace(",", "").toInt()
             }
-            findNavController().navigate(R.id.action_writeSecondFragment_to_writeThirdFragment)
+            findNavController().navigate(
+                WriteSecondFragmentDirections.actionWriteSecondFragmentToWriteThirdFragment(
+                    args.recruitDetailForModify
+                )
+            )
         }
     }
 
@@ -165,7 +156,7 @@ class WriteSecondFragment : Fragment() {
     private fun initPlatform() {
         val deviceWidth = GetDeviceSize.getDeviceWidthSizeDp(requireContext())
         val useWidth = deviceWidth - 52.dp
-        for(i in 0 until binding.radiogroupWriteSecondPlatformList.childCount) {
+        for (i in 0 until binding.radiogroupWriteSecondPlatformList.childCount) {
             val radioButton = binding.radiogroupWriteSecondPlatformList.getChildAt(i) as RadioButton
             radioButton.updateLayoutParams<RadioGroup.LayoutParams> {
                 width = useWidth
@@ -229,8 +220,22 @@ class WriteSecondFragment : Fragment() {
             var result = ""
             val decimalFormat = DecimalFormat("#,###")
             this.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {}
-                override fun onTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {}
+                override fun beforeTextChanged(
+                    charSequence: CharSequence?,
+                    i1: Int,
+                    i2: Int,
+                    i3: Int
+                ) {
+                }
+
+                override fun onTextChanged(
+                    charSequence: CharSequence?,
+                    i1: Int,
+                    i2: Int,
+                    i3: Int
+                ) {
+                }
+
                 override fun afterTextChanged(s: Editable?) {
                     if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
                         result = decimalFormat.format(s.toString().replace(",", "").toDouble())
@@ -285,6 +290,54 @@ class WriteSecondFragment : Fragment() {
                     else -> false
                 }
             }
+        }
+    }
+
+    private fun initDetailForModify() {
+        args.recruitDetailForModify?.let { originDetail ->
+            with(originDetail) {
+                initDetailForModifyDormitory(dormitory)
+                initDetailForModifyStore(place)
+                initDetailForModifyPlatform(platform)
+                initDetailForModifyCoupon(coupon)
+            }
+        }
+    }
+
+    private fun initDetailForModifyDormitory(dormitory: String) {
+        val originDormitory =
+            when (dormitory) {
+                Dormitory.NURI.name-> "누리학사"
+                Dormitory.SUNGLIM.name -> "성림학사"
+                Dormitory.KB.name -> "KB학사"
+                Dormitory.BURAM.name -> "불암학사"
+                Dormitory.SULIM.name -> "수림학사"
+                else -> "누리학사"
+            }
+
+        binding.spinnerWriteSecondUserLocationInputDormitory.setSelection(
+            resources.getStringArray(R.array.dormitory_list).indexOf(originDormitory)
+        )
+    }
+
+    private fun initDetailForModifyStore(storeLocation: PlaceDto) {
+        writeViewModel.deliveryStore.postValue(storeLocation)
+    }
+
+    private fun initDetailForModifyPlatform(platform: DeliveryPlatform) {
+        when (platform) {
+            DeliveryPlatform.BAEMIN -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_baemin)
+            DeliveryPlatform.YOGIYO -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_yogiyo)
+            DeliveryPlatform.COUPANG -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_coupang)
+            DeliveryPlatform.DDGNGYO -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_ddangyo)
+            DeliveryPlatform.ETC -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_etc)
+        }
+    }
+
+    private fun initDetailForModifyCoupon (couponPrice: Int) {
+        binding.checkboxWriteSecondCouponUse.isChecked = couponPrice == 0
+        if (couponPrice != 0) {
+            binding.etWriteSecondCouponUserInput.setText("$couponPrice")
         }
     }
 }

@@ -58,6 +58,7 @@ import com.mate.baedalmate.domain.usecase.review.RequestGetTargetReviewUserListU
 import com.mate.baedalmate.domain.usecase.review.RequestReviewUsersUseCase
 import com.mate.baedalmate.domain.usecase.search.RequestGetSearchTagKeywordUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestKakaoLocalUseCase
+import com.mate.baedalmate.domain.usecase.write.RequestModifyPostUseCase
 import com.mate.baedalmate.domain.usecase.write.RequestUploadPostUseCase
 import dagger.Module
 import dagger.Provides
@@ -130,6 +131,10 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideUploadPostUseCase(writeRepository: WriteRepository): RequestUploadPostUseCase = RequestUploadPostUseCase(writeRepository)
+
+    @Singleton
+    @Provides
+    fun provideModifyPostUseCase(writeRepository: WriteRepository): RequestModifyPostUseCase = RequestModifyPostUseCase(writeRepository)
 
     @Singleton
     @Provides

@@ -13,11 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.size
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.databinding.FragmentWriteThirdBinding
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
@@ -26,6 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class WriteThirdFragment : Fragment() {
     private var binding by autoCleared<FragmentWriteThirdBinding>()
+    private val args by navArgs<WriteThirdFragmentArgs>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
 
     override fun onCreateView(
@@ -43,16 +46,17 @@ class WriteThirdFragment : Fragment() {
         initSubjectInput()
         initDescriptionInput()
         initTagList()
+        initDetailForModify()
     }
 
     private fun setBackClickListener() {
-        binding.btnWriteThirdActionbarBack.setOnClickListener {
+        binding.btnWriteThirdActionbarBack.setOnDebounceClickListener {
             findNavController().navigateUp()
         }
     }
 
     private fun setNextClickListener() {
-        binding.btnWriteThirdNext.setOnClickListener {
+        binding.btnWriteThirdNext.setOnDebounceClickListener {
             val titleText =
                 if (binding.etWriteThirdSubjectInput.text.toString()
                         .trim().length > MAX_TITLE_LENGTH
@@ -77,7 +81,11 @@ class WriteThirdFragment : Fragment() {
                 else tagList.add(TagDto(tagname = tagText))
             }
             writeViewModel.postTagList = tagList
-            findNavController().navigate(R.id.action_writeThirdFragment_to_writeFourthFragment)
+            findNavController().navigate(
+                WriteThirdFragmentDirections.actionWriteThirdFragmentToWriteFourthFragment(
+                    args.recruitDetailForModify
+                )
+            )
         }
     }
 
@@ -196,7 +204,7 @@ class WriteThirdFragment : Fragment() {
     }
 
     private fun setAddTagClickListener() {
-        binding.btnWriteThirdTagAdd.setOnClickListener {
+        binding.btnWriteThirdTagAdd.setOnDebounceClickListener {
             setAddingTag()
         }
     }
@@ -357,6 +365,30 @@ class WriteThirdFragment : Fragment() {
                     )
                 )
             }
+        }
+    }
+
+    private fun initDetailForModify() {
+        args.recruitDetailForModify?.let { originDetail ->
+            with(originDetail) {
+                initDetailForModifySubject(title)
+                initDetailForModifyDescription(description)
+                initDetailForModifyTags(tags)
+            }
+        }
+    }
+
+    private fun initDetailForModifySubject(title: String) {
+        binding.etWriteThirdSubjectInput.setText(title)
+    }
+
+    private fun initDetailForModifyDescription(description: String) {
+        binding.etWriteThirdDescriptionInput.setText(description)
+    }
+
+    private fun initDetailForModifyTags(tags: List<TagDto>) {
+        for (tag in tags) {
+            setTagChipProperties(tag.tagname)
         }
     }
 

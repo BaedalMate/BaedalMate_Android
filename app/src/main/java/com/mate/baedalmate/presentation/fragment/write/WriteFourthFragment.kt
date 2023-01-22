@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.LoadingAlertDialog
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.databinding.FragmentWriteFourthBinding
 import com.mate.baedalmate.presentation.adapter.write.WriteFourthMenuListAdapter
@@ -27,6 +29,7 @@ import java.text.DecimalFormat
 @AndroidEntryPoint
 class WriteFourthFragment : Fragment() {
     private var binding by autoCleared<FragmentWriteFourthBinding>()
+    private val args by navArgs<WriteFirstFragmentArgs>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
     private lateinit var writeFourthMenuListAdapter: WriteFourthMenuListAdapter
     private var currentMenuAmount = 0
@@ -48,7 +51,9 @@ class WriteFourthFragment : Fragment() {
         setNextClickListener()
         setAddMenuClickListener()
         setMenuListOriginalValue()
+        initDetailForModify()
         observeUploadSuccess()
+        observeModifySuccess()
     }
 
     override fun onDestroyView() {
@@ -57,21 +62,28 @@ class WriteFourthFragment : Fragment() {
     }
 
     private fun setBackClickListener() {
-        binding.btnWriteFourthActionbarBack.setOnClickListener {
+        binding.btnWriteFourthActionbarBack.setOnDebounceClickListener {
             findNavController().navigateUp()
         }
     }
 
     private fun setNextClickListener() {
-        binding.btnWriteFourthNext.setOnClickListener {
-            writeViewModel.requestUploadPost()
+        binding.btnWriteFourthNext.setOnDebounceClickListener {
+            if (args.recruitDetailForModify != null)
+                args.recruitDetailForModify?.let {
+                    writeViewModel.requestModifyPost(
+                        it.recruitId,
+                        it.categoryId
+                    )
+                }
+            else writeViewModel.requestUploadPost()
             LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
             LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
         }
     }
 
     private fun setAddMenuClickListener() {
-        binding.btnWriteFourthMenuAdd.setOnClickListener {
+        binding.btnWriteFourthMenuAdd.setOnDebounceClickListener {
             findNavController().navigate(R.id.action_writeFourthFragment_to_writeFourthAddMenuFragment)
         }
     }
@@ -183,25 +195,51 @@ class WriteFourthFragment : Fragment() {
         binding.tvWriteFourthAmountTotal.text = span
     }
 
+
+    private fun initDetailForModify() {
+        args.recruitDetailForModify?.let { originDetail ->
+            with(originDetail) {
+                writeViewModel.menuList.postValue(ArrayList(menu))
+            }
+        }
+    }
+
     private fun observeUploadSuccess() {
         writeViewModel.writeSuccess.observe(viewLifecycleOwner) { isSuccess ->
             if (isSuccess.getContentIfNotHandled() == true) {
                 writeViewModel.writePostId.value?.getContentIfNotHandled()?.let { writePostId ->
-                    findNavController().navigate(
-                        WriteFourthFragmentDirections.actionWriteFourthFragmentToPostFragment(
-                            writePostId
-                        )
-                    )
-                    writeViewModel.resetVariables()
+                    navigateToUploadedPost(writePostId)
                 }
             } else if (isSuccess.getContentIfNotHandled() == false) {
                 LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
                 Toast.makeText(
                     requireContext(),
-                    "글 작성을 다시 시도해주세요",
+                    getString(R.string.write_upload_fail_toast_message),
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
+    }
+
+    private fun observeModifySuccess() {
+        writeViewModel.writeModifySuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess.getContentIfNotHandled() == true)
+                navigateToUploadedPost(args.recruitDetailForModify!!.recruitId ?: 0)
+            else if (isSuccess.getContentIfNotHandled() == false) {
+                LoadingAlertDialog.hideLoadingDialog(loadingAlertDialog)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.write_modify_fail_toast_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun navigateToUploadedPost(recruitId: Int) {
+        findNavController().navigate(
+            WriteFourthFragmentDirections.actionWriteFourthFragmentToPostFragment(recruitId)
+        )
+        writeViewModel.resetVariables()
     }
 }
