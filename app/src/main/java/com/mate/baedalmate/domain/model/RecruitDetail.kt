@@ -71,7 +71,7 @@ data class RecruitDetailForModify(
     @SerializedName("coupon")
     val coupon: Int,
     @SerializedName("platform")
-    val platform: String,
+    val platform: DeliveryPlatform,
     @SerializedName("deadlineDate")
     val deadlineDate: String,
     @SerializedName("title")

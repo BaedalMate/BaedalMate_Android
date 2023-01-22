@@ -135,6 +135,8 @@
     <!-- Write -->
     <string name="write_actionbar_title">상세 설정</string>
     <string name="write_goal_title">주문조건</string>
+    <string name="write_upload_fail_toast_message">글 작성을 다시 시도해주세요</string>
+    <string name="write_modify_fail_toast_message">글이 정상적으로 수정되지 않았습니다.</string>
 
     <!-- Write Category -->
     <string name="write_category_actionbar_title">카테고리 선택</string>
