@@ -25,7 +25,9 @@ data class UserInfoResponse(
 
 data class HistoryRecruitList (
     @SerializedName("recruitList")
-    val recruitList: List<HistoryRecruitResponseDto>
+    val recruitList: List<HistoryRecruitResponseDto>,
+    @SerializedName("last")
+    val last: Boolean
 )
 
 data class HistoryRecruitResponseDto (

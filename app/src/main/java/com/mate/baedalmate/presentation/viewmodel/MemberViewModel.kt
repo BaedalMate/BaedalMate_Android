@@ -6,15 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.mate.baedalmate.BaedalMateApplication
 import com.mate.baedalmate.common.Event
-import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitList
+import com.mate.baedalmate.data.datasource.remote.member.HistoryRecruitResponseDto
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthRequest
 import com.mate.baedalmate.data.datasource.remote.member.MemberOAuthResponse
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.model.Dormitory
-import com.mate.baedalmate.domain.model.UpdateUserDto
 import com.mate.baedalmate.domain.repository.TokenPreferencesRepository
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
@@ -25,6 +26,9 @@ import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -58,11 +62,12 @@ class MemberViewModel @Inject constructor(
     private val _isMyProfileChangeSuccess = MutableLiveData<Event<Boolean>>()
     val isMyProfileChangeSuccess: LiveData<Event<Boolean>> get() = _isMyProfileChangeSuccess
 
-    private val _historyPostCreatedList = MutableLiveData(HistoryRecruitList(emptyList()))
-    val historyPostCreatedList: LiveData<HistoryRecruitList> get() = _historyPostCreatedList
+    private val _historyPostCreatedList = MutableStateFlow<PagingData<HistoryRecruitResponseDto>>(PagingData.empty())
+    val historyPostCreatedList = _historyPostCreatedList.asStateFlow()
 
-    private val _historyPostParticipatedList = MutableLiveData(HistoryRecruitList(emptyList()))
-    val historyPostParticipatedList: LiveData<HistoryRecruitList> get() = _historyPostParticipatedList
+    private val _historyPostParticipatedList =
+        MutableStateFlow<PagingData<HistoryRecruitResponseDto>>(PagingData.empty())
+    val historyPostParticipatedList = _historyPostParticipatedList.asStateFlow()
 
     private val _isLogoutSuccess = MutableLiveData<Event<Boolean>>()
     val isLogoutSuccess: LiveData<Event<Boolean>> get() = _isLogoutSuccess
@@ -150,26 +155,20 @@ class MemberViewModel @Inject constructor(
         }
     }
 
-    fun requestGetHistoryPostCreatedList(page: Int, size: Int, sort: String) = viewModelScope.launch {
-        requestGetHistoryPostCreatedUseCase.invoke(page = page, size = size, sort = sort).let { ApiResponse ->
-            when (ApiResponse.status) {
-                ApiResult.Status.SUCCESS -> {
-                    _historyPostCreatedList.postValue(ApiResponse.data)
-                }
+    fun requestGetHistoryPostCreatedList(sort: String) = viewModelScope.launch {
+        requestGetHistoryPostCreatedUseCase(sort).cachedIn(viewModelScope)
+            .collectLatest { historyList ->
+                _historyPostCreatedList.emit(historyList)
             }
-        }
     }
 
-    fun requestGetHistoryPostParticipatedList(page: Int, size: Int, sort: String) = viewModelScope.launch {
-        requestGetHistoryPostParticipatedUseCase.invoke(page = page, size = size, sort = sort).let { ApiResponse ->
-            when (ApiResponse.status) {
-                ApiResult.Status.SUCCESS -> {
-                    _historyPostParticipatedList.postValue(ApiResponse.data)
-                }
+    fun requestGetHistoryPostParticipatedList(sort: String) = viewModelScope.launch {
+        requestGetHistoryPostParticipatedUseCase(sort).cachedIn(viewModelScope)
+            .collectLatest { historyList ->
+                _historyPostParticipatedList.emit(historyList)
             }
-        }
     }
-    
+
     fun requestClearAllLocalData() = viewModelScope.launch {
         tokenPreferencesRepository.clearAllInfo()
     }

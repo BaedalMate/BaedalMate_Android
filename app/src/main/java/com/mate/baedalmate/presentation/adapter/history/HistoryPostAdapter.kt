@@ -2,8 +2,8 @@ package com.mate.baedalmate.presentation.adapter.history
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
@@ -15,7 +15,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class HistoryPostAdapter(private val requestManager: RequestManager) :
-    ListAdapter<HistoryRecruitResponseDto, HistoryPostAdapter.HistoryPostViewHolder>(diffCallback) {
+    PagingDataAdapter<HistoryRecruitResponseDto, HistoryPostAdapter.HistoryPostViewHolder>(
+        diffCallback
+    ) {
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<HistoryRecruitResponseDto>() {
             override fun areItemsTheSame(
@@ -51,13 +53,10 @@ class HistoryPostAdapter(private val requestManager: RequestManager) :
         )
 
     override fun onBindViewHolder(
-        holder: HistoryPostAdapter.HistoryPostViewHolder, position: Int,
+        holder: HistoryPostAdapter.HistoryPostViewHolder,
+        position: Int,
     ) {
-        holder.bind(getItem(position))
-    }
-
-    override fun submitList(list: MutableList<HistoryRecruitResponseDto>?) {
-        super.submitList(list?.let { ArrayList(it) })
+        getItem(position)?.let { holder.bind(it) }
     }
 
     inner class HistoryPostViewHolder(private val binding: ItemHistoryPostBinding) :

@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -17,8 +18,12 @@ import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentHistoryPostParticipatedBinding
 import com.mate.baedalmate.presentation.adapter.history.HistoryPostAdapter
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,6 +32,7 @@ class HistoryPostParticipatedFragment : Fragment() {
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var historyPostParticipatedAdapter: HistoryPostAdapter
+    private var isGettingRecruitPostCalled: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +49,8 @@ class HistoryPostParticipatedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initListAdapter()
         getHistoryPostParticipatedList()
+        initListAdapter()
         observeHistoryPostParticipatedList()
         setBackClickListener()
     }
@@ -59,7 +65,10 @@ class HistoryPostParticipatedFragment : Fragment() {
         historyPostParticipatedAdapter = HistoryPostAdapter(requestManager = glideRequestManager)
         binding.rvHistoryPostParticipatedList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
-            rvHistoryPostParticipatedList.adapter = historyPostParticipatedAdapter
+            rvHistoryPostParticipatedList.adapter =
+                historyPostParticipatedAdapter.withLoadStateFooter(
+                    PostCategoryLoadStateAdapter { historyPostParticipatedAdapter.retry() }
+                )
         }
 
         historyPostParticipatedAdapter.setOnItemClickListener(object :
@@ -75,21 +84,33 @@ class HistoryPostParticipatedFragment : Fragment() {
     }
 
     private fun getHistoryPostParticipatedList() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                memberViewModel.requestGetHistoryPostParticipatedList(
-                    page = 0,
-                    size = 10000,
-                    sort = "deadlineDate|asc"
-                )
+        if (isGettingRecruitPostCalled == null) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                    memberViewModel.requestGetHistoryPostParticipatedList(sort = "createDate")
+                    isGettingRecruitPostCalled = true
+                }
             }
         }
     }
 
     private fun observeHistoryPostParticipatedList() {
         viewLifecycleOwner.lifecycleScope.launch {
-            memberViewModel.historyPostParticipatedList.observe(viewLifecycleOwner) { participatedPostList ->
-                historyPostParticipatedAdapter.submitList(participatedPostList.recruitList.toMutableList())
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    memberViewModel.historyPostParticipatedList.collectLatest { recruitList ->
+                        historyPostParticipatedAdapter.submitData(recruitList)
+                    }
+                }
+
+                launch {
+                    historyPostParticipatedAdapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collect {
+                            if (it is LoadState.NotLoading) {
+                            }
+                        }
+                }
             }
         }
     }
