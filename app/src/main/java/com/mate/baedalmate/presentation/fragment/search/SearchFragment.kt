@@ -12,7 +12,11 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -21,9 +25,14 @@ import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentSearchBinding
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -98,7 +107,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun getSearchResultList(keyword: String, sort: String = "deadlineDate") {
-        // TODO 검색시 무한 스크롤로 내릴 수 있도록 처리해야함
         if (keyword.trim().isEmpty()) {
             Toast.makeText(
                 requireContext(),
@@ -115,34 +123,51 @@ class SearchFragment : Fragment() {
 
     private fun initListAdapter() {
         searchResultListAdapter = PostCategoryListAdapter(requestManager = glideRequestManager)
-        binding.rvSearchResultList.layoutManager = LinearLayoutManager(requireContext())
-        with(binding) {
-            rvSearchResultList.adapter = searchResultListAdapter
+        with(binding.rvSearchResultList) {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = searchResultListAdapter
+            adapter = searchResultListAdapter.withLoadStateFooter(
+                PostCategoryLoadStateAdapter { searchResultListAdapter.retry() }
+            )
         }
     }
 
     private fun setSearchResultListContents() {
         setEmptyViewNew()
-        searchViewModel.searchKeywordResults.observe(viewLifecycleOwner) { searchResultList ->
-            binding.tvSearchResultCount.text =
-                String.format(
-                    getString(R.string.search_result_count),
-                    searchResultList.recruitList.size
-                )
-            val span = SpannableString(binding.tvSearchResultCount.text)
-            setHighlightSpanMessage(span, searchResultList.recruitList.size.toString())
-            binding.tvSearchResultCount.text = span
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    searchViewModel.searchKeywordResults.collectLatest { searchResultList ->
+                        searchResultListAdapter.submitData(searchResultList)
+                    }
+                }
 
-            if (searchResultList.recruitList.isNotEmpty()) {
-                binding.layoutSearchResultEmpty.visibility = View.GONE
-            } else if (binding.etSearchActionbarKeyword.text.isNotEmpty()) {
-                setEmptyViewNotAppear()
-                binding.layoutSearchResultEmpty.visibility = View.VISIBLE
-            } else { // 아무것도 입력하지 않은 경우
-                binding.layoutSearchResultEmpty.visibility = View.GONE
+                // TODO: 무한스크롤로 변경됨에 따라, 게시글의 총 갯수를 클라이언트단에서 알 수 없으므로 총 개수를 서버에서 받아야함. 서버에서 갯수를 내려주면 해당사항 반영
+//                launch {
+//                    searchResultListAdapter.loadStateFlow.map { it.append }
+//                        .distinctUntilChanged()
+//                        .collectLatest {
+//                        if (it is LoadState.NotLoading) {
+//                            binding.tvSearchResultCount.text = String.format(
+//                                getString(R.string.search_result_count),
+//                                searchResultListAdapter.itemCount
+//                            )
+//                            val span = SpannableString(binding.tvSearchResultCount.text)
+//                            setHighlightSpanMessage(span, searchResultListAdapter.itemCount.toString())
+//                            binding.tvSearchResultCount.text = span
+//
+//                            if (searchResultListAdapter.itemCount != 0) {
+//                                binding.layoutSearchResultEmpty.visibility = View.GONE
+//                            } else if (binding.etSearchActionbarKeyword.text.isNotEmpty()) {
+//                                setEmptyViewNotAppear()
+//                                binding.layoutSearchResultEmpty.visibility = View.VISIBLE
+//                            } else { // 아무것도 입력하지 않은 경우
+//                                binding.layoutSearchResultEmpty.visibility = View.GONE
+//                            }
+//                        }
+//                    }
+//                }
             }
-
-            searchResultListAdapter.submitList(searchResultList.recruitList.toMutableList())
         }
 
         searchResultListAdapter.setOnItemClickListener(object :

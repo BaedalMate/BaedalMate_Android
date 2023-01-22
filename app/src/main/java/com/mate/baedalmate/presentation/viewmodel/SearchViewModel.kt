@@ -1,13 +1,15 @@
 package com.mate.baedalmate.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mate.baedalmate.domain.model.ApiResult
-import com.mate.baedalmate.domain.model.RecruitList
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.mate.baedalmate.domain.model.RecruitDto
 import com.mate.baedalmate.domain.usecase.search.RequestGetSearchTagKeywordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,30 +17,22 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val requestGetSearchTagKeywordUseCase: RequestGetSearchTagKeywordUseCase
 ) : ViewModel() {
-    private val _searchKeywordResults = MutableLiveData(RecruitList(emptyList()))
-    val searchKeywordResults: LiveData<RecruitList> get() = _searchKeywordResults
+    private val _searchKeywordResults = MutableStateFlow<PagingData<RecruitDto>>(PagingData.empty())
+    val searchKeywordResults = _searchKeywordResults.asStateFlow()
 
     fun requestSearchKeywordResult(
         keyword: String,
-        page: Int = 0,
-        size: Int = 100,
         sort: String
     ) = viewModelScope.launch {
         requestGetSearchTagKeywordUseCase(
             keyword = keyword,
-            page = page,
-            size = size,
             sort = sort
-        ).let { ApiResponse ->
-            when (ApiResponse.status) {
-                ApiResult.Status.SUCCESS -> {
-                    ApiResponse.data.let { _searchKeywordResults.postValue(it) }
-                }
-            }
+        ).cachedIn(viewModelScope).collectLatest { searchResultLit ->
+            _searchKeywordResults.emit(searchResultLit)
         }
     }
 
-    fun clearSearchKeywordResult() {
-        _searchKeywordResults.postValue(RecruitList(emptyList()))
+    fun clearSearchKeywordResult() = viewModelScope.launch {
+        _searchKeywordResults.emit(PagingData.empty())
     }
 }

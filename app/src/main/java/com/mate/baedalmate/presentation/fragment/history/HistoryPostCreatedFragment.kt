@@ -17,8 +17,10 @@ import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentHistoryPostCreatedBinding
 import com.mate.baedalmate.presentation.adapter.history.HistoryPostAdapter
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,6 +29,7 @@ class HistoryPostCreatedFragment : Fragment() {
     private val memberViewModel by activityViewModels<MemberViewModel>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var historyPostCreatedAdapter: HistoryPostAdapter
+    private var isGettingRecruitPostCalled: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +62,9 @@ class HistoryPostCreatedFragment : Fragment() {
         historyPostCreatedAdapter = HistoryPostAdapter(requestManager = glideRequestManager)
         binding.rvHistoryPostCreatedList.layoutManager = LinearLayoutManager(requireContext())
         with(binding) {
-            rvHistoryPostCreatedList.adapter = historyPostCreatedAdapter
+            rvHistoryPostCreatedList.adapter = historyPostCreatedAdapter.withLoadStateFooter(
+                PostCategoryLoadStateAdapter { historyPostCreatedAdapter.retry() }
+            )
         }
 
         historyPostCreatedAdapter.setOnItemClickListener(object :
@@ -75,21 +80,24 @@ class HistoryPostCreatedFragment : Fragment() {
     }
 
     private fun getHistoryPostCreatedList() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                memberViewModel.requestGetHistoryPostCreatedList(
-                    page = 0,
-                    size = 10000,
-                    sort = "deadlineDate|asc"
-                )
+        if (isGettingRecruitPostCalled == null) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    memberViewModel.requestGetHistoryPostCreatedList(sort = "createDate")
+                    isGettingRecruitPostCalled = true
+                }
             }
         }
     }
 
     private fun observeHistoryPostCreatedList() {
         viewLifecycleOwner.lifecycleScope.launch {
-            memberViewModel.historyPostCreatedList.observe(viewLifecycleOwner) { createdPostList ->
-                historyPostCreatedAdapter.submitList(createdPostList.recruitList.toMutableList())
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    memberViewModel.historyPostCreatedList.collectLatest { recruitList ->
+                        historyPostCreatedAdapter.submitData(recruitList)
+                    }
+                }
             }
         }
     }

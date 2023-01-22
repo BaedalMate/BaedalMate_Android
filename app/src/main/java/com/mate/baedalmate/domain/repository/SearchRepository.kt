@@ -1,13 +1,12 @@
 package com.mate.baedalmate.domain.repository
 
-import com.mate.baedalmate.domain.model.ApiResult
-import com.mate.baedalmate.domain.model.RecruitList
+import androidx.paging.PagingData
+import com.mate.baedalmate.domain.model.RecruitDto
+import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
     suspend fun requestGetSearchTagKeyword(
         keyword: String,
-        page: Int,
-        size: Int,
         sort: String
-    ): ApiResult<RecruitList>
+    ): Flow<PagingData<RecruitDto>>
 }
