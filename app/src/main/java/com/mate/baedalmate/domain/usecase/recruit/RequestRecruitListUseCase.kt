@@ -8,7 +8,7 @@ import javax.inject.Singleton
 
 @Singleton
 class RequestRecruitListUseCase  @Inject constructor(private val recruitRepository: RecruitRepository) {
-    suspend operator fun invoke(categoryId: Int?=null, sort: String) =
-        recruitRepository.requestRecruitList(categoryId = categoryId, sort = sort)
+    suspend operator fun invoke(categoryId: Int?= null, exceptClose: Boolean, sort: String) =
+        recruitRepository.requestRecruitList(categoryId = categoryId,exceptClose = exceptClose, sort = sort)
             .flowOn(Dispatchers.Default)
 }

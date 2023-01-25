@@ -15,6 +15,7 @@ private const val DELAY_MILLIS = 1_000L
 class PostPagingSource(
     private val recruitApiService: RecruitApiService,
     private val categoryId: Int?,
+    private val exceptClose: Boolean,
     private val sort: String
 ) : PagingSource<Int, RecruitDto>() {
     override fun getRefreshKey(state: PagingState<Int, RecruitDto>): Int? {
@@ -32,6 +33,7 @@ class PostPagingSource(
             val response = setExceptionHandling {
                 recruitApiService.requestRecruitList(
                     categoryId = categoryId,
+                    except_close = exceptClose,
                     page = position,
                     size = 6,
                     sort = sort

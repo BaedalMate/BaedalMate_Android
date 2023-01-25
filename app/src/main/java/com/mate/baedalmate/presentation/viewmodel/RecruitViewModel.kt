@@ -156,9 +156,10 @@ class RecruitViewModel @Inject constructor(
 
     fun requestCategoryRecruitList(
         categoryId: Int?,
+        exceptClose: Boolean= false,
         sort: String
     ) = viewModelScope.launch {
-        recruitListUseCase(categoryId, sort).cachedIn(viewModelScope)
+        recruitListUseCase(categoryId, exceptClose, sort).cachedIn(viewModelScope)
             .collectLatest { recruitList ->
                 when (categoryId) {
                     null -> _recruitListAll.emit(recruitList)

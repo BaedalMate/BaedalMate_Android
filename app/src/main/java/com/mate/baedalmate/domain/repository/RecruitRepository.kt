@@ -13,7 +13,7 @@ import com.mate.baedalmate.domain.model.RecruitDto
 import kotlinx.coroutines.flow.Flow
 
 interface RecruitRepository {
-    suspend fun requestRecruitList(categoryId: Int?, sort: String): Flow<PagingData<RecruitDto>>
+    suspend fun requestRecruitList(categoryId: Int?, exceptClose: Boolean, sort: String): Flow<PagingData<RecruitDto>>
     suspend fun requestRecruitMainList(
         page: Int,
         size: Int,

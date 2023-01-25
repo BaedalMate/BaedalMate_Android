@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -20,7 +21,9 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.databinding.FragmentPostCategoryAllBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryListSortSpinnerAdapter
 import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
+import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +37,7 @@ class PostCategoryAllFragment : Fragment() {
     private var binding by autoCleared<FragmentPostCategoryAllBinding>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var postCategoryListAdapter: PostCategoryListAdapter
+    private lateinit var spinnerAdapter: PostCategoryListSortSpinnerAdapter
     private lateinit var glideRequestManager: RequestManager
     private val constraintSet = ConstraintSet()
 
@@ -54,13 +58,16 @@ class PostCategoryAllFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getRecruitList()
         initListAdapter()
+        initSortSpinner()
+        setDisplayAvailableRecruitPost()
+        observeSortSpinnerSelectedItem()
         setCategoryListContents()
-        setCategoryClickListener()
     }
 
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
             categoryId = null,
+            exceptClose = binding.checkboxPostCategoryAllAvailable.isChecked,
             sort = sort
         )
     }
@@ -72,23 +79,49 @@ class PostCategoryAllFragment : Fragment() {
             rvPostCategoryAllList.adapter = postCategoryListAdapter.withLoadStateFooter(
                 PostCategoryLoadStateAdapter { postCategoryListAdapter.retry() }
             )
-            postCategoryListAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            postCategoryListAdapter.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
     }
 
-    private fun setCategoryClickListener() {
-        binding.radiogroupLayoutPostCategoryAllSort.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.radiobutton_post_category_all_sort_time -> {
-                    getRecruitList(sort = "deadlineDate")
+    private fun initSortSpinner() {
+        val items = resources.getStringArray(R.array.post_category_sort_list)
+        spinnerAdapter = PostCategoryListSortSpinnerAdapter(
+            requireContext(),
+            R.layout.item_spinner_post_category_sort_list,
+            items.toMutableList()
+        )
+        binding.spinnerPostCategoryAllSort.adapter = spinnerAdapter
+    }
+
+    private fun observeSortSpinnerSelectedItem() {
+        binding.spinnerPostCategoryAllSort.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    setSortSpinnerRequestQuery()
                 }
-                R.id.radiobutton_post_category_all_sort_star -> {
-                    getRecruitList(sort = "score")
-                }
-                R.id.radiobutton_post_category_all_sort_popular -> {
-                    getRecruitList(sort = "view")
-                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+    }
+
+    private fun setSortSpinnerRequestQuery() {
+        when (binding.spinnerPostCategoryAllSort.selectedItem) {
+            getString(R.string.post_sort_createDate) -> getRecruitList(sort = "createDate")
+            getString(R.string.post_sort_deadlineDate) -> getRecruitList(sort = "deadlineDate")
+            getString(R.string.post_sort_score) -> getRecruitList(sort = "score")
+            getString(R.string.post_sort_view) -> getRecruitList(sort = "view")
+        }
+    }
+
+    private fun setDisplayAvailableRecruitPost() {
+        binding.checkboxPostCategoryAllAvailable.setOnCheckedChangeListener { _, _ ->
+            setSortSpinnerRequestQuery()
         }
     }
 
@@ -111,6 +144,7 @@ class PostCategoryAllFragment : Fragment() {
                         .distinctUntilChanged()
                         .collect {
                             if (it is LoadState.NotLoading) {
+                                setScrollToTop()
                                 if (postCategoryListAdapter.itemCount == 0) {
                                     constraintSet.clone(binding.layoutPostCategoryListAll)
                                     constraintSet.setVisibility(emptyView.id, View.VISIBLE)
@@ -171,5 +205,9 @@ class PostCategoryAllFragment : Fragment() {
             0
         )
         constraintSet.applyTo(binding.layoutPostCategoryListAll)
+    }
+
+    private fun setScrollToTop() {
+        binding.rvPostCategoryAllList.scrollToPosition(0)
     }
 }

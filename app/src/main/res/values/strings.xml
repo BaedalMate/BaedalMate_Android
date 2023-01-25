@@ -40,6 +40,13 @@
     <string name="participate_complete">모집 완료</string>
     <string name="participate_close">모집 마감</string>
 
+    <!-- Post Sort -->
+    <string name="post_sort_createDate">최신순</string>
+    <string name="post_sort_deadlineDate">마감순</string>
+    <string name="post_sort_score">평점순</string>
+    <string name="post_sort_view">인기순</string>
+    <string name="post_sort_available">참여가능만 보기</string>
+
     <!-- Finish Criterion -->
     <string name="finish_criterion_number_people">최소인원</string>
     <string name="finish_criterion_price">목표금액</string>
