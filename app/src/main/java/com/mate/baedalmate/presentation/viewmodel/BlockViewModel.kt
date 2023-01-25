@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mate.baedalmate.common.Event
+import com.mate.baedalmate.common.SingleLiveEvent
 import com.mate.baedalmate.data.datasource.remote.block.BlockRequestDto
 import com.mate.baedalmate.data.datasource.remote.block.BlockedUserListDto
 import com.mate.baedalmate.domain.model.ApiResult
@@ -24,13 +24,13 @@ class BlockViewModel @Inject constructor(
     private val _blockedUserList = MutableLiveData<BlockedUserListDto>()
     val blockedUserList: LiveData<BlockedUserListDto> get() = _blockedUserList
 
-    private val _isSuccessBlockUser = MutableLiveData<Event<Boolean>>()
-    val isSuccessBlockUser: LiveData<Event<Boolean>> get() = _isSuccessBlockUser
-    private val _isAlreadyBlockedUser = MutableLiveData<Event<Boolean>>()
-    val isAlreadyBlockedUser: LiveData<Event<Boolean>> get() = _isAlreadyBlockedUser
+    private val _isSuccessBlockUser = SingleLiveEvent<Boolean>()
+    val isSuccessBlockUser: SingleLiveEvent<Boolean> get() = _isSuccessBlockUser
+    private val _isAlreadyBlockedUser = SingleLiveEvent<Boolean>()
+    val isAlreadyBlockedUser: SingleLiveEvent<Boolean> get() = _isAlreadyBlockedUser
 
-    private val _isSuccessUnblockUser = MutableLiveData<Event<Boolean>>()
-    val isSuccessUnblockUser: LiveData<Event<Boolean>> get() = _isSuccessUnblockUser
+    private val _isSuccessUnblockUser = SingleLiveEvent<Boolean>()
+    val isSuccessUnblockUser: SingleLiveEvent<Boolean> get() = _isSuccessUnblockUser
 
     fun requestGetBlockedUserList() = viewModelScope.launch {
         requestGetBlockUserListUseCase().let { ApiResponse ->
@@ -50,20 +50,20 @@ class BlockViewModel @Inject constructor(
         ).let { ApiResponse ->
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
-                    ApiResponse.data.let { _isSuccessBlockUser.postValue(Event(true)) }
+                    ApiResponse.data.let { _isSuccessBlockUser.postValue(true) }
                 }
                 ApiResult.Status.API_ERROR -> {
                     when (ApiResponse.code) {
                         "400" -> {
-                            _isAlreadyBlockedUser.postValue(Event(true))
+                            _isAlreadyBlockedUser.postValue(true)
                         }
                         else -> {
-                            _isSuccessBlockUser.postValue(Event(false))
+                            _isSuccessBlockUser.postValue(false)
                         }
                     }
                 }
                 ApiResult.Status.NETWORK_ERROR -> {
-                    _isSuccessBlockUser.postValue(Event(false))
+                    _isSuccessBlockUser.postValue(false)
                 }
             }
         }
@@ -76,17 +76,17 @@ class BlockViewModel @Inject constructor(
             ).let { ApiResponse ->
                 when (ApiResponse.status) {
                     ApiResult.Status.SUCCESS -> {
-                        ApiResponse.data.let { _isSuccessUnblockUser.postValue(Event(true)) }
+                        ApiResponse.data.let { _isSuccessUnblockUser.postValue(true) }
                     }
                     ApiResult.Status.API_ERROR -> {
                         when (ApiResponse.code) {
                             else -> {
-                                _isSuccessUnblockUser.postValue(Event(false))
+                                _isSuccessUnblockUser.postValue(false)
                             }
                         }
                     }
                     ApiResult.Status.NETWORK_ERROR -> {
-                        _isSuccessUnblockUser.postValue(Event(false))
+                        _isSuccessUnblockUser.postValue(false)
                     }
                 }
             }

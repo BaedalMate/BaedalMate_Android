@@ -118,20 +118,43 @@
             android:id="@+id/action_postFragment_to_postMenuBottomSheetDialogFragment"
             app:destination="@id/PostMenuBottomSheetDialogFragment" />
         <action
-            android:id="@+id/action_postFragment_to_reportPostFragment"
-            app:destination="@id/ReportPostFragment"
-            app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out" />
-        <action
             android:id="@+id/action_postFragment_to_modifyPostFragment"
             app:destination="@id/WriteFirstFragment"
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_postFragment_to_postOptionFragment"
+            app:destination="@+id/PostOptionFragment"/>
     </fragment>
+
+    <dialog
+        android:id="@+id/PostOptionFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.post.PostOptionFragment"
+        android:label="fragment_post_option"
+        tools:layout="@layout/fragment_post_option">
+        <argument
+            android:name="postId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="postWriterUserId"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="postWriterName"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/action_postOptionFragment_to_reportPostFragment"
+            app:destination="@id/ReportPostFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+    </dialog>
+
     <dialog
         android:id="@+id/PostMapFragment"
         android:name="com.mate.baedalmate.presentation.fragment.post.PostMapFragment"

@@ -291,6 +291,7 @@ class PostFragment : Fragment() {
         binding.btnPostFrontContentsDeadlineDeliveryFeeHelp.setOnClickListener {
             findNavController().navigate(
                 PostFragmentDirections.actionPostFragmentToPostDeliveryFeeHelpFragment(
+                    currentShippingFee = shippingFee,
                     deliveryFeeList = deliveryFeeList.toTypedArray(),
                     couponAmount = coupon
                 )
@@ -403,7 +404,7 @@ class PostFragment : Fragment() {
                     initContentsUserInfo(recruitDetail)
                     initContentsPostInfo(recruitDetail)
                     setRecruitActionButton(recruitDetail)
-                    setReportPostClickListener(recruitDetail)
+                    setOptionClickListener(recruitDetail)
                     requestRecruitPostDetailForModify(recruitDetail)
                     setModifyPostClickListener(recruitDetail)
                 }
@@ -411,21 +412,15 @@ class PostFragment : Fragment() {
         }
     }
 
-    private fun setReportPostClickListener(recruitDetail: RecruitDetail) {
-        with(binding.tvPostFrontUserReport) {
-            val span = SpannableString(this.text)
-            span.setSpan(UnderlineSpan(), 0, span.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            this.text = span
-
+    private fun setOptionClickListener(recruitDetail: RecruitDetail) {
+        with(binding.btnPostActionbarOption) {
             visibility = if (recruitDetail.host) View.GONE else View.VISIBLE
             setOnDebounceClickListener {
-                findNavController().navigate(
-                    PostFragmentDirections.actionPostFragmentToReportPostFragment(
-                        postId = args.postId,
-                        postWriterName = recruitDetail.userInfo.nickname,
-                        postWriterUserId = recruitDetail.userInfo.userId.toInt()
-                    )
-                )
+                findNavController().navigate(PostFragmentDirections.actionPostFragmentToPostOptionFragment(
+                    postId = args.postId,
+                    postWriterName = recruitDetail.userInfo.nickname,
+                    postWriterUserId = recruitDetail.userInfo.userId.toInt()
+                ))
             }
         }
     }

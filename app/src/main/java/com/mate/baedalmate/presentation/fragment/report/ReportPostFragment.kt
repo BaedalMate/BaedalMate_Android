@@ -186,7 +186,7 @@ class ReportPostFragment : Fragment() {
 
     private fun observeBlockUserResult() {
         blockViewModel.isSuccessBlockUser.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess.getContentIfNotHandled() == true) {
+            if (isSuccess == true) {
                 Toast.makeText(
                     requireContext(),
                     String.format(
