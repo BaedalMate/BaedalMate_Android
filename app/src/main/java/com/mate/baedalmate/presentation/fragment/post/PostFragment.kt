@@ -156,14 +156,15 @@ class PostFragment : Fragment() {
         binding.layoutPostFrontUserScore.removeAllViews()
         for (i in starIndicator.indices) {
             starIndicator[i] = ImageView(requireContext())
-            if (i <= userScore) {
+            val calculateUserScore = userScore - 1
+            if (i <= calculateUserScore) {
                 starIndicator[i]!!.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
                         R.drawable.ic_star_full
                     )
                 )
-            } else if (i > userScore && (i - userScore) != 0f && (i - userScore) < 1) {
+            } else if (i > calculateUserScore && (i - calculateUserScore) != 0f && (i - calculateUserScore) < 1) {
                 starIndicator[i]!!.setImageDrawable(
                     ContextCompat.getDrawable(
                         requireContext(),
@@ -254,16 +255,18 @@ class PostFragment : Fragment() {
 
     private fun initContentsUserInfo(recruitDetail: RecruitDetail) {
         with(binding) {
-            glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.userInfo.profileImage}")
-                .override(45.dp)
-                .thumbnail(0.1f)
-                .priority(Priority.HIGH)
-                .centerCrop()
-                .into(imgPostFrontUser)
-            displayUserScore(recruitDetail.score)
+            with(recruitDetail.userInfo) {
+                glideRequestManager.load("http://3.35.27.107:8080/images/${profileImage}")
+                    .override(45.dp)
+                    .thumbnail(0.1f)
+                    .priority(Priority.HIGH)
+                    .centerCrop()
+                    .into(imgPostFrontUser)
+                displayUserScore(score)
 
-            tvPostFrontUserName.text = recruitDetail.userInfo.nickname
-            tvPostFrontUserDormitory.text = recruitDetail.userInfo.dormitory
+                tvPostFrontUserName.text = nickname
+                tvPostFrontUserDormitory.text = dormitory
+            }
         }
     }
 
