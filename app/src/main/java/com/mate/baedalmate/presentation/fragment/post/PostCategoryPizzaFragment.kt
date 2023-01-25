@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -23,6 +24,7 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.databinding.FragmentPostCategoryPizzaBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
+import com.mate.baedalmate.presentation.adapter.post.PostCategoryListSortSpinnerAdapter
 import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
@@ -37,6 +39,7 @@ class PostCategoryPizzaFragment : Fragment() {
     private var binding by autoCleared<FragmentPostCategoryPizzaBinding>()
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var postCategoryListAdapter: PostCategoryListAdapter
+    private lateinit var spinnerAdapter: PostCategoryListSortSpinnerAdapter
     private lateinit var glideRequestManager: RequestManager
     private val constraintSet = ConstraintSet()
 
@@ -58,13 +61,16 @@ class PostCategoryPizzaFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getRecruitList()
         initListAdapter()
+        initSortSpinner()
+        setDisplayAvailableRecruitPost()
+        observeSortSpinnerSelectedItem()
         setCategoryListContents()
-        setCategoryClickListener()
     }
 
     private fun getRecruitList(sort: String = "deadlineDate") {
         recruitViewModel.requestCategoryRecruitList(
             categoryId = 9,
+            exceptClose = binding.checkboxPostCategoryPizzaAvailable.isChecked,
             sort = sort
         )
     }
@@ -79,19 +85,44 @@ class PostCategoryPizzaFragment : Fragment() {
         }
     }
 
-    private fun setCategoryClickListener() {
-        binding.radiogroupLayoutPostCategoryPizzaSort.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.radiobutton_post_category_pizza_sort_time -> {
-                    getRecruitList(sort = "deadlineDate")
+    private fun initSortSpinner() {
+        val items = resources.getStringArray(R.array.post_category_sort_list)
+        spinnerAdapter = PostCategoryListSortSpinnerAdapter(
+            requireContext(),
+            R.layout.item_spinner_post_category_sort_list,
+            items.toMutableList()
+        )
+        binding.spinnerPostCategoryPizzaSort.adapter = spinnerAdapter
+    }
+
+    private fun observeSortSpinnerSelectedItem() {
+        binding.spinnerPostCategoryPizzaSort.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    setSortSpinnerRequestQuery()
                 }
-                R.id.radiobutton_post_category_pizza_sort_star -> {
-                    getRecruitList(sort = "score")
-                }
-                R.id.radiobutton_post_category_pizza_sort_popular -> {
-                    getRecruitList(sort = "view")
-                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             }
+    }
+
+    private fun setSortSpinnerRequestQuery() {
+        when (binding.spinnerPostCategoryPizzaSort.selectedItem) {
+            getString(R.string.post_sort_createDate) -> getRecruitList(sort = "createDate")
+            getString(R.string.post_sort_deadlineDate) -> getRecruitList(sort = "deadlineDate")
+            getString(R.string.post_sort_score) -> getRecruitList(sort = "score")
+            getString(R.string.post_sort_view) -> getRecruitList(sort = "view")
+        }
+    }
+
+    private fun setDisplayAvailableRecruitPost() {
+        binding.checkboxPostCategoryPizzaAvailable.setOnCheckedChangeListener { _, _ ->
+            setSortSpinnerRequestQuery()
         }
     }
 
@@ -124,6 +155,7 @@ class PostCategoryPizzaFragment : Fragment() {
                         .distinctUntilChanged()
                         .collect {
                             if (it is LoadState.NotLoading) {
+                                setScrollToTop()
                                 if (postCategoryListAdapter.itemCount == 0) {
                                     constraintSet.clone(binding.layoutPostCategoryListPizza)
                                     constraintSet.setVisibility(emptyView.id, View.VISIBLE)
@@ -196,5 +228,9 @@ class PostCategoryPizzaFragment : Fragment() {
             0
         )
         constraintSet.applyTo(binding.layoutPostCategoryListPizza)
+    }
+
+    private fun setScrollToTop() {
+        binding.rvPostCategoryPizzaList.scrollToPosition(0)
     }
 }

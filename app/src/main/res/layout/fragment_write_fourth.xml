@@ -253,7 +253,7 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:textColor="@color/black_000000"
-                            tools:text="2,000원" />
+                            tools:text="+ 2,000원" />
                     </LinearLayout>
 
                     <TextView
@@ -313,7 +313,7 @@
                             android:layout_weight="1"
                             android:gravity="end"
                             android:textColor="@color/black_000000"
-                            tools:text="3,000원" />
+                            tools:text="- 3,000원" />
                     </LinearLayout>
 
                     <TextView

@@ -13,61 +13,49 @@
             android:id="@+id/layout_post_category_fastfood_sort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0">
 
-            <RadioGroup
-                android:id="@+id/radiogroup_layout_post_category_fastfood_sort"
+            <CheckBox
+                android:id="@+id/checkbox_post_category_fastfood_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginVertical="7dp"
+                android:buttonTint="@color/main_FB5F1C"
+                android:checked="false"
+                android:includeFontPadding="false"
+                android:letterSpacing="0"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/post_sort_available"
+                android:textColor="@color/gray_dark_666666"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <Spinner
+                android:id="@+id/spinner_post_category_fastfood_sort"
+                style="@style/style_body2_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/background_white_radius_10"
+                android:elevation="0dp"
+                android:gravity="end|center_vertical"
+                android:popupBackground="@drawable/background_white_radius_10"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
-
-                <RadioButton
-                    android:id="@+id/radiobutton_post_category_fastfood_sort_time"
-                    style="@style/style_body2_kor"
-                    android:layout_width="55dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/selector_post_category_sort"
-                    android:button="@null"
-                    android:checked="true"
-                    android:text="@string/home_contents_bottom_post_recommend_category_time"
-                    android:textAlignment="center"
-                    android:textColor="@drawable/selector_post_category_sort_text" />
-
-                <RadioButton
-                    android:id="@+id/radiobutton_post_category_fastfood_sort_popular"
-                    style="@style/style_body2_kor"
-                    android:layout_width="55dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/selector_post_category_sort"
-                    android:button="@null"
-                    android:text="@string/home_contents_bottom_post_recommend_category_popular"
-                    android:textAlignment="center"
-                    android:textColor="@drawable/selector_post_category_sort_text" />
-
-                <RadioButton
-                    android:id="@+id/radiobutton_post_category_fastfood_sort_star"
-                    style="@style/style_body2_kor"
-                    android:layout_width="55dp"
-                    android:layout_height="28dp"
-                    android:layout_marginEnd="15dp"
-                    android:background="@drawable/selector_post_category_sort"
-                    android:button="@null"
-                    android:text="@string/home_contents_bottom_post_recommend_category_star"
-                    android:textAlignment="center"
-                    android:textColor="@drawable/selector_post_category_sort_text" />
-            </RadioGroup>
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/item_spinner_post_category_sort_list" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView

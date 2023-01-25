@@ -23,11 +23,12 @@ class RecruitRepositoryImpl @Inject constructor(private val recruitApiService: R
     RecruitRepository {
     override suspend fun requestRecruitList(
         categoryId: Int?,
+        exceptClose: Boolean,
         sort: String
     ): Flow<PagingData<RecruitDto>> =
         Pager(
             config = PagingConfig(pageSize = 6, maxSize = 30, enablePlaceholders = false),
-            pagingSourceFactory = { PostPagingSource(recruitApiService, categoryId, sort) }
+            pagingSourceFactory = { PostPagingSource(recruitApiService, categoryId, exceptClose, sort) }
         ).flow
 
     override suspend fun requestRecruitMainList(

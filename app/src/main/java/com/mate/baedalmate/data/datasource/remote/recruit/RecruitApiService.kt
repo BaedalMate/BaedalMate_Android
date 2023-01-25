@@ -15,6 +15,7 @@ interface RecruitApiService {
     @GET("/api/v1/recruit/list")
     suspend fun requestRecruitList(
         @Query("categoryId") categoryId: Int? = null,
+        @Query("except_close") except_close: Boolean,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: String,
