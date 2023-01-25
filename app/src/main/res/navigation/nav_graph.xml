@@ -162,6 +162,10 @@
         android:label="fragment_post_delivery_fee_help"
         tools:layout="@layout/fragment_post_delivery_fee_help">
         <argument
+            android:name="currentShippingFee"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
             android:name="deliveryFeeList"
             app:argType="com.mate.baedalmate.domain.model.ShippingFeeDto[]" />
         <argument
