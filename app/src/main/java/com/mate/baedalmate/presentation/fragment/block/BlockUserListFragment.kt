@@ -127,7 +127,7 @@ class BlockUserListFragment : Fragment() {
 
     private fun observeUnblockResponse() {
         blockViewModel.isSuccessUnblockUser.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess.getContentIfNotHandled() == true) {
+            if (isSuccess == true) {
                 getBlockedUserList()
             }
         }

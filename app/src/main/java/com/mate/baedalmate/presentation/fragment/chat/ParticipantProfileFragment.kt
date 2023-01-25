@@ -147,7 +147,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
 
     private fun observeBlockUserSuccess() {
         blockViewModel.isSuccessBlockUser.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess.getContentIfNotHandled() == true) {
+            if (isSuccess == true) {
                 Toast.makeText(
                     requireContext(),
                     String.format(
@@ -156,7 +156,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     ),
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (isSuccess.getContentIfNotHandled() == false) {
+            } else if (isSuccess == false) {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.block_user_block_fail_unknown_toast_message),
@@ -167,7 +167,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
             findNavController().navigateUp()
         }
         blockViewModel.isAlreadyBlockedUser.observe(viewLifecycleOwner) { isAlreadyBlocked ->
-            if (isAlreadyBlocked.getContentIfNotHandled() == true) {
+            if (isAlreadyBlocked == true) {
                 Toast.makeText(
                     requireContext(),
                     String.format(
@@ -188,7 +188,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
 
     private fun observeUnBlockUserSuccess() {
         blockViewModel.isSuccessUnblockUser.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess.getContentIfNotHandled() == true) {
+            if (isSuccess == true) {
                 Toast.makeText(
                     requireContext(),
                     String.format(
@@ -197,7 +197,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     ),
                     Toast.LENGTH_SHORT
                 ).show()
-            } else if (isSuccess.getContentIfNotHandled() == false) {
+            } else if (isSuccess == false) {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.block_user_unblock_fail_unknown_toast_message),
