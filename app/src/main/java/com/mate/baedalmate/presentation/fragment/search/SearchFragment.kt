@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -29,9 +30,11 @@ import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapte
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -136,37 +139,43 @@ class SearchFragment : Fragment() {
         setEmptyViewNew()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                var currentResultCount = 0
+
                 launch {
                     searchViewModel.searchKeywordResults.collectLatest { searchResultList ->
-                        searchResultListAdapter.submitData(searchResultList)
+                        currentResultCount = 0
+                        // Paginig Library에서 Metadata를 넘겨주는 방법을 제시하지 않음에 따라 Pair로 모든 아이템의 리스트에 총 갯수를 넣어서 TotalCount를 파악한다..
+                        searchResultListAdapter.submitData(searchResultList.map {
+                            currentResultCount = it.second
+                            it.first
+                        })
                     }
                 }
 
-                // TODO: 무한스크롤로 변경됨에 따라, 게시글의 총 갯수를 클라이언트단에서 알 수 없으므로 총 개수를 서버에서 받아야함. 서버에서 갯수를 내려주면 해당사항 반영
-//                launch {
-//                    searchResultListAdapter.loadStateFlow.map { it.append }
-//                        .distinctUntilChanged()
-//                        .collectLatest {
-//                        if (it is LoadState.NotLoading) {
-//                            binding.tvSearchResultCount.text = String.format(
-//                                getString(R.string.search_result_count),
-//                                searchResultListAdapter.itemCount
-//                            )
-//                            val span = SpannableString(binding.tvSearchResultCount.text)
-//                            setHighlightSpanMessage(span, searchResultListAdapter.itemCount.toString())
-//                            binding.tvSearchResultCount.text = span
-//
-//                            if (searchResultListAdapter.itemCount != 0) {
-//                                binding.layoutSearchResultEmpty.visibility = View.GONE
-//                            } else if (binding.etSearchActionbarKeyword.text.isNotEmpty()) {
-//                                setEmptyViewNotAppear()
-//                                binding.layoutSearchResultEmpty.visibility = View.VISIBLE
-//                            } else { // 아무것도 입력하지 않은 경우
-//                                binding.layoutSearchResultEmpty.visibility = View.GONE
-//                            }
-//                        }
-//                    }
-//                }
+                launch {
+                    searchResultListAdapter.loadStateFlow.map { it.append }
+                        .distinctUntilChanged()
+                        .collectLatest {
+                        if (it is LoadState.NotLoading) {
+                            binding.tvSearchResultCount.text = String.format(
+                                getString(R.string.search_result_count),
+                                currentResultCount
+                            )
+                            val span = SpannableString(binding.tvSearchResultCount.text)
+                            setHighlightSpanMessage(span, currentResultCount.toString())
+                            binding.tvSearchResultCount.text = span
+
+                            if (currentResultCount != 0) {
+                                binding.layoutSearchResultEmpty.visibility = View.GONE
+                            } else if (binding.etSearchActionbarKeyword.text.isNotEmpty()) {
+                                setEmptyViewNotAppear()
+                                binding.layoutSearchResultEmpty.visibility = View.VISIBLE
+                            } else { // 아무것도 입력하지 않은 경우
+                                binding.layoutSearchResultEmpty.visibility = View.GONE
+                            }
+                        }
+                    }
+                }
             }
         }
 

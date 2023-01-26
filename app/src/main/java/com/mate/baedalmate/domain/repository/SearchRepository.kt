@@ -8,5 +8,5 @@ interface SearchRepository {
     suspend fun requestGetSearchTagKeyword(
         keyword: String,
         sort: String
-    ): Flow<PagingData<RecruitDto>>
+    ): Flow<PagingData<Pair<RecruitDto, Int>>>
 }
