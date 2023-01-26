@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@id/layout_my_page_actionbar">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_my_page_user_info"
+                android:id="@+id/layout_my_page_user_info_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
@@ -52,7 +52,6 @@
                 android:backgroundTint="@color/main_FB5F1C"
                 android:paddingHorizontal="15dp"
                 android:paddingTop="15dp"
-                android:paddingBottom="13dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -60,126 +59,138 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/img_my_page_user_info"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_marginStart="5dp"
-                    android:src="@color/gray_main_C4C4C4"
+                <LinearLayout
+                    android:id="@+id/layout_my_page_user_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="W,1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:shapeAppearanceOverlay="@style/roundImageView" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_my_page_user_info_detail"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@id/img_my_page_user_info"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0">
 
-                    <TextView
-                        android:id="@+id/tv_my_page_user_info_nickname"
-                        style="@style/style_title1_kor"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/applesdgothic_neo_medium"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/white_FFFFFF"
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/img_my_page_user_info"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="5dp"
+                        android:src="@color/gray_main_C4C4C4"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/layout_my_page_user_info_score"
+                        app:layout_constraintDimensionRatio="W,1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0"
-                        tools:text="사용자 이름" />
+                        app:shapeAppearanceOverlay="@style/roundImageView" />
 
-                    <LinearLayout
-                        android:id="@+id/layout_my_page_user_info_dormitory"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_my_page_user_info_detail"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="13dp"
-                        android:orientation="horizontal"
+                        android:layout_marginStart="15dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_info_nickname"
-                        app:layout_constraintVertical_bias="0.0">
-
-                        <TextView
-                            style="@style/style_caption1_kor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/background_white_radius_30"
-                            android:gravity="center"
-                            android:paddingHorizontal="8dp"
-                            android:paddingVertical="5dp"
-                            android:text="@string/current_location"
-                            android:textColor="@color/gray_dark_666666" />
-
-                        <TextView
-                            android:id="@+id/tv_my_page_user_info_dormitory"
-                            style="@style/style_semi_title_kor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:gravity="bottom"
-                            android:textColor="@color/white_FFFFFF"
-                            tools:text="성림학사" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_my_page_user_info_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@id/img_my_page_user_info"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0">
 
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/ic_star"
-                            app:tint="@color/white_FFFFFF" />
-
                         <TextView
-                            android:id="@+id/tv_my_page_user_info_score"
-                            style="@style/style_semi_title_kor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
+                            android:id="@+id/tv_my_page_user_info_nickname"
+                            style="@style/style_title1_kor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/applesdgothic_neo_medium"
+                            android:gravity="center_vertical"
                             android:textColor="@color/white_FFFFFF"
-                            tools:text="4.2" />
-                    </LinearLayout>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/layout_my_page_user_info_score"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:text="사용자 이름" />
+
+                        <LinearLayout
+                            android:id="@+id/layout_my_page_user_info_dormitory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="13dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_my_page_user_info_nickname"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <TextView
+                                style="@style/style_caption1_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/background_white_radius_30"
+                                android:gravity="center"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="5dp"
+                                android:text="@string/current_location"
+                                android:textColor="@color/gray_dark_666666" />
+
+                            <TextView
+                                android:id="@+id/tv_my_page_user_info_dormitory"
+                                style="@style/style_semi_title_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:gravity="bottom"
+                                android:textColor="@color/white_FFFFFF"
+                                tools:text="성림학사" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/layout_my_page_user_info_score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/ic_star"
+                                app:tint="@color/white_FFFFFF" />
+
+                            <TextView
+                                android:id="@+id/tv_my_page_user_info_score"
+                                style="@style/style_semi_title_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:textColor="@color/white_FFFFFF"
+                                tools:text="4.2" />
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_my_page_user_info_history"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
                     android:gravity="center"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/layout_my_page_user_info_detail">
+                    app:layout_constraintTop_toBottomOf="@id/layout_my_page_user_info">
 
                     <TextView
                         android:id="@+id/tv_my_page_user_info_history_participated"
@@ -188,12 +199,16 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:paddingTop="18dp"
+                        android:paddingBottom="13dp"
                         android:text="@string/my_page_user_info_history_participated"
                         android:textColor="@color/white_FFFFFF" />
 
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginBottom="13dp"
                         android:background="@color/white_FFFFFF" />
 
                     <TextView
@@ -203,6 +218,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
+                        android:paddingTop="18dp"
+                        android:paddingBottom="13dp"
                         android:text="@string/my_page_user_info_history_created"
                         android:textColor="@color/white_FFFFFF" />
                 </LinearLayout>
@@ -219,7 +236,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layout_my_page_user_info"
+                app:layout_constraintTop_toBottomOf="@id/layout_my_page_user_info_background"
                 app:layout_constraintVertical_bias="0.0">
 
                 <LinearLayout

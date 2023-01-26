@@ -55,7 +55,16 @@
             app:popExitAnim="@anim/slide_to_right"
             app:popUpTo="@id/SetAccountMyProfileFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_setAccountMyProfileFragment_to_setAccountMyProfileImageOptionFragment"
+            app:destination="@id/SetAccountMyProfileImageOptionFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/SetAccountMyProfileImageOptionFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.setAccount.SetAccountMyProfileImageOptionFragment"
+        android:label="fragment_set_account_my_profile_image_option"
+        tools:layout="@layout/fragment_set_account_my_profile_image_option" />
 
     <fragment
         android:id="@+id/LocationCertificationFragment"
