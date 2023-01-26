@@ -9,6 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.imageview.ShapeableImageView
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
@@ -20,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class WriteCategoryFragment : Fragment() {
     private var binding by autoCleared<FragmentWriteCategoryBinding>()
+    private val args by navArgs<WriteCategoryFragmentArgs>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
 
     override fun onCreateView(
@@ -70,7 +72,7 @@ class WriteCategoryFragment : Fragment() {
                     writeViewModel.categoryId = (i / 3) + 1
                     findNavController().navigate(
                         WriteCategoryFragmentDirections.actionWriteCategoryFragmentToWriteFirstFragment(
-                            null
+                            recruitDetailForModify = args.recruitDetailForModify
                         )
                     )
                 }

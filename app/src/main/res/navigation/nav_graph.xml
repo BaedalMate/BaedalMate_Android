@@ -119,7 +119,7 @@
             app:destination="@id/PostMenuBottomSheetDialogFragment" />
         <action
             android:id="@+id/action_postFragment_to_modifyPostFragment"
-            app:destination="@id/WriteFirstFragment"
+            app:destination="@id/WriteCategoryFragment"
             app:enterAnim="@anim/slide_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -220,6 +220,10 @@
         android:name="com.mate.baedalmate.presentation.fragment.write.WriteCategoryFragment"
         android:label="fragment_write_category"
         tools:layout="@layout/fragment_write_category">
+        <argument
+            android:name="recruitDetailForModify"
+            app:argType="com.mate.baedalmate.domain.model.RecruitDetailForModify"
+            app:nullable="true" />
         <action
             android:id="@+id/action_writeCategoryFragment_to_writeFirstFragment"
             app:destination="@id/WriteFirstFragment"

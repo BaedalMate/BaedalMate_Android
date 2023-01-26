@@ -155,7 +155,7 @@ class WriteViewModel @Inject constructor(
         }
     }
 
-    fun requestModifyPost(recruitId: Int, categoryId: Int) = viewModelScope.launch {
+    fun requestModifyPost(recruitId: Int) = viewModelScope.launch {
         _writeModifySuccess.postValue(Event(false))
 
         modifyPostUseCase.invoke(

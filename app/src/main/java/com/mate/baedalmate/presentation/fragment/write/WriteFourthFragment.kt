@@ -71,10 +71,7 @@ class WriteFourthFragment : Fragment() {
         binding.btnWriteFourthNext.setOnDebounceClickListener {
             if (args.recruitDetailForModify != null)
                 args.recruitDetailForModify?.let {
-                    writeViewModel.requestModifyPost(
-                        it.recruitId,
-                        it.categoryId
-                    )
+                    writeViewModel.requestModifyPost(it.recruitId)
                 }
             else writeViewModel.requestUploadPost()
             LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
@@ -137,7 +134,7 @@ class WriteFourthFragment : Fragment() {
 
         val currentDeliveryFee = setDeliveryFee(currentMenuAmount) // 배달비 설정
         binding.tvWriteFourthAmountDetailDeliveryFeeCurrent.text =
-            "${decimalFormat.format(currentDeliveryFee)}원"
+            "+ ${decimalFormat.format(currentDeliveryFee)}원"
 
         val totalAmount = decimalFormat.format(
             (currentMenuAmount + currentDeliveryFee).toString().replace(",", "").toDouble()
@@ -168,9 +165,9 @@ class WriteFourthFragment : Fragment() {
             discountedAmount = totalAmount - couponAmount
             result = decimalFormat.format(couponAmount.toString().replace(",", "").toDouble())
             binding.tvWriteFourthAmountDetailCouponCurrent.text =
-                "${result}원" // 이전 Fragment에서 설정한 쿠폰 사용금액
+                "- ${result}원" // 이전 Fragment에서 설정한 쿠폰 사용금액
         } else {
-            binding.tvWriteFourthAmountDetailCouponCurrent.text = "0원"
+            binding.tvWriteFourthAmountDetailCouponCurrent.text = "- 0원"
         }
 
         if (discountedAmount <= 0) {
