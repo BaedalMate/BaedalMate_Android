@@ -510,7 +510,16 @@
         android:id="@+id/MyProfileChangeFragment"
         android:name="com.mate.baedalmate.presentation.fragment.profile.MyProfileChangeFragment"
         android:label="fragment_my_profile_change"
-        tools:layout="@layout/fragment_my_profile_change" />
+        tools:layout="@layout/fragment_my_profile_change">
+        <action
+            android:id="@+id/action_myProfileChangeFragment_to_myProfileChangeOptionFragment"
+            app:destination="@id/MyProfileChangeImageOptionFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/MyProfileChangeImageOptionFragment"
+        android:name="com.mate.baedalmate.presentation.fragment.profile.MyProfileChangeImageOptionFragment"
+        android:label="fragment_my_profile_change_image_option"
+        tools:layout="@layout/fragment_my_profile_change_image_option" />
 
     <fragment
         android:id="@+id/LocationCertificationFragment"

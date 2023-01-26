@@ -102,6 +102,9 @@ class MyPageFragment : Fragment() {
     }
 
     private fun setUserInfoClickListener() {
+        binding.layoutMyPageUserInfo.setOnDebounceClickListener {
+            findNavController().navigate(R.id.action_myPageFragment_to_myProfileChangeFragment)
+        }
         binding.tvMyPageUserInfoHistoryParticipated.setOnDebounceClickListener {
             findNavController().navigate(R.id.action_myPageFragment_to_historyPostParticipatedFragment)
         }

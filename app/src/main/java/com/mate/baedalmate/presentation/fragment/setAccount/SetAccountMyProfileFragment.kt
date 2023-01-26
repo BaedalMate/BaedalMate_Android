@@ -1,9 +1,6 @@
 package com.mate.baedalmate.presentation.fragment.setAccount
 
-import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ImageDecoder
@@ -18,17 +15,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
-import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.LoadingAlertDialog
@@ -51,8 +44,8 @@ class SetAccountMyProfileFragment : Fragment() {
     private lateinit var glideRequestManager: RequestManager
     private lateinit var loadingAlertDialog: AlertDialog
 
-    private var userProfileImageString: String? = null
-    private var userProfileImageExtension: String? = null
+    private lateinit var userProfileImageString: String
+    private lateinit var userProfileImageExtension: String
     private val imageFileTimeFormat = SimpleDateFormat("yyyy-MM-d-HH-mm-ss", Locale.KOREA)
     private var imagePath: String? = null
 
@@ -75,6 +68,7 @@ class SetAccountMyProfileFragment : Fragment() {
         initAlertDialog()
         setActionbarInfo()
         setImageChangeClickListener()
+        observeNavigationMyProfileImageCallBack()
         setInitSubmitClick()
         setLimitEditTextInputType()
         observeMyProfileChange()
@@ -101,13 +95,28 @@ class SetAccountMyProfileFragment : Fragment() {
 
     private fun setImageChangeClickListener() {
         binding.layoutMyProfileChangePhoto.setOnDebounceClickListener {
-            requestOpenGallery.launch(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            )
+            findNavController().navigate(R.id.action_setAccountMyProfileFragment_to_setAccountMyProfileImageOptionFragment)
         }
+    }
+
+    private fun observeNavigationMyProfileImageCallBack() {
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("userProfileImageString")
+            ?.observe(viewLifecycleOwner) {
+                userProfileImageString = it
+                if (this::userProfileImageString.isInitialized) {
+                    if (userProfileImageString == "resetMyProfileImage") {
+                        glideRequestManager.load(R.drawable.ic_person)
+                            .centerCrop().into(binding.imgMyProfileChangePhotoThumbnail)
+                    } else {
+                        glideRequestManager.load(userProfileImageString.toUri()).centerCrop()
+                            .into(binding.imgMyProfileChangePhotoThumbnail)
+                    }
+                }
+            }
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("fileExtension")
+            ?.observe(viewLifecycleOwner) {
+                userProfileImageExtension = it
+            }
     }
 
     private fun setInitSubmitClick() {
@@ -167,57 +176,12 @@ class SetAccountMyProfileFragment : Fragment() {
         }
     }
 
-    private val requestOpenGallery =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach {
-                if (it.value == false) {
-                    return@registerForActivityResult
-                }
-            }
-            openGallery()
-        }
-
-    private fun openGallery() {
-        // ACTION PICK 사용시, intent type에서 설정한 종류의 데이터를 MediaStore에서 불러와서 목록으로 나열 후 선택할 수 있는 앱 실행
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = MediaStore.Images.Media.CONTENT_TYPE
-        requestActivity.launch(intent)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    val requestActivity =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
-            if (activityResult.resultCode == Activity.RESULT_OK) {
-                val data: Intent? = activityResult.data
-                // 호출된 갤러리에서 이미지 선택시, data의 data속성으로 해당 이미지의 Uri 전달
-                val uri = data?.data!!
-                // 이미지 파일과 함께, 파일 확장자도 같이 저장
-                val fileExtension =
-                    requireContext().contentResolver.getType(uri).toString().split("/")[1]
-                setMyProfileImage(uri.toString(), fileExtension)
-                setMyProfileImageView(uri)
-            }
-        }
-
-    private fun setMyProfileImage(ImageString: String, fileExtension: String) {
-        userProfileImageString = ImageString
-        userProfileImageExtension = fileExtension
-    }
-
-    private fun setMyProfileImageView(uri: Uri) {
-        glideRequestManager.load(uri)
-            .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
-            .priority(Priority.HIGH)
-            .centerCrop()
-            .into(binding.imgMyProfileChangePhotoThumbnail)
-    }
-
     private fun getMyProfileImageFile(): File? {
-        return if (userProfileImageString.isNullOrEmpty() || userProfileImageExtension.isNullOrEmpty()) {
+        return if (!::userProfileImageString.isInitialized) {
             null
         } else {
-            setUploadImagePath(userProfileImageExtension!!)
-            val originalBitmap = userProfileImageString!!.toUri().toBitmap()
+            setUploadImagePath(userProfileImageExtension)
+            val originalBitmap = userProfileImageString.toUri().toBitmap()
             bitmapToFile(originalBitmap, imagePath)
         }
     }
