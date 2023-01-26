@@ -17,15 +17,15 @@ class PostSearchResultPagingSource(
     private val keyword: String,
     private val sort: String
 ) :
-    PagingSource<Int, RecruitDto>() {
-    override fun getRefreshKey(state: PagingState<Int, RecruitDto>): Int? {
+    PagingSource<Int, Pair<RecruitDto, Int>>() {
+    override fun getRefreshKey(state: PagingState<Int, Pair<RecruitDto, Int>>): Int? {
         return state.anchorPosition?.let { position ->
             state.closestPageToPosition(position)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(position)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RecruitDto> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pair<RecruitDto, Int>> {
         val position = params.key ?: POST_LIST_STARTING_PAGE_INDEX
         if (position != POST_LIST_STARTING_PAGE_INDEX) delay(DELAY_MILLIS)
 
@@ -40,11 +40,15 @@ class PostSearchResultPagingSource(
             }
             when (response.status) {
                 ApiResult.Status.SUCCESS -> {
-                    LoadResult.Page(
-                        data = response.data!!.recruitList,
-                        prevKey = null, // Only Paging Forward
-                        nextKey = if (response.data.last) null else position + 1
-                    )
+                    response.data?.let { searchRecruitList ->
+                        LoadResult.Page(
+                            data = searchRecruitList.recruitList.map {
+                                Pair(it, response.data.total)
+                            },
+                            prevKey = null, // Only Paging Forward
+                            nextKey = if (response.data.last) null else position + 1
+                        )
+                    } ?: LoadResult.Page(data = emptyList(), null, null)
                 }
                 else -> {
                     throw NetworkErrorException("API RESULT FAIL")

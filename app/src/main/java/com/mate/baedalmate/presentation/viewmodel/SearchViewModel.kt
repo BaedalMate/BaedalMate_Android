@@ -17,7 +17,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val requestGetSearchTagKeywordUseCase: RequestGetSearchTagKeywordUseCase
 ) : ViewModel() {
-    private val _searchKeywordResults = MutableStateFlow<PagingData<RecruitDto>>(PagingData.empty())
+    private val _searchKeywordResults = MutableStateFlow<PagingData<Pair<RecruitDto, Int>>>(PagingData.empty())
     val searchKeywordResults = _searchKeywordResults.asStateFlow()
 
     fun requestSearchKeywordResult(
@@ -27,8 +27,8 @@ class SearchViewModel @Inject constructor(
         requestGetSearchTagKeywordUseCase(
             keyword = keyword,
             sort = sort
-        ).cachedIn(viewModelScope).collectLatest { searchResultLit ->
-            _searchKeywordResults.emit(searchResultLit)
+        ).cachedIn(viewModelScope).collectLatest { searchResult ->
+            _searchKeywordResults.emit(searchResult)
         }
     }
 

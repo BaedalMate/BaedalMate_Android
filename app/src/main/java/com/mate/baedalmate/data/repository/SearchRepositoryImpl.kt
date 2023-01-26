@@ -15,7 +15,7 @@ class SearchRepositoryImpl @Inject constructor(private val searchApiService: Sea
     override suspend fun requestGetSearchTagKeyword(
         keyword: String,
         sort: String
-    ): Flow<PagingData<RecruitDto>> = Pager(
+    ): Flow<PagingData<Pair<RecruitDto, Int>>> = Pager(
         config = PagingConfig(pageSize = 6, maxSize = 30, enablePlaceholders = false),
         pagingSourceFactory = { PostSearchResultPagingSource(searchApiService, keyword, sort) }
     ).flow
