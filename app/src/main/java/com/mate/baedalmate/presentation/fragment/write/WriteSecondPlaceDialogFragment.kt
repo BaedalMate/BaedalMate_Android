@@ -92,7 +92,9 @@ class WriteSecondPlaceDialogFragment : RoundDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 writeViewModel.searchResultList.observe(viewLifecycleOwner) { resultList ->
-                    writeSecondPlaceDialogListAdapter.submitList(resultList.documents.toMutableList())
+                    resultList.documents?.let { documentList ->
+                        writeSecondPlaceDialogListAdapter.submitList(documentList.toMutableList())
+                    }
                 }
             }
         }

@@ -36,11 +36,11 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'progaurd-retrofit2.pro', 'progaurd-gson.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'progaurd-retrofit2.pro', 'progaurd-gson.pro', 'proguard-kotlin-serialization.pro'
         }
         debug {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'progaurd-retrofit2.pro', 'progaurd-gson.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro', 'progaurd-retrofit2.pro', 'progaurd-gson.pro', 'proguard-kotlin-serialization.pro'
         }
     }
     compileOptions {

@@ -71,30 +71,34 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     }
 
     private fun setUserInfo() {
-        glideRequestManager.load("http://3.35.27.107:8080/images/${args.participant.profileImage}")
-            .thumbnail(0.1f)
-            .priority(Priority.HIGH)
-            .centerCrop()
-            .into(binding.imgParticipantProfileThumbnail)
-        binding.tvParticipantProfileNickname.text = args.participant.nickname
-        setBlockClickListener(isBlockedUser = args.participant.block)
+        args.participant?.let { participantInfo ->
+            glideRequestManager.load("http://3.35.27.107:8080/images/${participantInfo.profileImage}")
+                .thumbnail(0.1f)
+                .priority(Priority.HIGH)
+                .centerCrop()
+                .into(binding.imgParticipantProfileThumbnail)
+            binding.tvParticipantProfileNickname.text = participantInfo.nickname
+            setBlockClickListener(isBlockedUser = participantInfo.block)
+        }
     }
 
     private fun setReportClickListener() {
         binding.layoutParticipantProfileActionReport.setOnDebounceClickListener {
-            findNavController().navigate(
-                ParticipantProfileFragmentDirections.actionParticipantProfileFragmenttToReportUserFragment(
-                    userId = args.participant.userId,
-                    userName = args.participant.nickname
+            args.participant?.let { participantInfo ->
+                findNavController().navigate(
+                    ParticipantProfileFragmentDirections.actionParticipantProfileFragmenttToReportUserFragment(
+                        userId = participantInfo.userId,
+                        userName = participantInfo.nickname
+                    )
                 )
-            )
+            }
         }
     }
 
     private fun initBlockDialog() {
         blockAlertDialog = BlockAlertDialog.createBlockDialog(
             requireContext(),
-            "${args.participant.nickname} 님을 차단하시겠습니까?",
+            "${args.participant?.nickname} 님을 차단하시겠습니까?",
             getString(R.string.block_dialog_description)
         ) { findNavController().navigateUp() }
     }
@@ -124,7 +128,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
             binding.layoutParticipantProfileActionBlock.setOnDebounceClickListener {
                 blockAlertDialog = BlockAlertDialog.createBlockDialog(
                     requireContext(),
-                    "${args.participant.nickname} 님을 차단하시겠습니까?",
+                    "${args.participant?.nickname} 님을 차단하시겠습니까?",
                     getString(R.string.block_dialog_description)
                 ) {
                     blockUser()
@@ -142,7 +146,9 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     }
 
     private fun blockUser() {
-        blockViewModel.requestPostBlockUser(blockUserId = args.participant.userId)
+        args.participant?.let { participantInfo ->
+            blockViewModel.requestPostBlockUser(blockUserId = participantInfo.userId)
+        }
     }
 
     private fun observeBlockUserSuccess() {
@@ -152,7 +158,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     requireContext(),
                     String.format(
                         getString(R.string.block_user_block_success_toast_message),
-                        "${args.participant.nickname}"
+                        "${args.participant?.nickname}"
                     ),
                     Toast.LENGTH_SHORT
                 ).show()
@@ -172,7 +178,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     requireContext(),
                     String.format(
                         getString(R.string.block_user_block_fail_already_blocked_toast_message),
-                        "${args.participant.nickname}"
+                        "${args.participant?.nickname}"
                     ),
                     Toast.LENGTH_SHORT
                 ).show()
@@ -183,7 +189,9 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
     }
 
     private fun unblockUser() {
-        blockViewModel.requestPostUnblockUser(blockedUserId = args.participant.userId)
+        args.participant?.let { participantInfo ->
+            blockViewModel.requestPostUnblockUser(blockedUserId = participantInfo.userId)
+        }
     }
 
     private fun observeUnBlockUserSuccess() {
@@ -193,7 +201,7 @@ class ParticipantProfileFragment : BottomSheetDialogFragment() {
                     requireContext(),
                     String.format(
                         getString(R.string.block_user_unblock_success_toast_message),
-                        "${args.participant.nickname}"
+                        "${args.participant?.nickname}"
                     ),
                     Toast.LENGTH_SHORT
                 ).show()
