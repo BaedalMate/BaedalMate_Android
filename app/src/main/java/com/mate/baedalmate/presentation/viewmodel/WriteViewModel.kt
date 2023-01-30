@@ -56,12 +56,7 @@ class WriteViewModel @Inject constructor(
 
     var menuList = ListLiveData<MenuDto>()
 
-    private val _searchResultList = MutableLiveData(
-        ResultSearchKeyword(
-            PlaceMeta(0, 0, false, RegionInfo(emptyList(), "", "")),
-            emptyList()
-        )
-    )
+    private val _searchResultList = MutableLiveData<ResultSearchKeyword>()
     val searchResultList: LiveData<ResultSearchKeyword> get() = _searchResultList
 
     private val _writePostId = MutableLiveData<Event<Int>>()
@@ -110,7 +105,9 @@ class WriteViewModel @Inject constructor(
             ).let { ApiResponse ->
                 when (ApiResponse.status) {
                     ApiResult.Status.SUCCESS -> {
-                        ApiResponse.data.let { _searchResultList.postValue(it) }
+                        ApiResponse.data?.let {
+                            _searchResultList.postValue(it)
+                        }
                     }
                 }
             }

@@ -55,7 +55,7 @@ class PostDeliveryFeeHelpFragment : RoundDialogFragment() {
     }
 
     private fun initData() {
-        val deliveryFeeList = args.deliveryFeeList
+        val deliveryFeeList = args.deliveryFeeList?: emptyArray<ShippingFeeDto>()
         val isDeliveryFeeFreeVisible = deliveryFeeList.isEmpty()
         with(binding) {
             layoutPostDeliveryFeeHelpContents.visibility =

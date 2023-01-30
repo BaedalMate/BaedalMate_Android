@@ -73,7 +73,7 @@
         android:id="@+id/NotificationFragment"
         android:name="com.mate.baedalmate.presentation.fragment.notification.NotificationFragment"
         android:label="fragment_notification"
-        tools:layout="@layout/fragment_notification"/>
+        tools:layout="@layout/fragment_notification" />
 
     <fragment
         android:id="@+id/PostCategoryListFragment"
@@ -126,7 +126,7 @@
             app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_postFragment_to_postOptionFragment"
-            app:destination="@+id/PostOptionFragment"/>
+            app:destination="@+id/PostOptionFragment" />
     </fragment>
 
     <dialog
@@ -174,9 +174,11 @@
             app:argType="string" />
         <argument
             android:name="x"
+            android:defaultValue="0"
             app:argType="float" />
         <argument
             android:name="y"
+            android:defaultValue="0"
             app:argType="float" />
     </dialog>
     <dialog
@@ -190,7 +192,9 @@
             app:argType="integer" />
         <argument
             android:name="deliveryFeeList"
-            app:argType="com.mate.baedalmate.domain.model.ShippingFeeDto[]" />
+            android:defaultValue="@null"
+            app:argType="com.mate.baedalmate.domain.model.ShippingFeeDto[]"
+            app:nullable="true" />
         <argument
             android:name="couponAmount"
             android:defaultValue="0"
@@ -222,6 +226,7 @@
         tools:layout="@layout/fragment_write_category">
         <argument
             android:name="recruitDetailForModify"
+            android:defaultValue="@null"
             app:argType="com.mate.baedalmate.domain.model.RecruitDetailForModify"
             app:nullable="true" />
         <action
@@ -239,6 +244,7 @@
         tools:layout="@layout/fragment_write_first">
         <argument
             android:name="recruitDetailForModify"
+            android:defaultValue="@null"
             app:argType="com.mate.baedalmate.domain.model.RecruitDetailForModify"
             app:nullable="true" />
         <action
@@ -264,6 +270,7 @@
         tools:layout="@layout/fragment_write_second">
         <argument
             android:name="recruitDetailForModify"
+            android:defaultValue="@null"
             app:argType="com.mate.baedalmate.domain.model.RecruitDetailForModify"
             app:nullable="true" />
         <action
@@ -289,6 +296,7 @@
         tools:layout="@layout/fragment_write_third">
         <argument
             android:name="recruitDetailForModify"
+            android:defaultValue="@null"
             app:argType="com.mate.baedalmate.domain.model.RecruitDetailForModify"
             app:nullable="true" />
         <action
@@ -306,6 +314,7 @@
         tools:layout="@layout/fragment_write_fourth">
         <argument
             android:name="recruitDetailForModify"
+            android:defaultValue="@null"
             app:argType="com.mate.baedalmate.domain.model.RecruitDetailForModify"
             app:nullable="true" />
         <action
@@ -404,7 +413,9 @@
         tools:layout="@layout/fragment_participant_profile">
         <argument
             android:name="participant"
-            app:argType="com.mate.baedalmate.domain.model.ParticipantDto" />
+            android:defaultValue="@null"
+            app:argType="com.mate.baedalmate.domain.model.ParticipantDto"
+            app:nullable="true" />
         <argument
             android:name="recruitId"
             android:defaultValue="0"
