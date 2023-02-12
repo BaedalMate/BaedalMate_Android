@@ -15,6 +15,8 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +28,7 @@ import com.mate.baedalmate.common.ListLiveData
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.LoadingAlertDialog
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostMenuBottomSheetDialogBinding
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.presentation.adapter.write.WriteFourthMenuListAdapter
@@ -43,6 +46,25 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private var addedMenuList = ListLiveData<MenuDto>()
     private var dishCount = 1
     private lateinit var bottomSheetDialog: BottomSheetDialog
+
+    private var chkSubjectIsNotEmpty = MutableLiveData(false)
+    private var chkAmountIsNotEmpty = MutableLiveData(true)
+    private val onAdd: MediatorLiveData<Boolean> = MediatorLiveData()
+    init {
+        onAdd.addSource(chkSubjectIsNotEmpty) {
+            onAdd.value = _onAdd()
+        }
+        onAdd.addSource(chkAmountIsNotEmpty) {
+            onAdd.value = _onAdd()
+        }
+    }
+
+    private fun _onAdd(): Boolean {
+        if ((chkSubjectIsNotEmpty.value == true) and (chkAmountIsNotEmpty.value == true)) {
+            return true
+        }
+        return false
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return initBottomSheetDialog()
@@ -90,7 +112,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                binding.tvPostMenuAdd.isEnabled = s.toString().trim().isNotBlank()
+                chkSubjectIsNotEmpty.postValue(s.toString().trim().isNotBlank())
             }
         })
     }
@@ -124,6 +146,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
                         this@with.setText(result)
                         this@with.setSelection(result.length)
                     }
+                    chkAmountIsNotEmpty.postValue(s.toString().isNotBlank())
                 }
             })
 
@@ -147,8 +170,12 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setAddMenuClickListener() {
+        onAdd.observe(viewLifecycleOwner) { isAddEnable ->
+            binding.tvPostMenuAdd.isEnabled = isAddEnable
+        }
+
         with(binding) {
-            tvPostMenuAdd.setOnClickListener {
+            tvPostMenuAdd.setOnDebounceClickListener {
                 addedMenuList.add(
                     MenuDto(
                         name = etPostMenuSubjectInput.text.toString(),
@@ -169,7 +196,9 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
             currentDishCount = dishCount
 
             with(imgPostMenuDishCountDecrease) {
-                binding.imgPostMenuDishCountIncrease.setOnClickListener {
+                this.isEnabled = false // 초기 false 설정
+
+                binding.imgPostMenuDishCountIncrease.setOnDebounceClickListener(300L) {
                     dishCount++
                     binding.currentDishCount = dishCount
                     if (dishCount >= 2) {
@@ -184,7 +213,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     }
                 }
 
-                this.setOnClickListener {
+                this.setOnDebounceClickListener(300L)  {
                     dishCount--
                     binding.currentDishCount = dishCount
                     if (dishCount <= 1) {
@@ -199,7 +228,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     }
 
     private fun setParticipateClickListener() {
-        binding.btnPostFrontContentsParticipate.setOnClickListener {
+        binding.btnPostFrontContentsParticipate.setOnDebounceClickListener {
             showLoadingDialog()
             recruitViewModel.requestParticipateRecruitPost(
                 menuList = addedMenuList.value?.toList() ?: listOf(),
