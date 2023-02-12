@@ -52,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:visibility="invisible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,5 +62,19 @@
             app:layout_constraintVertical_bias="0.0"
             tools:itemCount="10"
             tools:listitem="@layout/item_notification" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_notification_loading"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:paddingVertical="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_notification_actionbar"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loading_post_list"
+            app:lottie_speed="1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

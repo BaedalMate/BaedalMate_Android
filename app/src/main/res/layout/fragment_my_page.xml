@@ -269,15 +269,11 @@
                             android:text="@string/setting_notification"
                             android:textColor="@color/gray_dark_666666" />
 
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/btn_toggle_my_page_menus_setting_notification"
+                        <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:padding="0dp"
-                            android:thumb="@drawable/selector_thumb_toggle_button"
-                            app:track="@drawable/selector_background_toggle_button"
-                            tools:checked="true" />
+                            android:src="@drawable/ic_arrow_right" />
                     </LinearLayout>
 
                     <View

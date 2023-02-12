@@ -2,7 +2,9 @@ package com.mate.baedalmate.data.di
 
 import com.mate.baedalmate.data.datasource.remote.block.BlockApiService
 import com.mate.baedalmate.data.datasource.remote.chat.ChatApiService
+import com.mate.baedalmate.data.datasource.remote.firebase.FirebaseMessagingService
 import com.mate.baedalmate.data.datasource.remote.member.MemberApiService
+import com.mate.baedalmate.data.datasource.remote.notification.NotificationApiService
 import com.mate.baedalmate.data.datasource.remote.recruit.RecruitApiService
 import com.mate.baedalmate.data.datasource.remote.report.ReportApiService
 import com.mate.baedalmate.data.datasource.remote.review.ReviewApiService
@@ -13,6 +15,7 @@ import com.mate.baedalmate.data.repository.BlockRepositoryImpl
 import com.mate.baedalmate.data.repository.ChatRepositoryImpl
 import com.mate.baedalmate.data.repository.KakaoLocalRepositoryImpl
 import com.mate.baedalmate.data.repository.MemberRepositoryImpl
+import com.mate.baedalmate.data.repository.NotificationRepositoryImpl
 import com.mate.baedalmate.data.repository.RecruitRepositoryImpl
 import com.mate.baedalmate.data.repository.ReportRepositoryImpl
 import com.mate.baedalmate.data.repository.ReviewRepositoryImpl
@@ -22,6 +25,7 @@ import com.mate.baedalmate.domain.repository.BlockRepository
 import com.mate.baedalmate.domain.repository.ChatRepository
 import com.mate.baedalmate.domain.repository.KakaoLocalRepository
 import com.mate.baedalmate.domain.repository.MemberRepository
+import com.mate.baedalmate.domain.repository.NotificationRepository
 import com.mate.baedalmate.domain.repository.RecruitRepository
 import com.mate.baedalmate.domain.repository.ReportRepository
 import com.mate.baedalmate.domain.repository.ReviewRepository
@@ -36,13 +40,18 @@ import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomDetailUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetChatRoomListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestGetMyMenuListUseCase
 import com.mate.baedalmate.domain.usecase.chat.RequestPutChangeMyMenuListUseCase
+import com.mate.baedalmate.domain.usecase.notification.RegisterFcmTokenUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostCreatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetHistoryPostParticipatedUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestDeleteResignUserUseCase
+import com.mate.baedalmate.domain.usecase.notification.RequestGetFcmTokenUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
+import com.mate.baedalmate.domain.usecase.notification.RequestNotificationListUseCase
+import com.mate.baedalmate.domain.usecase.notification.SubscribeTopicNoticeUseCase
+import com.mate.baedalmate.domain.usecase.notification.UnsubscribeTopicNoticeUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
@@ -70,6 +79,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ServiceModule {
+
+    @Singleton
+    @Provides
+    fun provideFirebaseMessageService(): FirebaseMessagingService = FirebaseMessagingService()
 
     @Singleton
     @Provides
@@ -275,4 +288,32 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideGetBlockedUserListUseCase(blockRepository: BlockRepository): RequestGetBlockUserListUseCase = RequestGetBlockUserListUseCase(blockRepository)
+
+    @Singleton
+    @Provides
+    fun provideNotificationApiService(retrofit: Retrofit): NotificationApiService = retrofit.create(NotificationApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideNotificationRepository(notificationRepositoryImpl: NotificationRepositoryImpl, firebaseMessagingService: FirebaseMessagingService): NotificationRepository = notificationRepositoryImpl
+
+    @Singleton
+    @Provides
+    fun provideRequestNotifications(notificationRepository: NotificationRepository): RequestNotificationListUseCase = RequestNotificationListUseCase(notificationRepository)
+
+    @Singleton
+    @Provides
+    fun provideRegisterFcmTokenUseCase(notificationRepository: NotificationRepository): RegisterFcmTokenUseCase = RegisterFcmTokenUseCase(notificationRepository)
+
+    @Singleton
+    @Provides
+    fun provideGetFcmTokenUseCase(notificationRepository: NotificationRepository): RequestGetFcmTokenUseCase = RequestGetFcmTokenUseCase(notificationRepository)
+
+    @Singleton
+    @Provides
+    fun provideSubscribeTopicNoticeUseCase(notificationRepository: NotificationRepository): SubscribeTopicNoticeUseCase = SubscribeTopicNoticeUseCase(notificationRepository)
+
+    @Singleton
+    @Provides
+    fun provideUnsubscribeTopicNoticeUseCase(notificationRepository: NotificationRepository): UnsubscribeTopicNoticeUseCase = UnsubscribeTopicNoticeUseCase(notificationRepository)
 }
