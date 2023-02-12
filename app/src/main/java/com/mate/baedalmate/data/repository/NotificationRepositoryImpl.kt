@@ -21,21 +21,20 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override suspend fun registerFcmToken(fcmToken: String, deviceCode: String) {
         firebaseMessagingService.registerFcmToken()
-        notificationApiService.requestPostRegisterFcmToken(
-            fcmToken = fcmToken,
-            deviceCode = deviceCode
-        )
+        setExceptionHandling {
+            notificationApiService.requestPostRegisterFcmToken(
+                fcmToken = fcmToken,
+                deviceCode = deviceCode
+            )
+        }
     }
 
-    override suspend fun unregisterFcmToken() {
-        return firebaseMessagingService.unregisterFcmToken()
-    }
+    override suspend fun unregisterFcmToken() =
+        firebaseMessagingService.unregisterFcmToken()
 
-    override suspend fun subscribeTopicNotice() {
+    override suspend fun subscribeTopicNotice() =
         firebaseMessagingService.subscribeTopicNotice()
-    }
 
-    override suspend fun unsubscribeTopicNotice() {
+    override suspend fun unsubscribeTopicNotice() =
         firebaseMessagingService.unsubscribeTopicNotice()
-    }
 }
