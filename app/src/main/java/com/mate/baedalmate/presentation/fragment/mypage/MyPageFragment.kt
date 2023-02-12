@@ -68,11 +68,6 @@ class MyPageFragment : Fragment() {
         setAccountActionClickListener()
     }
 
-    override fun onResume() {
-        super.onResume()
-        initNotification()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         ConfirmAlertDialog.hideConfirmDialog(logoutAlertDialog)
@@ -114,17 +109,19 @@ class MyPageFragment : Fragment() {
     }
 
     private fun setMenusSettingClickListener() {
-        // TODO 알림 설정
-        binding.layoutMyPageMenusSettingMyProfileChange.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_myPageFragment_to_myProfileChangeFragment)
-        }
-
-        binding.layoutMyPageMenusSettingLocationChange.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_myPageFragment_to_locationCertificationFragment)
-        }
-
-        binding.layoutMyPageMenusSettingBlock.setOnDebounceClickListener {
-            findNavController().navigate(R.id.action_myPageFragment_to_blockUserListFragment)
+        with(binding) {
+            layoutMyPageMenusSettingNotification.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_myPageSetNotificationFragment)
+            }
+            layoutMyPageMenusSettingMyProfileChange.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_myProfileChangeFragment)
+            }
+            layoutMyPageMenusSettingLocationChange.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_locationCertificationFragment)
+            }
+            layoutMyPageMenusSettingBlock.setOnDebounceClickListener {
+                findNavController().navigate(R.id.action_myPageFragment_to_blockUserListFragment)
+            }
         }
     }
 
@@ -228,40 +225,6 @@ class MyPageFragment : Fragment() {
             } else if (isSuccess.getContentIfNotHandled() == false) {
                 Toast.makeText(requireContext(), getString(R.string.resign_fail_toast_message), Toast.LENGTH_SHORT).show()
             }
-        }
-    }
-
-    private fun initNotification() {
-        val currentNotificationState =
-            NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
-        val intent = when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-                Intent().apply {
-                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-                }
-            }
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
-                Intent().apply {
-                    action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                    putExtra("app_package", requireContext().packageName)
-                    putExtra("app_uid", requireContext().applicationInfo?.uid)
-                }
-            }
-            else -> {
-                Intent().apply {
-                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                    addCategory(Intent.CATEGORY_DEFAULT)
-                    data = Uri.parse("package:${requireContext().packageName}")
-                }
-            }
-        }
-
-        binding.btnToggleMyPageMenusSettingNotification.isChecked = currentNotificationState
-        binding.btnToggleMyPageMenusSettingNotification.setOnTouchListener { _, _ ->
-            binding.btnToggleMyPageMenusSettingNotification.isClickable = false
-            startActivity(intent)
-            false
         }
     }
 

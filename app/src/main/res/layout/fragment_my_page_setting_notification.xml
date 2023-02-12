@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".presentation.fragment.mypage.MyPageSettingNotificationFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_my_page_setting_notification_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageButton
+                android:id="@+id/btn_my_page_setting_notification_actionbar_back"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="16dp"
+                android:src="@drawable/ic_left_arrow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_my_page_setting_notification_actionbar_title"
+                style="@style/style_title1_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/my_page_setting_notification_title_actionbar"
+                android:textColor="@color/black_000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_my_page_setting_notification_contents"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_my_page_setting_notification_actionbar">
+
+            <LinearLayout
+                android:id="@+id/layout_my_page_menus_setting_notification_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/style_semi_title_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_page_setting_notification_title_all"
+                        android:textColor="@color/gray_dark_666666" />
+
+                    <TextView
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/my_page_setting_notification_description_all"
+                        android:textColor="@color/gray_main_C4C4C4" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/btn_toggle_my_page_menus_setting_notification_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:padding="0dp"
+                    android:thumb="@drawable/selector_thumb_toggle_button"
+                    app:track="@drawable/selector_background_toggle_button"
+                    tools:checked="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_my_page_menus_setting_notification_new_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/style_semi_title_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_page_setting_notification_title_new_message"
+                        android:textColor="@color/gray_dark_666666" />
+
+                    <TextView
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/my_page_setting_notification_description_new_message"
+                        android:textColor="@color/gray_main_C4C4C4" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/btn_toggle_my_page_menus_setting_notification_new_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:padding="0dp"
+                    android:thumb="@drawable/selector_thumb_toggle_button"
+                    app:track="@drawable/selector_background_toggle_button"
+                    tools:checked="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_my_page_menus_setting_notification_recruit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/style_semi_title_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_page_setting_notification_title_recruit"
+                        android:textColor="@color/gray_dark_666666" />
+
+                    <TextView
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/my_page_setting_notification_description_recruit"
+                        android:textColor="@color/gray_main_C4C4C4" />
+                </LinearLayout>
+
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/btn_toggle_my_page_menus_setting_notification_recruit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:padding="0dp"
+                    android:thumb="@drawable/selector_thumb_toggle_button"
+                    app:track="@drawable/selector_background_toggle_button"
+                    tools:checked="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_my_page_menus_setting_notification_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/style_semi_title_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/my_page_setting_notification_title_notice"
+                        android:textColor="@color/gray_dark_666666" />
+
+                    <TextView
+                        style="@style/style_caption1_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/my_page_setting_notification_description_notice"
+                        android:textColor="@color/gray_main_C4C4C4" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/btn_toggle_my_page_menus_setting_notification_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:padding="0dp"
+                    android:thumb="@drawable/selector_thumb_toggle_button"
+                    app:track="@drawable/selector_background_toggle_button"
+                    tools:checked="true" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

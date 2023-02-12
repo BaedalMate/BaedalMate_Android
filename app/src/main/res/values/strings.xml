@@ -40,6 +40,36 @@
     <string name="participate_complete">모집 완료</string>
     <string name="participate_close">모집 마감</string>
 
+    <!-- Notification -->
+    <string name="notification_type_all">all</string>
+    <string name="notification_type_newMessage">newMessage</string>
+    <string name="notification_type_recruit">recruit</string>
+    <string name="notification_type_notice">notice</string>
+    <string name="notification_channel_default_id" translatable="false">notification</string>
+    <string name="notification_channel_default_name" translatable="false">기본 알림</string>
+    <string name="notification_channel_default_description" translatable="false">기타 알림을 설정합니다</string>
+    <string name="notification_channel_notice_id" translatable="false">notice</string>
+    <string name="notification_channel_notice_name" translatable="false">공지 알림</string>
+    <string name="notification_channel_notice_description" translatable="false">새로운 공지사항이 등록되면 알림을 받습니다</string>
+    <string name="notification_channel_chat_id" translatable="false">chat</string>
+    <string name="notification_channel_chat_name" translatable="false">새 메시지 알림</string>
+    <string name="notification_channel_chat_description" translatable="false">새 메시지가 오면 알림을 받습니다. 중요도를 변경할 경우 배달메이트에서 설정한 알림을 정상적으로 받아보지 못할 수 있습니다.</string>
+    <string name="notification_channel_recruit_id" translatable="false">recruit</string>
+    <string name="notification_channel_recruit_name" translatable="false">모집글 알림</string>
+    <string name="notification_channel_recruit_description" translatable="false">참여하고 있는 모집글의 진행상황에 대한 알림을 받습니다. 중요도를 변경할 경우 배달메이트에서 설정한 알림을 정상적으로 받아보지 못할 수 있습니다.</string>
+    <string name="notification_topic_chat" translatable="false">chat</string>
+    <string name="notification_topic_notice" translatable="false">notice</string>
+    <string name="notification_topic_recruit" translatable="false">recruit</string>
+    <string name="my_page_setting_notification_title_actionbar">알림 설정</string>
+    <string name="my_page_setting_notification_title_all">전체 알림 설정</string>
+    <string name="my_page_setting_notification_description_all">앱에서 보내는 알림을 받아요</string>
+    <string name="my_page_setting_notification_title_new_message">새로운 메시지 알림</string>
+    <string name="my_page_setting_notification_description_new_message">참여한 모집글 채팅방의 새 메시지 알림을 받아요</string>
+    <string name="my_page_setting_notification_title_recruit">모집글 알림</string>
+    <string name="my_page_setting_notification_description_recruit">참여한 모집글 진행상황에 대한 알림을 받아요</string>
+    <string name="my_page_setting_notification_title_notice">공지사항 알림</string>
+    <string name="my_page_setting_notification_description_notice">배달메이트에서 보내는 공지사항 알림을 받아요</string>
+
     <!-- Post Sort -->
     <string name="post_sort_createDate">최신순</string>
     <string name="post_sort_deadlineDate">마감순</string>

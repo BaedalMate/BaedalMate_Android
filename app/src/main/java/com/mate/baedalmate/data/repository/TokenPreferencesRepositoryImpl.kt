@@ -77,10 +77,42 @@ class TokenPreferencesRepositoryImpl @Inject constructor(private val tokenDataSt
         }
     }
 
+    override suspend fun setFcmToken(fcmToken: String) {
+        tokenDataStorePreferences.storeValue(fcmTokenKey, fcmToken)
+    }
+
+    override suspend fun getFcmToken(): String =
+        tokenDataStorePreferences.readValue(fcmTokenKey) ?: ""
+
+    override suspend fun setNotificationPermitAll(isPermit: Boolean) =
+        tokenDataStorePreferences.storeValue(notificationPermitAllKey, isPermit)
+
+    override suspend fun getNotificationPermitAll(): Boolean =
+        tokenDataStorePreferences.readValue(notificationPermitAllKey) ?: false
+
+    override suspend fun setNotificationPermitNewMessage(isPermit: Boolean) =
+        tokenDataStorePreferences.storeValue(notificationPermitNewMessageKey, isPermit)
+
+    override suspend fun getNotificationPermitNewMessage(): Boolean  =
+        tokenDataStorePreferences.readValue(notificationPermitNewMessageKey) ?: false
+
+    override suspend fun setNotificationPermitRecruit(isPermit: Boolean) =
+        tokenDataStorePreferences.storeValue(notificationPermitRecruitKey, isPermit)
+
+    override suspend fun getNotificationPermitRecruit(): Boolean  =
+        tokenDataStorePreferences.readValue(notificationPermitRecruitKey) ?: false
+
+    override suspend fun setNotificationPermitNotice(isPermit: Boolean) =
+        tokenDataStorePreferences.storeValue(notificationPermitNoticeKey, isPermit)
+
+    override suspend fun getNotificationPermitNotice(): Boolean =
+        tokenDataStorePreferences.readValue(notificationPermitNoticeKey) ?: false
+
     private companion object {
         val kakaoAccessTokenKey = stringPreferencesKey("kakaoAccessToken")
         val accessTokenKey = stringPreferencesKey("accessToken")
         val refreshTokenKey = stringPreferencesKey("refreshToken")
+        val fcmTokenKey = stringPreferencesKey("fcmToken")
 
         val userIdKey = longPreferencesKey("userId")
         val userNicknameKey = stringPreferencesKey("userNickname")
@@ -88,5 +120,10 @@ class TokenPreferencesRepositoryImpl @Inject constructor(private val tokenDataSt
         val userDormitoryKey = stringPreferencesKey("userDormitory")
         val userScoreKey = floatPreferencesKey("userScore")
         val userAccountValidKey = booleanPreferencesKey("userAccountValid")
+
+        val notificationPermitAllKey = booleanPreferencesKey("notificationPermitAll")
+        val notificationPermitNewMessageKey = booleanPreferencesKey("notificationPermitNewMessage")
+        val notificationPermitRecruitKey = booleanPreferencesKey("notificationPermitRecruit")
+        val notificationPermitNoticeKey = booleanPreferencesKey("notificationPermitNotice")
     }
 }
