@@ -12,11 +12,14 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.databinding.FragmentWriteFourthAddMenuBinding
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
@@ -28,6 +31,25 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
     private var binding by autoCleared<FragmentWriteFourthAddMenuBinding>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
     private var dishCount = 1
+
+    private var chkSubjectIsNotEmpty = MutableLiveData(false)
+    private var chkAmountIsNotEmpty = MutableLiveData(true)
+    private val onAdd: MediatorLiveData<Boolean> = MediatorLiveData()
+    init {
+        onAdd.addSource(chkSubjectIsNotEmpty) {
+            onAdd.value = _onAdd()
+        }
+        onAdd.addSource(chkAmountIsNotEmpty) {
+            onAdd.value = _onAdd()
+        }
+    }
+
+    private fun _onAdd(): Boolean {
+        if ((chkSubjectIsNotEmpty.value == true) and (chkAmountIsNotEmpty.value == true)) {
+            return true
+        }
+        return false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +72,7 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                binding.tvWriteFourthAddMenu.isEnabled = s.toString().trim().isNotBlank()
+                chkSubjectIsNotEmpty.postValue(s.toString().trim().isNotBlank())
             }
         })
     }
@@ -70,6 +92,7 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
                         this@with.setText(result)
                         this@with.setSelection(result.length)
                     }
+                    chkAmountIsNotEmpty.postValue(s.toString().isNotBlank())
                 }
             })
 
@@ -93,6 +116,10 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
     }
 
     private fun setAddMenuClickListener() {
+        onAdd.observe(viewLifecycleOwner) { isAddEnable ->
+            binding.tvWriteFourthAddMenu.isEnabled = isAddEnable
+        }
+
         with(binding) {
             tvWriteFourthAddMenu.setOnClickListener {
                 writeViewModel.menuList.add(
@@ -113,7 +140,8 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
             currentDishCount = dishCount
 
             with(imgWriteFourthDishCountDecrease) {
-                binding.imgWriteFourthDishCountIncrease.setOnClickListener {
+                this.isEnabled = false // 초기 false 설정
+                binding.imgWriteFourthDishCountIncrease.setOnDebounceClickListener(300L)  {
                     dishCount++
                     binding.currentDishCount = dishCount
                     if (dishCount >= 2) {
@@ -124,7 +152,7 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
                     }
                 }
 
-                this.setOnClickListener {
+                this.setOnDebounceClickListener(300L)  {
                     dishCount--
                     binding.currentDishCount = dishCount
                     if (dishCount <= 1) {
