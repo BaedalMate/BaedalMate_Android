@@ -17,13 +17,13 @@ def NATIVE_APP_KEY = properties.getProperty('NATIVE_APP_KEY')
 def KAKAO_REST_API_KEY = properties.getProperty('KAKAO_REST_API_KEY')
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.mate.baedalmate"
         minSdk 28
-        targetSdk 32
-        versionCode 10000
+        targetSdk 33
+        versionCode 10001
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
