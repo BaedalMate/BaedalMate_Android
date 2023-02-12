@@ -246,6 +246,22 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@id/et_chat_user_input"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_chat_user_input_disable"
+                style="@style/style_title2_kor"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/overlay_black_B3212123"
+                android:gravity="center"
+                android:text="@string/chat_user_input_disable_guide_message"
+                android:textColor="@color/white_FFFFFF"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

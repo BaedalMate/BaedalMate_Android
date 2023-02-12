@@ -49,6 +49,8 @@ data class ChatRoomRecruitDetailDto(
     val minPeople: Int,
     @SerializedName("deadlineDate")
     val deadlineDate: String,
+    @SerializedName("deactivateDate")
+    val deactivateDate: String,
     @SerializedName("active")
     val active: Boolean,
     @SerializedName("cancel")
