@@ -12,6 +12,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.ListLiveData
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentChangeOrderBinding
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.presentation.adapter.write.WriteFourthMenuListAdapter
@@ -38,6 +41,25 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
     private lateinit var bottomSheetDialog: BottomSheetDialog
     private var addedMenuList = ListLiveData<MenuDto>()
     private var dishCount = 1
+
+    private var chkSubjectIsNotEmpty = MutableLiveData(false)
+    private var chkAmountIsNotEmpty = MutableLiveData(true)
+    private val onAdd: MediatorLiveData<Boolean> = MediatorLiveData()
+    init {
+        onAdd.addSource(chkSubjectIsNotEmpty) {
+            onAdd.value = _onAdd()
+        }
+        onAdd.addSource(chkAmountIsNotEmpty) {
+            onAdd.value = _onAdd()
+        }
+    }
+
+    private fun _onAdd(): Boolean {
+        if ((chkSubjectIsNotEmpty.value == true) and (chkAmountIsNotEmpty.value == true)) {
+            return true
+        }
+        return false
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return initBottomSheetDialog()
@@ -88,7 +110,7 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                binding.tvChangeOrderAdd.isEnabled = s.toString().trim().isNotBlank()
+                chkSubjectIsNotEmpty.postValue(s.toString().trim().isNotBlank())
             }
         })
     }
@@ -122,6 +144,7 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
                         this@with.setText(result)
                         this@with.setSelection(result.length)
                     }
+                    chkAmountIsNotEmpty.postValue(s.toString().isNotBlank())
                 }
             })
 
@@ -145,6 +168,10 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
     }
 
     private fun setAddMenuClickListener() {
+        onAdd.observe(viewLifecycleOwner) { isAddEnable ->
+            binding.tvChangeOrderAdd.isEnabled = isAddEnable
+        }
+
         with(binding) {
             tvChangeOrderAdd.setOnClickListener {
                 addedMenuList.add(
@@ -155,7 +182,7 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
                     )
                 )
                 etChangeOrderSubjectInput.setText("")
-                etChangeOrderAmountInput.setText("")
+                etChangeOrderAmountInput.setText("0")
                 currentDishCount = 1
                 dishCount = 1
             }
@@ -167,25 +194,24 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
             currentDishCount = dishCount
 
             with(imgChangeOrderDishCountDecrease) {
-                binding.imgChangeOrderDishCountIncrease.setOnClickListener {
+                this.isEnabled = false // 초기 false 설정
+                binding.imgChangeOrderDishCountIncrease.setOnDebounceClickListener(300L) {
                     dishCount++
                     binding.currentDishCount = dishCount
                     if (dishCount >= 2) {
                         this.background =
                             androidx.core.content.ContextCompat.getDrawable(
-                                requireContext(),
-                                com.mate.baedalmate.R.color.white_FFFFFF
+                                requireContext(), R.color.white_FFFFFF
                             )
                         this.strokeColor = androidx.core.content.ContextCompat.getColorStateList(
-                            requireContext(),
-                            com.mate.baedalmate.R.color.gray_line_EBEBEB
+                            requireContext(), R.color.gray_line_EBEBEB
                         )
                         this.strokeWidth = 1.dp.toFloat()
                         this.isEnabled = true
                     }
                 }
 
-                this.setOnClickListener {
+                this.setOnDebounceClickListener(300L) {
                     dishCount--
                     binding.currentDishCount = dishCount
                     if (dishCount <= 1) {
@@ -235,7 +261,8 @@ class ChangeOrderFragment : BottomSheetDialogFragment() {
                 writeFourthMenuListAdapter.notifyDataSetChanged()
                 binding.layoutChangeOrderAdded.visibility = View.VISIBLE
                 binding.btnChangeOrderSubmit.isEnabled = true
-                bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED // HALF EXPAND를 false 처리했음에도 처음에 동적으로 크기가 변하는 경우 절반만 보여지는 상태에 의해 해결을 위해 추가
+                bottomSheetDialog.behavior.state =
+                    BottomSheetBehavior.STATE_EXPANDED // HALF EXPAND를 false 처리했음에도 처음에 동적으로 크기가 변하는 경우 절반만 보여지는 상태에 의해 해결을 위해 추가
             } else {
                 binding.layoutChangeOrderAdded.visibility = View.GONE
                 binding.btnChangeOrderSubmit.isEnabled = false
