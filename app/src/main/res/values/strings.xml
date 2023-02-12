@@ -259,6 +259,7 @@
     <string name="chat_participant_order_list_mine_receipt_sum_menu_title">총 주문 금액</string>
     <string name="chat_participant_order_list_mine_receipt_coupon_title">쿠폰 사용금액</string>
     <string name="chat_participant_order_list_mine_final_amount_title">결제 예정 금액</string>
+    <string name="chat_user_input_disable_guide_message">모집 마감후 3시간까지만 채팅이 가능합니다</string>
 
     <!-- Change Order -->
     <string name="change_order">메뉴 변경하기</string>

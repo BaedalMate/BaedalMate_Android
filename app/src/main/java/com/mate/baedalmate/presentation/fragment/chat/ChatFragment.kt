@@ -156,6 +156,7 @@ class ChatFragment : Fragment() {
                     )
                     initChatRoomTitleBarInfo(recruitDetail)
                     setInfoActionClickListener(recruitDetail, detail.reviewed)
+                    setUserInputTextEnable(recruitDetail)
                     setOptionClickListener(recruitDetail)
                     initChatLog(detail.messages)
                 }
@@ -320,7 +321,7 @@ class ChatFragment : Fragment() {
                         ChatFragmentDirections.actionChatFragmentToReviewUserFragment(recruitId = recruitInfo.recruitId)
                     )
                 }
-                if (isReviewed)
+                if (isReviewed || recruitInfo.fail || recruitInfo.cancel)
                     this.isEnabled = false
             }
         }
@@ -360,6 +361,19 @@ class ChatFragment : Fragment() {
                     recruitId = recruitInfo.recruitId
                 )
             )
+        }
+    }
+
+    private fun setUserInputTextEnable(recruitInfo: ChatRoomRecruitDetailDto) {
+        val deactivateTime = LocalDateTime.parse(recruitInfo.deactivateDate, formatter)
+        if (deactivateTime.plusHours(3L) <= LocalDateTime.now()) {
+            binding.etChatUserInput.isEnabled = false
+            binding.btnChatUserInputSend.isEnabled = false
+            binding.tvChatUserInputDisable.visibility = View.VISIBLE
+        } else {
+            binding.etChatUserInput.isEnabled = true
+            binding.btnChatUserInputSend.isEnabled = true
+            binding.tvChatUserInputDisable.visibility = View.GONE
         }
     }
 }
