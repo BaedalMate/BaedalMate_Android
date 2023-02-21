@@ -29,11 +29,13 @@
                     android:layout_height="wrap_content"
                     android:background="@color/main_FB5F1C"
                     android:paddingBottom="14dp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0">
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:visibility="visible">
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline_home_contents_top_left"
@@ -218,11 +220,13 @@
                     android:id="@+id/layout_home_contents_bottom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/layout_home_contents_top"
-                    app:layout_constraintVertical_bias="0.0">
+                    app:layout_constraintVertical_bias="0.0"
+                    tools:visibility="visible">
 
                     <androidx.constraintlayout.widget.Guideline
                         android:id="@+id/guideline_home_contents_bottom_left"
@@ -440,9 +444,57 @@
                             tools:listitem="@layout/item_home_bottom_post_recommend" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+
+        <LinearLayout
+            android:id="@+id/layout_home_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_home_loading_error_guide"
+                style="@style/style_semi_title_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingVertical="10dp"
+                android:text="@string/post_category_list_load_fail"
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_home_loading"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingVertical="10dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_loading_post_list"
+                app:lottie_speed="1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_home_loading_retry"
+                style="@style/style_semi_title_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
+                android:minHeight="0dp"
+                android:paddingVertical="5dp"
+                android:stateListAnimator="@null"
+                android:text="@string/retry"
+                android:textColor="@color/white_FFFFFF"
+                android:visibility="gone" />
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_home_to_write"

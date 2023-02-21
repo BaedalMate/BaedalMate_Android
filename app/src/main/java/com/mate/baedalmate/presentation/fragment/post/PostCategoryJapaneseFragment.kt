@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostCategoryJapaneseBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
 import com.mate.baedalmate.presentation.adapter.post.PostCategoryListSortSpinnerAdapter
@@ -64,6 +66,7 @@ class PostCategoryJapaneseFragment : Fragment() {
         initSortSpinner()
         setDisplayAvailableRecruitPost()
         observeSortSpinnerSelectedItem()
+        setRetryGetRecruitList()
         setCategoryListContents()
     }
 
@@ -153,19 +156,17 @@ class PostCategoryJapaneseFragment : Fragment() {
                 launch {
                     postCategoryListAdapter.loadStateFlow.map { it.refresh }
                         .distinctUntilChanged()
-                        .collect {
-                            if (it is LoadState.NotLoading) {
+                        .collectLatest { loadState ->
+                            if (loadState is LoadState.NotLoading) {
                                 setScrollToTop()
-                                if (postCategoryListAdapter.itemCount == 0) {
-                                    constraintSet.clone(binding.layoutPostCategoryListJapanese)
-                                    constraintSet.setVisibility(emptyView.id, View.VISIBLE)
-                                    constraintSet.applyTo(binding.layoutPostCategoryListJapanese)
-                                } else {
-                                    constraintSet.clone(binding.layoutPostCategoryListJapanese)
-                                    constraintSet.setVisibility(emptyView.id, View.GONE)
-                                    constraintSet.applyTo(binding.layoutPostCategoryListJapanese)
-                                }
                             }
+                            constraintSet.clone(binding.layoutPostCategoryListJapanese)
+                            constraintSet.setVisibility(
+                                emptyView.id,
+                                if (loadState is LoadState.NotLoading && postCategoryListAdapter.itemCount == 0) View.VISIBLE else View.GONE
+                            )
+                            constraintSet.applyTo(binding.layoutPostCategoryListJapanese)
+                            setLoadingView(loadState)
                         }
                 }
             }
@@ -190,6 +191,26 @@ class PostCategoryJapaneseFragment : Fragment() {
             span.indexOf(categoryName) + categoryName.length + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+    }
+
+    private fun setRetryGetRecruitList() {
+        binding.btnPostCategoryJapaneseLoadingRetry.setOnDebounceClickListener {
+            setSortSpinnerRequestQuery()
+        }
+    }
+
+    private fun setLoadingView(loadState: LoadState) {
+        with(binding) {
+            lottiePostCategoryJapaneseLoading.isVisible =
+                loadState is LoadState.Loading
+            btnPostCategoryJapaneseLoadingRetry.isVisible =
+                loadState is LoadState.Error
+            tvPostCategoryJapaneseLoadingErrorGuide.isVisible =
+                loadState is LoadState.Error
+            rvPostCategoryJapaneseList.isVisible =
+                loadState is LoadState.NotLoading
+
+        }
     }
 
     private fun addEmptyView(emptyView: View) {

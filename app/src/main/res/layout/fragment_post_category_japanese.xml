@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -71,6 +72,53 @@
             app:layout_constraintTop_toBottomOf="@id/layout_post_category_japanese_sort"
             app:layout_constraintVertical_bias="0.0"
             tools:itemCount="10"
-            tools:listitem="@layout/item_post_category_list" />
+            tools:listitem="@layout/item_post_category_list"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/layout_post_category_japanese_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_post_category_japanese_loading_error_guide"
+                style="@style/style_semi_title_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingVertical="10dp"
+                android:text="@string/post_category_list_load_fail"
+                android:textAlignment="center" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_post_category_japanese_loading"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingVertical="10dp"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_loading_post_list"
+                app:lottie_speed="1" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_post_category_japanese_loading_retry"
+                style="@style/style_semi_title_kor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
+                android:minHeight="0dp"
+                android:paddingVertical="5dp"
+                android:stateListAnimator="@null"
+                android:text="@string/retry"
+                android:textColor="@color/white_FFFFFF" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

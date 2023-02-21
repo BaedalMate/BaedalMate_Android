@@ -105,6 +105,7 @@ class PostFragment : Fragment() {
     }
 
     private fun getPostDetailData() {
+        showLoadingView()
         recruitViewModel.requestRecruitPost(postId = args.postId)
     }
 
@@ -395,21 +396,24 @@ class PostFragment : Fragment() {
 
             viewLifecycleOwner.lifecycleScope.launch {
                 recruitViewModel.recruitPostDetail.observe(viewLifecycleOwner) { recruitDetail ->
-                    glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.image}")
-                        .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
-                        .thumbnail(0.1f)
-                        .priority(Priority.HIGH)
-                        .centerCrop()
-                        .into(imgPostBack)
+                    if (recruitDetail != null) {
+                        hideLoadingView()
+                        glideRequestManager.load("http://3.35.27.107:8080/images/${recruitDetail.image}")
+                            .override(GetDeviceSize.getDeviceWidthSize(requireContext()))
+                            .thumbnail(0.1f)
+                            .priority(Priority.HIGH)
+                            .centerCrop()
+                            .into(imgPostBack)
 
-                    displayPostPlatform(recruitDetail.platform)
-                    setStoreIconClickListener(recruitDetail.place)
-                    initContentsUserInfo(recruitDetail)
-                    initContentsPostInfo(recruitDetail)
-                    setRecruitActionButton(recruitDetail)
-                    setOptionClickListener(recruitDetail)
-                    requestRecruitPostDetailForModify(recruitDetail)
-                    setModifyPostClickListener(recruitDetail)
+                        displayPostPlatform(recruitDetail.platform)
+                        setStoreIconClickListener(recruitDetail.place)
+                        initContentsUserInfo(recruitDetail)
+                        initContentsPostInfo(recruitDetail)
+                        setRecruitActionButton(recruitDetail)
+                        setOptionClickListener(recruitDetail)
+                        requestRecruitPostDetailForModify(recruitDetail)
+                        setModifyPostClickListener(recruitDetail)
+                    }
                 }
             }
         }
@@ -440,6 +444,8 @@ class PostFragment : Fragment() {
 
     private fun setModifyPostClickListener(recruitDetail: RecruitDetail) {
         with(binding.tvPostFrontContentsDetailModify) {
+
+            /*
             visibility = if (recruitDetail.host && recruitDetail.active) View.VISIBLE else View.GONE
             recruitViewModel.recruitPostDetailForModify.observe(viewLifecycleOwner) { recruitDetailForModify ->
                 setOnDebounceClickListener {
@@ -450,6 +456,23 @@ class PostFragment : Fragment() {
                     )
                 }
             }
+             */
+        }
+    }
+
+    private fun showLoadingView() {
+        with(binding) {
+            layoutPostBack.visibility = View.INVISIBLE
+            layoutPostFront.visibility = View.INVISIBLE
+            lottiePostLoading.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideLoadingView() {
+        with(binding) {
+            layoutPostBack.visibility = View.VISIBLE
+            layoutPostFront.visibility = View.VISIBLE
+            lottiePostLoading.visibility = View.GONE
         }
     }
 }

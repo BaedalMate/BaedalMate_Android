@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -49,6 +50,8 @@ class HomeFragment : Fragment() {
     private lateinit var homeRecommendPostAdapter: HomeRecommendPostAdapter
     private lateinit var homeTopPostIndicators: Array<ImageView?>
 
+    private var isInitialLoadCompleted: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glideRequestManager = Glide.with(this)
@@ -64,6 +67,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if(!isInitialLoadCompleted) showLoadingView()
         getUserInfo()
         getRecruitListData()
     }
@@ -72,6 +76,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initUI()
         initNavigation()
+        setRetryRequestRecruitAndUserData()
+        observeRequestDataLoadState()
     }
 
     private fun getUserInfo() {
@@ -82,6 +88,15 @@ class HomeFragment : Fragment() {
         recruitViewModel.requestHomeRecruitTagList(sort = "deadlineDate")
         recruitViewModel.requestHomeRecruitRecentList(sort = "deadlineDate")
         recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+    }
+
+    private fun observeRequestDataLoadState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            recruitViewModel.isHomeContentsLoadFail.observe(viewLifecycleOwner) { isFail ->
+                hideLoadingView(isErrorOccurred = isFail)
+                if (!isFail) isInitialLoadCompleted = true
+            }
+        }
     }
 
     private fun initUI() {
@@ -256,6 +271,37 @@ class HomeFragment : Fragment() {
         }
         binding.btnHomeTopActionbarNotification.setOnDebounceClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+        }
+    }
+
+    private fun setRetryRequestRecruitAndUserData() {
+        binding.btnHomeLoadingRetry.setOnDebounceClickListener {
+            getUserInfo()
+            getRecruitListData()
+        }
+    }
+
+    private fun showLoadingView() {
+        with(binding) {
+            layoutHomeContentsTop.visibility = View.GONE
+            layoutHomeContentsBottom.visibility = View.GONE
+
+            layoutHomeLoading.visibility = View.VISIBLE
+            lottieHomeLoading.visibility = View.VISIBLE
+            tvHomeLoadingErrorGuide.visibility = View.GONE
+            btnHomeLoadingRetry.visibility = View.GONE
+        }
+    }
+
+    private fun hideLoadingView(isErrorOccurred: Boolean) {
+        with(binding) {
+            layoutHomeContentsTop.isVisible = !isErrorOccurred
+            layoutHomeContentsBottom.isVisible = !isErrorOccurred
+
+            layoutHomeLoading.isVisible = isErrorOccurred
+            lottieHomeLoading.isVisible = !isErrorOccurred
+            tvHomeLoadingErrorGuide.isVisible = isErrorOccurred
+            btnHomeLoadingRetry.isVisible = isErrorOccurred
         }
     }
 

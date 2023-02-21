@@ -1,12 +1,14 @@
 package com.mate.baedalmate.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.mate.baedalmate.common.Event
+import com.mate.baedalmate.common.extension.addSourceList
 import com.mate.baedalmate.data.datasource.remote.member.UserInfoResponse
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderRequest
 import com.mate.baedalmate.data.datasource.remote.recruit.CreateOrderResponse
@@ -70,7 +72,8 @@ class RecruitViewModel @Inject constructor(
     val recruitListPizza = _recruitListPizza.asStateFlow()
     private val _recruitListAsia = MutableStateFlow<PagingData<RecruitDto>>(PagingData.empty())
     val recruitListAsia = _recruitListAsia.asStateFlow()
-    private val _recruitListPackedmeal = MutableStateFlow<PagingData<RecruitDto>>(PagingData.empty())
+    private val _recruitListPackedmeal =
+        MutableStateFlow<PagingData<RecruitDto>>(PagingData.empty())
     val recruitListPackedmeal = _recruitListPackedmeal.asStateFlow()
 
     private val _isRecruitListLoad = MutableLiveData(false)
@@ -91,31 +94,7 @@ class RecruitViewModel @Inject constructor(
     private val _recruitPostParticipateInfo = MutableLiveData<CreateOrderResponse>()
     val recruitPostParticipateInfo: LiveData<CreateOrderResponse> get() = _recruitPostParticipateInfo
 
-    private val _recruitPostDetail = MutableLiveData(
-        RecruitDetail(
-            false,
-            0,
-            0,
-            "",
-            "",
-            "",
-            false,
-            "",
-            0,
-            false,
-            PlaceDto("", "", "", 0f, 0f),
-            "",
-            0,
-            0f,
-            0,
-            emptyList(),
-            "",
-            UserInfoResponse("", "", "", 5f, 0L),
-            0,
-            0,
-            false
-        )
-    )
+    private val _recruitPostDetail = MutableLiveData<RecruitDetail>()
     val recruitPostDetail: LiveData<RecruitDetail> get() = _recruitPostDetail
 
     private val _recruitPostDetailForModify = MutableLiveData<RecruitDetailForModify>()
@@ -145,18 +124,31 @@ class RecruitViewModel @Inject constructor(
     )
     val recruitHomeRecommendList: LiveData<MainRecruitList> get() = _recruitHomeRecommendList
 
-    private val _isRecruitMainListLoad = MutableLiveData(false)
-    val isRecruitMainListLoad: LiveData<Boolean> get() = _isRecruitMainListLoad
-
     private val _recruitHomeTagList = MutableLiveData(TagRecruitList(emptyList()))
     val recruitHomeTagList: LiveData<TagRecruitList> get() = _recruitHomeTagList
 
-    private val _isRecruitTagListLoad = MutableLiveData(false)
-    val isRecruitTagListLoad: LiveData<Boolean> get() = _isRecruitTagListLoad
+    private val _isHomeRecentListLoad = MutableLiveData<Boolean>()
+    private val _isHomeRecommendListLoad = MutableLiveData<Boolean>()
+    private val _isHomeRecruitTagListLoad = MutableLiveData<Boolean>()
+
+    val isHomeContentsLoadFail = MediatorLiveData<Boolean>().apply {
+        addSourceList(
+            _isHomeRecentListLoad,
+            _isHomeRecommendListLoad,
+            _isHomeRecruitTagListLoad
+        ) { _isHomeContentsLoadFail() }
+    }
+
+    private fun _isHomeContentsLoadFail(): Boolean {
+        if ((_isHomeRecentListLoad.value == false) or (_isHomeRecommendListLoad.value == false) or (_isHomeRecruitTagListLoad.value == false)) {
+            return true
+        }
+        return false
+    }
 
     fun requestCategoryRecruitList(
         categoryId: Int?,
-        exceptClose: Boolean= false,
+        exceptClose: Boolean = false,
         sort: String
     ) = viewModelScope.launch {
         recruitListUseCase(categoryId, exceptClose, sort).cachedIn(viewModelScope)
@@ -187,7 +179,15 @@ class RecruitViewModel @Inject constructor(
                     when (ApiResponse.status) {
                         ApiResult.Status.SUCCESS -> {
                             _recruitHomeRecentList.postValue(ApiResponse.data)
+                            _isHomeRecentListLoad.postValue(true)
                         }
+                        ApiResult.Status.API_ERROR -> {
+                            _isHomeRecentListLoad.postValue(false)
+                        }
+                        ApiResult.Status.NETWORK_ERROR -> {
+                            _isHomeRecentListLoad.postValue(false)
+                        }
+                        ApiResult.Status.LOADING -> { }
                     }
                 }
         }
@@ -199,7 +199,15 @@ class RecruitViewModel @Inject constructor(
                     when (ApiResponse.status) {
                         ApiResult.Status.SUCCESS -> {
                             _recruitHomeRecommendList.postValue(ApiResponse.data)
+                            _isHomeRecommendListLoad.postValue(true)
                         }
+                        ApiResult.Status.API_ERROR -> {
+                            _isHomeRecommendListLoad.postValue(false)
+                        }
+                        ApiResult.Status.NETWORK_ERROR -> {
+                            _isHomeRecommendListLoad.postValue(false)
+                        }
+                        ApiResult.Status.LOADING -> { }
                     }
                 }
         }
@@ -210,10 +218,16 @@ class RecruitViewModel @Inject constructor(
                 when (ApiResponse.status) {
                     ApiResult.Status.SUCCESS -> {
                         ApiResponse.data.let { _recruitHomeTagList.postValue(it) }
-                        _isRecruitTagListLoad.postValue(true)
+                        _isHomeRecruitTagListLoad.postValue(true)
+                    }
+                    ApiResult.Status.API_ERROR -> {
+                        _isHomeRecruitTagListLoad.postValue(false)
+                    }
+                    ApiResult.Status.NETWORK_ERROR -> {
+                        _isHomeRecruitTagListLoad.postValue(false)
                     }
                     else -> {
-                        _isRecruitTagListLoad.postValue(false)
+
                     }
                 }
             }
