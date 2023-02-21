@@ -35,6 +35,9 @@ class ChatViewModel @Inject constructor(
     private val _chatRoomList = MutableLiveData<ChatRoomList>()
     val chatRoomList: LiveData<ChatRoomList> get() = _chatRoomList
 
+    private val _isChatRoomListLoadSuccess = MutableLiveData<Boolean>()
+    val isChatRoomListLoadSuccess: LiveData<Boolean> get() = _isChatRoomListLoadSuccess
+
     private val _chatRoomLog = MutableLiveData<ChatRoomDetail>()
     val chatRoomLog: LiveData<ChatRoomDetail> get() = _chatRoomLog
 
@@ -55,6 +58,10 @@ class ChatViewModel @Inject constructor(
             when (ApiResponse.status) {
                 ApiResult.Status.SUCCESS -> {
                     ApiResponse.data.let { _chatRoomList.postValue(it) }
+                    _isChatRoomListLoadSuccess.postValue(true)
+                }
+                else -> {
+                    _isChatRoomListLoadSuccess.postValue(false)
                 }
             }
         }

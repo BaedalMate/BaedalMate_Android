@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,11 +20,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostCategoryAllBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
 import com.mate.baedalmate.presentation.adapter.post.PostCategoryListSortSpinnerAdapter
 import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapter
-import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.fragment.post.adapter.PostCategoryListAdapter
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,6 +62,7 @@ class PostCategoryAllFragment : Fragment() {
         initSortSpinner()
         setDisplayAvailableRecruitPost()
         observeSortSpinnerSelectedItem()
+        setRetryGetRecruitList()
         setCategoryListContents()
     }
 
@@ -142,19 +144,17 @@ class PostCategoryAllFragment : Fragment() {
                 launch {
                     postCategoryListAdapter.loadStateFlow.map { it.refresh }
                         .distinctUntilChanged()
-                        .collect {
-                            if (it is LoadState.NotLoading) {
+                        .collectLatest { loadState ->
+                            if (loadState is LoadState.NotLoading) {
                                 setScrollToTop()
-                                if (postCategoryListAdapter.itemCount == 0) {
-                                    constraintSet.clone(binding.layoutPostCategoryListAll)
-                                    constraintSet.setVisibility(emptyView.id, View.VISIBLE)
-                                    constraintSet.applyTo(binding.layoutPostCategoryListAll)
-                                } else {
-                                    constraintSet.clone(binding.layoutPostCategoryListAll)
-                                    constraintSet.setVisibility(emptyView.id, View.GONE)
-                                    constraintSet.applyTo(binding.layoutPostCategoryListAll)
-                                }
                             }
+                            constraintSet.clone(binding.layoutPostCategoryListAll)
+                            constraintSet.setVisibility(
+                                emptyView.id,
+                                if (loadState is LoadState.NotLoading && postCategoryListAdapter.itemCount == 0) View.VISIBLE else View.GONE
+                            )
+                            constraintSet.applyTo(binding.layoutPostCategoryListAll)
+                            setLoadingView(loadState)
                         }
                 }
             }
@@ -172,38 +172,37 @@ class PostCategoryAllFragment : Fragment() {
         })
     }
 
+    private fun setRetryGetRecruitList() {
+        binding.btnPostCategoryAllLoadingRetry.setOnDebounceClickListener {
+            setSortSpinnerRequestQuery()
+        }
+    }
+
+    private fun setLoadingView(loadState: LoadState) {
+        with(binding) {
+            lottiePostCategoryAllLoading.isVisible =
+                loadState is LoadState.Loading
+            btnPostCategoryAllLoadingRetry.isVisible =
+                loadState is LoadState.Error
+            tvPostCategoryAllLoadingErrorGuide.isVisible =
+                loadState is LoadState.Error
+            rvPostCategoryAllList.isVisible =
+                loadState is LoadState.NotLoading
+
+        }
+    }
+
     private fun addEmptyView(emptyView: View) {
         binding.layoutPostCategoryListAll.addView(emptyView)
+        setConstraintLayoutCondition(emptyView.id, binding.layoutPostCategoryListAll.id)
+    }
 
+    private fun setConstraintLayoutCondition(childLayoutId:Int, parentLayoutId: Int) {
         constraintSet.clone(binding.layoutPostCategoryListAll)
-        constraintSet.connect(
-            emptyView.id,
-            ConstraintSet.TOP,
-            binding.layoutPostCategoryListAll.id,
-            ConstraintSet.TOP,
-            0
-        )
-        constraintSet.connect(
-            emptyView.id,
-            ConstraintSet.BOTTOM,
-            binding.layoutPostCategoryListAll.id,
-            ConstraintSet.BOTTOM,
-            0
-        )
-        constraintSet.connect(
-            emptyView.id,
-            ConstraintSet.START,
-            binding.layoutPostCategoryListAll.id,
-            ConstraintSet.START,
-            0
-        )
-        constraintSet.connect(
-            emptyView.id,
-            ConstraintSet.END,
-            binding.layoutPostCategoryListAll.id,
-            ConstraintSet.END,
-            0
-        )
+        constraintSet.connect(childLayoutId, ConstraintSet.TOP,parentLayoutId, ConstraintSet.TOP, 0)
+        constraintSet.connect(childLayoutId, ConstraintSet.BOTTOM,parentLayoutId, ConstraintSet.BOTTOM, 0)
+        constraintSet.connect(childLayoutId, ConstraintSet.START,parentLayoutId, ConstraintSet.START, 0)
+        constraintSet.connect(childLayoutId, ConstraintSet.END,parentLayoutId, ConstraintSet.END, 0)
         constraintSet.applyTo(binding.layoutPostCategoryListAll)
     }
 

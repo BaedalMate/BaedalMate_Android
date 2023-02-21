@@ -40,12 +40,22 @@ class ChatListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showLoadingView()
+        observeRequestChatRoomListDataState()
         getChatRoomListData()
         initChatRoomList()
     }
 
     private fun getChatRoomListData() {
         chatViewModel.getChatRoomList()
+    }
+
+    private fun observeRequestChatRoomListDataState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            chatViewModel.isChatRoomListLoadSuccess.observe(viewLifecycleOwner) { isSuccess ->
+                if (isSuccess) hideLoadingView()
+            }
+        }
     }
 
     private fun initChatRoomList() {
@@ -58,6 +68,20 @@ class ChatListFragment : Fragment() {
                     chatRoomListAdapter.submitList(roomList.rooms.toMutableList())
                 }
             }
+        }
+    }
+
+    private fun showLoadingView() {
+        with(binding) {
+            rvChatListContents.visibility = View.GONE
+            lottieChatListLoading.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideLoadingView() {
+        with(binding) {
+            rvChatListContents.visibility = View.VISIBLE
+            lottieChatListLoading.visibility = View.GONE
         }
     }
 }

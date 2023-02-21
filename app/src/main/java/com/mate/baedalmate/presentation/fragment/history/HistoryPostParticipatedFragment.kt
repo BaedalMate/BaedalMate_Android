@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -52,6 +53,7 @@ class HistoryPostParticipatedFragment : Fragment() {
         getHistoryPostParticipatedList()
         initListAdapter()
         observeHistoryPostParticipatedList()
+        setRetryGetHistoryPostParticipatedList()
         setBackClickListener()
     }
 
@@ -106,12 +108,30 @@ class HistoryPostParticipatedFragment : Fragment() {
                 launch {
                     historyPostParticipatedAdapter.loadStateFlow.map { it.refresh }
                         .distinctUntilChanged()
-                        .collect {
-                            if (it is LoadState.NotLoading) {
-                            }
-                        }
+                        .collectLatest { loadState -> setLoadingView(loadState) }
                 }
             }
+        }
+    }
+
+    private fun setRetryGetHistoryPostParticipatedList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.btnHistoryPostParticipatedLoadingRetry.setOnDebounceClickListener {
+                memberViewModel.requestGetHistoryPostParticipatedList(sort = "createDate")
+            }
+        }
+    }
+
+    private fun setLoadingView(loadState: LoadState) {
+        with(binding) {
+            lottieHistoryPostParticipatedLoading.isVisible =
+                loadState is LoadState.Loading
+            btnHistoryPostParticipatedLoadingRetry.isVisible =
+                loadState is LoadState.Error
+            tvHistoryPostParticipatedLoadingErrorGuide.isVisible =
+                loadState is LoadState.Error
+            rvHistoryPostParticipatedList.isVisible =
+                loadState is LoadState.NotLoading
         }
     }
 }

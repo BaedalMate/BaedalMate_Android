@@ -36,6 +36,6 @@
         android:minHeight="0dp"
         android:paddingVertical="5dp"
         android:stateListAnimator="@null"
-        android:text="다시 시도"
+        android:text="@string/retry"
         android:textColor="@color/white_FFFFFF" />
 </LinearLayout>

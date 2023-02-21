@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -21,6 +23,8 @@ import com.mate.baedalmate.presentation.adapter.post.PostCategoryLoadStateAdapte
 import com.mate.baedalmate.presentation.viewmodel.MemberViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -49,6 +53,7 @@ class HistoryPostCreatedFragment : Fragment() {
         initListAdapter()
         getHistoryPostCreatedList()
         observeHistoryPostCreatedList()
+        setRetryGetHistoryPostCreatedList()
         setBackClickListener()
     }
 
@@ -98,7 +103,34 @@ class HistoryPostCreatedFragment : Fragment() {
                         historyPostCreatedAdapter.submitData(recruitList)
                     }
                 }
+
+                launch {
+                    historyPostCreatedAdapter.loadStateFlow.map { it.refresh }
+                        .distinctUntilChanged()
+                        .collectLatest { loadState -> setLoadingView(loadState) }
+                }
             }
+        }
+    }
+
+    private fun setRetryGetHistoryPostCreatedList() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            binding.btnHistoryPostCreatedLoadingRetry.setOnDebounceClickListener {
+                memberViewModel.requestGetHistoryPostCreatedList(sort = "createDate")
+            }
+        }
+    }
+
+    private fun setLoadingView(loadState: LoadState) {
+        with(binding) {
+            lottieHistoryPostCreatedLoading.isVisible =
+                loadState is LoadState.Loading
+            btnHistoryPostCreatedLoadingRetry.isVisible =
+                loadState is LoadState.Error
+            tvHistoryPostCreatedLoadingErrorGuide.isVisible =
+                loadState is LoadState.Error
+            rvHistoryPostCreatedList.isVisible =
+                loadState is LoadState.NotLoading
         }
     }
 }

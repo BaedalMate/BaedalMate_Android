@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -62,6 +63,7 @@ class SearchFragment : Fragment() {
         setBackClickListener()
         setSearchClickListener()
         initListAdapter()
+        setRetryGetRecruitList()
         setSearchResultListContents()
     }
 
@@ -153,28 +155,33 @@ class SearchFragment : Fragment() {
                 }
 
                 launch {
-                    searchResultListAdapter.loadStateFlow.map { it.append }
+                    searchResultListAdapter.loadStateFlow.map { it.refresh }
                         .distinctUntilChanged()
                         .collectLatest {
-                        if (it is LoadState.NotLoading) {
-                            binding.tvSearchResultCount.text = String.format(
-                                getString(R.string.search_result_count),
-                                currentResultCount
-                            )
-                            val span = SpannableString(binding.tvSearchResultCount.text)
-                            setHighlightSpanMessage(span, currentResultCount.toString())
-                            binding.tvSearchResultCount.text = span
+                            if (it is LoadState.NotLoading) {
+                                binding.tvSearchResultCount.text = String.format(
+                                    getString(R.string.search_result_count),
+                                    currentResultCount
+                                )
+                                val span = SpannableString(binding.tvSearchResultCount.text)
+                                setHighlightSpanMessage(span, currentResultCount.toString())
+                                binding.tvSearchResultCount.text = span
+                            }
+                            setLoadingView(it)
 
                             if (currentResultCount != 0) {
                                 binding.layoutSearchResultEmpty.visibility = View.GONE
-                            } else if (binding.etSearchActionbarKeyword.text.isNotEmpty()) {
+                            } else if (binding.etSearchActionbarKeyword.text.isNotEmpty()
+                                && !binding.lottieSearchResultLoading.isVisible
+                                && !binding.tvSearchResultLoadingErrorGuide.isVisible
+                                && !binding.btnSearchResultLoadingRetry.isVisible
+                            ) {
                                 setEmptyViewNotAppear()
                                 binding.layoutSearchResultEmpty.visibility = View.VISIBLE
                             } else { // 아무것도 입력하지 않은 경우
                                 binding.layoutSearchResultEmpty.visibility = View.GONE
                             }
                         }
-                    }
                 }
             }
         }
@@ -210,6 +217,27 @@ class SearchFragment : Fragment() {
     private fun setEmptyViewNew() {
         binding.btnSearchResultEmptyNew.setOnDebounceClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_writeCategoryFragment)
+        }
+    }
+
+    private fun setRetryGetRecruitList() {
+        binding.btnSearchResultLoadingRetry.setOnDebounceClickListener {
+            if (binding.etSearchActionbarKeyword.text.toString().trim().isNotEmpty()) {
+                getSearchResultList(keyword = binding.etSearchActionbarKeyword.text.toString())
+            }
+        }
+    }
+
+    private fun setLoadingView(loadState: LoadState) {
+        with(binding) {
+            lottieSearchResultLoading.isVisible =
+                loadState is LoadState.Loading
+            btnSearchResultLoadingRetry.isVisible =
+                loadState is LoadState.Error
+            tvSearchResultLoadingErrorGuide.isVisible =
+                loadState is LoadState.Error
+            rvSearchResultList.isVisible =
+                loadState is LoadState.NotLoading
         }
     }
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -22,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostCategoryPizzaBinding
 import com.mate.baedalmate.databinding.ItemEmptyPostCategoryViewBinding
 import com.mate.baedalmate.presentation.adapter.post.PostCategoryListSortSpinnerAdapter
@@ -64,6 +66,7 @@ class PostCategoryPizzaFragment : Fragment() {
         initSortSpinner()
         setDisplayAvailableRecruitPost()
         observeSortSpinnerSelectedItem()
+        setRetryGetRecruitList()
         setCategoryListContents()
     }
 
@@ -153,19 +156,17 @@ class PostCategoryPizzaFragment : Fragment() {
                 launch {
                     postCategoryListAdapter.loadStateFlow.map { it.refresh }
                         .distinctUntilChanged()
-                        .collect {
-                            if (it is LoadState.NotLoading) {
+                        .collectLatest { loadState ->
+                            if (loadState is LoadState.NotLoading) {
                                 setScrollToTop()
-                                if (postCategoryListAdapter.itemCount == 0) {
-                                    constraintSet.clone(binding.layoutPostCategoryListPizza)
-                                    constraintSet.setVisibility(emptyView.id, View.VISIBLE)
-                                    constraintSet.applyTo(binding.layoutPostCategoryListPizza)
-                                } else {
-                                    constraintSet.clone(binding.layoutPostCategoryListPizza)
-                                    constraintSet.setVisibility(emptyView.id, View.GONE)
-                                    constraintSet.applyTo(binding.layoutPostCategoryListPizza)
-                                }
                             }
+                            constraintSet.clone(binding.layoutPostCategoryListPizza)
+                            constraintSet.setVisibility(
+                                emptyView.id,
+                                if (loadState is LoadState.NotLoading && postCategoryListAdapter.itemCount == 0) View.VISIBLE else View.GONE
+                            )
+                            constraintSet.applyTo(binding.layoutPostCategoryListPizza)
+                            setLoadingView(loadState)
                         }
                 }
             }
@@ -190,6 +191,26 @@ class PostCategoryPizzaFragment : Fragment() {
             span.indexOf(categoryName) + categoryName.length + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
+    }
+
+    private fun setRetryGetRecruitList() {
+        binding.btnPostCategoryPizzaLoadingRetry.setOnDebounceClickListener {
+            setSortSpinnerRequestQuery()
+        }
+    }
+
+    private fun setLoadingView(loadState: LoadState) {
+        with(binding) {
+            lottiePostCategoryPizzaLoading.isVisible =
+                loadState is LoadState.Loading
+            btnPostCategoryPizzaLoadingRetry.isVisible =
+                loadState is LoadState.Error
+            tvPostCategoryPizzaLoadingErrorGuide.isVisible =
+                loadState is LoadState.Error
+            rvPostCategoryPizzaList.isVisible =
+                loadState is LoadState.NotLoading
+
+        }
     }
 
     private fun addEmptyView(emptyView: View) {

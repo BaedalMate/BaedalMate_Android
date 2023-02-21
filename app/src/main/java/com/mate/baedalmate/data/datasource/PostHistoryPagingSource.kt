@@ -53,7 +53,10 @@ class PostHistoryPagingSource(
                     )
                 }
                 else -> {
-                    throw NetworkErrorException("API RESULT FAIL")
+                    response.exception?.let {
+                        throw it
+                    }
+                    throw Exception("API REQUEST FAIL")
                 }
             }
         } catch (e: Exception) {

@@ -39,6 +39,7 @@
     <string name="dialog_loading_wait_description">잠시만 기다려 주세요!</string>
     <string name="participate_complete">모집 완료</string>
     <string name="participate_close">모집 마감</string>
+    <string name="retry">다시시도</string>
 
     <!-- Notification -->
     <string name="notification_type_all">all</string>
