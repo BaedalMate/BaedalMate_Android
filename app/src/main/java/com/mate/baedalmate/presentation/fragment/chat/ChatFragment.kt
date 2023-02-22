@@ -178,13 +178,26 @@ class ChatFragment : Fragment() {
     }
 
     private fun initChatRoomTitleBarInfo(recruitInfo: ChatRoomRecruitDetailDto) {
-        val createdTimeString = recruitInfo.createDate
-        val createdTime = LocalDateTime.parse(createdTimeString, formatter)
         navigateToRecruitPost(binding.imgChatInfo, recruitInfo.recruitId)
         navigateToRecruitPost(binding.layoutChatInfoContents, recruitInfo.recruitId)
 
-        binding.tvChatInfoContentsCreatedDate.text =
-            with(createdTime) { "${this.year}년 ${this.monthValue + 1}월 ${this.dayOfMonth}일 ${this.hour}시 ${this.minute}분" }
+        val currentStatus = if (recruitInfo.active) {
+            binding.tvChatInfoContentsTitleStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
+            getString(R.string.chat_room_status_active)
+        } else {
+            if (recruitInfo.fail) {
+                binding.tvChatInfoContentsTitleStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.overlay_black_B3212123))
+                getString(R.string.chat_room_status_fail)
+            } else if (recruitInfo.cancel) {
+                binding.tvChatInfoContentsTitleStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.overlay_black_B3212123))
+                getString(R.string.chat_room_status_cancel)
+            } else {
+                binding.tvChatInfoContentsTitleStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.main_FB5F1C))
+                getString(R.string.chat_room_status_complete)
+            }
+        }
+
+        binding.tvChatInfoContentsTitleStatus.text = "[$currentStatus]"
         binding.tvChatInfoContentsTitle.text = recruitInfo.title
 
         glideRequestManager.load("http://3.35.27.107:8080/images/${recruitInfo.recruitImage}")
@@ -230,9 +243,11 @@ class ChatFragment : Fragment() {
 
     private fun navigateToRecruitPost(view: View, recruitId: Int) {
         view.setOnDebounceClickListener {
-            findNavController().navigate(ChatFragmentDirections.actionChatFragmentToPostFragment(
-                postId = recruitId
-            ))
+            findNavController().navigate(
+                ChatFragmentDirections.actionChatFragmentToPostFragment(
+                    postId = recruitId
+                )
+            )
         }
     }
 
@@ -304,6 +319,7 @@ class ChatFragment : Fragment() {
         recruitInfo: ChatRoomRecruitDetailDto,
         isReviewed: Boolean
     ) {
+        binding.btnChatInfoAction.isEnabled = true
         if (recruitInfo.active) {
             with(binding.btnChatInfoAction) {
                 text = getString(R.string.chat_info_action_change_menu)
@@ -314,15 +330,21 @@ class ChatFragment : Fragment() {
                 }
             }
         } else {
+            // 리뷰작성 상황으로 넘어간 경우 리뷰 대상자를 채팅방에서도 확인함
+            reviewViewModel.requestGetTargetReviewUserList(recruitInfo.recruitId)
             with(binding.btnChatInfoAction) {
                 text = getString(R.string.chat_info_action_change_review)
+                reviewViewModel.reviewTargetUserList.observe(viewLifecycleOwner) {
+                    if (it.participants.isEmpty() || isReviewed || recruitInfo.fail || recruitInfo.cancel) {
+                        this.isEnabled = false
+                    }
+                }
+
                 setOnDebounceClickListener {
                     findNavController().navigate(
                         ChatFragmentDirections.actionChatFragmentToReviewUserFragment(recruitId = recruitInfo.recruitId)
                     )
                 }
-                if (isReviewed || recruitInfo.fail || recruitInfo.cancel)
-                    this.isEnabled = false
             }
         }
     }
@@ -365,15 +387,17 @@ class ChatFragment : Fragment() {
     }
 
     private fun setUserInputTextEnable(recruitInfo: ChatRoomRecruitDetailDto) {
-        val deactivateTime = LocalDateTime.parse(recruitInfo.deactivateDate, formatter)
-        if (deactivateTime.plusHours(3L) <= LocalDateTime.now()) {
-            binding.etChatUserInput.isEnabled = false
-            binding.btnChatUserInputSend.isEnabled = false
-            binding.tvChatUserInputDisable.visibility = View.VISIBLE
-        } else {
-            binding.etChatUserInput.isEnabled = true
-            binding.btnChatUserInputSend.isEnabled = true
-            binding.tvChatUserInputDisable.visibility = View.GONE
+        if (recruitInfo.deactivateDate != null) {
+            val deactivateTime = LocalDateTime.parse(recruitInfo.deactivateDate, formatter)
+            if (deactivateTime.plusHours(3L) <= LocalDateTime.now()) {
+                binding.etChatUserInput.isEnabled = false
+                binding.btnChatUserInputSend.isEnabled = false
+                binding.tvChatUserInputDisable.visibility = View.VISIBLE
+            } else {
+                binding.etChatUserInput.isEnabled = true
+                binding.btnChatUserInputSend.isEnabled = true
+                binding.tvChatUserInputDisable.visibility = View.GONE
+            }
         }
     }
 }

@@ -96,42 +96,46 @@
                 app:layout_constraintStart_toEndOf="@id/img_chat_info"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/tv_chat_info_contents_created_date"
-                    style="@style/style_body2_kor"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/layout_chat_info_contents_title"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray_main_C4C4C4"
+                    android:layout_marginEnd="12dp"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    tools:text="2022년 3얼 5일 18시 34분 " />
+                    app:layout_constraintVertical_bias="0.0">
 
-                <TextView
-                    android:id="@+id/tv_chat_info_contents_title"
-                    style="@style/style_semi_title_kor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_chat_info_contents_created_date"
-                    app:layout_constraintVertical_bias="0.0"
-                    tools:text="피자헛 같이 부술 사람 구합니다" />
+                    <TextView
+                        android:id="@+id/tv_chat_info_contents_title_status"
+                        style="@style/style_semi_title_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_FB5F1C"
+                        tools:text="[모집완료]" />
+
+                    <TextView
+                        android:id="@+id/tv_chat_info_contents_title"
+                        style="@style/style_semi_title_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:singleLine="true"
+                        tools:text="피자헛 같이 부술 사람 구합니다" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/layout_chat_info_contents_criterion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
+                    android:layout_marginEnd="12dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_chat_info_contents_title"
+                    app:layout_constraintTop_toBottomOf="@id/layout_chat_info_contents_title"
                     app:layout_constraintVertical_bias="0.0">
 
                     <TextView
