@@ -1,10 +1,12 @@
 package com.mate.baedalmate.presentation.fragment.write
 
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +14,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,14 +26,15 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.databinding.FragmentWriteSecondBinding
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.Dormitory
-import com.mate.baedalmate.databinding.FragmentWriteSecondBinding
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
+
 
 @AndroidEntryPoint
 class WriteSecondFragment : Fragment() {
@@ -73,6 +78,7 @@ class WriteSecondFragment : Fragment() {
         initDormitorySpinner()
         initStoreLocation()
         initPlatform()
+        setPlatformClickListener()
         setCouponInputForm()
         validateCouponInputForm()
         initDetailForModify()
@@ -155,12 +161,37 @@ class WriteSecondFragment : Fragment() {
 
     private fun initPlatform() {
         val deviceWidth = GetDeviceSize.getDeviceWidthSizeDp(requireContext())
-        val useWidth = deviceWidth - 52.dp
-        for (i in 0 until binding.radiogroupWriteSecondPlatformList.childCount) {
-            val radioButton = binding.radiogroupWriteSecondPlatformList.getChildAt(i) as RadioButton
-            radioButton.updateLayoutParams<RadioGroup.LayoutParams> {
-                width = useWidth
-                height = useWidth
+        val useWidth = deviceWidth - 52.dp // 4번의 12dp margin을 만들었음에 따라 52dp를 빼서 계산
+
+        with(binding.radiogroupWriteSecondPlatformList) {
+            for (i in 0 until this.childCount) {
+                val radioButton = this.getChildAt(i) as RadioButton
+                radioButton.updateLayoutParams<RadioGroup.LayoutParams> {
+                    width = useWidth
+                    height = useWidth
+                }
+            }
+
+            displayCurrentCheckedPlatform(this, checkedRadioButtonId)
+        }
+    }
+
+    private fun setPlatformClickListener() {
+        binding.radiogroupWriteSecondPlatformList.setOnCheckedChangeListener { radioGroup, checkedId ->
+            displayCurrentCheckedPlatform(radioGroup, checkedId)
+        }
+    }
+
+    private fun displayCurrentCheckedPlatform(
+        currentRadioGroup: RadioGroup,
+        currentCheckedRadioButtonId: Int
+    ) {
+        for (radioButton in currentRadioGroup.children) {
+            if (radioButton.id == currentCheckedRadioButtonId) {
+                (radioButton as RadioButton).background.colorFilter = null
+            } else {
+                val currentBackground = (radioButton as RadioButton).background
+                (radioButton as RadioButton).background = convertToGrayscale(currentBackground)
             }
         }
     }
@@ -307,7 +338,7 @@ class WriteSecondFragment : Fragment() {
     private fun initDetailForModifyDormitory(dormitory: String) {
         val originDormitory =
             when (dormitory) {
-                Dormitory.NURI.name-> "누리학사"
+                Dormitory.NURI.name -> "누리학사"
                 Dormitory.SUNGLIM.name -> "성림학사"
                 Dormitory.KB.name -> "KB학사"
                 Dormitory.BURAM.name -> "불암학사"
@@ -334,10 +365,18 @@ class WriteSecondFragment : Fragment() {
         }
     }
 
-    private fun initDetailForModifyCoupon (couponPrice: Int) {
+    private fun initDetailForModifyCoupon(couponPrice: Int) {
         binding.checkboxWriteSecondCouponUse.isChecked = couponPrice == 0
         if (couponPrice != 0) {
             binding.etWriteSecondCouponUserInput.setText("$couponPrice")
         }
+    }
+
+    private fun convertToGrayscale(drawable: Drawable): Drawable? {
+        val matrix = ColorMatrix()
+        matrix.setSaturation(0F)
+        val filter = ColorMatrixColorFilter(matrix)
+        drawable.colorFilter = filter
+        return drawable
     }
 }
