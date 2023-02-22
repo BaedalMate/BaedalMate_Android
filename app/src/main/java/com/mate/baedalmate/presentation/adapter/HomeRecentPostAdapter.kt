@@ -69,11 +69,13 @@ class HomeRecentPostAdapter(private val requestManager: RequestManager) :
             }
 
             with(binding) {
-                requestManager.load("http://3.35.27.107:8080/images/${post.image}")
-                    .thumbnail(0.1f)
-                    .priority(Priority.HIGH)
-                    .centerCrop()
-                    .into(imgHomeBottomPostRecentItem)
+                if (post.image.isNotEmpty()) {
+                    requestManager.load("http://3.35.27.107:8080/images/${post.image}")
+                        .thumbnail(0.1f)
+                        .priority(Priority.HIGH)
+                        .centerCrop()
+                        .into(imgHomeBottomPostRecentItem)
+                }
 
                 tvHomeBottomPostRecentItemBottomTitle.text = "${post.place}"
                 tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
