@@ -85,7 +85,9 @@ class SearchFragment : Fragment() {
 
     private fun btnTextSearchClickListener() {
         binding.btnSearchActionbarAction.setOnDebounceClickListener {
-            getSearchResultList(keyword = binding.etSearchActionbarKeyword.text.toString())
+            if (binding.etSearchActionbarKeyword.text.toString().trim().isNotEmpty()) {
+                getSearchResultList(keyword = binding.etSearchActionbarKeyword.text.toString())
+            }
             HideKeyBoardUtil.hideEditText(
                 requireContext(),
                 binding.etSearchActionbarKeyword
