@@ -8,7 +8,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +65,10 @@ class LocationCertificationFragment : Fragment() {
         setLocationChangeClickListener()
         observeChangeSpinnerSelectedItem()
         observeLocationChange(isInitialCertificate = args.isInitialCertificate)
+    }
+
+    override fun onResume() {
+        super.onResume()
         initMap()
     }
 
@@ -108,6 +114,11 @@ class LocationCertificationFragment : Fragment() {
                         )
                     }
                     map["EXPLAINED"]?.let {
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also {
+                            val uri = Uri.parse("package:${requireContext().packageName}")
+                            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            it.data = uri
+                        }
                         Toast.makeText(
                             requireContext(),
                             getString(R.string.location_certification_error_message_permission_denied_second),
