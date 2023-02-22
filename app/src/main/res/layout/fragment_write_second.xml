@@ -294,88 +294,76 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0" />
 
-                    <HorizontalScrollView
-                        android:id="@+id/layout_scroll_write_fourth_menu_add"
+                    <RadioGroup
+                        android:id="@+id/radiogroup_write_second_platform_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:overScrollMode="never"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="3dp"
+                        android:orientation="horizontal"
+                        android:weightSum="5"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="W,1:5"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_write_second_platform_title"
                         app:layout_constraintVertical_bias="0.0">
 
-                        <RadioGroup
-                            android:id="@+id/radiogroup_write_second_platform_list"
-                            android:layout_width="wrap_content"
+                        <RadioButton
+                            android:id="@+id/radiobutton_write_second_platform_baemin"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="15dp"
-                            android:paddingBottom="3dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_write_second_platform_title"
-                            app:layout_constraintVertical_bias="0.0">
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radiobutton_platform_baemin"
+                            android:button="@null"
+                            android:checked="true"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
 
-                            <RadioButton
-                                android:id="@+id/radiobutton_write_second_platform_baemin"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:button="@null"
-                                android:checked="true"
-                                android:drawableStart="@drawable/selector_radiobutton_platform_baemin"
-                                android:minWidth="0dp"
-                                android:minHeight="0dp" />
+                        <RadioButton
+                            android:id="@+id/radiobutton_write_second_platform_yogiyo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="13dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radiobutton_platform_yogiyo"
+                            android:button="@null"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
 
-                            <RadioButton
-                                android:id="@+id/radiobutton_write_second_platform_yogiyo"
-                                style="@style/style_body2_kor"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                android:button="@null"
-                                android:drawableStart="@drawable/selector_radiobutton_platform_yogiyo"
-                                android:minWidth="0dp"
-                                android:minHeight="0dp" />
+                        <RadioButton
+                            android:id="@+id/radiobutton_write_second_platform_coupang"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="13dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radiobutton_platform_coupang"
+                            android:button="@null"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
 
-                            <RadioButton
-                                android:id="@+id/radiobutton_write_second_platform_coupang"
-                                style="@style/style_body2_kor"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                android:button="@null"
-                                android:drawableStart="@drawable/selector_radiobutton_platform_coupang"
-                                android:drawablePadding="7dp"
-                                android:minWidth="0dp"
-                                android:minHeight="0dp" />
+                        <RadioButton
+                            android:id="@+id/radiobutton_write_second_platform_ddangyo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="13dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radiobutton_platform_ddangyo"
+                            android:button="@null"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
 
-                            <RadioButton
-                                android:id="@+id/radiobutton_write_second_platform_ddangyo"
-                                style="@style/style_body2_kor"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                android:button="@null"
-                                android:drawableStart="@drawable/selector_radiobutton_platform_ddangyo"
-                                android:drawablePadding="7dp"
-                                android:minWidth="0dp"
-                                android:minHeight="0dp" />
-
-                            <RadioButton
-                                android:id="@+id/radiobutton_write_second_platform_etc"
-                                style="@style/style_body2_kor"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:layout_marginStart="13dp"
-                                android:button="@null"
-                                android:drawableStart="@drawable/selector_radiobutton_platform_etc"
-                                android:drawablePadding="7dp"
-                                android:minWidth="0dp"
-                                android:minHeight="0dp" />
-                        </RadioGroup>
-                    </HorizontalScrollView>
+                        <RadioButton
+                            android:id="@+id/radiobutton_write_second_platform_etc"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="13dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_radiobutton_platform_etc"
+                            android:button="@null"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp" />
+                    </RadioGroup>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

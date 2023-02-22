@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
         <layer-list>
-            <item android:bottom="1dp" android:drawable="@drawable/ic_ddangyo_circle" android:end="1dp" android:start="1dp" android:top="1dp" />
+            <item android:bottom="1dp" android:drawable="@drawable/ic_ddangyo_logo" android:end="1dp" android:start="1dp" android:top="1dp" />
             <item>
                 <shape android:shape="oval">
                     <stroke android:width="2dp" android:color="@color/gray_main_C4C4C4" />
@@ -10,5 +10,5 @@
             </item>
         </layer-list>
     </item>
-    <item android:bottom="1dp" android:drawable="@drawable/ic_ddangyo_circle" android:end="1dp" android:start="1dp" android:state_checked="false" android:top="1dp" />
+    <item android:bottom="1dp" android:drawable="@drawable/ic_ddangyo_logo" android:end="1dp" android:start="1dp" android:state_checked="false" android:top="1dp" />
 </selector>
