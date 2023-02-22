@@ -117,11 +117,11 @@ class PostFragment : Fragment() {
 
     private fun displayPostPlatform(platformName: String) {
         val platformImageDrawableId = when (platformName) {
-            DeliveryPlatform.BAEMIN.name -> R.drawable.ic_baemin_circle
-            DeliveryPlatform.COUPANG.name -> R.drawable.ic_coupang_circle
-            DeliveryPlatform.DDGNGYO.name -> R.drawable.ic_ddangyo_circle
-            DeliveryPlatform.YOGIYO.name -> R.drawable.ic_yogiyo_circle
-            else -> R.drawable.ic_etc_circle
+            DeliveryPlatform.BAEMIN.name -> R.drawable.ic_baemin_logo
+            DeliveryPlatform.COUPANG.name -> R.drawable.ic_coupang_logo
+            DeliveryPlatform.DDGNGYO.name -> R.drawable.ic_ddangyo_logo
+            DeliveryPlatform.YOGIYO.name -> R.drawable.ic_yogiyo_logo_circle
+            else -> R.drawable.ic_etc_logo
         }
         binding.imgPostBackDeliveryPlatform.setImageDrawable(
             ContextCompat.getDrawable(
