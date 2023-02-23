@@ -6,15 +6,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mate.baedalmate.data.datasource.remote.notification.FcmAllow
 import com.mate.baedalmate.data.datasource.remote.notification.NotificationList
 import com.mate.baedalmate.domain.model.ApiResult
 import com.mate.baedalmate.domain.repository.TokenPreferencesRepository
+import com.mate.baedalmate.domain.usecase.notification.GetNotificationPermitUseCase
 import com.mate.baedalmate.domain.usecase.notification.RegisterFcmTokenUseCase
 import com.mate.baedalmate.domain.usecase.notification.RequestGetFcmTokenUseCase
 import com.mate.baedalmate.domain.usecase.notification.RequestNotificationListUseCase
 import com.mate.baedalmate.domain.usecase.notification.SubscribeTopicNoticeUseCase
 import com.mate.baedalmate.domain.usecase.notification.UnregisterFcmTokenUseCase
 import com.mate.baedalmate.domain.usecase.notification.UnsubscribeTopicNoticeUseCase
+import com.mate.baedalmate.domain.usecase.notification.UpdateNotificationPermitUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,11 +29,19 @@ class NotificationViewModel @Inject constructor(
     private val requestGetFcmTokenUseCase: RequestGetFcmTokenUseCase,
     private val subscribeTopicNoticeUseCase: SubscribeTopicNoticeUseCase,
     private val unsubscribeTopicNoticeUseCase: UnsubscribeTopicNoticeUseCase,
+    private val getNotificationPermitUseCase: GetNotificationPermitUseCase,
+    private val updateNotificationPermitUseCase: UpdateNotificationPermitUseCase,
     private val requestNotificationListUseCase: RequestNotificationListUseCase,
     private val tokenPreferencesRepository: TokenPreferencesRepository
 ) : ViewModel() {
     private val _notifications = MutableLiveData<NotificationList>()
     val notifications: LiveData<NotificationList> get() = _notifications
+
+    private val _notificationPermits = MutableLiveData<FcmAllow>()
+    val notificationPermits: LiveData<FcmAllow> get() = _notificationPermits
+
+    private val _isUpdateNotificationPermitSuccess = MutableLiveData<Boolean>(true)
+    val isUpdateNotificationPermitSuccess: LiveData<Boolean> get() = _isUpdateNotificationPermitSuccess
 
     fun registerFcmToken(contentResolver: ContentResolver) = viewModelScope.launch {
         registerFcmTokenUseCase(
@@ -47,13 +58,13 @@ class NotificationViewModel @Inject constructor(
         tokenPreferencesRepository.setNotificationPermitAll(isPermit)
     }
 
-    fun setNotificationNewMessage(isPermit: Boolean) = viewModelScope.launch {
-        // TODO 서버에 새로운 메시지 관련 알림 수신/미수신 요청
+    fun setNotificationNewMessage(isPermit: Boolean, currentRecruitAllowed: Boolean, contentResolver: ContentResolver) = viewModelScope.launch {
+        updateNotificationPermit(contentResolver = contentResolver, allowChat = isPermit, allowRecruit = currentRecruitAllowed)
         tokenPreferencesRepository.setNotificationPermitNewMessage(isPermit)
     }
 
-    fun setNotificationRecruit(isPermit: Boolean) = viewModelScope.launch {
-        // TODO 서버에 모집글 알림 수신/미수신 요청
+    fun setNotificationRecruit(isPermit: Boolean, currentMessageAllowed: Boolean, contentResolver: ContentResolver) = viewModelScope.launch {
+        updateNotificationPermit(contentResolver = contentResolver, allowChat = currentMessageAllowed, allowRecruit = isPermit)
         tokenPreferencesRepository.setNotificationPermitRecruit(isPermit)
     }
 
@@ -71,7 +82,9 @@ class NotificationViewModel @Inject constructor(
         viewModelScope.launch {
             isPermit = when (notificationType) {
                 "all" -> tokenPreferencesRepository.getNotificationPermitAll()
-                "newMessage" -> tokenPreferencesRepository.getNotificationPermitNewMessage()
+                "newMessage" -> {
+                    tokenPreferencesRepository.getNotificationPermitNewMessage()
+                }
                 "recruit" -> tokenPreferencesRepository.getNotificationPermitRecruit()
                 "notice" -> tokenPreferencesRepository.getNotificationPermitNotice()
                 else -> false
@@ -90,6 +103,45 @@ class NotificationViewModel @Inject constructor(
                 }
                 else -> {
 
+                }
+            }
+        }
+    }
+
+    fun syncNotificationPermit(contentResolver: ContentResolver) = viewModelScope.launch {
+        getNotificationPermitUseCase(
+            deviceCode = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        )?.let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    ApiResponse.data?.let { permitAllows ->
+                        tokenPreferencesRepository.setNotificationPermitNewMessage(isPermit = permitAllows.allowChat)
+                        tokenPreferencesRepository.setNotificationPermitRecruit(isPermit = permitAllows.allowRecruit)
+                    }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun updateNotificationPermit(
+        contentResolver: ContentResolver,
+        allowChat: Boolean,
+        allowRecruit: Boolean
+    ) = viewModelScope.launch {
+        updateNotificationPermitUseCase(
+            deviceCode = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID),
+            allowChat = allowChat, allowRecruit = allowRecruit
+        )?.let { ApiResponse ->
+            when (ApiResponse.status) {
+                ApiResult.Status.SUCCESS -> {
+                    _isUpdateNotificationPermitSuccess.postValue(true)
+                }
+                ApiResult.Status.NETWORK_ERROR -> {
+                    _isUpdateNotificationPermitSuccess.postValue(false)
+                }
+                ApiResult.Status.API_ERROR -> {
+                    _isUpdateNotificationPermitSuccess.postValue(false)
                 }
             }
         }

@@ -19,3 +19,10 @@ data class Notification (
     @SerializedName("createDate")
     val createDate: String
 )
+
+data class FcmAllow (
+    @SerializedName("allowChat")
+    val allowChat: Boolean,
+    @SerializedName("allowRecruit")
+    val allowRecruit: Boolean,
+)

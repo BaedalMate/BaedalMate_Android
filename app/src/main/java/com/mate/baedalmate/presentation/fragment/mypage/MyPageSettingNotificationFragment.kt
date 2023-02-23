@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -40,6 +41,7 @@ class MyPageSettingNotificationFragment : Fragment() {
         setNotificationNewMessage()
         setNotificationRecruit()
         setNotificationNotice()
+        observeNotificationNewMessageUpdating()
     }
 
     private fun setBackClickListener() {
@@ -49,6 +51,8 @@ class MyPageSettingNotificationFragment : Fragment() {
     }
 
     private fun initNotificationStates() {
+        notificationViewModel.syncNotificationPermit(requireContext().contentResolver)
+
         // 전체 알림 먼저 확인한뒤 하위 알림들 확인
         if (notificationViewModel.getNotificationSettings(getString(R.string.notification_type_all))) {
             with(binding) {
@@ -62,21 +66,21 @@ class MyPageSettingNotificationFragment : Fragment() {
                     notificationViewModel.getNotificationSettings(getString(R.string.notification_type_notice))
             }
         } else {
-            showNotificationStates(isOnState = false)
+            setNotificationStates(isOnState = false)
         }
     }
 
     private fun setNotificationAll() {
         binding.btnToggleMyPageMenusSettingNotificationAll.setOnCheckedChangeListener { _, isChecked ->
             // 모든 알림 설정이 ON/OFF 될때 하위 알림들도 모두 따라가도록 설정
-            showNotificationStates(isOnState = isChecked)
+            setNotificationStates(isOnState = isChecked)
             notificationViewModel.setNotificationAll(isChecked)
             if (isChecked) notificationViewModel.registerFcmToken(requireContext().contentResolver)
             else notificationViewModel.unregisterFcmToken()
         }
     }
 
-    private fun showNotificationStates(isOnState: Boolean) {
+    private fun setNotificationStates(isOnState: Boolean) {
         with(binding) {
             btnToggleMyPageMenusSettingNotificationNewMessage.isEnabled = isOnState
             btnToggleMyPageMenusSettingNotificationRecruit.isEnabled = isOnState
@@ -91,13 +95,29 @@ class MyPageSettingNotificationFragment : Fragment() {
 
     private fun setNotificationNewMessage() {
         binding.btnToggleMyPageMenusSettingNotificationNewMessage.setOnCheckedChangeListener { _, isChecked ->
-            notificationViewModel.setNotificationNewMessage(isChecked)
+            notificationViewModel.setNotificationNewMessage(
+                isChecked,
+                binding.btnToggleMyPageMenusSettingNotificationRecruit.isChecked,
+                requireContext().contentResolver
+            )
         }
     }
 
     private fun setNotificationRecruit() {
         binding.btnToggleMyPageMenusSettingNotificationRecruit.setOnCheckedChangeListener { _, isChecked ->
-            notificationViewModel.setNotificationRecruit(isChecked)
+            notificationViewModel.setNotificationRecruit(
+                isChecked,
+                binding.btnToggleMyPageMenusSettingNotificationNewMessage.isChecked,
+                requireContext().contentResolver
+            )
+        }
+    }
+
+    private fun observeNotificationNewMessageUpdating() {
+        notificationViewModel.isUpdateNotificationPermitSuccess.observe(viewLifecycleOwner) { isSuccess ->
+            if (!isSuccess) {
+                Toast.makeText(requireContext(), getString(R.string.my_page_setting_notification_update_fail_message), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
