@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -40,11 +41,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         firebaseAnalytics = Firebase.analytics
         setFcm()
+        checkCurrentNotification()
         getNotificationData()
         initBottomNavigation()
         setBottomNaviVisibility()
         observeAccountValid()
         askNotificationPermission()
+    }
+
+    private fun checkCurrentNotification() {
+        val currentNotificationState =
+            NotificationManagerCompat.from(this).areNotificationsEnabled()
+        notificationViewModel.setNotificationAll(currentNotificationState)
     }
 
     private val permissionLauncherNotification =
@@ -89,8 +97,8 @@ class MainActivity : AppCompatActivity() {
                     // 알림 최초 허용시에 모든 알림 허용처리
                     with(notificationViewModel) {
                         setNotificationAll(true)
-                        setNotificationNewMessage(true)
-                        setNotificationRecruit(true)
+                        setNotificationNewMessage(true, true, contentResolver)
+                        setNotificationRecruit(true, true, contentResolver)
                         setNotificationNotice(true)
                     }
                 }
