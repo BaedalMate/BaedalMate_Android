@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Priority
 import com.bumptech.glide.RequestManager
 import com.mate.baedalmate.R
+import com.mate.baedalmate.common.TimeChangerUtil
 import com.mate.baedalmate.data.datasource.remote.recruit.MainRecruitDto
 import com.mate.baedalmate.databinding.ItemHomeBottomPostRecommendBinding
 import com.mate.baedalmate.presentation.fragment.home.HomeFragmentDirections
 import java.text.DecimalFormat
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -60,13 +60,14 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
             val decimalFormat = DecimalFormat("#,###")
             val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
             val deadlineTimeString: String = post.deadlineDate
-            var durationMinute = "0"
+            var remainedTime = "0"
 
             if (post.deadlineDate != "") {
-                val deadlineTime = LocalDateTime.parse(deadlineTimeString, formatter)
-                val currentTime = LocalDateTime.now()
-                val duration = Duration.between(currentTime, deadlineTime).toMinutes()
-                durationMinute = duration.toString()
+                remainedTime = TimeChangerUtil.getTimeRemained(
+                    binding.tvHomeBottomPostRecentItemTopTime.context,
+                    LocalDateTime.now(),
+                    LocalDateTime.parse(deadlineTimeString, formatter)
+                )
             }
 
             with(binding) {
@@ -80,7 +81,7 @@ class HomeRecommendPostAdapter(private val requestManager: RequestManager) :
 
                 tvHomeBottomPostRecommendItemInfoTitle.text = "${post.place}"
                 tvHomeBottomPostRecentItemTopPerson.text = "${post.currentPeople}/${post.minPeople}"
-                tvHomeBottomPostRecentItemTopTime.text = "${durationMinute}분"
+                tvHomeBottomPostRecentItemTopTime.text = remainedTime
                 tvHomeBottomPostRecommendItemInfoBottomDeliveryCurrent.text =
                     " ${decimalFormat.format(post.shippingFee)}원"
                 tvHomeBottomPostRecommendItemInfoBottomCurrent.text =

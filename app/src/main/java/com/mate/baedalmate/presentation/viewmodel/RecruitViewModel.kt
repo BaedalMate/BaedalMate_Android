@@ -298,9 +298,9 @@ class RecruitViewModel @Inject constructor(
             }
         }
 
-    fun requestCancelParticipateRecruitPost(postId: Int) =
+    fun requestCancelParticipateRecruitPost(recruitId: Int) =
         viewModelScope.launch {
-            cancelParticipateRecruitPostUseCase.invoke(data = DeleteOrderDto(recruitId = postId))
+            cancelParticipateRecruitPostUseCase.invoke(data = DeleteOrderDto(recruitId = recruitId))
                 .let { ApiResponse ->
                     when (ApiResponse.status) {
                         ApiResult.Status.SUCCESS -> {
