@@ -140,7 +140,7 @@
                         app:layout_constraintStart_toEndOf="@id/img_write_first_goal_people_decrease"
                         app:layout_constraintTop_toTopOf="@id/img_write_first_goal_people_increase"
                         app:layout_constraintVertical_bias="0.5"
-                        tools:text="1인" />
+                        tools:text="2인" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/img_write_first_goal_people_decrease"

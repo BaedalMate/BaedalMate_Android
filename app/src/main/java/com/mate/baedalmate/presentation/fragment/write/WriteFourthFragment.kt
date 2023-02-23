@@ -69,13 +69,25 @@ class WriteFourthFragment : Fragment() {
 
     private fun setNextClickListener() {
         binding.btnWriteFourthNext.setOnDebounceClickListener {
-            if (args.recruitDetailForModify != null)
-                args.recruitDetailForModify?.let {
-                    writeViewModel.requestModifyPost(it.recruitId)
-                }
-            else writeViewModel.requestUploadPost()
-            LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
-            LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
+            if (writeViewModel.deadLineAmount <=
+                binding.tvWriteFourthAmountTotal.text.toString().replace(",", "").replace("원", "")
+                    .toInt()
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "목표 금액 ${decimalFormat.format(writeViewModel.deadLineAmount)}원 보다 결제 예정금액이 작아야 합니다",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            } else {
+                if (args.recruitDetailForModify != null)
+                    args.recruitDetailForModify?.let {
+                        writeViewModel.requestModifyPost(it.recruitId)
+                    }
+                else writeViewModel.requestUploadPost()
+                LoadingAlertDialog.showLoadingDialog(loadingAlertDialog)
+                LoadingAlertDialog.resizeDialogFragment(requireContext(), loadingAlertDialog)
+            }
         }
     }
 
