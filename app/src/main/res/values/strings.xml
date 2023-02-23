@@ -70,6 +70,7 @@
     <string name="my_page_setting_notification_description_recruit">참여한 모집글 진행상황에 대한 알림을 받아요</string>
     <string name="my_page_setting_notification_title_notice">공지사항 알림</string>
     <string name="my_page_setting_notification_description_notice">배달메이트에서 보내는 공지사항 알림을 받아요</string>
+    <string name="my_page_setting_notification_update_fail_message">알림 변경이 정상적으로 실행되지 않았습니다. 다시 실행해주세요.</string>
 
     <!-- Post Sort -->
     <string name="post_sort_createDate">최신순</string>

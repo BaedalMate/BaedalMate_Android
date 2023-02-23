@@ -49,9 +49,11 @@ import com.mate.baedalmate.domain.usecase.member.RequestGetUserInfoUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestLogoutUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutChangeMyProfileUseCase
 import com.mate.baedalmate.domain.usecase.member.RequestPutUserDormitoryUseCase
+import com.mate.baedalmate.domain.usecase.notification.GetNotificationPermitUseCase
 import com.mate.baedalmate.domain.usecase.notification.RequestNotificationListUseCase
 import com.mate.baedalmate.domain.usecase.notification.SubscribeTopicNoticeUseCase
 import com.mate.baedalmate.domain.usecase.notification.UnsubscribeTopicNoticeUseCase
+import com.mate.baedalmate.domain.usecase.notification.UpdateNotificationPermitUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelParticipateRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCancelRecruitPostUseCase
 import com.mate.baedalmate.domain.usecase.recruit.RequestCloseRecruitPostUseCase
@@ -316,4 +318,12 @@ object ServiceModule {
     @Singleton
     @Provides
     fun provideUnsubscribeTopicNoticeUseCase(notificationRepository: NotificationRepository): UnsubscribeTopicNoticeUseCase = UnsubscribeTopicNoticeUseCase(notificationRepository)
+
+    @Singleton
+    @Provides
+    fun provideGetNotificationPermitUseCase(notificationRepository: NotificationRepository): GetNotificationPermitUseCase = GetNotificationPermitUseCase(notificationRepository)
+
+    @Singleton
+    @Provides
+    fun provideUpdateNotificationPermitUseCase(notificationRepository: NotificationRepository): UpdateNotificationPermitUseCase = UpdateNotificationPermitUseCase(notificationRepository)
 }
