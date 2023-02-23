@@ -43,7 +43,7 @@ class HomeTopPostTagAdapter :
     inner class HomeTopPostTagViewHolder(private val binding: ItemHomeTopPostTagBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(tag: TagDto) {
-            binding.tvHomeTopPostTag.text = tag.tagname
+            binding.tvHomeTopPostTag.text = "#${tag.tagname}"
         }
     }
 }

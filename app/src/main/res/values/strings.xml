@@ -91,6 +91,12 @@
     <string name="time_unit_hours">시간 전</string>
     <string name="time_unit_minutes">분 전</string>
     <string name="time_unit_seconds">초 전</string>
+    <string name="time_year">년</string>
+    <string name="time_month">달</string>
+    <string name="time_day">일</string>
+    <string name="time_hour">시간</string>
+    <string name="time_minute">분</string>
+    <string name="time_second">초</string>
 
     <!-- University -->
     <string name="university_seoultech">서울과기대</string>
@@ -139,9 +145,7 @@
     <string name="set_account_my_profile_actionbar_title">프로필 설정</string>
 
     <!-- Home -->
-    <string name="home_top_title">님을 위한</string>
-    <string name="home_top_title_menu">오늘의 메뉴</string>
-    <string name="home_top_title_location">배달 거점</string>
+    <string name="home_top_title">님 주변 모집글🍴</string>
     <string name="home_top_post_contents_write_title">지금 먹고 싶은 메뉴가 생겼다면?</string>
     <string name="home_top_post_contents_write_description">합리적으로 배달시키세요!</string>
     <string name="home_contents_bottom_menu_title">메뉴 둘러보기</string>
