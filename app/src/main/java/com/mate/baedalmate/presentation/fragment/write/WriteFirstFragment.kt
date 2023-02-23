@@ -171,7 +171,7 @@ class WriteFirstFragment : Fragment() {
 
     private fun initDeadLinePeople() {
         with(binding) {
-            currentPeopleDeadLineCount = 1
+            currentPeopleDeadLineCount = 2
             setDeadLinePeopleCountClickListener()
         }
     }
@@ -179,11 +179,11 @@ class WriteFirstFragment : Fragment() {
     private fun setDeadLinePeopleCountClickListener() {
         with(binding) {
             with(imgWriteFirstGoalPeopleDecrease) {
-                isEnabled = (binding.currentPeopleDeadLineCount ?: 1) >= 2
+                isEnabled = (binding.currentPeopleDeadLineCount ?: 2) >= 3
                 setOnDebounceClickListener(300L) {
                     binding.currentPeopleDeadLineCount =
-                        (binding.currentPeopleDeadLineCount ?: 1) - 1
-                    if ((binding.currentPeopleDeadLineCount ?: 1) <= 1) {
+                        (binding.currentPeopleDeadLineCount ?: 2) - 1
+                    if ((binding.currentPeopleDeadLineCount ?: 2) <= 2) {
                         imgWriteFirstGoalPeopleDecrease.background =
                             Color.parseColor("#D9D9D9").toDrawable()
                         imgWriteFirstGoalPeopleDecrease.isEnabled = false
@@ -191,8 +191,8 @@ class WriteFirstFragment : Fragment() {
                 }
                 imgWriteFirstGoalPeopleIncrease.setOnDebounceClickListener(300L) {
                     binding.currentPeopleDeadLineCount =
-                        (binding.currentPeopleDeadLineCount ?: 1) + 1
-                    if ((binding.currentPeopleDeadLineCount ?: 1) >= 2) {
+                        (binding.currentPeopleDeadLineCount ?: 2) + 1
+                    if ((binding.currentPeopleDeadLineCount ?: 2) >= 3) {
                         this.background =
                             ContextCompat.getDrawable(requireContext(), R.color.white_FFFFFF)
                         this.isEnabled = true
@@ -467,7 +467,7 @@ class WriteFirstFragment : Fragment() {
     }
 
     private fun setUserInputInformationDeadLinePeopleCount() {
-        writeViewModel.deadLinePeopleCount = binding.currentPeopleDeadLineCount ?: 1
+        writeViewModel.deadLinePeopleCount = binding.currentPeopleDeadLineCount ?: 2
     }
 
     private fun setUserInputInformationGoalAmount() {
@@ -503,7 +503,7 @@ class WriteFirstFragment : Fragment() {
         with(currentDeadLinePeople) {
             binding.currentPeopleDeadLineCount = this
             binding.imgWriteFirstGoalPeopleDecrease.let { decreaseButton ->
-                if (this > 1) {
+                if (this > 2) {
                     decreaseButton.isEnabled = true
                     decreaseButton.background =
                         ContextCompat.getDrawable(requireContext(), R.color.white_FFFFFF)
