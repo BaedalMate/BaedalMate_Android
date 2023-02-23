@@ -52,7 +52,7 @@ class MyProfileChangeFragment : Fragment() {
     private lateinit var glideRequestManager: RequestManager
     private lateinit var loadingAlertDialog: AlertDialog
 
-    private lateinit var userProfileImageString: String
+    private var userProfileImageString: String?= null
     private lateinit var userProfileImageExtension: String
     private val imageFileTimeFormat = SimpleDateFormat("yyyy-MM-d-HH-mm-ss", Locale.KOREA)
     private var imagePath: String? = null
@@ -125,12 +125,12 @@ class MyProfileChangeFragment : Fragment() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("userProfileImageString")
             ?.observe(viewLifecycleOwner) {
                 userProfileImageString = it
-                if (this::userProfileImageString.isInitialized) {
+                this.userProfileImageString?.let { imageString ->
                     if (userProfileImageString == "resetMyProfileImage") {
                         glideRequestManager.load(R.drawable.ic_person)
                             .centerCrop().into(binding.imgMyProfileChangePhotoThumbnail)
                     } else {
-                        glideRequestManager.load(userProfileImageString.toUri()).centerCrop()
+                        glideRequestManager.load(imageString.toUri()).centerCrop()
                             .into(binding.imgMyProfileChangePhotoThumbnail)
                     }
                 }
@@ -191,11 +191,11 @@ class MyProfileChangeFragment : Fragment() {
     }
 
     private fun getMyProfileImageFile(): File? {
-        return if (userProfileImageString == "resetMyProfileImage") {
+        return if ( userProfileImageString.isNullOrEmpty() || userProfileImageString == "resetMyProfileImage") {
             null
         } else {
             setUploadImagePath(userProfileImageExtension)
-            val originalBitmap = userProfileImageString.toUri().toBitmap()
+            val originalBitmap = userProfileImageString!!.toUri().toBitmap()
             bitmapToFile(originalBitmap, imagePath)
         }
     }

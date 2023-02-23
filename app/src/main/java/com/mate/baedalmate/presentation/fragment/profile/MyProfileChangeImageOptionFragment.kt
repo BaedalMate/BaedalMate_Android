@@ -9,18 +9,22 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.provider.Settings
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.mate.baedalmate.BuildConfig
+import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
@@ -74,24 +78,13 @@ class MyProfileChangeImageOptionFragment : DialogFragment() {
 
     private fun setCameraClickListener() {
         binding.layoutMyProfileChangeOptionSelectCamera.setOnDebounceClickListener {
-            requestOpenCamera.launch(
-                arrayOf(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            )
+            requestOpenCamera.launch(PERMISSIONS_CAMERA)
         }
     }
 
     private fun setGalleryClickListener() {
         binding.layoutMyProfileChangeOptionSelectGallery.setOnDebounceClickListener {
-            requestOpenGallery.launch(
-                arrayOf(
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-            )
+            requestOpenGallery.launch(PERMISSIONS_GALLERY)
         }
     }
 
@@ -103,13 +96,48 @@ class MyProfileChangeImageOptionFragment : DialogFragment() {
 
     private val requestOpenCamera =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach {
-                if (it.value == false) {
-                    return@registerForActivityResult
+            val deniedList: List<String> = permissions.filter { !it.value }.map { it.key }
+
+            when {
+                deniedList.isNotEmpty() -> {
+                    val map = deniedList.groupBy { permission ->
+                        if (shouldShowRequestPermissionRationale(permission)) getString(R.string.permission_fail_second)
+                        else getString(R.string.permission_fail_final)
+                    }
+                    map[getString(R.string.permission_fail_second)]?.let {
+                        // request denied , request again
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.permission_fail_message_camera),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            PERMISSIONS_CAMERA,
+                            1000
+                        )
+                    }
+                    map[getString(R.string.permission_fail_final)]?.let {
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also {
+                            val uri = Uri.parse("package:${requireContext().packageName}")
+                            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            it.data = uri
+                        }
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.permission_fail_final_message_camera),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        //request denied ,send to settings
+                    }
+                }
+                else -> {
+                    //All request are permitted
+                    openCamera()
                 }
             }
-            openCamera()
         }
+
 
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -140,12 +168,46 @@ class MyProfileChangeImageOptionFragment : DialogFragment() {
 
     private val requestOpenGallery =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach {
-                if (it.value == false) {
-                    return@registerForActivityResult
+            val deniedList: List<String> = permissions.filter { !it.value }.map { it.key }
+
+            when {
+                deniedList.isNotEmpty() -> {
+                    val map = deniedList.groupBy { permission ->
+                        if (shouldShowRequestPermissionRationale(permission)) getString(R.string.permission_fail_second)
+                        else getString(R.string.permission_fail_final)
+                    }
+                    map[getString(R.string.permission_fail_second)]?.let {
+                        // request denied , request again
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.permission_fail_message_gallery),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            PERMISSIONS_GALLERY,
+                            1000
+                        )
+                    }
+                    map[getString(R.string.permission_fail_final)]?.let {
+                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).also {
+                            val uri = Uri.parse("package:${requireContext().packageName}")
+                            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            it.data = uri
+                        }
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.permission_fail_final_message_gallery),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        //request denied ,send to settings
+                    }
+                }
+                else -> {
+                    //All request are permitted
+                    openGallery()
                 }
             }
-            openGallery()
         }
 
     private fun openGallery() {
@@ -194,5 +256,32 @@ class MyProfileChangeImageOptionFragment : DialogFragment() {
             fileExtension
         )
         findNavController().popBackStack()
+    }
+
+    companion object {
+        val PERMISSIONS_CAMERA = if (Build.VERSION.SDK_INT >= 33) {
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
+        val PERMISSIONS_GALLERY = if (Build.VERSION.SDK_INT >= 33) {
+            arrayOf(
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            )
+        } else {
+            arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
     }
 }
