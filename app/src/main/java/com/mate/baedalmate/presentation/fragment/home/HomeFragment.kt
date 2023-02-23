@@ -86,8 +86,8 @@ class HomeFragment : Fragment() {
 
     private fun getRecruitListData() {
         recruitViewModel.requestHomeRecruitTagList(sort = "deadlineDate")
-        recruitViewModel.requestHomeRecruitRecentList(sort = "deadlineDate")
-        recruitViewModel.requestHomeRecruitRecommendList(sort = "deadlineDate")
+        recruitViewModel.requestHomeRecruitRecentList(sort = "createDate")
+        recruitViewModel.requestHomeRecruitRecommendList(sort = "score")
     }
 
     private fun observeRequestDataLoadState() {
@@ -109,18 +109,14 @@ class HomeFragment : Fragment() {
 
     private fun initTopUserUI() {
         var userName = "학생"
-        var userDormitory = "누리학사"
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 memberViewModel.userInfo.observe(viewLifecycleOwner) { userInfo ->
                     userName = userInfo.nickname
-                    userDormitory = userInfo.dormitory
 
                     val span = SpannableString(userName)
                     setRoundTextView(span, "rounded", 0, span.length)
                     binding.tvHomeTopTitleUserName.text = span
-                    binding.tvHomeTopTitleLocationCurrent.text =
-                        "${getString(R.string.university_seoultech)} $userDormitory"
                 }
             }
         }

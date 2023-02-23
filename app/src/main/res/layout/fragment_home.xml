@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/main_FB5F1C"
-                    android:paddingBottom="14dp"
+                    android:paddingBottom="13dp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -88,6 +88,7 @@
                         android:id="@+id/layout_home_top_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -128,61 +129,13 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0" />
 
-                        <TextView
-                            android:id="@+id/tv_home_top_title_2"
-                            style="@style/style_large_title_kor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:lineHeight="33.46dp"
-                            android:paddingVertical="2dp"
-                            android:paddingStart="2dp"
-                            android:text="@string/home_top_title_menu"
-                            android:textColor="@color/white_FFFFFF"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_home_top_title_user_name"
-                            app:layout_constraintVertical_bias="0.0" />
-
-                        <TextView
-                            android:id="@+id/tv_home_top_title_location"
-                            style="@style/style_body2_kor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="28dp"
-                            android:lineHeight="24dp"
-                            android:text="@string/home_top_title_location"
-                            android:textColor="@color/white_FFFFFF"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_home_top_title_2"
-                            app:layout_constraintVertical_bias="0.0" />
-
-                        <TextView
-                            android:id="@+id/tv_home_top_title_location_current"
-                            style="@style/style_semi_title_kor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:lineHeight="19.52dp"
-                            android:textColor="@color/gray_light_F9F9F9"
-                            app:layout_constraintBottom_toBottomOf="@id/tv_home_top_title_location"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toEndOf="@id/tv_home_top_title_location"
-                            app:layout_constraintTop_toTopOf="@id/tv_home_top_title_location"
-                            app:layout_constraintVertical_bias="0.0"
-                            tools:text="서울과기대 누리학사" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layout_home_top_posts"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="39dp"
+                        android:layout_marginTop="26dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -390,19 +343,6 @@
                             app:layout_constraintVertical_bias="0.0">
 
                             <RadioButton
-                                android:id="@+id/radiobutton_home_contents_bottom_post_recommend_time"
-                                style="@style/style_body2_kor"
-                                android:layout_width="55dp"
-                                android:layout_height="28dp"
-                                android:layout_marginEnd="8dp"
-                                android:background="@drawable/selector_home_recommend_post_category"
-                                android:button="@null"
-                                android:checked="true"
-                                android:text="@string/home_contents_bottom_post_recommend_category_time"
-                                android:textAlignment="center"
-                                android:textColor="@drawable/selector_home_recommend_post_category_text" />
-
-                            <RadioButton
                                 android:id="@+id/radiobutton_home_contents_bottom_post_recommend_popular"
                                 style="@style/style_body2_kor"
                                 android:layout_width="55dp"
@@ -410,7 +350,20 @@
                                 android:layout_marginEnd="8dp"
                                 android:background="@drawable/selector_home_recommend_post_category"
                                 android:button="@null"
+                                android:checked="true"
                                 android:text="@string/home_contents_bottom_post_recommend_category_popular"
+                                android:textAlignment="center"
+                                android:textColor="@drawable/selector_home_recommend_post_category_text" />
+
+                            <RadioButton
+                                android:id="@+id/radiobutton_home_contents_bottom_post_recommend_time"
+                                style="@style/style_body2_kor"
+                                android:layout_width="55dp"
+                                android:layout_height="28dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/selector_home_recommend_post_category"
+                                android:button="@null"
+                                android:text="@string/home_contents_bottom_post_recommend_category_time"
                                 android:textAlignment="center"
                                 android:textColor="@drawable/selector_home_recommend_post_category_text" />
 
