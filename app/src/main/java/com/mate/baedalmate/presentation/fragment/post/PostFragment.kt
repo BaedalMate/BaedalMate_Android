@@ -54,6 +54,7 @@ class PostFragment : Fragment() {
     private var deliveryFeeList = listOf<ShippingFeeDto>()
     private lateinit var cancelPostAlertDialog: AlertDialog
     private lateinit var closePostAlertDialog: AlertDialog
+    private val decimalFormat = DecimalFormat("#,###")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
