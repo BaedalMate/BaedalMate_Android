@@ -375,7 +375,7 @@ class PostFragment : Fragment() {
                 text = getString(R.string.post_participate_in)
                 if (isCurrentUserParticipant) {
                     text = getString(R.string.post_participate_out)
-                    setOnClickListener { recruitViewModel.requestCancelParticipateRecruitPost(postId = args.postId) }
+                    setOnDebounceClickListener { recruitViewModel.requestCancelParticipateRecruitPost(recruitId = args.postId) }
                 } else {
                     text = getString(R.string.post_participate_in)
                     setOnClickListener {
