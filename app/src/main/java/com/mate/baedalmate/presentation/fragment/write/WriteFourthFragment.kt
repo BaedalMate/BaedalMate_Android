@@ -144,7 +144,7 @@ class WriteFourthFragment : Fragment() {
         result = decimalFormat.format(currentMenuAmount.toString().replace(",", "").toDouble())
         binding.tvWriteFourthAmountDetailTotalCurrent.text = "${result}원"
 
-        val currentDeliveryFee = setDeliveryFee(currentMenuAmount) // 배달비 설정
+        val currentDeliveryFee = writeViewModel.deliveryFee // 배달비 설정
         binding.tvWriteFourthAmountDetailDeliveryFeeCurrent.text =
             "+ ${decimalFormat.format(currentDeliveryFee)}원"
 
@@ -153,20 +153,6 @@ class WriteFourthFragment : Fragment() {
         )
         binding.tvWriteFourthAmountDetailTotal.text = "${totalAmount}원"
         initCoupon(totalAmount = currentMenuAmount + currentDeliveryFee)
-    }
-
-    private fun setDeliveryFee(currentMenuAmount: Int): Int {
-        // WriteFirstFragment에서 정한 배달비 구간 별로 배달비 자동 조정 설정
-        var currentDeliveryFee = 0
-        val deliveryFeeRangeList = writeViewModel.deliveryFeeRangeList
-        if (!writeViewModel.isDeliveryFeeFree) {
-            for (feeRange in deliveryFeeRangeList) {
-                if (currentMenuAmount <= feeRange.upperPrice && feeRange.lowerPrice <= currentMenuAmount) {
-                    currentDeliveryFee = feeRange.shippingFee
-                }
-            }
-        }
-        return currentDeliveryFee
     }
 
     private fun initCoupon(totalAmount: Int) {
