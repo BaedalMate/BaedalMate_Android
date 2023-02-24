@@ -152,30 +152,7 @@ class WriteFourthFragment : Fragment() {
             (currentMenuAmount + currentDeliveryFee).toString().replace(",", "").toDouble()
         )
         binding.tvWriteFourthAmountDetailTotal.text = "${totalAmount}원"
-        initCoupon(totalAmount = currentMenuAmount + currentDeliveryFee)
-    }
-
-    private fun initCoupon(totalAmount: Int) {
-        var discountedAmount = totalAmount
-        if (writeViewModel.isCouponUse) {
-            var result = ""
-            val couponAmount = writeViewModel.couponAmount
-            discountedAmount = totalAmount - couponAmount
-            result = decimalFormat.format(couponAmount.toString().replace(",", "").toDouble())
-            binding.tvWriteFourthAmountDetailCouponCurrent.text =
-                "- ${result}원" // 이전 Fragment에서 설정한 쿠폰 사용금액
-        } else {
-            binding.tvWriteFourthAmountDetailCouponCurrent.text = "- 0원"
-        }
-
-        if (discountedAmount <= 0) {
-            binding.tvWriteFourthAmountDetailDiscounted.text = "0원"
-            setTotalAmount(totalAmount = 0)
-        } else {
-            binding.tvWriteFourthAmountDetailDiscounted.text =
-                "${decimalFormat.format(discountedAmount)}원" // 총 금액에서 쿠폰 금액을 뺀 금액, 사실상 최종 결제 금액
-            setTotalAmount(totalAmount = discountedAmount)
-        }
+        setTotalAmount(totalAmount.replace(",", "").toInt())
     }
 
     private fun setTotalAmount(totalAmount: Int) {
