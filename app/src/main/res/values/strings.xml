@@ -199,11 +199,13 @@
     <string name="write_category_actionbar_title">카테고리 선택</string>
 
     <!-- Write First -->
+    <string name="write_first_goal_title">모집 조건 작성하기</string>
     <string name="write_first_goal_people_title">최소 모집 인원</string>
-    <string name="write_first_goal_delivery_title">주문 목표 금액</string>
+    <string name="write_first_goal_delivery_title">최소 주문 금액</string>
+    <string name="write_first_goal_delivery_description">내가 배달 시키려는 금액보다 높게 설정해주세요</string>
     <string name="write_first_goal_delivery_error">주문 목표 금액을 입력해주세요</string>
-    <string name="write_first_goal_time_title">마감 시간</string>
-    <string name="write_first_goal_time_description">모집 시간에 도달하면 모집이 완료됩니다. 현재 시각 이전으로 설정시, 다음 날 해당 시각으로 마감시간이 설정됩니다.</string>
+    <string name="write_first_goal_time_title">마감 시간 설정</string>
+    <string name="write_first_goal_time_description">모집 시간에 도달하면 모집이 종료됩니다. 현재 시각 이전으로 설정시, 다음 날 해당 시각으로 마감시간이 설정됩니다</string>
     <string name="write_first_goal_criterion_title">마감 기준</string>
     <string name="write_first_goal_criterion_description_people">최소 모집인원이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 모집인원이 충족되지 못한경우, 모집이 취소됩니다.</string>
     <string name="write_first_goal_criterion_description_delivery">최소 주문금액이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 주문금액이 충족되지 못한경우, 모집이 취소됩니다.</string>
@@ -211,11 +213,12 @@
     <string name="write_first_goal_criterion_people">모집 인원</string>
     <string name="write_first_goal_criterion_delivery">목표 금액</string>
     <string name="write_first_goal_criterion_time">마감 시간</string>
-    <string name="write_first_delivery_fee_title">배달비 구간 설정</string>
-    <string name="write_first_delivery_fee_description">주문금액 별 배달금액을 설정해주세요</string>
-    <string name="write_first_delivery_fee_range_error">올바른 구간 설정이 아닙니다</string>
-    <string name="write_first_delivery_fee_free">무료배송</string>
-    <string name="write_first_delivery_fee_free_not">무료배송이 아니에요</string>
+    <string name="write_first_delivery_fee_title">예상 배달비</string>
+    <string name="write_first_delivery_fee_description">최소 주문금액이상 주문시, 예상되는 배달비를 작성해주세요</string>
+    <string name="write_first_delivery_fee_error">예상되는 배달비를 입력해주세요</string>
+    <string name="write_first_delivery_fee_free">무료배달</string>
+    <string name="write_first_delivery_fee_free_not">무료배달이 아니에요</string>
+    <string name="write_first_delivery_fee_user_input_title">예상 배달비</string>
     <string name="write_first_delivery_fee_range_add">+ 구간 추가하기</string>
 
     <!-- Write Second -->

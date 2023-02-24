@@ -35,7 +35,7 @@ data class CreateRecruitRequest (
     @SerializedName("platform")
     val platform: DeliveryPlatform,
     @SerializedName("shippingFee")
-    val shippingFee: List<ShippingFeeDto>,
+    val shippingFee: Int,
     @SerializedName("tags")
     val tags: List<TagDto>,
     @SerializedName("title")
@@ -56,7 +56,7 @@ data class UpdateRecruitDto (
     @SerializedName("minPeople")
     val minPeople: Int,
     @SerializedName("shippingFee")
-    val shippingFee: List<ShippingFeeDto>,
+    val shippingFee: Int,
     @SerializedName("coupon")
     val coupon: Int,
     @SerializedName("platform")
