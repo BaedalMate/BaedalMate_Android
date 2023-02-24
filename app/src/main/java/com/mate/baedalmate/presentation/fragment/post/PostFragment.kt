@@ -311,11 +311,7 @@ class PostFragment : Fragment() {
     private fun initContentsPostInfo(recruitDetail: RecruitDetail) {
         binding.tvPostFrontContentsTitle.text = recruitDetail.title
         setDeadlineTime(recruitDetail.deadlineDate)
-        setDeliveryFeeDetail(
-            recruitDetail.shippingFee,
-            recruitDetail.shippingFeeDetail,
-            recruitDetail.coupon
-        )
+        binding.tvPostFrontContentsDeadlineDeliveryFee.text = "${decimalFormat.format(recruitDetail.shippingFee)}원"
         setDeadlinePeopleCount(
             minPeople = recruitDetail.minPeople,
             currentPeople = recruitDetail.currentPeople
