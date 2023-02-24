@@ -69,6 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
+                    android:animateLayoutChanges="true"
                     android:text="@string/write_fourth_menu_title"
                     android:textColor="@color/main_FB5F1C"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -107,6 +108,21 @@
                         app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
+                        android:id="@+id/tv_write_fourth_menu_add_error"
+                        style="@style/style_body2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:text="@string/write_fourth_menu_add_error"
+                        android:textColor="@color/error_FF0000"
+                        app:layout_constraintBottom_toBottomOf="@id/tv_write_fourth_menu_add_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/tv_write_fourth_menu_add_title"
+                        app:layout_constraintTop_toTopOf="@id/tv_write_fourth_menu_add_title"
+                        app:layout_constraintVertical_bias="0.5" />
+
+                    <TextView
                         android:id="@+id/tv_write_fourth_menu_add_description"
                         style="@style/style_body2_kor"
                         android:layout_width="wrap_content"
@@ -125,7 +141,10 @@
                         android:id="@+id/layout_scroll_write_fourth_menu_add"
                         android:layout_width="match_parent"
                         android:layout_height="123dp"
-                        android:overScrollMode="never"
+                        android:animateLayoutChanges="true"
+                        android:scrollbarFadeDuration="0"
+                        android:scrollbarThumbHorizontal="@color/gray_dark_666666"
+                        android:scrollbars="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -142,7 +161,7 @@
                                 android:id="@+id/btn_write_fourth_menu_add"
                                 style="@style/style_semi_title_kor"
                                 android:layout_width="200dp"
-                                android:layout_height="90dp"
+                                android:layout_height="100dp"
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerVertical="true"
                                 android:background="@drawable/background_white_radius_10_stroke_dot"

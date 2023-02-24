@@ -13,6 +13,7 @@
     <string name="amount">금액</string>
     <string name="money_unit_korea">%s원</string>
     <string name="unit_korea">원</string>
+    <string name="unit_korea_with_money">%s원</string>
     <string name="section">구간</string>
     <string name="next_to">다음으로</string>
     <string name="select">선택</string>
@@ -249,15 +250,16 @@
     <!-- Write Fourth -->
     <string name="write_fourth_menu_title">주문할 메뉴 고르기</string>
     <string name="write_fourth_menu_add_title">내가 주문할 메뉴들</string>
-    <string name="write_fourth_menu_add_description">내가 시키고 싶은 메뉴들의 이름과 각 금액을 작성해주세요!</string>
+    <string name="write_fourth_menu_add_description">내가 시킬 메뉴들을 작성해주세요!</string>
+    <string name="write_fourth_menu_add_error">%s원 보다 적게 시켜야 해요</string>
     <string name="write_fourth_menu_add_plus_sign">+ 메뉴 추가하기</string>
-    <string name="write_fourth_menu_add">주문할 메뉴 추가하기</string>
     <string name="write_fourth_amount_title">주문 예정 금액</string>
     <string name="write_fourth_amount_detail_title">현재 주문예정 금액</string>
     <string name="write_fourth_amount_detail_total_title">총 주문 금액</string>
     <string name="write_fourth_amount_detail_coupon_title">쿠폰 사용금액</string>
     <string name="write_fourth_amount_total_title">결제 예정 금액</string>
-    <string name="write_fourth_add_menu_description">추가할 메뉴와, 해당 메뉴의 금액, 갯수를 하단에 적어주세요</string>
+    <string name="write_fourth_add_menu_title">주문할 메뉴 추가하기</string>
+    <string name="write_fourth_add_menu_description">내가 시키고 싶은 메뉴들의 이름과 각 금액을 작성해주세요!</string>
     <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴 이름을 적어주세요</string>
     <string name="write_fourth_post_upload">모집글 올리기</string>
 
