@@ -232,15 +232,17 @@
     <string name="write_second_place_result_title">장소결과</string>
 
     <!-- Write Third -->
-    <string name="write_third_title">주문글 쓰기</string>
+    <string name="write_third_title">모집글 작성하기</string>
+    <string name="write_third_subject_length_limit">/20</string>
     <string name="write_third_subject_error">제목을 적어주세요</string>
     <string name="write_third_subject_input_hint">제목을 적어주세요</string>
+    <string name="write_third_description_length_limit">/200</string>
     <string name="write_third_description_title">모집글 설명</string>
     <string name="write_third_description_error">설명을 적어주세요</string>
-    <string name="write_third_description_input_hint">모집글을 적어주세요</string>
+    <string name="write_third_description_input_hint">모집글 상세 내용을 적어주세요</string>
     <string name="write_third_tag_title">태그쓰기</string>
-    <string name="write_third_tag_input_hint">#태그를 입력해주세요</string>
-    <string name="write_third_tag_add">태그입력</string>
+    <string name="write_third_tag_input_hint">태그를 입력해주세요</string>
+    <string name="write_third_tag_add">태그추가</string>
     <string name="write_third_tag_add_error_count_limit">태그는 %d개 까지 등록 가능합니다.</string>
     <string name="write_third_tag_add_error_length_limit">태그는 %d자 까지 입력 가능합니다.</string>
 
