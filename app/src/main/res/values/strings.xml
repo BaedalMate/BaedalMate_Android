@@ -204,7 +204,7 @@
     <string name="write_first_goal_people_title">최소 모집 인원</string>
     <string name="write_first_goal_delivery_title">최소 주문 금액</string>
     <string name="write_first_goal_delivery_description">내가 배달 시키려는 금액보다 높게 설정해주세요</string>
-    <string name="write_first_goal_delivery_error">주문 목표 금액을 입력해주세요</string>
+    <string name="write_first_goal_delivery_error">최소 주문 금액을 입력해주세요</string>
     <string name="write_first_goal_time_title">마감 시간 설정</string>
     <string name="write_first_goal_time_description">모집 시간에 도달하면 모집이 종료됩니다. 현재 시각 이전으로 설정시, 다음 날 해당 시각으로 마감시간이 설정됩니다</string>
     <string name="write_first_goal_criterion_title">마감 기준</string>

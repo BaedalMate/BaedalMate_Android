@@ -133,7 +133,7 @@ class WriteFirstFragment : Fragment() {
 
     private fun initDeadLinePeople() {
         with(binding) {
-            currentPeopleDeadLineCount = 2
+            currentPeopleDeadLineCount = MIN_PEOPLE_COUNT
             setDeadLinePeopleCountClickListener()
         }
     }
@@ -141,11 +141,11 @@ class WriteFirstFragment : Fragment() {
     private fun setDeadLinePeopleCountClickListener() {
         with(binding) {
             with(imgWriteFirstGoalPeopleDecrease) {
-                isEnabled = (binding.currentPeopleDeadLineCount ?: 2) >= 3
+                isEnabled = (binding.currentPeopleDeadLineCount ?: MIN_PEOPLE_COUNT) >= 3
                 setOnDebounceClickListener(300L) {
                     binding.currentPeopleDeadLineCount =
-                        (binding.currentPeopleDeadLineCount ?: 2) - 1
-                    if ((binding.currentPeopleDeadLineCount ?: 2) <= 2) {
+                        (binding.currentPeopleDeadLineCount ?: MIN_PEOPLE_COUNT) - 1
+                    if ((binding.currentPeopleDeadLineCount ?: MIN_PEOPLE_COUNT) <= MIN_PEOPLE_COUNT) {
                         imgWriteFirstGoalPeopleDecrease.background =
                             Color.parseColor("#D9D9D9").toDrawable()
                         imgWriteFirstGoalPeopleDecrease.isEnabled = false
@@ -153,8 +153,8 @@ class WriteFirstFragment : Fragment() {
                 }
                 imgWriteFirstGoalPeopleIncrease.setOnDebounceClickListener(300L) {
                     binding.currentPeopleDeadLineCount =
-                        (binding.currentPeopleDeadLineCount ?: 2) + 1
-                    if ((binding.currentPeopleDeadLineCount ?: 2) >= 3) {
+                        (binding.currentPeopleDeadLineCount ?: MIN_PEOPLE_COUNT) + 1
+                    if ((binding.currentPeopleDeadLineCount ?: MIN_PEOPLE_COUNT) >= 3) {
                         this.background =
                             ContextCompat.getDrawable(requireContext(), R.color.white_FFFFFF)
                         this.isEnabled = true
@@ -177,26 +177,24 @@ class WriteFirstFragment : Fragment() {
                 override fun beforeTextChanged(
                     charSequence: CharSequence?, i1: Int, i2: Int, i3: Int
                 ) {
+                    if (charSequence != null) checkDeliveryGoalAmountIsEmpty(charSequence)
                 }
 
                 override fun onTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {
+                    if (charSequence != null) checkDeliveryGoalAmountIsEmpty(charSequence)
                 }
 
                 override fun afterTextChanged(s: Editable?) {
                     s?.let { currentText ->
                         with(currentText.toString()) {
-                            setDeliveryGoalAmountIsEmpty(isError = (this.isEmpty()))
-
+                            checkDeliveryGoalAmountIsEmpty(s)
                             if (!TextUtils.isEmpty(this) && this != currentEditTextInput) {
                                 currentEditTextInput =
                                     decimalFormat.format(s.toString().replace(",", "").toDouble())
                                 setText(currentEditTextInput)
                                 setSelection(currentEditTextInput.length)
 
-                                setDeliveryGoalAmountIsEmpty(
-                                    isError =
-                                    currentEditTextInput.replace(",", "").toInt() <= 0
-                                )
+                                checkDeliveryGoalAmountIsEmpty(s)
                             }
                         }
                     }
@@ -205,20 +203,22 @@ class WriteFirstFragment : Fragment() {
         }
     }
 
-    private fun setDeliveryGoalAmountIsEmpty(isError: Boolean) {
+    private fun checkDeliveryGoalAmountIsEmpty(currentString: CharSequence) {
         with(binding) {
-            if (isError) {
+            if (currentString.isNullOrEmpty() || currentString.toString().replace(",", "").toInt() <= 0) {
                 tvWriteFirstGoalDeliveryError.visibility = View.VISIBLE
                 viewWriteFristGoalDeliveryUserInputBackground.background =
                     ContextCompat.getDrawable(
-                        requireContext(), R.drawable.background_white_radius_10_stroke_red
+                        requireContext(),
+                        R.drawable.background_white_radius_10_stroke_red
                     )
                 chkDeadLineAmount.postValue(false)
             } else {
                 tvWriteFirstGoalDeliveryError.visibility = View.INVISIBLE
                 viewWriteFristGoalDeliveryUserInputBackground.background =
                     ContextCompat.getDrawable(
-                        requireContext(), R.drawable.background_white_radius_10
+                        requireContext(),
+                        R.drawable.background_white_radius_10
                     )
                 chkDeadLineAmount.postValue(true)
             }
@@ -358,7 +358,7 @@ class WriteFirstFragment : Fragment() {
     }
 
     private fun checkDeliveryFeeIsNotEmpty(currentString: CharSequence) {
-        if (currentString.isNullOrEmpty()) {
+        if (currentString.isNullOrEmpty() || currentString.toString().replace(",", "").toInt() <= 0) {
             chkDeliveryFee.postValue(false)
             binding.viewWriteFirstDeliveryFeeUserInputBackground.background =
                 ContextCompat.getDrawable(
@@ -414,7 +414,7 @@ class WriteFirstFragment : Fragment() {
     }
 
     private fun setUserInputInformationDeadLinePeopleCount() {
-        writeViewModel.deadLinePeopleCount = binding.currentPeopleDeadLineCount ?: 2
+        writeViewModel.deadLinePeopleCount = binding.currentPeopleDeadLineCount ?: MIN_PEOPLE_COUNT
     }
 
     private fun setUserInputInformationGoalAmount() {
@@ -452,7 +452,7 @@ class WriteFirstFragment : Fragment() {
         with(currentDeadLinePeople) {
             binding.currentPeopleDeadLineCount = this
             binding.imgWriteFirstGoalPeopleDecrease.let { decreaseButton ->
-                if (this > 2) {
+                if (this > MIN_PEOPLE_COUNT) {
                     decreaseButton.isEnabled = true
                     decreaseButton.background =
                         ContextCompat.getDrawable(requireContext(), R.color.white_FFFFFF)
@@ -507,5 +507,9 @@ class WriteFirstFragment : Fragment() {
                 etWriteFirstDeliveryFeeUserInput.setText(decimalFormat.format(newDeliveryFee))
             }
         }
+    }
+
+    companion object {
+        const val MIN_PEOPLE_COUNT = 2
     }
 }
