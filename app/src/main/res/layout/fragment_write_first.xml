@@ -279,21 +279,21 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:gravity="end"
+                            android:hint="100,000"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLength="9"
                             android:maxLines="1"
                             android:paddingVertical="13dp"
                             android:paddingStart="15dp"
-                            android:text="0"
                             android:textColor="@color/black_000000"
+                            android:textColorHint="@color/gray_main_C4C4C4"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/tv_write_first_goal_delivery_user_input_unit"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@id/view_write_frist_goal_delivery_user_input_background"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0"
-                            tools:text="10,000" />
+                            app:layout_constraintVertical_bias="0.0" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -684,20 +684,20 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:gravity="end"
+                            android:hint="2,500"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLength="9"
                             android:maxLines="1"
                             android:paddingVertical="13dp"
                             android:paddingStart="15dp"
-                            android:text="0"
                             android:textColor="@color/black_000000"
+                            android:textColorHint="@color/gray_main_C4C4C4"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/tv_write_first_delivery_fee_user_input_unit"
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toStartOf="@id/view_write_first_delivery_fee_user_input_background"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="10,000" />
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
