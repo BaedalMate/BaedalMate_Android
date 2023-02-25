@@ -19,6 +19,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.mate.baedalmate.R
+import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentWriteFirstBinding
@@ -70,6 +71,7 @@ class WriteFirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        HideKeyBoardUtil.hideTouchDisplay(requireActivity(), binding.scrollviewWriteFirst)
         setBackClickListener()
         initUserInputForms()
         initDetailForModify()
