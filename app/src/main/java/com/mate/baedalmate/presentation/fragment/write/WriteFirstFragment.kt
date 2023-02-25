@@ -76,6 +76,13 @@ class WriteFirstFragment : Fragment() {
         setNextClickListener()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // 최초 작성시 WriteSecond로 넘어간뒤 다시 돌아왔을 때 초기 배달비 구간관련 chk 변수들이 false로 되어있어 다음으로 버튼이 갱신되지 않는 문제를 다시 체크하도록 처리하여 해결
+        refreshOriginDeliveryFeeCorrect()
+    }
+
     private fun setBackClickListener() {
         binding.btnWriteFirstActionbarBack.setOnDebounceClickListener {
             findNavController().navigateUp()
@@ -176,9 +183,7 @@ class WriteFirstFragment : Fragment() {
             this.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     charSequence: CharSequence?, i1: Int, i2: Int, i3: Int
-                ) {
-                    if (charSequence != null) checkDeliveryGoalAmountIsEmpty(charSequence)
-                }
+                ) {}
 
                 override fun onTextChanged(charSequence: CharSequence?, i1: Int, i2: Int, i3: Int) {
                     if (charSequence != null) checkDeliveryGoalAmountIsEmpty(charSequence)
@@ -205,7 +210,9 @@ class WriteFirstFragment : Fragment() {
 
     private fun checkDeliveryGoalAmountIsEmpty(currentString: CharSequence) {
         with(binding) {
-            if (currentString.isNullOrEmpty() || currentString.toString().replace(",", "").toInt() <= 0) {
+            if (currentString.isNullOrEmpty() || currentString.toString().replace(",", "")
+                    .toInt() <= 0
+            ) {
                 tvWriteFirstGoalDeliveryError.visibility = View.VISIBLE
                 viewWriteFristGoalDeliveryUserInputBackground.background =
                     ContextCompat.getDrawable(
@@ -299,23 +306,18 @@ class WriteFirstFragment : Fragment() {
 
     private fun initDeliveryFee() {
         validateDeliveryFeeInputForm()
-        refreshOriginDeliveryFeeCorrect()
+        observeDeliveryFeeIsFree()
         setDeliveryFeeFocusListener()
         setDeliveryFeeSoftKeyboardDoneClickListener()
-
-        // 최초 작성시 WriteSecond로 넘어간뒤 다시 돌아왔을 때 초기 배달비 구간관련 chk 변수들이 false로 되어있어 다음으로 버튼이 갱신되지 않는 문제를 다시 체크하도록 처리하여 해결
     }
 
     private fun validateDeliveryFeeInputForm() {
         var currentEditTextInput = ""
-        checkDeliveryFeeIsFree()
         binding.etWriteFirstDeliveryFeeUserInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (s != null) checkDeliveryFeeIsNotEmpty(s)
-            }
+            override fun beforeTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (s != null) checkDeliveryFeeIsNotEmpty(s)
+                checkDeliveryFeeError(false)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -331,7 +333,7 @@ class WriteFirstFragment : Fragment() {
                                 currentEditTextInput.length
                             )
 
-                            checkDeliveryFeeIsNotEmpty(currentEditTextInput)
+                            checkDeliveryFeeError(false)
                         }
                     }
                 }
@@ -339,26 +341,43 @@ class WriteFirstFragment : Fragment() {
         })
     }
 
-    private fun checkDeliveryFeeIsFree() {
+    private fun observeDeliveryFeeIsFree() {
         with(binding) {
             radiogroupWriteFirstDeliveryFee.setOnCheckedChangeListener { group, checkedId ->
                 when (checkedId) {
                     radiobuttonWriteFirstDeliveryFeeFree.id -> {
-                        layoutWriteFirstDeliveryFeeUserInput.visibility = View.GONE
-                        chkDeliveryFee.postValue(true)
-                        tvWriteFirstDeliveryFeeError.visibility = View.INVISIBLE
+                        checkDeliveryFeeError(true)
                     }
                     radiobuttonWriteFirstDeliveryFeeFreeNot.id -> {
-                        layoutWriteFirstDeliveryFeeUserInput.visibility = View.VISIBLE
-                        refreshOriginDeliveryFeeCorrect()
+                        checkDeliveryFeeError(false)
                     }
                 }
             }
         }
     }
 
+    private fun refreshOriginDeliveryFeeCorrect() {
+        checkDeliveryFeeError(writeViewModel.isDeliveryFeeFree)
+    }
+
+    private fun checkDeliveryFeeError(isDeliveryFeeFree: Boolean) {
+        with(binding) {
+            if (isDeliveryFeeFree) {
+                HideKeyBoardUtil.hideEditText(requireContext(), binding.etWriteFirstDeliveryFeeUserInput)
+                layoutWriteFirstDeliveryFeeUserInput.visibility = View.GONE
+                chkDeliveryFee.postValue(true)
+                tvWriteFirstDeliveryFeeError.visibility = View.INVISIBLE
+            } else {
+                layoutWriteFirstDeliveryFeeUserInput.visibility = View.VISIBLE
+                checkDeliveryFeeIsNotEmpty(binding.etWriteFirstDeliveryFeeUserInput.text)
+            }
+        }
+    }
+
     private fun checkDeliveryFeeIsNotEmpty(currentString: CharSequence) {
-        if (currentString.isNullOrEmpty() || currentString.toString().replace(",", "").toInt() <= 0) {
+        if (currentString.isNullOrEmpty() || currentString.toString().replace(",", "")
+                .toInt() <= 0
+        ) {
             chkDeliveryFee.postValue(false)
             binding.viewWriteFirstDeliveryFeeUserInputBackground.background =
                 ContextCompat.getDrawable(
@@ -372,10 +391,6 @@ class WriteFirstFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.background_white_radius_10)
             binding.tvWriteFirstDeliveryFeeError.visibility = View.INVISIBLE
         }
-    }
-
-    private fun refreshOriginDeliveryFeeCorrect() {
-        checkDeliveryFeeIsNotEmpty(binding.etWriteFirstDeliveryFeeUserInput.text)
     }
 
     private fun setDeliveryFeeFocusListener() {
