@@ -59,6 +59,7 @@
             android:id="@+id/scrollview_write_first"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:fillViewport="true"
             android:overScrollMode="never"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="20dp"
-                    android:text="@string/write_goal_title"
+                    android:text="@string/write_first_goal_title"
                     android:textColor="@color/main_FB5F1C"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -163,6 +164,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:animateLayoutChanges="true"
                     android:background="@color/background_F7F8FA"
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="15dp"
@@ -194,25 +196,37 @@
                         android:layout_marginStart="15dp"
                         android:text="@string/write_first_goal_delivery_error"
                         android:textColor="@color/error_FF0000"
-                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="@id/tv_write_first_goal_delivery_title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toEndOf="@id/tv_write_first_goal_delivery_title"
                         app:layout_constraintTop_toTopOf="@id/tv_write_first_goal_delivery_title" />
 
+                    <TextView
+                        android:id="@+id/tv_write_first_goal_delivery_description"
+                        style="@style/style_body2_kor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:text="@string/write_first_goal_delivery_description"
+                        android:textColor="@color/gray_dark_666666"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@id/tv_write_first_goal_delivery_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_first_goal_delivery_title" />
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/layout_write_first_goal_delivery_user_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="15dp"
+                        android:layout_marginTop="14dp"
+                        android:layout_marginBottom="16dp"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv_write_first_goal_delivery_title"
+                        app:layout_constraintTop_toBottomOf="@id/tv_write_first_goal_delivery_description"
                         app:layout_constraintVertical_bias="0.0">
 
                         <TextView
@@ -234,7 +248,7 @@
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_marginStart="30dp"
-                            android:background="@drawable/background_white_radius_10"
+                            android:background="@drawable/background_white_radius_10_stroke_red"
                             android:paddingHorizontal="15dp"
                             android:paddingVertical="13dp"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -265,20 +279,21 @@
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
                             android:gravity="end"
+                            android:hint="100,000"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:maxLength="9"
                             android:maxLines="1"
                             android:paddingVertical="13dp"
                             android:paddingStart="15dp"
-                            android:text="0"
                             android:textColor="@color/black_000000"
+                            android:textColorHint="@color/gray_main_C4C4C4"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@id/tv_write_first_goal_delivery_user_input_unit"
-                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@id/view_write_frist_goal_delivery_user_input_background"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:text="10,000" />
+                            app:layout_constraintVertical_bias="0.0" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -411,6 +426,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:animateLayoutChanges="true"
                     android:background="@color/background_F7F8FA"
                     android:paddingHorizontal="15dp"
                     android:paddingVertical="15dp"
@@ -440,6 +456,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
+                        android:animateLayoutChanges="true"
                         android:text="@string/write_first_goal_criterion_description_people"
                         android:textColor="@color/gray_dark_666666"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -455,6 +472,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="22dp"
+                        android:animateLayoutChanges="true"
                         android:orientation="horizontal"
                         android:weightSum="3"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -513,7 +531,8 @@
                     android:animateLayoutChanges="true"
                     android:background="@color/background_F7F8FA"
                     android:paddingHorizontal="15dp"
-                    android:paddingVertical="15dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="37dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -535,14 +554,13 @@
                         app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
-                        android:id="@+id/tv_write_first_delivery_fee_range_error"
+                        android:id="@+id/tv_write_first_delivery_fee_error"
                         style="@style/style_body2_kor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-                        android:text="@string/write_first_delivery_fee_range_error"
+                        android:text="@string/write_first_delivery_fee_error"
                         android:textColor="@color/error_FF0000"
-                        android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="@id/tv_write_first_delivery_fee_title"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
@@ -584,7 +602,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:button="@null"
-                            android:checked="true"
                             android:drawableStart="@drawable/selector_radiobutton_circle"
                             android:drawablePadding="7dp"
                             android:minWidth="0dp"
@@ -598,6 +615,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="33dp"
                             android:button="@null"
+                            android:checked="true"
                             android:drawableStart="@drawable/selector_radiobutton_circle"
                             android:drawablePadding="7dp"
                             android:minWidth="0dp"
@@ -605,35 +623,82 @@
                             android:text="@string/write_first_delivery_fee_free_not" />
                     </RadioGroup>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_write_first_delivery_fee_range"
-                        android:layout_width="match_parent"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_write_first_delivery_fee_user_input"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/radiogroup_write_first_delivery_fee"
-                        app:layout_constraintVertical_bias="0.0"
-                        tools:itemCount="5"
-                        tools:listitem="@layout/item_write_first_delivery_fee_range" />
+                        tools:visibility="visible">
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_write_first_delivery_fee_range_add"
-                        style="@style/style_semi_title_kor"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:background="@drawable/background_white_radius_10_stroke_dot"
-                        android:stateListAnimator="@null"
-                        android:text="@string/write_first_delivery_fee_range_add"
-                        android:textColor="@color/gray_dark_666666"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/rv_write_first_delivery_fee_range" />
+                        <TextView
+                            android:id="@+id/tv_write_first_delivery_fee_user_input_title"
+                            style="@style/style_body2_kor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/write_first_delivery_fee_user_input_title"
+                            android:textColor="@color/black_000000"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <View
+                            android:id="@+id/view_write_first_delivery_fee_user_input_background"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="30dp"
+                            android:background="@drawable/background_white_radius_10_stroke_red"
+                            android:paddingHorizontal="15dp"
+                            android:paddingVertical="13dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tv_write_first_delivery_fee_user_input_title"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_write_first_delivery_fee_user_input_unit"
+                            style="@style/style_title2_kor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:paddingVertical="13dp"
+                            android:paddingEnd="15dp"
+                            android:text="@string/unit_korea"
+                            android:textColor="@color/black_000000"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toEndOf="@id/tv_write_first_delivery_fee_user_input_title"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <EditText
+                            android:id="@+id/et_write_first_delivery_fee_user_input"
+                            style="@style/style_title2_kor"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:gravity="end"
+                            android:hint="2,500"
+                            android:imeOptions="actionDone"
+                            android:inputType="number"
+                            android:maxLength="9"
+                            android:maxLines="1"
+                            android:paddingVertical="13dp"
+                            android:paddingStart="15dp"
+                            android:textColor="@color/black_000000"
+                            android:textColorHint="@color/gray_main_C4C4C4"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_write_first_delivery_fee_user_input_unit"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="@id/view_write_first_delivery_fee_user_input_background"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

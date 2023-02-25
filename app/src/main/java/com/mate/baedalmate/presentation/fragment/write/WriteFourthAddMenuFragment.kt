@@ -1,5 +1,7 @@
 package com.mate.baedalmate.presentation.fragment.write
 
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -15,8 +17,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mate.baedalmate.R
+import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
@@ -30,6 +34,7 @@ import java.text.DecimalFormat
 class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
     private var binding by autoCleared<FragmentWriteFourthAddMenuBinding>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
+    private lateinit var bottomSheetDialog: BottomSheetDialog
     private var dishCount = 1
 
     private var chkSubjectIsNotEmpty = MutableLiveData(false)
@@ -51,6 +56,10 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
         return false
     }
 
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return initBottomSheetDialog()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -61,10 +70,28 @@ class WriteFourthAddMenuFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideKeyboardTouchOtherArea(view)
         initMenuNameEditText()
         validateDeadLineDeliveryInputForm()
         setAddMenuClickListener()
         initDishCountListener()
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun hideKeyboardTouchOtherArea(view: View) {
+        view.setOnTouchListener { _, _ ->
+            // TODO Activity로 하면 적용되지 않는 문제가 존재함
+            HideKeyBoardUtil.hideEditText(requireContext(), binding.etWriteFourthAddMenuSubjectInput)
+            HideKeyBoardUtil.hideEditText(requireContext(), binding.etWriteFourthAddMenuAmountInput)
+            false
+        }
+    }
+
+    private fun initBottomSheetDialog(): BottomSheetDialog {
+        bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
+        bottomSheetDialog.setCanceledOnTouchOutside(true)
+        bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        return bottomSheetDialog
     }
 
     private fun initMenuNameEditText() {

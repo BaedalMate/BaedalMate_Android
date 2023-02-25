@@ -34,7 +34,7 @@
                 style="@style/style_title1_kor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/write_fourth_menu_add"
+                android:text="@string/write_fourth_add_menu_title"
                 android:textColor="@color/main_FB5F1C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -228,7 +228,7 @@
                     app:layout_constraintStart_toEndOf="@id/img_write_fourth_dish_count_decrease"
                     app:layout_constraintTop_toTopOf="@id/img_write_fourth_dish_count_increase"
                     app:layout_constraintVertical_bias="0.5"
-                    tools:text="1인" />
+                    tools:text="1개" />
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/img_write_fourth_dish_count_decrease"

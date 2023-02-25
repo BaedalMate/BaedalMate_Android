@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.RoundDialogFragment
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.data.datasource.remote.write.Place
 import com.mate.baedalmate.databinding.FragmentWriteSecondPlaceDialogBinding
+import com.mate.baedalmate.domain.model.FoodCategory
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondPlaceDialogListAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,15 +46,24 @@ class WriteSecondPlaceDialogFragment : RoundDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        writeViewModel.searchPlaceKeyword(keyword = "음식점") // 기본적으로 Dialog가 띄워지면 주변 음식점을 검색하도록 설정
+        initialGetSearchResult()
         setBackClickListener()
         setSearchResultList()
         editTextSearchClickListener()
         setSelectStoreClickListener()
     }
 
+    private fun initialGetSearchResult() {
+        val categoryIds = FoodCategory.values().associateBy { it.categoryId }
+        showLoadingView()
+        writeViewModel.searchPlaceKeyword(
+            keyword = categoryIds[writeViewModel.categoryId]?.categoryName ?: "음식점"
+        )
+        // 기본적으로 Dialog가 띄워지면 주변 음식점을 검색하도록 설정
+    }
+
     private fun setBackClickListener() {
-        binding.btnWriteSecondPlaceClose.setOnClickListener {
+        binding.btnWriteSecondPlaceClose.setOnDebounceClickListener {
             findNavController().navigateUp()
         }
     }
@@ -61,6 +73,7 @@ class WriteSecondPlaceDialogFragment : RoundDialogFragment() {
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
                     if (binding.etWriteSecondPlaceUserInput.text.toString().trim().isNotEmpty()) {
+                        showLoadingView()
                         writeViewModel.searchPlaceKeyword(
                             keyword = binding.etWriteSecondPlaceUserInput.text.toString().trim()
                         )
@@ -79,7 +92,8 @@ class WriteSecondPlaceDialogFragment : RoundDialogFragment() {
 
     private fun setSearchResultList() {
         writeSecondPlaceDialogListAdapter = WriteSecondPlaceDialogListAdapter()
-        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         with(binding.rvWriteSecondPlaceResultList) {
             this.layoutManager = layoutManager
@@ -93,6 +107,9 @@ class WriteSecondPlaceDialogFragment : RoundDialogFragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 writeViewModel.searchResultList.observe(viewLifecycleOwner) { resultList ->
                     resultList.documents?.let { documentList ->
+                        hideLoadingView()
+                        displayEmptyView(documentList.isEmpty())
+                        binding.tvWriteSecondPlaceResultEmpty.isVisible = documentList.isEmpty()
                         writeSecondPlaceDialogListAdapter.submitList(documentList.toMutableList())
                     }
                 }
@@ -116,5 +133,29 @@ class WriteSecondPlaceDialogFragment : RoundDialogFragment() {
                 findNavController().navigateUp()
             }
         })
+    }
+
+
+    private fun showLoadingView() {
+        with(binding) {
+            rvWriteSecondPlaceResultList.visibility = View.GONE
+            tvWriteSecondPlaceResultEmpty.visibility = View.GONE
+            lottieWriteSecondPlaceResultLoading.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideLoadingView() {
+        with(binding) {
+            rvWriteSecondPlaceResultList.visibility = View.VISIBLE
+            tvWriteSecondPlaceResultEmpty.visibility = View.GONE
+            lottieWriteSecondPlaceResultLoading.visibility = View.GONE
+        }
+    }
+
+    private fun displayEmptyView(isResultEmpty: Boolean) {
+        with(binding) {
+            rvWriteSecondPlaceResultList.isVisible = !isResultEmpty
+            tvWriteSecondPlaceResultEmpty.isVisible = isResultEmpty
+        }
     }
 }

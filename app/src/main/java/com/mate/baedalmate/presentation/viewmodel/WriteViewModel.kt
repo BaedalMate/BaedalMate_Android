@@ -13,7 +13,6 @@ import com.mate.baedalmate.domain.model.Dormitory
 import com.mate.baedalmate.domain.model.MenuDto
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
-import com.mate.baedalmate.domain.model.ShippingFeeDto
 import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.data.datasource.remote.write.PlaceMeta
 import com.mate.baedalmate.data.datasource.remote.write.RegionInfo
@@ -42,7 +41,7 @@ class WriteViewModel @Inject constructor(
     var deadLineTime: MutableLiveData<String>? = MutableLiveData(null)
     var deadLineCriterion = RecruitFinishCriteria.NUMBER
     var isDeliveryFeeFree = false
-    var deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
+    var deliveryFee = 0
 
     var deliveryDormitory = Dormitory.NURI
     var deliveryStore = MutableLiveData(PlaceDto("", "", "", 0f, 0f))
@@ -79,7 +78,7 @@ class WriteViewModel @Inject constructor(
         deadLineTime = MutableLiveData(null)
         deadLineCriterion = RecruitFinishCriteria.NUMBER
         isDeliveryFeeFree = false
-        deliveryFeeRangeList = mutableListOf<ShippingFeeDto>()
+        deliveryFee = 0
         deliveryDormitory = Dormitory.NURI
         deliveryStore = MutableLiveData(PlaceDto("", "", "", 0f, 0f))
         isCouponUse = false
@@ -133,7 +132,7 @@ class WriteViewModel @Inject constructor(
                 minPrice = deadLineAmount,
                 place = deliveryStore.value!!,
                 platform = deliveryPlatform,
-                shippingFee = deliveryFeeRangeList,
+                shippingFee = deliveryFee,
                 tags = postTagList,
                 title = postTitle
             )
@@ -173,7 +172,7 @@ class WriteViewModel @Inject constructor(
                 minPrice = deadLineAmount,
                 place = deliveryStore.value!!,
                 platform = deliveryPlatform,
-                shippingFee = deliveryFeeRangeList,
+                shippingFee = deliveryFee,
                 tags = postTagList,
                 title = postTitle
             )

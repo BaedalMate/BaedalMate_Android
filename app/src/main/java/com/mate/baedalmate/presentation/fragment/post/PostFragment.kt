@@ -54,6 +54,7 @@ class PostFragment : Fragment() {
     private var deliveryFeeList = listOf<ShippingFeeDto>()
     private lateinit var cancelPostAlertDialog: AlertDialog
     private lateinit var closePostAlertDialog: AlertDialog
+    private val decimalFormat = DecimalFormat("#,###")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -311,11 +312,7 @@ class PostFragment : Fragment() {
     private fun initContentsPostInfo(recruitDetail: RecruitDetail) {
         binding.tvPostFrontContentsTitle.text = recruitDetail.title
         setDeadlineTime(recruitDetail.deadlineDate)
-        setDeliveryFeeDetail(
-            recruitDetail.shippingFee,
-            recruitDetail.shippingFeeDetail,
-            recruitDetail.coupon
-        )
+        binding.tvPostFrontContentsDeadlineDeliveryFee.text = "${decimalFormat.format(recruitDetail.shippingFee)}원"
         setDeadlinePeopleCount(
             minPeople = recruitDetail.minPeople,
             currentPeople = recruitDetail.currentPeople
@@ -375,7 +372,7 @@ class PostFragment : Fragment() {
                 text = getString(R.string.post_participate_in)
                 if (isCurrentUserParticipant) {
                     text = getString(R.string.post_participate_out)
-                    setOnClickListener { recruitViewModel.requestCancelParticipateRecruitPost(postId = args.postId) }
+                    setOnDebounceClickListener { recruitViewModel.requestCancelParticipateRecruitPost(recruitId = args.postId) }
                 } else {
                     text = getString(R.string.post_participate_in)
                     setOnClickListener {

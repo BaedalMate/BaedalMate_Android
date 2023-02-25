@@ -3,25 +3,29 @@ package com.mate.baedalmate.presentation.fragment.write
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.size
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.mate.baedalmate.R
+import com.mate.baedalmate.common.HideKeyBoardUtil
+import com.mate.baedalmate.common.KeyboardVisibilityUtils
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
-import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.databinding.FragmentWriteThirdBinding
+import com.mate.baedalmate.domain.model.TagDto
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +34,7 @@ class WriteThirdFragment : Fragment() {
     private var binding by autoCleared<FragmentWriteThirdBinding>()
     private val args by navArgs<WriteThirdFragmentArgs>()
     private val writeViewModel by activityViewModels<WriteViewModel>()
+    private lateinit var keyboardVisibilityUtils: KeyboardVisibilityUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,12 +46,18 @@ class WriteThirdFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        HideKeyBoardUtil.hideTouchDisplay(requireActivity(), binding.scrollviewWriteThird)
         setBackClickListener()
         setNextClickListener()
         initSubjectInput()
         initDescriptionInput()
         initTagList()
         initDetailForModify()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        keyboardVisibilityUtils.detachKeyboardListeners()
     }
 
     private fun setBackClickListener() {
@@ -124,6 +135,7 @@ class WriteThirdFragment : Fragment() {
     }
 
     private fun initDescriptionInput() {
+        setDescriptionScroll()
         binding.etWriteThirdDescriptionInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -157,10 +169,40 @@ class WriteThirdFragment : Fragment() {
         })
     }
 
+    private fun setDescriptionScroll() {
+        binding.etWriteThirdDescriptionInput.setOnTouchListener(OnTouchListener { v, event ->
+            if (v.id == R.id.et_write_third_description_input) {
+                v.parent.requestDisallowInterceptTouchEvent(true)
+                when (event.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_UP -> v.parent.requestDisallowInterceptTouchEvent(false)
+                }
+            }
+            false
+        })
+
+    }
+
     private fun initTagList() {
+        setTagInputClickListener()
         setEditTextChangeListener()
         setAddTagClickListener()
         setEditTextAddTagKeyClickListener()
+    }
+
+    private fun setTagInputClickListener() {
+        keyboardVisibilityUtils = KeyboardVisibilityUtils(requireActivity().window,
+            onShowKeyboard = { keyboardHeight ->
+                if (!(binding.etWriteThirdSubjectInput.isFocused || binding.etWriteThirdDescriptionInput.isFocused)) {
+                    binding.scrollviewWriteThird.run {
+                        smoothScrollBy(
+                            scrollX,
+                            scrollY + keyboardHeight,
+                            200
+                        )
+                    }
+                }
+            }
+        )
     }
 
     private fun setEditTextChangeListener() {

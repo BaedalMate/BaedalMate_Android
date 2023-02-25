@@ -37,7 +37,7 @@ data class RecruitDetail(
     @SerializedName("shippingFee")
     val shippingFee: Int,
     @SerializedName("shippingFeeDetail")
-    val shippingFeeDetail: List<ShippingFeeDto>,
+    val shippingFeeDetail: Int,
     @SerializedName("title")
     val title: String,
     @SerializedName("userInfo")
@@ -67,7 +67,7 @@ data class RecruitDetailForModify(
     @SerializedName("minPeople")
     val minPeople: Int,
     @SerializedName("shippingFee")
-    val shippingFee: List<ShippingFeeDto>,
+    val shippingFee: Int,
     @SerializedName("coupon")
     val coupon: Int,
     @SerializedName("platform")

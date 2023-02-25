@@ -4,16 +4,11 @@ import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
@@ -26,6 +21,8 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.navigateSafe
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentWriteSecondBinding
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.Dormitory
@@ -33,8 +30,6 @@ import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.presentation.adapter.write.WriteSecondDormitorySpinnerAdapter
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.DecimalFormat
-
 
 @AndroidEntryPoint
 class WriteSecondFragment : Fragment() {
@@ -44,20 +39,16 @@ class WriteSecondFragment : Fragment() {
     private lateinit var spinnerAdapter: WriteSecondDormitorySpinnerAdapter
 
     private var chkStoreDescription = MutableLiveData(false)
-    private var chkCoupon = MutableLiveData(true)
     private val onNext: MediatorLiveData<Boolean> = MediatorLiveData()
 
     init {
         onNext.addSource(chkStoreDescription) {
             onNext.value = _onNext()
         }
-        onNext.addSource(chkCoupon) {
-            onNext.value = _onNext()
-        }
     }
 
     private fun _onNext(): Boolean {
-        if ((chkStoreDescription.value == true) and (chkCoupon.value == true)) {
+        if ((chkStoreDescription.value == true)) {
             return true
         }
         return false
@@ -79,8 +70,6 @@ class WriteSecondFragment : Fragment() {
         initStoreLocation()
         initPlatform()
         setPlatformClickListener()
-        setCouponInputForm()
-        validateCouponInputForm()
         initDetailForModify()
     }
 
@@ -98,11 +87,11 @@ class WriteSecondFragment : Fragment() {
         binding.btnWriteSecondNext.setOnClickListener {
             val selectedDormitory =
                 when (binding.spinnerWriteSecondUserLocationInputDormitory.selectedItem) {
-                    "누리학사" -> Dormitory.NURI
-                    "성림학사" -> Dormitory.SUNGLIM
-                    "KB학사" -> Dormitory.KB
-                    "불암학사" -> Dormitory.BURAM
-                    "수림학사" -> Dormitory.SULIM
+                    getString(R.string.nuri) -> Dormitory.NURI
+                    getString(R.string.sunglim) -> Dormitory.SUNGLIM
+                    getString(R.string.kb) -> Dormitory.KB
+                    getString(R.string.buram) -> Dormitory.BURAM
+                    getString(R.string.sulim) -> Dormitory.SULIM
                     else -> Dormitory.NURI
                 }
             writeViewModel.deliveryDormitory = selectedDormitory
@@ -116,13 +105,6 @@ class WriteSecondFragment : Fragment() {
                     else -> DeliveryPlatform.ETC
                 }
 
-            if (binding.checkboxWriteSecondCouponUse.isChecked) {
-                writeViewModel.isCouponUse = false
-            } else {
-                writeViewModel.isCouponUse = true
-                writeViewModel.couponAmount =
-                    binding.etWriteSecondCouponUserInput.text.toString().replace(",", "").toInt()
-            }
             findNavController().navigate(
                 WriteSecondFragmentDirections.actionWriteSecondFragmentToWriteThirdFragment(
                     args.recruitDetailForModify
@@ -142,11 +124,8 @@ class WriteSecondFragment : Fragment() {
     }
 
     private fun initStoreLocation() {
-        binding.imgWriteSecondStoreLocationIcon.setOnClickListener {
-            findNavController().navigate(R.id.action_writeSecondFragment_to_writeSecondPlaceDialogFragment)
-        }
-        binding.tvWriteSecondStoreLocation.setOnClickListener {
-            findNavController().navigate(R.id.action_writeSecondFragment_to_writeSecondPlaceDialogFragment)
+        binding.tvWriteSecondStoreLocation.setOnDebounceClickListener {
+            findNavController().navigateSafe(R.id.action_writeSecondFragment_to_writeSecondPlaceDialogFragment)
         }
 
         writeViewModel.deliveryStore.observe(viewLifecycleOwner) { placeDto ->
@@ -196,141 +175,12 @@ class WriteSecondFragment : Fragment() {
         }
     }
 
-    private fun setCouponInputForm() {
-        binding.checkboxWriteSecondCouponUse.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                binding.etWriteSecondCouponUserInput.isEnabled = false
-                binding.viewWriteSecondCouponUserInputBackground.background =
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_white_radius_10_stroke_gray_line
-                    )
-                binding.tvWriteSecondCouponUserInputUnit.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.gray_line_EBEBEB
-                    )
-                )
-                binding.etWriteSecondCouponUserInput.setText("0")
-                binding.etWriteSecondCouponUserInput.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.gray_line_EBEBEB
-                    )
-                )
-                binding.tvWriteSecondCouponInputError.visibility = View.INVISIBLE
-                chkCoupon.postValue(true)
-            } else {
-                binding.etWriteSecondCouponUserInput.isEnabled = true
-                binding.viewWriteSecondCouponUserInputBackground.background =
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.background_white_radius_10
-                    )
-                binding.tvWriteSecondCouponUserInputUnit.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black_000000
-                    )
-                )
-                binding.etWriteSecondCouponUserInput.setText("0")
-                binding.etWriteSecondCouponUserInput.setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black_000000
-                    )
-                )
-                chkCoupon.postValue(false)
-            }
-        }
-    }
-
-    private fun validateCouponInputForm() {
-        with(binding.etWriteSecondCouponUserInput) {
-            this.setText("0")
-            var result = ""
-            val decimalFormat = DecimalFormat("#,###")
-            this.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    charSequence: CharSequence?,
-                    i1: Int,
-                    i2: Int,
-                    i3: Int
-                ) {
-                }
-
-                override fun onTextChanged(
-                    charSequence: CharSequence?,
-                    i1: Int,
-                    i2: Int,
-                    i3: Int
-                ) {
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (!TextUtils.isEmpty(s!!.toString()) && s.toString() != result) {
-                        result = decimalFormat.format(s.toString().replace(",", "").toDouble())
-                        this@with.setText(result)
-                        this@with.setSelection(result.length)
-
-                        if (result.replace(",", "").toInt() > 0) {
-                            binding.tvWriteSecondCouponInputError.visibility = View.INVISIBLE
-                            binding.viewWriteSecondCouponUserInputBackground.background =
-                                ContextCompat.getDrawable(
-                                    requireContext(),
-                                    R.drawable.background_white_radius_10
-                                )
-                            chkCoupon.postValue(true)
-                        } else {
-                            if (!binding.checkboxWriteSecondCouponUse.isChecked) {
-                                binding.tvWriteSecondCouponInputError.visibility = View.VISIBLE
-                                binding.viewWriteSecondCouponUserInputBackground.background =
-                                    ContextCompat.getDrawable(
-                                        requireContext(),
-                                        R.drawable.background_white_radius_10_stroke_red
-                                    )
-                                chkCoupon.postValue(false)
-                            }
-                        }
-                    } else if (s.isEmpty() && !binding.checkboxWriteSecondCouponUse.isChecked) {
-                        binding.tvWriteSecondCouponInputError.visibility = View.VISIBLE
-                        binding.viewWriteSecondCouponUserInputBackground.background =
-                            ContextCompat.getDrawable(
-                                requireContext(),
-                                R.drawable.background_white_radius_10_stroke_red
-                            )
-                        chkCoupon.postValue(false)
-                    }
-                }
-            })
-
-            this@with.setOnFocusChangeListener { v, hasFocus ->
-                if (hasFocus && this@with.text.toString() == "0") {
-                    this@with.setText("")
-                }
-            }
-
-            this@with.setOnEditorActionListener { _, actionId, _ ->
-                when (actionId) {
-                    EditorInfo.IME_ACTION_DONE -> {
-                        if (this@with.text.isEmpty())
-                            this@with.setText("0")
-                        this@with.clearFocus()
-                        false
-                    }
-                    else -> false
-                }
-            }
-        }
-    }
-
     private fun initDetailForModify() {
         args.recruitDetailForModify?.let { originDetail ->
             with(originDetail) {
                 initDetailForModifyDormitory(dormitory)
                 initDetailForModifyStore(place)
                 initDetailForModifyPlatform(platform)
-                initDetailForModifyCoupon(coupon)
             }
         }
     }
@@ -338,12 +188,12 @@ class WriteSecondFragment : Fragment() {
     private fun initDetailForModifyDormitory(dormitory: String) {
         val originDormitory =
             when (dormitory) {
-                Dormitory.NURI.name -> "누리학사"
-                Dormitory.SUNGLIM.name -> "성림학사"
-                Dormitory.KB.name -> "KB학사"
-                Dormitory.BURAM.name -> "불암학사"
-                Dormitory.SULIM.name -> "수림학사"
-                else -> "누리학사"
+                Dormitory.NURI.name -> getString(R.string.nuri)
+                Dormitory.SUNGLIM.name -> getString(R.string.sunglim)
+                Dormitory.KB.name -> getString(R.string.kb)
+                Dormitory.BURAM.name -> getString(R.string.buram)
+                Dormitory.SULIM.name -> getString(R.string.sulim)
+                else -> getString(R.string.nuri)
             }
 
         binding.spinnerWriteSecondUserLocationInputDormitory.setSelection(
@@ -362,13 +212,6 @@ class WriteSecondFragment : Fragment() {
             DeliveryPlatform.COUPANG -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_coupang)
             DeliveryPlatform.DDGNGYO -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_ddangyo)
             DeliveryPlatform.ETC -> binding.radiogroupWriteSecondPlatformList.check(R.id.radiobutton_write_second_platform_etc)
-        }
-    }
-
-    private fun initDetailForModifyCoupon(couponPrice: Int) {
-        binding.checkboxWriteSecondCouponUse.isChecked = couponPrice == 0
-        if (couponPrice != 0) {
-            binding.etWriteSecondCouponUserInput.setText("$couponPrice")
         }
     }
 

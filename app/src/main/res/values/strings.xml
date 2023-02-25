@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">배달메이트</string>
     <string name="currency_unit_kor">원</string>
-    <string name="delivery_fee">배달팁</string>
+    <string name="delivery_fee">배달비</string>
     <string name="delivery_min">목표금액</string>
     <string name="write">글 작성하러 가기</string>
     <string name="home">홈</string>
@@ -13,6 +13,7 @@
     <string name="amount">금액</string>
     <string name="money_unit_korea">%s원</string>
     <string name="unit_korea">원</string>
+    <string name="unit_korea_with_money">%s원</string>
     <string name="section">구간</string>
     <string name="next_to">다음으로</string>
     <string name="select">선택</string>
@@ -193,17 +194,20 @@
     <string name="write_actionbar_title">상세 설정</string>
     <string name="write_goal_title">주문조건</string>
     <string name="write_upload_fail_toast_message">글 작성을 다시 시도해주세요</string>
+    <string name="write_upload_fail_toast_message_menu_amount">목표 금액 $s원 보다 결제 예정금액이 작아야 합니다</string>
     <string name="write_modify_fail_toast_message">글이 정상적으로 수정되지 않았습니다.</string>
 
     <!-- Write Category -->
     <string name="write_category_actionbar_title">카테고리 선택</string>
 
     <!-- Write First -->
+    <string name="write_first_goal_title">모집 조건 작성하기</string>
     <string name="write_first_goal_people_title">최소 모집 인원</string>
-    <string name="write_first_goal_delivery_title">주문 목표 금액</string>
-    <string name="write_first_goal_delivery_error">주문 목표 금액을 입력해주세요</string>
-    <string name="write_first_goal_time_title">마감 시간</string>
-    <string name="write_first_goal_time_description">모집 시간에 도달하면 모집이 완료됩니다. 현재 시각 이전으로 설정시, 다음 날 해당 시각으로 마감시간이 설정됩니다.</string>
+    <string name="write_first_goal_delivery_title">최소 주문 금액</string>
+    <string name="write_first_goal_delivery_description">내가 배달 시키려는 금액보다 높게 설정해주세요</string>
+    <string name="write_first_goal_delivery_error">최소 주문 금액을 입력해주세요</string>
+    <string name="write_first_goal_time_title">마감 시간 설정</string>
+    <string name="write_first_goal_time_description">모집 시간에 도달하면 모집이 종료됩니다. 현재 시각 이전으로 설정시, 다음 날 해당 시각으로 마감시간이 설정됩니다</string>
     <string name="write_first_goal_criterion_title">마감 기준</string>
     <string name="write_first_goal_criterion_description_people">최소 모집인원이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 모집인원이 충족되지 못한경우, 모집이 취소됩니다.</string>
     <string name="write_first_goal_criterion_description_delivery">최소 주문금액이 마감시간내에 충족된 경우,\n최소주문 금액에 관계없이 자동으로 모집이 종료됩니다.\n\n마감시간 까지 최소 주문금액이 충족되지 못한경우, 모집이 취소됩니다.</string>
@@ -211,50 +215,55 @@
     <string name="write_first_goal_criterion_people">모집 인원</string>
     <string name="write_first_goal_criterion_delivery">목표 금액</string>
     <string name="write_first_goal_criterion_time">마감 시간</string>
-    <string name="write_first_delivery_fee_title">배달비 구간 설정</string>
-    <string name="write_first_delivery_fee_description">주문금액 별 배달금액을 설정해주세요</string>
-    <string name="write_first_delivery_fee_range_error">올바른 구간 설정이 아닙니다</string>
-    <string name="write_first_delivery_fee_free">무료배송</string>
-    <string name="write_first_delivery_fee_free_not">무료배송이 아니에요</string>
+    <string name="write_first_delivery_fee_title">예상 배달비</string>
+    <string name="write_first_delivery_fee_description">최소 주문금액이상 주문시, 예상되는 배달비를 작성해주세요</string>
+    <string name="write_first_delivery_fee_error">예상되는 배달비를 입력해주세요</string>
+    <string name="write_first_delivery_fee_free">무료배달</string>
+    <string name="write_first_delivery_fee_free_not">무료배달이 아니에요</string>
+    <string name="write_first_delivery_fee_user_input_title">예상 배달비</string>
     <string name="write_first_delivery_fee_range_add">+ 구간 추가하기</string>
 
     <!-- Write Second -->
-    <string name="write_second_user_location_description">모집 인원에 도달하면 모집이 완료됩니다</string>
-    <string name="write_second_store_location_hint">서울 노원구 공릉로 231 중앙빌딩</string>
-    <string name="write_second_coupon_title">쿠폰 입력</string>
-    <string name="write_second_coupon_input_error">쿠폰 금액을 입력해주세요</string>
-    <string name="write_second_coupon_description">기존 금액에서 주최자의 쿠폰 사용금액만큼 할인된 후 배달비가 나누기 됩니다.</string>
-    <string name="write_second_coupon_use">쿠폰 없음</string>
+    <string name="write_second_title">배달 내용 작성하기</string>
+    <string name="write_second_user_location_title">모이는 곳</string>
+    <string name="write_second_user_location_description">배달 받고 다른 사람들과 만날 건물을 선택해 주세요</string>
+    <string name="write_second_store_location_hint">어디서 시킬까요?</string>
+    <string name="write_second_platform_title">이용할 배달 플랫폼</string>
     <string name="write_second_place_dialog_title">배달 가게 선택</string>
     <string name="write_second_place_user_input_hint">장소명을 입력해주세요</string>
     <string name="write_second_place_result_title">장소결과</string>
-    <string name="input_lesson_price">%1$s</string>
+    <string name="write_second_place_result_empty">검색하신 키워드 관련 음식점이 존재하지 않아요.\n다시 검색해주세요</string>
 
     <!-- Write Third -->
-    <string name="write_third_title">주문글 쓰기</string>
+    <string name="write_third_title">모집글 작성하기</string>
+    <string name="write_third_subject_length_limit">/20</string>
     <string name="write_third_subject_error">제목을 적어주세요</string>
     <string name="write_third_subject_input_hint">제목을 적어주세요</string>
+    <string name="write_third_description_length_limit">/200</string>
     <string name="write_third_description_title">모집글 설명</string>
     <string name="write_third_description_error">설명을 적어주세요</string>
-    <string name="write_third_description_input_hint">모집글을 적어주세요</string>
+    <string name="write_third_description_input_hint">모집글 상세 내용을 적어주세요</string>
     <string name="write_third_tag_title">태그쓰기</string>
-    <string name="write_third_tag_input_hint">#태그를 입력해주세요</string>
-    <string name="write_third_tag_add">태그입력</string>
+    <string name="write_third_tag_input_hint">태그를 입력해주세요</string>
+    <string name="write_third_tag_add">태그추가</string>
     <string name="write_third_tag_add_error_count_limit">태그는 %d개 까지 등록 가능합니다.</string>
     <string name="write_third_tag_add_error_length_limit">태그는 %d자 까지 입력 가능합니다.</string>
 
     <!-- Write Fourth -->
-    <string name="write_fourth_menu_title">메뉴 추가</string>
-    <string name="write_fourth_menu_add_title">배달 메뉴</string>
+    <string name="write_fourth_menu_title">주문할 메뉴 고르기</string>
+    <string name="write_fourth_menu_add_title">내가 주문할 메뉴들</string>
+    <string name="write_fourth_menu_add_description">내가 시킬 메뉴들을 작성해주세요!</string>
+    <string name="write_fourth_menu_add_error">%s원 보다 적게 시켜야 해요</string>
     <string name="write_fourth_menu_add_plus_sign">+ 메뉴 추가하기</string>
-    <string name="write_fourth_menu_add">메뉴 추가하기</string>
-    <string name="write_fourth_amount_title">합산 금액</string>
-    <string name="write_fourth_amount_detail_title">현재 금액</string>
+    <string name="write_fourth_amount_title">주문 예정 금액</string>
+    <string name="write_fourth_amount_detail_title">현재 주문예정 금액</string>
     <string name="write_fourth_amount_detail_total_title">총 주문 금액</string>
     <string name="write_fourth_amount_detail_coupon_title">쿠폰 사용금액</string>
-    <string name="write_fourth_amount_total_title">현재 결제 예정 금액</string>
-    <string name="write_fourth_add_menu_description">추가할 메뉴와, 해당 메뉴의 금액, 갯수를 하단에 적어주세요</string>
-    <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴를 적어주세요</string>
+    <string name="write_fourth_amount_total_title">결제 예정 금액</string>
+    <string name="write_fourth_add_menu_title">주문할 메뉴 추가하기</string>
+    <string name="write_fourth_add_menu_description">내가 시키고 싶은 메뉴들의 이름과 각 금액을 작성해주세요!</string>
+    <string name="write_fourth_add_menu_subject_input_hint">추가할 메뉴 이름을 적어주세요</string>
+    <string name="write_fourth_post_upload">모집글 올리기</string>
 
     <!-- Chat List -->
     <string name="chat_list_actionbar_title">채팅방 리스트</string>
