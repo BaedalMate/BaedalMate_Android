@@ -27,7 +27,7 @@ object HideKeyBoardUtil {
             val inputMethodManager: InputMethodManager =
                 activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(activity.currentFocus?.windowToken, 0)
-            true
+            false
         }
     }
 }
