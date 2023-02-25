@@ -21,6 +21,7 @@ import androidx.navigation.fragment.navArgs
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.navigateSafe
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentWriteFirstBinding
 import com.mate.baedalmate.domain.model.RecruitFinishCriteria
@@ -131,7 +132,7 @@ class WriteFirstFragment : Fragment() {
 
             setOnDebounceClickListener {
                 setUserInputInformation()
-                findNavController().navigate(
+                findNavController().navigateSafe(
                     WriteFirstFragmentDirections.actionWriteFirstFragmentToWriteSecondFragment(
                         recruitDetailForModify = args.recruitDetailForModify
                     )
@@ -265,13 +266,13 @@ class WriteFirstFragment : Fragment() {
     private fun setGoalTimeInput() {
         with(binding) {
             etWriteFirstGoalTimePickerHour.setOnDebounceClickListener {
-                findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+                findNavController().navigateSafe(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
             }
             etWriteFirstGoalTimePickerMinute.setOnDebounceClickListener {
-                findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+                findNavController().navigateSafe(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
             }
             layoutWriteFirstGoalTimePicker.setOnDebounceClickListener {
-                findNavController().navigate(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
+                findNavController().navigateSafe(R.id.action_writeFirstFragment_to_writeFirstGoalTimeDialogFragment)
             }
 
             writeViewModel.deadLineTime?.observe(viewLifecycleOwner) { time ->
