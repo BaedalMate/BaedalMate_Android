@@ -231,6 +231,7 @@
     <string name="write_second_place_dialog_title">배달 가게 선택</string>
     <string name="write_second_place_user_input_hint">장소명을 입력해주세요</string>
     <string name="write_second_place_result_title">장소결과</string>
+    <string name="write_second_place_result_empty">검색하신 키워드 관련 음식점이 존재하지 않아요.\n다시 검색해주세요</string>
 
     <!-- Write Third -->
     <string name="write_third_title">모집글 작성하기</string>

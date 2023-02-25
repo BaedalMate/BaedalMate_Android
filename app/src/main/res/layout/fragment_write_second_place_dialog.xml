@@ -79,14 +79,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="@string/write_second_place_result_title"
-                android:textColor="@color/gray_main_C4C4C4"/>
+                android:textColor="@color/gray_main_C4C4C4" />
 
             <View
                 android:id="@+id/view_write_second_place_result_horizontal_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
-                android:background="@color/gray_line_EBEBEB"/>
+                android:background="@color/gray_line_EBEBEB" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_write_second_place_result_list"
@@ -94,9 +94,37 @@
                 android:layout_height="match_parent"
                 android:minHeight="300dp"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="5"
-                tools:listitem="@layout/item_write_second_place" />
+                tools:listitem="@layout/item_write_second_place"
+                tools:visibility="visible" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_write_second_place_result_loading"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingVertical="10dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_write_second_place_result_horizontal_line"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/lottie_loading_post_list"
+                app:lottie_speed="1"
+                tools:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_write_second_place_result_empty"
+                style="@style/style_semi_title_kor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="20dp"
+                android:text="@string/write_second_place_result_empty"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </layout>
