@@ -323,7 +323,6 @@ class WriteFirstFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 s?.let { currentText ->
                     with(currentText.toString()) {
-                        checkDeliveryFeeIsNotEmpty(currentText)
                         if (!TextUtils.isEmpty(this) && this != currentEditTextInput) {
                             currentEditTextInput = decimalFormat.format(
                                 currentText.toString().replace(",", "").toDouble()
