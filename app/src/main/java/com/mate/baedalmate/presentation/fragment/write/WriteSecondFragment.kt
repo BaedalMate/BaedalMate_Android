@@ -21,6 +21,8 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.navigateSafe
+import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentWriteSecondBinding
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.Dormitory
@@ -122,8 +124,8 @@ class WriteSecondFragment : Fragment() {
     }
 
     private fun initStoreLocation() {
-        binding.tvWriteSecondStoreLocation.setOnClickListener {
-            findNavController().navigate(R.id.action_writeSecondFragment_to_writeSecondPlaceDialogFragment)
+        binding.tvWriteSecondStoreLocation.setOnDebounceClickListener {
+            findNavController().navigateSafe(R.id.action_writeSecondFragment_to_writeSecondPlaceDialogFragment)
         }
 
         writeViewModel.deliveryStore.observe(viewLifecycleOwner) { placeDto ->
