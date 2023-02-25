@@ -95,12 +95,16 @@ class WriteFourthFragment : Fragment() {
 
         binding.btnWriteFourthNext.setOnDebounceClickListener {
             if (writeViewModel.deadLineAmount <=
-                binding.tvWriteFourthAmountTotal.text.toString().replace(",", "").replace("원", "")
+                binding.tvWriteFourthAmountDetailTotalCurrent.text.toString().replace(",", "")
+                    .replace("원", "")
                     .toInt()
             ) {
                 Toast.makeText(
                     requireContext(),
-                    "목표 금액 ${decimalFormat.format(writeViewModel.deadLineAmount)}원 보다 결제 예정금액이 작아야 합니다",
+                    String.format(
+                        getString(R.string.write_upload_fail_toast_message_menu_amount),
+                        decimalFormat.format(writeViewModel.deadLineAmount)
+                    ),
                     Toast.LENGTH_SHORT
                 )
                     .show()
@@ -173,7 +177,8 @@ class WriteFourthFragment : Fragment() {
         }
 
         result = decimalFormat.format(currentMenuAmount.toString().replace(",", "").toDouble())
-        binding.tvWriteFourthAmountDetailTotalCurrent.text = String.format(getString(R.string.unit_korea_with_money), result)
+        binding.tvWriteFourthAmountDetailTotalCurrent.text =
+            String.format(getString(R.string.unit_korea_with_money), result)
 
         val currentDeliveryFee = writeViewModel.deliveryFee // 배달비 설정
         binding.tvWriteFourthAmountDetailDeliveryFeeCurrent.text =
@@ -204,6 +209,7 @@ class WriteFourthFragment : Fragment() {
             )
             animate().alpha(if (isPassedLimit) 0f else 1f).setDuration(200L)
         }
+
     }
 
     private fun setTotalAmount(totalAmount: Int) {
