@@ -14,6 +14,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
+import com.mate.baedalmate.common.extension.navigateSafe
 import com.mate.baedalmate.databinding.FragmentWriteCategoryBinding
 import com.mate.baedalmate.presentation.viewmodel.WriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,7 +71,7 @@ class WriteCategoryFragment : Fragment() {
             if (childView is ShapeableImageView) {
                 childView.setOnClickListener {
                     writeViewModel.categoryId = (i / 3) + 1
-                    findNavController().navigate(
+                    findNavController().navigateSafe(
                         WriteCategoryFragmentDirections.actionWriteCategoryFragmentToWriteFirstFragment(
                             recruitDetailForModify = args.recruitDetailForModify
                         )

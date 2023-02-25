@@ -23,6 +23,7 @@ import com.mate.baedalmate.common.HideKeyBoardUtil
 import com.mate.baedalmate.common.KeyboardVisibilityUtils
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.navigateSafe
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentWriteThirdBinding
 import com.mate.baedalmate.domain.model.TagDto
@@ -92,7 +93,7 @@ class WriteThirdFragment : Fragment() {
                 else tagList.add(TagDto(tagname = tagText))
             }
             writeViewModel.postTagList = tagList
-            findNavController().navigate(
+            findNavController().navigateSafe(
                 WriteThirdFragmentDirections.actionWriteThirdFragmentToWriteFourthFragment(
                     args.recruitDetailForModify
                 )
