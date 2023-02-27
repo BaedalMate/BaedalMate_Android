@@ -60,7 +60,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/tv_write_third_title"
@@ -215,14 +215,16 @@
                         android:id="@+id/et_write_third_description_input"
                         style="@style/style_body2_kor"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="212dp"
                         android:layout_marginTop="16dp"
                         android:background="@drawable/background_white_radius_10"
                         android:gravity="top"
                         android:hint="@string/write_third_description_input_hint"
-                        android:minHeight="212dp"
                         android:paddingHorizontal="15dp"
                         android:paddingVertical="10dp"
+                        android:scrollbarFadeDuration="0"
+                        android:scrollbarThumbVertical="@color/gray_dark_666666"
+                        android:scrollbars="vertical"
                         android:textColorHint="@color/gray_dark_666666"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -105,7 +105,7 @@ class WriteSecondFragment : Fragment() {
                     else -> DeliveryPlatform.ETC
                 }
 
-            findNavController().navigate(
+            findNavController().navigateSafe(
                 WriteSecondFragmentDirections.actionWriteSecondFragmentToWriteThirdFragment(
                     args.recruitDetailForModify
                 )
