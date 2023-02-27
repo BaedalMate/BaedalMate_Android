@@ -185,8 +185,8 @@
     <string name="post_alert_message_close">해당 모집글이 마감처리 되었습니다</string>
     <string name="post_alert_message_cancel">해당 모집글이 취소처리 되었습니다</string>
     <string name="post_alert_message_cancel_participate">참여 취소되었습니다.</string>
-    <string name="post_menu_add_title">주문메뉴 추가</string>
-    <string name="post_menu_add_description">추가할 메뉴와 금액을 작성하여, 모든 메뉴를 추가한 뒤 모집에 참여하세요</string>
+    <string name="post_menu_add_title">주문할 메뉴 추가하기</string>
+    <string name="post_menu_add_description">내가 시키고 싶은 메뉴들의 이름과 각 금액을 작성하고, 모집에 참여하세요!</string>
     <string name="post_menu_added_title">현재 작성 메뉴</string>
     <string name="post_category_list_empty">현재 \'%s\' 에 대한\n모집글이 없어요</string>
     <string name="post_category_list_load_fail">네트워크 통신이 원활하지 않습니다.</string>
