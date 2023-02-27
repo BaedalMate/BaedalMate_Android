@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -22,9 +23,12 @@ import com.mate.baedalmate.R
 import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.BlockAlertDialog
+import com.mate.baedalmate.common.dialog.ConfirmAlertDialog
+import com.mate.baedalmate.common.extension.navigateSafe
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostOptionBinding
 import com.mate.baedalmate.presentation.viewmodel.BlockViewModel
+import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,8 +36,15 @@ import kotlinx.coroutines.launch
 class PostOptionFragment : DialogFragment() {
     private var binding by autoCleared<FragmentPostOptionBinding>()
     private val args by navArgs<PostOptionFragmentArgs>()
+    private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private val blockViewModel by activityViewModels<BlockViewModel>()
     private lateinit var blockAlertDialog: AlertDialog
+    private lateinit var cancelPostAlertDialog: AlertDialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        createCancelPostAlertDialog()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +57,11 @@ class PostOptionFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        showOptionButtons()
         initBlockDialog()
         setBlockClickListener()
         setReportClickListener()
+        setCancelClickListener()
     }
 
     override fun onResume() {
@@ -58,6 +71,7 @@ class PostOptionFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        ConfirmAlertDialog.hideConfirmDialog(cancelPostAlertDialog)
         BlockAlertDialog.hideBlockDialog(blockAlertDialog)
     }
 
@@ -74,6 +88,18 @@ class PostOptionFragment : DialogFragment() {
         dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
+    private fun createCancelPostAlertDialog() {
+        cancelPostAlertDialog = ConfirmAlertDialog.createChoiceDialog(
+            context = requireContext(),
+            title = getString(R.string.post_cancel_dialog_title),
+            description = getString(R.string.post_cancel_dialog_description),
+            confirmButtonFunction = {
+                recruitViewModel.requestCancelRecruitPost(postId = args.postId)
+                findNavController().navigateUp()
+            }
+        )
+    }
+
     private fun initBlockDialog() {
         blockAlertDialog = BlockAlertDialog.createBlockDialog(
             requireContext(), "${args.postWriterName} 님을 차단하시겠습니까?",
@@ -84,8 +110,20 @@ class PostOptionFragment : DialogFragment() {
         }
     }
 
+    private fun showOptionButtons() {
+        with(binding) {
+            with(layoutPostOptionHostCancel) {
+                isVisible = args.isHost
+                isEnabled = args.isHost
+            }
+            layoutPostOptionParticipant.isVisible = !args.isHost
+            layoutPostOptionParticipantSelectReport.isEnabled = !args.isHost
+            layoutPostOptionParticipantSelectBlock.isEnabled = !args.isHost
+        }
+    }
+
     private fun setBlockClickListener() {
-        binding.layoutPostOptionSelectBlock.setOnDebounceClickListener {
+        binding.layoutPostOptionParticipantSelectBlock.setOnDebounceClickListener {
             BlockAlertDialog.showBlockDialog(blockAlertDialog)
             BlockAlertDialog.resizeDialogFragment(
                 requireContext(),
@@ -96,8 +134,8 @@ class PostOptionFragment : DialogFragment() {
     }
 
     private fun setReportClickListener() {
-        binding.layoutPostOptionSelectReport.setOnDebounceClickListener {
-            findNavController().navigate(
+        binding.layoutPostOptionParticipantSelectReport.setOnDebounceClickListener {
+            findNavController().navigateSafe(
                 PostOptionFragmentDirections.actionPostOptionFragmentToReportPostFragment(
                     postId = args.postId,
                     postWriterUserId = args.postWriterUserId,
@@ -106,6 +144,7 @@ class PostOptionFragment : DialogFragment() {
             )
         }
     }
+
     private fun blockUser() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -147,6 +186,17 @@ class PostOptionFragment : DialogFragment() {
                 ).show()
             }
             findNavController().navigateUp()
+        }
+    }
+
+    private fun setCancelClickListener() {
+        binding.layoutPostOptionHostCancel.setOnDebounceClickListener {
+            ConfirmAlertDialog.showConfirmDialog(cancelPostAlertDialog)
+            ConfirmAlertDialog.resizeDialogFragment(
+                requireContext(),
+                cancelPostAlertDialog,
+                dialogSizeRatio = 0.7f
+            )
         }
     }
 }
