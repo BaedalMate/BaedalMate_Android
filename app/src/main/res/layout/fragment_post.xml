@@ -6,7 +6,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white_FFFFFF">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_post_actionbar"
@@ -117,22 +118,6 @@
                         app:shapeAppearanceOverlay="@style/roundImageView"
                         app:strokeColor="@color/white_FFFFFF"
                         app:strokeWidth="2dp" />
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/img_post_back_store"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:layout_marginTop="-26dp"
-                        android:layout_marginEnd="-26dp"
-                        android:adjustViewBounds="true"
-                        android:background="@color/white_FFFFFF"
-                        android:scaleType="center"
-                        android:src="@drawable/ic_store_map"
-                        app:layout_constraintEnd_toStartOf="@id/img_post_back_delivery_platform"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintTop_toBottomOf="@id/img_post_back_delivery_platform"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:shapeAppearanceOverlay="@style/roundImageView" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -244,9 +229,8 @@
                         app:layout_constraintTop_toBottomOf="@id/layout_post_front_user"
                         app:layout_constraintVertical_bias="0.0">
 
-                        <TextView
-                            android:id="@+id/tv_post_front_contents_title"
-                            style="@style/style_large_title_kor"
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_post_front_contents_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -254,8 +238,47 @@
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0"
-                            tools:text="유기택 피자 중랑구점" />
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <TextView
+                                android:id="@+id/tv_post_front_contents_title"
+                                style="@style/style_large_title_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:singleLine="true"
+                                app:layout_constrainedWidth="true"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/view_post_front_contents_close"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0"
+                                tools:text="유기택 피자 중랑구점" />
+
+                            <TextView
+                                android:id="@+id/view_post_front_contents_close"
+                                style="@style/style_caption1_kor"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/background_white_radius_20_line_main_gray_stroke_1"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                android:paddingHorizontal="7dp"
+                                android:paddingVertical="4dp"
+                                android:stateListAnimator="@null"
+                                android:text="@string/participate_close_2"
+                                android:textColor="@color/gray_main_C4C4C4"
+                                app:layout_constrainedWidth="true"
+                                app:layout_constraintBottom_toBottomOf="@id/tv_post_front_contents_title"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintTop_toTopOf="@id/tv_post_front_contents_title"
+                                app:layout_constraintVertical_bias="0.5"
+                                app:layout_constraintWidth_min="wrap" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/layout_post_front_contents_deadline"
@@ -266,7 +289,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_post_front_contents_title"
+                            app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_title"
                             app:layout_constraintVertical_bias="0.0">
 
                             <View
@@ -340,14 +363,6 @@
                                         android:layout_height="wrap_content"
                                         android:text="@string/post_deadline_delivery_fee_title"
                                         android:textColor="@color/gray_dark_666666" />
-
-                                    <ImageButton
-                                        android:id="@+id/btn_post_front_contents_deadline_delivery_fee_help"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="3dp"
-                                        android:background="@android:color/transparent"
-                                        android:src="@drawable/ic_question_mark_gray_circle" />
                                 </LinearLayout>
 
                                 <TextView
@@ -438,7 +453,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/layout_post_front_contents_detail"
+                            android:id="@+id/layout_post_front_contents_info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -448,70 +463,180 @@
                             app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_deadline"
                             app:layout_constraintVertical_bias="0.0">
 
-                            <TextView
-                                android:id="@+id/tv_post_front_contents_detail_title"
-                                style="@style/style_title2_kor"
-                                android:layout_width="0dp"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_post_front_contents_info_store"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:singleLine="true"
-                                android:text="@string/post_detail_title"
-                                android:textColor="@color/main_FB5F1C"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@id/tv_post_front_contents_detail_modify"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.0" />
+                                app:layout_constraintVertical_bias="0.0">
 
-                            <TextView
-                                android:id="@+id/tv_post_front_contents_detail_modify"
-                                style="@style/style_body2_kor"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/post_modify"
-                                android:textColor="@color/gray_dark_666666"
-                                android:visibility="gone"
-                                app:layout_constraintBottom_toBottomOf="@id/tv_post_front_contents_detail_title"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="1.0"
-                                app:layout_constraintTop_toTopOf="@id/tv_post_front_contents_detail_title"
-                                app:layout_constraintVertical_bias="0.0"
-                                tools:visibility="visible" />
+                                <TextView
+                                    android:id="@+id/tv_post_front_contents_info_store_title"
+                                    style="@style/style_title2_kor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:singleLine="true"
+                                    android:text="@string/post_store_title"
+                                    android:textColor="@color/main_FB5F1C"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@id/tv_post_front_contents_detail_modify"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.0" />
 
-                            <TextView
-                                android:id="@+id/tv_post_front_contents_detail"
-                                style="@style/style_body1_kor"
-                                android:layout_width="wrap_content"
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/btn_post_front_contents_info_store_location"
+                                    style="@style/style_semi_title_kor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="8dp"
+                                    android:background="@drawable/selector_btn_pressed_stroke_line_orange_white_main_radius_20"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:paddingHorizontal="7dp"
+                                    android:paddingVertical="4dp"
+                                    android:stateListAnimator="@null"
+                                    android:text="@string/post_store_location_map"
+                                    android:textColor="@drawable/selector_textview_pressed_line_orange_white"
+                                    app:layout_constraintBottom_toBottomOf="@id/tv_post_front_contents_info_store_title"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toEndOf="@id/tv_post_front_contents_info_store_title"
+                                    app:layout_constraintTop_toTopOf="@id/tv_post_front_contents_info_store_title"
+                                    app:layout_constraintVertical_bias="0.5" />
+
+                                <TextView
+                                    android:id="@+id/tv_post_front_contents_detail_modify"
+                                    style="@style/style_body2_kor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/post_modify"
+                                    android:textColor="@color/gray_dark_666666"
+                                    android:visibility="gone"
+                                    app:layout_constraintBottom_toBottomOf="@id/tv_post_front_contents_info_store_title"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="1.0"
+                                    app:layout_constraintTop_toTopOf="@id/tv_post_front_contents_info_store_title"
+                                    app:layout_constraintVertical_bias="0.0"
+                                    tools:visibility="visible" />
+
+                                <TextView
+                                    android:id="@+id/tv_post_front_contents_info_store_description"
+                                    style="@style/style_body2_kor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="13dp"
+                                    android:singleLine="true"
+                                    android:textColor="@color/gray_dark_666666"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/tv_post_front_contents_info_store_title"
+                                    app:layout_constraintVertical_bias="0.0"
+                                    tools:text="유기택 피자 중랑구점" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_post_front_contents_info_detail"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
-                                android:paddingBottom="30dp"
-                                android:textColor="@color/black_000000"
+                                android:layout_marginTop="20dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/tv_post_front_contents_detail_title"
-                                app:layout_constraintVertical_bias="0.0"
-                                tools:text="글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. " />
+                                app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_info_store"
+                                app:layout_constraintVertical_bias="0.0">
+
+                                <TextView
+                                    android:id="@+id/tv_post_front_contents_info_detail_title"
+                                    style="@style/style_title2_kor"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:singleLine="true"
+                                    android:text="@string/post_detail_title"
+                                    android:textColor="@color/main_FB5F1C"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintVertical_bias="0.0" />
+
+                                <TextView
+                                    android:id="@+id/tv_post_front_contents_info_detail_description"
+                                    style="@style/style_body1_kor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:textColor="@color/black_000000"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.0"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/tv_post_front_contents_info_detail_title"
+                                    app:layout_constraintVertical_bias="0.0"
+                                    tools:text="글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. 글에 대한 내용이 적힐 부분입니다. " />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/layout_post_front_contents_info_tag"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_info_detail"
+                                app:layout_constraintVertical_bias="0.0">
+
+                                <com.google.android.flexbox.FlexboxLayout
+                                    android:id="@+id/layout_post_front_contents_info_tag_list"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="21dp"
+                                    app:alignContent="stretch"
+                                    app:alignItems="stretch"
+                                    app:flexWrap="wrap"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent">
+
+                                    <com.google.android.material.chip.ChipGroup
+                                        android:id="@+id/chipgroup_post_front_contents_info_tag_list"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent" />
+                                </com.google.android.flexbox.FlexboxLayout>
+                            </androidx.constraintlayout.widget.ConstraintLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/layout_post_front_contents_participate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="25dp"
+                            android:layout_marginBottom="29dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_detail"
+                            app:layout_constraintTop_toBottomOf="@id/layout_post_front_contents_info"
                             app:layout_constraintVertical_bias="0.0">
 
                             <androidx.appcompat.widget.AppCompatButton
-                                android:id="@+id/btn_post_front_contents_participate_guest"
+                                android:id="@+id/btn_post_front_contents_participate_one_button"
                                 style="@style/style_button_title_kor"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="62dp"
                                 android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
                                 android:enabled="false"
                                 android:paddingVertical="14.5dp"
@@ -525,7 +650,7 @@
                                 app:layout_constraintVertical_bias="0.0" />
 
                             <LinearLayout
-                                android:id="@+id/layout_post_front_contents_participate_host"
+                                android:id="@+id/layout_post_front_contents_participate_two_button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -535,30 +660,35 @@
                                 app:layout_constraintHorizontal_bias="0.0"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.0">
+                                app:layout_constraintVertical_bias="0.0"
+                                tools:visibility="visible">
 
                                 <androidx.appcompat.widget.AppCompatButton
-                                    android:id="@+id/btn_post_front_contents_participate_host_cancel"
-                                    style="@style/style_title2_kor"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
+                                    android:id="@+id/btn_post_front_contents_participate_two_button_left"
+                                    style="@style/style_button_title_kor"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:background="@drawable/selector_btn_enabled_stroke_orange_line_white_gray_light_radius_10"
                                     android:enabled="false"
+                                    android:paddingVertical="14.5dp"
                                     android:stateListAnimator="@null"
-                                    android:text="@string/post_cancel"
+                                    android:text="채팅방 이동"
                                     android:textColor="@drawable/selector_textview_orange_line_gray_main"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintHorizontal_bias="0.0"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.0" />
+                                    app:layout_constraintVertical_bias="0.0"
+                                    tools:enabled="true" />
 
                                 <androidx.appcompat.widget.AppCompatButton
-                                    android:id="@+id/btn_post_front_contents_participate_host_close"
+                                    android:id="@+id/btn_post_front_contents_participate_two_button_right"
                                     style="@style/style_button_title_kor"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
+                                    android:layout_weight="1"
                                     android:background="@drawable/selector_btn_main_orange_gray_light_radius_10"
                                     android:enabled="false"
                                     android:paddingVertical="14.5dp"
@@ -569,7 +699,8 @@
                                     app:layout_constraintHorizontal_bias="0.0"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent"
-                                    app:layout_constraintVertical_bias="0.0" />
+                                    app:layout_constraintVertical_bias="0.0"
+                                    tools:enabled="true" />
                             </LinearLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -589,7 +720,7 @@
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/lottie_loading_post_list"
                     app:lottie_speed="1"
-                    tools:visibility="gone"/>
+                    tools:visibility="gone" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

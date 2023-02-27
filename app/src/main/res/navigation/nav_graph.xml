@@ -143,6 +143,14 @@
         <action
             android:id="@+id/action_postFragment_to_postOptionFragment"
             app:destination="@+id/PostOptionFragment" />
+
+        <action
+            android:id="@+id/action_postFragment_to_chatFragment"
+            app:destination="@id/ChatFragment"
+            app:enterAnim="@anim/slide_from_right"
+            app:exitAnim="@anim/slide_to_left"
+            app:popEnterAnim="@anim/slide_from_left"
+            app:popExitAnim="@anim/slide_to_right" />
     </fragment>
 
     <dialog
@@ -150,6 +158,10 @@
         android:name="com.mate.baedalmate.presentation.fragment.post.PostOptionFragment"
         android:label="fragment_post_option"
         tools:layout="@layout/fragment_post_option">
+        <argument
+            android:name="isHost"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
             android:name="postId"
             android:defaultValue="0"
