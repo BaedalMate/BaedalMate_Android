@@ -1,7 +1,10 @@
 package com.mate.baedalmate.presentation.fragment.post
 
+import android.animation.LayoutTransition
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -9,17 +12,23 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -80,6 +89,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        hideKeyboardTouchOtherArea(view)
         initAlertDialog()
         initMenuNameEditText()
         validateDeadLineDeliveryInputForm()
@@ -99,7 +109,48 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
         bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogRadius)
         bottomSheetDialog.setCanceledOnTouchOutside(true)
         bottomSheetDialog.behavior.skipCollapsed = true // Dialog가 길어지는 경우 Half_expand되는 경우 방지
+        bottomSheetDialog.behavior.isHideable = false
         return bottomSheetDialog
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun hideKeyboardTouchOtherArea(view: View) {
+        var startClickTime = 0L;
+        with(binding) {
+            rvPostMenuAddedList.setOnTouchListener { view, event ->
+                if (event?.action == MotionEvent.ACTION_DOWN) {
+                    startClickTime = System.currentTimeMillis()
+                } else if (event?.action == MotionEvent.ACTION_UP) {
+                    setHideKeyboard(startClickTime)
+                }
+                false
+            }
+            layoutScrollPostMenuAdded.setOnTouchListener { view, event ->
+                if (event?.action == MotionEvent.ACTION_DOWN) {
+                    startClickTime = System.currentTimeMillis()
+                } else if (event?.action == MotionEvent.ACTION_UP) {
+                    setHideKeyboard(startClickTime)
+                }
+                false
+            }
+            scrollviewPostMenuBottomSheetDialog.setOnTouchListener { _, event ->
+                if (event?.action == MotionEvent.ACTION_DOWN) {
+                    startClickTime = System.currentTimeMillis()
+                } else if (event?.action == MotionEvent.ACTION_UP) {
+                    setHideKeyboard(startClickTime)
+                }
+                false
+            }
+        }
+    }
+
+    private fun setHideKeyboard(startClickTime: Long) {
+        if (System.currentTimeMillis() - startClickTime < ViewConfiguration.getTapTimeout()) {
+            val inputMethodManager: InputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(binding.etPostMenuSubjectInput.windowToken, 0)
+            inputMethodManager.hideSoftInputFromWindow(binding.etPostMenuAmountInput.windowToken, 0)
+        }
     }
 
     private fun initAlertDialog() {
@@ -213,7 +264,7 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
                     }
                 }
 
-                this.setOnDebounceClickListener(300L)  {
+                this.setOnDebounceClickListener(300L) {
                     dishCount--
                     binding.currentDishCount = dishCount
                     if (dishCount <= 1) {
@@ -249,6 +300,9 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun setMenuListOriginalValue() {
         addedMenuList.observe(viewLifecycleOwner) {
+            TransitionManager.beginDelayedTransition(
+                binding.root as ViewGroup,
+                AutoTransition().apply { duration = 150L })
             setMenuListAdapter(menuList = it)
 
             if (!it.isNullOrEmpty()) {
@@ -269,7 +323,10 @@ class PostMenuBottomSheetDialogFragment : BottomSheetDialogFragment() {
     private fun setMenuListAdapter(menuList: MutableList<MenuDto>) {
         writeFourthMenuListAdapter = WriteFourthMenuListAdapter(menuList)
         val layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false).apply {
+                reverseLayout = true
+                stackFromEnd = true
+            }
         with(binding.rvPostMenuAddedList) {
             this.layoutManager = layoutManager
             this.adapter = writeFourthMenuListAdapter

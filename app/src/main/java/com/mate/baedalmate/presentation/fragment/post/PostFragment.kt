@@ -3,9 +3,6 @@ package com.mate.baedalmate.presentation.fragment.post
 import android.app.AlertDialog
 import android.graphics.Typeface
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.UnderlineSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -31,12 +29,12 @@ import com.mate.baedalmate.common.GetDeviceSize
 import com.mate.baedalmate.common.autoCleared
 import com.mate.baedalmate.common.dialog.ConfirmAlertDialog
 import com.mate.baedalmate.common.dp
+import com.mate.baedalmate.common.extension.navigateSafe
 import com.mate.baedalmate.common.extension.setOnDebounceClickListener
 import com.mate.baedalmate.databinding.FragmentPostBinding
 import com.mate.baedalmate.domain.model.DeliveryPlatform
 import com.mate.baedalmate.domain.model.PlaceDto
 import com.mate.baedalmate.domain.model.RecruitDetail
-import com.mate.baedalmate.domain.model.ShippingFeeDto
 import com.mate.baedalmate.presentation.viewmodel.RecruitViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -51,15 +49,14 @@ class PostFragment : Fragment() {
     private val recruitViewModel by activityViewModels<RecruitViewModel>()
     private lateinit var glideRequestManager: RequestManager
     private lateinit var starIndicator: Array<ImageView?>
-    private var deliveryFeeList = listOf<ShippingFeeDto>()
-    private lateinit var cancelPostAlertDialog: AlertDialog
     private lateinit var closePostAlertDialog: AlertDialog
+    private lateinit var cancelParticipatePostAlertDialog: AlertDialog
     private val decimalFormat = DecimalFormat("#,###")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        createCancelPostAlertDialog()
         createClosePostAlertDialog()
+        createCancelParticipatePostAlertDialog()
     }
 
     override fun onCreateView(
@@ -83,17 +80,8 @@ class PostFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        ConfirmAlertDialog.hideConfirmDialog(cancelPostAlertDialog)
         ConfirmAlertDialog.hideConfirmDialog(closePostAlertDialog)
-    }
-
-    private fun createCancelPostAlertDialog() {
-        cancelPostAlertDialog = ConfirmAlertDialog.createChoiceDialog(
-            context = requireContext(),
-            title = getString(R.string.post_cancel_dialog_title),
-            description = getString(R.string.post_cancel_dialog_description),
-            confirmButtonFunction = { recruitViewModel.requestCancelRecruitPost(postId = args.postId) }
-        )
+        ConfirmAlertDialog.hideConfirmDialog(cancelParticipatePostAlertDialog)
     }
 
     private fun createClosePostAlertDialog() {
@@ -105,13 +93,22 @@ class PostFragment : Fragment() {
         )
     }
 
+    private fun createCancelParticipatePostAlertDialog() {
+        cancelParticipatePostAlertDialog = ConfirmAlertDialog.createChoiceDialog(
+            context = requireContext(),
+            title = getString(R.string.post_cancel_participate_dialog_title),
+            description = getString(R.string.post_cancel_participate_dialog_description),
+            confirmButtonFunction = { recruitViewModel.requestCancelParticipateRecruitPost(recruitId = args.postId) }
+        )
+    }
+
     private fun getPostDetailData() {
         showLoadingView()
         recruitViewModel.requestRecruitPost(postId = args.postId)
     }
 
     private fun setBackClickListener() {
-        binding.btnPostActionbarBack.setOnClickListener {
+        binding.btnPostActionbarBack.setOnDebounceClickListener {
             findNavController().navigateUp()
         }
     }
@@ -132,11 +129,20 @@ class PostFragment : Fragment() {
         )
     }
 
-    private fun setStoreIconClickListener(place: PlaceDto) {
-        binding.imgPostBackStore.setOnClickListener {
+    private fun setStoreLocationDetail(place: PlaceDto) {
+        displayStoreLocationName(place.name)
+        setStoreLocationDetailClickListener(place)
+    }
+
+    private fun displayStoreLocationName(placeName: String) {
+        binding.tvPostFrontContentsInfoStoreDescription.text = placeName
+    }
+
+    private fun setStoreLocationDetailClickListener(place: PlaceDto) {
+        binding.btnPostFrontContentsInfoStoreLocation.setOnDebounceClickListener {
             with(place) {
-                findNavController().navigate(
-                    com.mate.baedalmate.presentation.fragment.post.PostFragmentDirections.actionPostFragmentToPostMapFragment(
+                findNavController().navigateSafe(
+                    PostFragmentDirections.actionPostFragmentToPostMapFragment(
                         name = this.name,
                         addressName = this.addressName,
                         roadAddressName = this.roadAddressName,
@@ -200,7 +206,7 @@ class PostFragment : Fragment() {
                     R.font.applesdgothic_neo_bold
                 ), Typeface.NORMAL
             )
-            text = "$userScore"
+            text = String.format(getString(R.string.user_score_format), userScore)
             textSize = 12f
             lineHeight = 18
             layoutParams = paramsTextView
@@ -279,107 +285,157 @@ class PostFragment : Fragment() {
         if (deadlineDate.isNotEmpty()) {
             val deadlineTime = LocalDateTime.parse(deadlineTimeString, formatter)
             binding.tvPostFrontContentsDeadlineTime.text =
-                "${deadlineTime.hour}시 ${deadlineTime.minute}분"
-        }
-    }
-
-    private fun setDeliveryFeeDetail(
-        shippingFee: Int,
-        shippingFeeDetail: List<ShippingFeeDto>,
-        coupon: Int
-    ) {
-        val decimalFormat = DecimalFormat("#,###")
-        binding.tvPostFrontContentsDeadlineDeliveryFee.text =
-            "${decimalFormat.format(shippingFee)}원"
-
-        deliveryFeeList = shippingFeeDetail
-        binding.btnPostFrontContentsDeadlineDeliveryFeeHelp.setOnClickListener {
-            findNavController().navigate(
-                PostFragmentDirections.actionPostFragmentToPostDeliveryFeeHelpFragment(
-                    currentShippingFee = shippingFee,
-                    deliveryFeeList = deliveryFeeList.toTypedArray(),
-                    couponAmount = coupon
+                String.format(
+                    getString(R.string.post_deadline_time_format),
+                    deadlineTime.hour,
+                    deadlineTime.minute
                 )
-            )
         }
     }
 
     private fun setDeadlinePeopleCount(minPeople: Int, currentPeople: Int) {
         binding.tvPostFrontContentsDeadlinePeople.text =
-            "${currentPeople}명 / ${minPeople}명"
+            String.format(
+                getString(R.string.post_deadline_people_format),
+                currentPeople,
+                minPeople
+            )
     }
 
     private fun initContentsPostInfo(recruitDetail: RecruitDetail) {
-        binding.tvPostFrontContentsTitle.text = recruitDetail.title
-        setDeadlineTime(recruitDetail.deadlineDate)
-        binding.tvPostFrontContentsDeadlineDeliveryFee.text = "${decimalFormat.format(recruitDetail.shippingFee)}원"
-        setDeadlinePeopleCount(
-            minPeople = recruitDetail.minPeople,
-            currentPeople = recruitDetail.currentPeople
-        )
-        binding.tvPostFrontContentsDormitory.text = recruitDetail.dormitory
-        binding.tvPostFrontContentsDetail.text = recruitDetail.description
+        with(binding) {
+            initContentsPostInfoTitle(recruitDetail)
+            initContentsPostInfoConditions(recruitDetail)
+            tvPostFrontContentsInfoDetailDescription.text = recruitDetail.description
+        }
+    }
+
+    private fun initContentsPostInfoTitle(recruitDetail: RecruitDetail) {
+        with(binding) {
+            tvPostFrontContentsTitle.text = recruitDetail.title
+            viewPostFrontContentsClose.isVisible = !recruitDetail.active
+        }
+    }
+
+    private fun initContentsPostInfoConditions(recruitDetail: RecruitDetail) {
+        with(binding) {
+            setDeadlineTime(recruitDetail.deadlineDate)
+            tvPostFrontContentsDeadlineDeliveryFee.text =
+                String.format(
+                    getString(R.string.unit_korea_with_money),
+                    decimalFormat.format(recruitDetail.shippingFee)
+                )
+            setDeadlinePeopleCount(
+                minPeople = recruitDetail.minPeople,
+                currentPeople = recruitDetail.currentPeople
+            )
+            binding.tvPostFrontContentsDormitory.text = recruitDetail.dormitory
+        }
     }
 
     private fun setRecruitActionButton(recruitDetail: RecruitDetail) {
-        val isCurrentUserHost = recruitDetail.host
-        val isCurrentUserParticipant = recruitDetail.participate
-
-        if (!recruitDetail.active) { // 주최자,참여자에 관계없이 마감된 모집글인 경우
-            with(binding) {
-                layoutPostFrontContentsParticipateHost.visibility = View.GONE
-                with(btnPostFrontContentsParticipateGuest) {
-                    isEnabled = false
-                    text = getString(R.string.post_not_active)
-                }
-            }
-        } else if (isCurrentUserHost) { // 주최자이면서 진행중인 모집글인 경우
-            with(binding) {
-                layoutPostFrontContentsParticipateHost.visibility = View.VISIBLE
-                btnPostFrontContentsParticipateGuest.isEnabled = false
-
-                with(btnPostFrontContentsParticipateHostCancel) {
-                    isEnabled = true
-                    setOnClickListener {
-                        ConfirmAlertDialog.showConfirmDialog(cancelPostAlertDialog)
-                        ConfirmAlertDialog.resizeDialogFragment(
-                            requireContext(),
-                            cancelPostAlertDialog,
-                            dialogSizeRatio = 0.7f
-                        )
-                    }
-                }
-                with(btnPostFrontContentsParticipateHostClose) {
-                    isEnabled = true
-                    setOnClickListener {
-                        ConfirmAlertDialog.showConfirmDialog(closePostAlertDialog)
-                        ConfirmAlertDialog.resizeDialogFragment(
-                            requireContext(),
-                            closePostAlertDialog,
-                            dialogSizeRatio = 0.7f
-                        )
-                    }
-                }
-            }
-
-        } else { // 참여자이면서 진행중인 모집글인 경우
-            binding.layoutPostFrontContentsParticipateHost.visibility = View.GONE
-            binding.btnPostFrontContentsParticipateHostCancel.isEnabled = false
-            binding.btnPostFrontContentsParticipateHostClose.isEnabled = false
-
-            with(binding.btnPostFrontContentsParticipateGuest) {
-                isEnabled = true
-                text = getString(R.string.post_participate_in)
-                if (isCurrentUserParticipant) {
-                    text = getString(R.string.post_participate_out)
-                    setOnDebounceClickListener { recruitViewModel.requestCancelParticipateRecruitPost(recruitId = args.postId) }
-                } else {
+        // 활성화 - 미참여 - 참여자   > 모집 참여하기
+        // 활성화 - 참여 - 참여자    > 채팅방이동/모집나가기
+        // 활성화 - 참여 - 주최자    > 채팅방이동/모집마감
+        //비활성화 - 미참여 - 참여자  > 마감된 모집글입니다
+        //비화렁화 - 참여 - 참여자   > 채팅방 이동
+        //비활성화 - 참여 - 주최자   > 채팅방 이동
+        displayRecruitActionButtonTwoButton(recruitDetail.participate && recruitDetail.active)
+        if (!recruitDetail.participate) {
+            if (recruitDetail.active) {
+                with(binding.btnPostFrontContentsParticipateOneButton) {
                     text = getString(R.string.post_participate_in)
-                    setOnClickListener {
-                        findNavController().navigate(
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.white_FFFFFF))
+                    background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.selector_btn_main_orange_gray_light_radius_10
+                    )
+                    isEnabled = true
+                    setOnDebounceClickListener {
+                        findNavController().navigateSafe(
                             PostFragmentDirections.actionPostFragmentToPostMenuBottomSheetDialogFragment(
                                 recruitId = args.postId
                             )
+                        )
+                    }
+                }
+            } else {
+                with(binding.btnPostFrontContentsParticipateOneButton) {
+                    text = getString(R.string.post_not_active)
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_main_C4C4C4))
+                    background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.selector_btn_main_orange_gray_light_radius_10
+                    )
+                    isEnabled = false
+                    // 클릭해도 아무런 동작하지 않도록 처리
+                    setOnDebounceClickListener { }
+                }
+            }
+        } else {
+            if (recruitDetail.active) {
+                with(binding.btnPostFrontContentsParticipateTwoButtonLeft) {
+                    isEnabled = true
+                    setOnDebounceClickListener {
+                        // TODO 받아온 채팅방 ID로 parameter 변경
+                        navigateToChatRoom(chatRoomId = 0)
+                    }
+                }
+                setRecruitActionButtonTwoButtonRight(isHost = recruitDetail.host)
+
+            } else {
+                with(binding.btnPostFrontContentsParticipateOneButton) {
+                    text = getString(R.string.post_navigate_to_chatroom)
+                    setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.line_orange_FFA077
+                        )
+                    )
+                    background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.selector_btn_enabled_stroke_orange_line_white_gray_light_radius_10
+                    )
+                    isEnabled = true
+                    setOnDebounceClickListener {
+                        // TODO 받아온 채팅방 ID로 parameter 변경
+                        navigateToChatRoom(chatRoomId = 0)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun displayRecruitActionButtonTwoButton(shouldDisplayTwoButton: Boolean) {
+        with(binding) {
+            btnPostFrontContentsParticipateOneButton.isVisible = !shouldDisplayTwoButton
+            layoutPostFrontContentsParticipateTwoButton.isVisible = shouldDisplayTwoButton
+        }
+    }
+
+    private fun setRecruitActionButtonTwoButtonRight(isHost: Boolean) {
+        with(binding.btnPostFrontContentsParticipateTwoButtonRight) {
+            if (isHost) {
+                isEnabled = true
+                text = getString(R.string.post_close)
+                setOnDebounceClickListener {
+                    ConfirmAlertDialog.showConfirmDialog(closePostAlertDialog)
+                    ConfirmAlertDialog.resizeDialogFragment(
+                        requireContext(),
+                        closePostAlertDialog,
+                        dialogSizeRatio = 0.7f
+                    )
+                }
+            } else {
+                isEnabled = true
+                text = getString(R.string.post_participate_out)
+                setOnDebounceClickListener {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        ConfirmAlertDialog.showConfirmDialog(cancelParticipatePostAlertDialog)
+                        ConfirmAlertDialog.resizeDialogFragment(
+                            requireContext(),
+                            cancelParticipatePostAlertDialog,
+                            dialogSizeRatio = 0.7f
                         )
                     }
                 }
@@ -403,7 +459,7 @@ class PostFragment : Fragment() {
                             .into(imgPostBack)
 
                         displayPostPlatform(recruitDetail.platform)
-                        setStoreIconClickListener(recruitDetail.place)
+                        setStoreLocationDetail(recruitDetail.place)
                         initContentsUserInfo(recruitDetail)
                         initContentsPostInfo(recruitDetail)
                         setRecruitActionButton(recruitDetail)
@@ -418,13 +474,16 @@ class PostFragment : Fragment() {
 
     private fun setOptionClickListener(recruitDetail: RecruitDetail) {
         with(binding.btnPostActionbarOption) {
-            visibility = if (recruitDetail.host) View.GONE else View.VISIBLE
+            isVisible = !(recruitDetail.host && !recruitDetail.active)
             setOnDebounceClickListener {
-                findNavController().navigate(PostFragmentDirections.actionPostFragmentToPostOptionFragment(
-                    postId = args.postId,
-                    postWriterName = recruitDetail.userInfo.nickname,
-                    postWriterUserId = recruitDetail.userInfo.userId.toInt()
-                ))
+                findNavController().navigateSafe(
+                    PostFragmentDirections.actionPostFragmentToPostOptionFragment(
+                        isHost = recruitDetail.host,
+                        postId = args.postId,
+                        postWriterName = recruitDetail.userInfo.nickname,
+                        postWriterUserId = recruitDetail.userInfo.userId.toInt()
+                    )
+                )
             }
         }
     }
@@ -441,12 +500,11 @@ class PostFragment : Fragment() {
 
     private fun setModifyPostClickListener(recruitDetail: RecruitDetail) {
         with(binding.tvPostFrontContentsDetailModify) {
-
             /*
             visibility = if (recruitDetail.host && recruitDetail.active) View.VISIBLE else View.GONE
             recruitViewModel.recruitPostDetailForModify.observe(viewLifecycleOwner) { recruitDetailForModify ->
                 setOnDebounceClickListener {
-                    findNavController().navigate(
+                    findNavController().navigateSafe(
                         PostFragmentDirections.actionPostFragmentToModifyPostFragment(
                             recruitDetailForModify
                         )
@@ -457,10 +515,18 @@ class PostFragment : Fragment() {
         }
     }
 
+    private fun navigateToChatRoom(chatRoomId: Int) {
+        findNavController().navigateSafe(
+            PostFragmentDirections.actionPostFragmentToChatFragment(
+                roomId = chatRoomId,
+            )
+        )
+    }
+
     private fun showLoadingView() {
         with(binding) {
-            layoutPostBack.visibility = View.INVISIBLE
-            layoutPostFront.visibility = View.INVISIBLE
+            layoutPostBack.visibility = View.GONE
+            layoutPostFront.visibility = View.GONE
             lottiePostLoading.visibility = View.VISIBLE
         }
     }
